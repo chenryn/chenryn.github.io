@@ -1,0 +1,54 @@
+---
+layout: post
+title: 【Logstash系列】使用原版Ruby1.8运行logstash的客户端程序
+date: 2012-05-31
+category: logstash
+tags:
+  - ruby
+---
+在一般情况下，我们实验logstash都是直接用官网上下载的jar包，然后java运行即可。但如果在大规模场景下，这样其实并不是运维的最佳实践：
+
+1. 并不是所有设备都默认或者很方便的可以安装java；
+2. 默认使用的JRuby执行效率比MRI的版本低一些，为了大规模运维管理，一般部署puppet的时候附加yum/apt获取的是Ruby1.8.7。
+
+花了一点时间了解了一下代码结构，发现这点其实是可以做到的。从github上clone代码，在其中的example、bin和lib目录中都看到大量对应官网文档的input/filter/output的东东。
+
+根据我对logstash的了解，仅保留input的file、syslog和remote_luby，filter里的grok，output里的elasticsearch和rabbitmq。然后看lib/logstash/*的具体模块，只有三个模块提到了必须使用java后台。
+
+于是第一步，修改Gemile，只留下必备的模块。
+第二步，通过bundle管理工具加载安装。
+第三步，通过命令行方式指定配置变量和参数。
+第四步，把所属包打包发送到其他设备测试。
+
+现在保留的Gemfile如下：
+{% highlight ruby %}
+source :rubygems
+
+gem "cabin", "0.4.4" # for logging. apache 2 license
+gem "bunny" # for amqp support, MIT-style license
+gem "uuidtools" # for naming amqp queues, License ???
+
+gem "filewatch", "0.3.3"  # for file tailing, BSD License
+gem "jls-grok", "0.10.6" # for grok filter, BSD License
+gem "json
+gem "mail"
+
+gem "minitest" # License: Ruby
+
+gem "statsd-ruby", "0.3.0" # outputs/statsd, # License: As-Is
+
+group :test do
+  gem "mocha"
+  gem "shoulda"
+end
+{% endhighlight %}
+然后客户端的运行，这里有点小问题，默认要求必须大于Ruby1.9.2的版本才行。但是通读一遍，发现其实只是用到了Ruby1.9.2里一个全局变量RUBY_ENGINE来判断自己是不是JRuby，这个对等判断很容易修改成为RUBY_DESCRIPTION变量的正则匹配判断。之后就OK了。
+
+具体替换代码如下：
+{% highlight ruby %}
+# if RUBY_ENGINE == 'JRuby' 
+  if RUBY_DESCRIPTION =~ m/^Ruby/
+{% endhighlight %}
+
+最后把挑好的lib/*.rb和bin/logstash、etc/logstash打包发送到其他设备。运行也没问题。写上不同的server和agent.conf启动起来一看，果然就传输过去了。
+目前就到这步，随后随时更新

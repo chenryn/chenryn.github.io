@@ -1,0 +1,37 @@
+---
+layout: page
+title: 三斗室
+tagline: 与poem斗 与stock斗 与tech斗 其乐无穷
+---
+{% include JB/setup %}
+
+{% for post in paginator.posts %}
+  <div class="full" style='background-color: #FFF;'>
+    <h1 class="entry-title">
+      <a href="{{ post.url }}" title="{{ post.title }}" rel="bookmark">{{ post.title }}</a>
+    </h1>
+    <p class="alt-font tight">
+      <span class="date full-date">
+        <abbr class="published" title="{{ post.date }}">{{ post.date | date_to_string }}</abbr>
+      </span>
+        {{ post.author }}
+      <span>
+      </span>
+      Posted in&nbsp;
+      {% for category in post.categories %}
+      <a href="/categories.html#{{ category }}-ref" title="{{ category }}" rel="category tag">{{ category }}</a>
+      {% endfor %}
+    </p>
+    <div class="entry-content full-content" style='background-color: #FFF; margin-left: 24px; padding: 10px;'>
+      {{ post.content | truncatehtml: 350 }}
+      <a href="{{ post.url }}" class="read_more span2 pull-right">继续阅读……</a>
+      <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="rule"><hr/></div>
+{% endfor %}
+
+{% if paginator.total_pages > 1 %}
+  {% include paginator.html %}
+{% endif %}

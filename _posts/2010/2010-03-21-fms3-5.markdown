@@ -1,0 +1,31 @@
+---    
+layout: post    
+title: fms3.5试用    
+date: 2010-03-21    
+category: CDN
+---    
+    
+flash和flex应该是现在网络上红到发紫的技术了，要flv不要tv，要sns不要bbs，连春晚节目都满嘴偷菜~~~我也试着用用fms3.5，一些基本搭建，过过瘾，免得自己太过OUT了。    
+fms是adobe的付费产品，不过不花钱买序列号，也可以用免费的开发版，限制是10个链接而已。上www.adobe.com注册一个帐号，就可以下载了。下载下来的zip中包含了win版的exe和linux版的tar.gz。网上教程大多是win的，不过不要紧，除了字符和图形，真正使用上没啥区别。    
+上传FlashMediaServer3.5.tar.gz到linux服务器上，解压开，./installFMS -platformWarnOnly，然后按提示，设定安装目录、管理员帐号密码、监听端口、是否安装自带的apache2.2.9，是否设为守护进程等，最后完成。    
+ps看看，已经有几个fms的进程了吧；netstat看看，也有1935/19350/1111端口的监听吧（前提是你没改），OK了。    
+注：这里有几个问题。如果install的时候，端口选择了默认的1935,80，而本身服务器上又开着httpd的80，就会有冲突；这时候关掉FMSHttpd是不够的，因为fmsedge也监听这80端口，需要在conf/fms.ini中，把SERVER.HTTPD_ENABLED设为false，再删除ADAPTOR.HOSTPORT里的80，然后/etc/init.d/fms restart，这样就可以了。    
+
+* VOD点播：    
+
+上传一个flv/mp4/avi/f4v到服务器上，放进applications/vod/media/目录里。然后用播放器播放rtmp://testip/vod/sample就可以播放flv格式的视频了，如果是mp4/avi/f4v等H.264的视频，uri地址为rtmp://testip/vod/mp4:sample.f4v，也就是申明一下它是mp4的，然后写全文件名就行。    
+fms自带一个测试的页面，可以用来试验。在apache里建一个virtualhost，发布/opt/adobe/fms/samples/videoPlayer，就可以用http://testip/videoPlayer/videoplayer.html访问这个测试页面，把上面说到的url贴进STREAM URL:里，选择VOD，点击PLAY STREAM，看到上面出现loading、buffering，然后就开始播放上传的那个视频了。OK~    
+rtmp流方式和nginx/lighttpd的flv_module不同的是，rtmp的拖动，你拖到哪它就从哪开始播放；而flv_module的拖动，只是在你拖到的地点附件找一个最接近的关键帧，向服务器发送start=***的query_strings，然后从该关键帧开始播放。这也就意味着在拖动之前，你至少得等到flv的meta信息（主要是全部的关键帧位置）下载完才行。    
+
+* LIVE直播：    
+
+上面的小实验完成了，可能惊喜不是很大，唉，谁让web发布flv的拖动功能一样ok呢。嗯，下面开始用live功能，把web给ko掉~~    
+要完成直播，还得用另外一样东东：FME，全称flash media live encoder，同样上adobe官网，登陆帐号下载即可。两个消息，一好一坏，好消息是这个东东免费，不收钱；坏消息是这个东东只有windows版，口年那些用ubuntu、mac、fc的童鞋们了~~    
+下载安装运行，可以看到一个很一目了然的界面，IO画面，视频编码和分辨率选择、音频码率大小选择、保存地址、流服务器地址，日志。主要就是这些。    
+先试试最基本的保存视频，取消stream to flash media server的勾选，点击start，稍后再点stop，去我的文档里看我的视频文件夹，里面是不是就有个sample.flv了？那就成功了。（不行？看log排查，不会是你压根没接摄像头吧？）    
+然后就是给fms服务器传直播流了。把刚才取消的勾重新打上。修改FMS url地址为服务器的正确地址，也就是把localhost改成testip，然后修改stream为一个别的名字（比如otherlivestream），因为livestream这个名字服务器上默认已经存在了。点connect，嗯，连不上……    
+这是因为fme和fms之间还差了个桥梁。返回刚才下载fme的页面（没关吧~），看到下面还有个auth-addin下载吧，赶紧下下来传服务器上。解压出来，./installSAA，同样是字符界面，一顿y就可以了，不过如果你前面修改过安装路径什么的，也得一样修改这里~    
+然后进入conf路径，里面除了fms.ini、Loggerxml、Server.xml、Users.xml外，多了users、users.dat两个文件。./users add -u username -p password，添加用户即可。然后你就可以看到users.dat中多了一行username:****    
+返回本机的fme，再重点connect，很快弹出验证框，输入username和password，连接成功了，点start，直播流就此建立。    
+继续使用刚才看vod的页面，在stream url里填rtmp:/live/otherlivestream，选择live，点play stream，缓冲完成后，看是不是就是摄像头前的自己在动在说话？OK啦~    
+    

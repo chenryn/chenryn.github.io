@@ -1,0 +1,83 @@
+---
+layout: post
+title: (R)?ex介绍
+category: perl
+---
+
+按说这文章好像轮不到我写。几个线上运用着的哥们都不出手，我勉强记录一些[官网](http://rexify.org/)上没写example但实际应该蛮常用的功能吧：
+
+* IP列表
+
+Rex的示例中，都突出了自己可以方便的对group做集合运算的特点。嗯，这个在早先使用SSH::Batch的时候就很钦佩。但是面对可能某个应用每个节点就一两台设备又有很多应用的情况，在Rexfile里写就很麻烦了。而且难免有其他操作的时候需要用单独的列表。
+
+其实Rex有Rex::Group::Lookup::File模块专门解决这个问题：
+{% highlight perl %}
+use Rex::Group::Lookup::File;
+my $group_path = "/etc/puppet/iplist";
+grep {
+    my $group_file = $_;
+    my $group_name = $1 if $group_file =~ m#$group_path/(.+)\.list#;
+    group "$group_name" => lookup_file("$group_file");
+} glob("$group_path/*");
+{% endhighlight %}
+比如上面的例子，原先是在puppet上做集群管理的，已经有了现成的一个目录iplist专门存放各个应用的设备ip列表文件。那么在Rexfile开头加上这么两三行代码，就自动把整个应用设备归类到group里了。然后运行rex -Tv就看到Server Groups栏下一串串列表了。
+
+* 错误输出
+
+Rex的command示例中，都是如下形式：
+{% highlight perl %}
+    say run 'uptime';
+{% endhighlight %}
+但是大家会发现一个很常见的事情，就是命令行上敲错某个字母了，rex是没有错误提示输出的——当然rex本来的主要目的是做任务管理，理论上你得先保证task写正确。
+当然，其实rex也可以返回错误提示的。Rex::Interface::Exec::SSH中对返回结果是有判断的。
+{% highlight perl %}
+use Rex::Helper::SSH2;
+...;
+my ($out, $err) = net_ssh2_exec($ssh, "LC_ALL=C $path " . $cmd);
+if(wantarray) { return ($out, $err); }
+return $out;
+{% endhighlight %}
+对应到run命令的Rex::Commands::Run::run()里则是：
+{% highlight perl %}
+sub run {
+   my ($cmd, $code) = @_;
+   my $path = join(":", Rex::Config->get_path());
+   my $exec = Rex::Interface::Exec->create;
+   my ($out, $err) = $exec->exec($cmd, $path);
+   chomp $out if $out;
+   chomp $err if $err;
+   if($code) {
+      return &$code($out, $err);
+   }
+   if(wantarray) {
+      return split(/\n/, $out);
+   }
+   return $out;
+}
+{% endhighlight %}
+ok，看到了吧。run命令除了接收cmd外，还可以接收code的。而且也只有code方式可以处理错误输出。这里和exec不同，exec在列表上下文中返回标准输出和错误输出，但run在列表上下文中是把标准输出以行分割成列表元素。
+
+所以要在run下看错误输出的话，应该这么写：
+{% highlight perl %}
+task "test", group => 'nginx', sub {
+    run "pa aux|grep ngin[x]", sub {
+        my ($out, $err) = @_;
+        print $err ? $err : $out;
+    };
+};
+{% endhighlight %}
+
+* Kerberos支持
+
+这是个人问题，估计碰到的不会多，姑且记录在此。查阅POD，包括在perl mongers和maillist上询问过了。Net::SSH2用的是libssh2库，这个库确实没办法支持gssapi-keyex/gssapi-micpassword的auth。半年前我在github上问Rex作者，表示有计划提供除Net::SSH2之外的支持，不过时间未定。结果看到他的做法是上个月推出了一个和puppet极类似的http方式的Rex::Endpoint::HTTP，我晕。
+
+浏览了一遍，其实替换Net::SSH2模块并不费劲。于是我花几个小时给rex加上了krb5认证参数，在rex -k或者Rexfile里set -krb5的时候，改用Net::OpenSSH模块来完成。主要一个是connect，因为Net::SSH2是connect和auth分开的；一个是exec，因为Net::SSH2里另建channel的，Net::OpenSSH里直接capture即可；一个是disconnect，同理Net::OpenSSH是没这步直接退出的。至于SFTP，两者都实现了标准的sftp接口，代码甚至一行都不用改就能用(Makefile.PL里还是要加Net::SFTP::Foreign的)。代码见[我的fork](http://github.com/chenryn/rex)。
+
+* 集群高性能管理
+
+rex中有批量操作的参数，看代码应该是用ForkManager。但中心单机就是单机，所以rex也是在上个月推出了Rex::Gearman模块，通过gearmand把worker作成分布式的工作模式，这样简单有效的完成高性能扩展。gearmand也是我最爱的万能组件了～～
+
+* 命令行集群管理
+
+rex的命令行有个怪逻辑，在-e的时候只认-H，-G只读rexfile里的task。但估计很多人都希望得到的是一次定义iplist，然后之后执行任意命令，即-G 'groupname' -e "say run 'commands'"的方式。稍微挪动一下代码段的位置，把elsif(-f $::rexfile){...}改成if(){}并移动到if($opts{'e'}){...}前面去就好了。本更改已提交个人fork。
+

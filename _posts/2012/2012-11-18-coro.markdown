@@ -1,0 +1,731 @@
+---
+layout: post
+title: 【翻译】Coro模块文档
+category: perl
+---
+# 名称
+
+Coro —— perl唯一真正的线程
+
+# 简要
+
+{% highlight perl %}
+    use Coro;
+    async {
+        #一些异步执行的线程
+        print "2\n";
+        cede; #切换回main线程
+        print "4\n";
+    };
+    print "1\n";
+    cede; #切换到coro线程
+    print "3\n";
+    cede; #再次切换
+    #使用信号锁
+    my $lock = new Coro::Semaphore;
+    my $locked;
+    $lock->down;
+    $locked = 1;
+    $lock->up;
+{% endhighlight %}
+
+# 描述
+
+如果想看教程式的介绍，请阅读[Coro::Intro](http://search.cpan.org/perldoc?Coro::Intro)文档。这里主要介绍的是一些参考信息。
+
+一般来说，本模块以协作线程(文档中简写成coro)的方式来汇总管理后续代码。他们和内核线程很像但是一般来说不会在SMP机器上同时并发执行。这个模块提供的线程特殊的格式保证了他只在必须的时候才会在你程序中标明了的地方切换线程，所以锁和并发访问都不太会成为问题。Coro模块让线程编程变得更安全，更容易了。
+
+不像那些所谓的“Perl threads”(这并不是真的线程，而是windows进程仿真(详见下面同名章节)移植到UNIX的，实际工作还是进程)，Coro提供了一个完全共享的地址空间。这使得线程之间的通信变得非常容易。而且Coro线程也非常快：放弃掉你的perl程序中windows进程仿真的代码改用coro可以很容易的获得2到4倍的速度提升。一个并行矩阵乘法基准测试(高度密集的通信)用coro在单核上运行也比在4核上跑满perl伪线程快300倍。
+
+Coro通过支持多个运行中的解释器共享数据做到的这点。这对写伪并行进程和事件驱动程序非常有用，比如多个HTTP协议的GET请求并发运行。可以看看[Coro::AnyEvent](http://search.cpan.org/perldoc?Coro::AnyEvent)模块来学习怎样集成Coro到事件驱动环境里。
+
+在这个模块里，一个县城被定义为“调用链+词法变量+包变量+C栈”。也就是说，一个线程有自己的调用链，自己的词法集，自己的关键性的全局变量(更多配置和背景知识见[Coro::State](http://search.cpan.org/perldoc?Coro::State)模块)。
+
+注意看文档结尾的`参考`区域——Coro模块的家族可是非常庞大的。
+
+# Coro线程生命周期
+
+在coro线程漫长而兴奋(或许也不)的生命中，它咬经过一系列的状态：
+
+- 1、创建
+
+coro线程生命中的第一件事情当然是创建——创建方法就是调用`async块`函数：
+
+{% highlight perl %}
+    async {
+        #这里写线程的代码
+    };
+{% endhighlight %}
+
+你也可以传递参数给代码块，默认会存进`@_`里：
+
+{% highlight perl %}
+    async {
+         print $_[1]; #打印2
+    } 1,2,3;
+{% endhighlight %}
+
+这会创建一个新的coro线程并放进ready队列里，这意味着当CPU空闲后它会立刻运行。
+
+`async`会返回一个Coro对象——你可以把这个对象存起来给之后使用——这个对象就是一个运行中、准备运行或者等待事件中的线程。
+
+另一个创建线程的办法是调用带有代码引用的`new`构造器：
+
+{% highlight perl %}
+    new Coro sub {
+         #这里写线程代码
+    }, @optional_arguments;
+{% endhighlight %}
+
+这和调用`async`相当类似，唯一的区别就是新线程默认不会放进ready队列里。你不显式的放进去的话，这个线程就永远不会执行了。所以，`async`应该等于下面这样的写法：
+
+{% highlight perl %}
+    my $coro = new Coro sub {
+         #这里写线程代码
+    };
+    $coro->ready;
+    return $coro;
+{% endhighlight %}
+
+- 2、启动
+
+当新coro线程创建之后，只会保存一个代码引用和参数。并不立刻分配额外的内存给栈。这样可以保持coro线程的低内存使用水平。
+
+只有当线程真正开始运行的时候，这些资源才会分配出来。
+
+附加参数在coro创建的时候存进了`@_`里，这点和函数调用是一样的。
+
+- 3、运行、阻塞
+
+当coro线程开始运行之后会发生很多事情。一般来说，它不会一口气跑到底(因为这种情况你肯定是直接用普通函数代替了)，它会让出CPU来等待其他外部事件。
+
+只要coro线程还在运行，这个Coro对象就一直存在一个叫做`$Coro::current`的全局变量里。
+
+一个底层的让出CPU的办法是调用调度器，调度器会选择一个新的线程来运行：
+
+{% highlight perl %}
+    Coro::schedule;
+{% endhighlight %}
+
+因为运行中的线程不可能在ready队列里，所以啥都不做单纯调用调度器会永远的阻塞住coro线程——你必须安排好由某些事件或者线程唤醒coro线程，或者是在调度前直接把coro线程放进ready队列：
+
+{% highlight perl %}
+    #这其实就是Coro::cede做的
+    $Coro::current->ready;
+    Coro::schedule;
+{% endhighlight %}
+
+所有高级的同步方法(Coro::Semaphore, Coro::rouse\_\*)都是通过`->ready`和`Coro::schedule`来实现的。
+
+当coro线程运行的时候，它可能被分配到一个C级别的线程，也可能从C级别的线程里被剥离，一切如Coro运行时所愿。当你的perl线程调用C级别的函数的时候，就需要分配到C线程，然后这个函数反过来调用perl，然后perl就要想办法切换协程。在你运行事件循环然后在回调中阻塞的时候经常会出现这个情况。还有一种情况是perl自己通过`tie`机制调用一些方法或者函数比如`AUTOLOAD`等等。
+
+- 4、终止
+
+一段时间后，大多数线程都会终止。有很多办法来终止一个coro线程。最简单的就是从顶级代码引用里返回：
+
+{% highlight perl %}
+    async {
+        #当从这里return后，coro线程自然就终止了
+    };
+    async {
+        return if 0.5 <  rand; #可能提前从这里就终止了
+        print "got a chance to print this\n";
+        #或者在这里终止
+    };
+{% endhighlight %}
+
+从协程里返回的任意值都可以由`->join`获取：
+
+{% highlight perl %}
+    my $coro = async {
+         "hello, world\n" #返回一个字符串
+    }
+    my $hello_world = $coro->join;
+    print $hello_world;
+{% endhighlight %}
+
+另一个办法就是调用`Coro::terminate`方法，在任意嵌套级别的子例程里都行：
+
+{% highlight perl %}
+    async {
+         Coro::terminate "return value 1", "return value 2";
+    }
+{% endhighlight %}
+
+还有一个办法是从另一个线程`->cancel`(或者`->safe_cancel`)一个coro线程：
+
+{% highlight perl %}
+    my $coro = async {
+        exit 1;
+    };
+    $coro->cancel; #同样接收数据给->join获取
+{% endhighlight %}
+
+取消操作通常`可能`会很危险——它有点像调用了`exit`却又没真的退出。然后可能把C库和XS模块遗留在一个古怪的状态。而且和其他的线程实现不一样的是，Coro关于取消方面的异常是安全的。在你想用Coro做些奇妙的事情而又被取消的情况下，Perl会一直保持一个一致的状态——那就是，确保线程被取消的时候，所有清理代码都被执行了——所以还有一个`->safe_cancel`方法。
+
+所以，在一个XS的事件循环里取消一个线程可能不是最好的主意。不过在只有perl(比如`tie`方法或`AUTOLOAD`)的其他组合里这么处理是安全的。
+最后，Coro线程对象在`->cancel`后自动的被取消引用了——和Perl里其他对象一样。虽然这不是什么普遍的情况，一个运行中的线程被`$Coro::current`引用，一个等待运行中的线程被ready队列引用，一个等待锁或者信号的线程被等待列表引用，等等等等……但取消的时候，所有队列都不再有这个线程了：
+
+{% highlight perl %}
+    async {
+         schedule; #切换到其他coro里，不进ready队列
+    };
+    cede;
+    #现在上面的async被摧毁了，不再被任何地方引用。
+{% endhighlight %}
+
+- 5、清理
+
+线程需要分配各种资源。大多数但不是所有在线程终止的时候会被清理返回。
+
+清理非常像丢弃未捕获的异常：perl会按照它的方式去运行所有的子例程调用和代码块。它的方式里，它会释放所有的`my`变量，撤销所有的`local`变量，释放所有其他线程独立的资源。
+
+所以，常见的释放资源的办法就是让他们成为my变量。
+
+{% highlight perl %}
+    async {
+         my $big_cache = new Cache ...;
+    };
+{% endhighlight %}
+
+如果不再有引用存在，`$big_cache`对象在线程终止的时候自然就释放掉了。
+
+它并`不`会解锁Coro::Semaphore或类似的其他资源，这时候`guard`方法就派上用场了：
+
+{% highlight perl %}
+    my $sem = new Coro::Semaphore;
+    async {
+         my $lock_guard = $sem->guard;
+         #如果我们在这里return，或者die，或者取消
+         #信号也就唤醒了
+    }
+{% endhighlight %}
+
+这个`Guard::guard`函数可以在你想要的时候出现在任意清理的时候(但是不能从代码块里切换到其他协程中)：
+
+{% highlight perl %}
+    async {
+         my $window = new Gtk2::window "toplevel";
+         #window不会被自动清理，哪怕$window被释放了
+         #所以用guard确保在出错的时候它可以被正确的毁灭
+         my $window_guard = Guard::guard {$window->destroy};
+         #这样从这里开始我就安全了
+    };
+{% endhighlight %}
+
+最后，`local`通常也是很方便的。比如临时替换一下coro线程的描述：
+
+{% highlight perl %}
+    sub myfunction {
+         local $Coro::current->{desc} = "inside myfunction(@_)";
+         #如果这里突然return或者die了，描述会重新存储过
+    }
+{% endhighlight %}
+
+- 6、僵尸死亡万岁
+
+即便一个线程已经终止并且清理过它的资源了，Coro对象依然存在，而且存储着它的线程返回值。
+
+这意味着线程终止并清理，不再有其他引用之后，Coro对象会自动释放掉。
+
+而如果还有引用，Coro对象就还保留着，你可以调用`->join`多次来接收结果数据：
+
+{% highlight perl %}
+    async {
+         print "hi\n";
+         1
+    };
+    #运行上面的async，并且在从Coro::cede返回前释放所有资源
+    Coro::cede;
+    {
+         my $coro = async {
+              print "hi\n";
+              1
+         };
+         #运行上面的async并清理掉，但是不是放coro对象：
+         Coro::cede;
+         #可选的收取结果
+         my @results = $coro->join;
+         #现在$coro超出范围了，可能被释放掉
+    };
+{% endhighlight %}
+
+# 全局变量
+
+- $Coro::main
+
+这个变量存储了代表主程序的Coro对象。如果你可以`ready`好它，可以像操作coro一样操作它。在对比`$Coro::current`的时候特别有用，这样可以看到自己是不是运行在主程序里了。
+
+- $Coro::current
+
+这个变量代表当前coro(Coro调度器切换到的最后一个coro)。初始值和`$Coro::main`一样。
+
+这个变量是__严格___只读_的。你可以复制到别的变量然后在其他Coro对象里使用，但不能修改这个变量本身。
+
+- $Coro::idle
+
+这个变量在集成Coro到事件循环的时候很有用。通常他更依赖[Coro::AnyEvent](http://search.cpan.org/perldoc?Coro::AnyEvent)或者[Coro::EV](http://search.cpan.org/perldoc?Coro::EV)，这是很漂亮的底层功能。
+
+这个变量存储的Coro对象在没有其他ready线程的时候，就会被放进ready队列里(而不会调用其他ready钩子)。
+
+默认实现是带着一个“致命的：检测到死锁”的提示die退出，然后跟着线程列表，因为程序没办法继续了。
+
+钩子被`Coro::EV`和`Coro::AnyEvent`这样的模块重写以等待外部事件唤醒coro以便调度器运行。
+
+这个技术的示例请参见[Coro::EV](http://search.cpan.org/perldoc?Coro::EV)或者[Coro::AnyEvent](http://search.cpan.org/perldoc?Coro::AnyEvent)模块。
+
+# 简单的Coro创建
+
+- async {...} \[@args...\]
+
+创建新coro返回他的Coro对象(通常用不上)。这个coro会被放进ready队列，当下一次调度来临的时候就自动运行。
+
+第一个参数是要在coro里运行的代码块/闭包。当它返回时，coro自动终止。
+
+剩余参数作为闭包的参数传递进去。
+
+参见`Coro::State::new`构造器来了解当coro运行时coro环境的信息。
+
+在coro里调用`exit`和在外头的效果是一样的，同样，如果coro线程die掉，程序整个退出，和在cor外面也一样。
+
+如果你不想这样，你可以通过一个默认的`die`句柄，或者简单的用`eval`包装一下。
+
+示例：
+
+{% highlight perl %}
+    async {
+         print "@_\n";
+    } 1,2,3,4;
+{% endhighlight %}
+
+- async\_pool {...} \[@args...\]
+
+和`async`类似，不过用一个coro池，所以你不要对这个对象调用terminate或者join方法(然后我们也没禁止)。而且你可能得到一个coro是已经在执行其他代码的(这事儿说好也好，说不好也不好)。
+
+从加强的的一面说，这个函数比完整的创建(和销毁)一个新coro快了两倍。所以你如果需要快速创建大批量的通用coro，使用`async_pool`，别用`async`。
+
+代码块会在`eval`环境里运行，出现异常的时候抛出warning而不是终止程序，这和`async`一样。
+
+当coro被重用的时候，像`on_destroy`这样的东西可能不会按照你想象的那样工作，除非你调用终止或者取消，这些都是跟池的目的相违背的(不过在异常的情况下还是很不错的)。
+
+每次运行后，优先级都设置成`0`，跟踪被禁用，描述被清空，默认输出句柄被恢复。这样你可以改变所有这些东西。否则，coro会重用他们的“初始值”：最显著的就是如果你修改了每个线程的全局变量比如`$/`，你必须修复这个改变。最简单的做法就是用`local $/`这样。
+
+空闲池的大小限定为`8`个空闲线程(这可以通过$Coro::POOL\_SIZE改变)，但是有需求的恶化，非空闲的coro是多多益善的。
+
+如果一个`async_pool`用了太多栈空间让你担心池里的coro章太猛了，你可以每秒钟运行`async_pool {terminate}`这样的代码来缓慢的补充池子。除此之外，当句柄用的栈涨到超过32KB(由$Coro::POOL\_RSS设置)时，它就会被销毁。
+
+# 静态方法
+
+静态方法实际上就是对当前coro进行隐式操作的函数。
+
+- schedule
+
+调用调度器。调度器会从ready队列中查找下一个可以运行的coro并切换过去。这个“下一个可以运行的coro”就是有最高优先级的，在队列里等待时间最久的那个。如果一个都没有，就调用`$Coro::idle`钩子。
+
+请注意：当前coro`不`会被放进ready队列里，所以调用这个函数后，这个coro不再会被调用知道有其他事件调用`->ready`来唤醒你。
+
+这让`schedule`阻塞当前线程并等待事件：首先你要把当前coro记在一个变量里，然后安排好回调，在某些情况下可以用`->ready`来唤醒你，最后你调用`schedule`让自己进入沉睡。注意有很多办法可以唤醒coro，所以你要检测一下事件是否正确，比如把状态存储在一个变量里。
+
+至于怎样等待回调，参见下面的__怎么等待回调__章节。
+
+- cede
+
+"放弃"到其他coro。这个函数把当前线程放进ready队列里然后调用`schedule`。它的效果是放弃当前的“时间片”给其他拥有更高优先级或者至少同级别的coro。一旦你的coro重新被轮到，它会自动恢复过来。
+
+在其他语言里，这个函数经常被叫做`yield`。
+
+- Coro::cede\_notself
+
+和cede类似，不过默认不会export出来，这个函数会不顾优先级强制cede给_其他_coro，在需要确保进程运行的时候还是有些用的。
+
+- terminate \[arg...\]
+
+带着给定的状态值终止当前coro(参见[cancel](http://search.cpan.org/perldoc?cancel))。这些状态值不会被直接返回，而是返回他们的引用。
+
+- Coro::on\_enter BLOCK, Coro::on\_leave BLOCK
+
+这两函数会在当前作用域内安装enter和leave。enter块会在on\_enter 被调用，还有当前coro被调度器re-enter的时候执行。而leave快则是在当前coro被调度器阻塞，还有词法作用域被退出(意思就是exit、die、last等)的时候被执行。
+
+_在这些块里，不允许再调用调度器，也不允许异常_。这意味着，不用eval的情况下别想调用`die`命令，至于调度器更是什么办法都没法用了。
+
+介于这些块都是和当前作用域绑定的，所以当当前作用域退出的时候，他们会自动删除。
+
+这两函数实现了和计划中`dynamic-wind`做的一样的概念，在你想给一个特定coro本地化某些资源的时候比较有用。
+
+使用这两函数的coro会相对的被放慢线程切换的速度(大概一个单独分配的块40%的样子，所以只要处理程序够快，线程切换依然很快)。
+
+通过下面这个例子，可以更好的理解这些函数：切换当前时区到"南极"，这需要调用`tzset`，但是我们使用`on_enter`和`on_leave`，用来记忆/改变当前时区并存储之前的值。分别的，只有安装了这两函数的coro才会改变时区。
+
+{% highlight perl %}
+    use POSIX qw(tzset);
+    async {
+        my $old\_tz; \#在这里存储外面的时区
+        Coro::on\_enter {
+            $old\_tz = $ENV{TZ}; \#记忆旧的数值
+            $ENV{TZ} = "Antarctica/South\_Pole";
+            tzset; \#启用新值
+        };
+        Coro::on\_leave {
+            $ENV{TZ} = $old\_tz;
+            tzset; \#恢复旧值
+        };
+        \#在这块，时区就是"南极"，不会被其他coro里的时区影响
+    };
+{% endhighlight %}
+
+这可以用于给块本地化任何资源(locale，uid，当前工作目录等)，尽管当前有其他coro存在。
+
+另一个有趣的例子，通过间隔计时器实现了时间片的多任务(下面的代码明显是可以优化的，不过当前足够跑任务了)：
+
+{% highlight perl %}
+    \#把给定块按时间分片
+    sub timeslice(&) {
+        use Time::HiRes ();
+        Coro::on\_enter {
+            \#在进线程的时候，我们设置一个VTALRM信号以便cede
+            $SIG{VTALRM} = sub { cede };
+            \#然后启动一个间隔计时器
+            Time::HiRes::setitimer &Time::HiRes::ITIMER\_VIRTUAL, 0.01, 0.01;
+        };
+        Coro::on\_leave {
+            \#在离开线程的时候我们停止这个间隔计时器
+            Time::HiRes::setitimer &Time::HiRes::ITIMER\_VIRTUAL, 0, 0;
+        };
+        &{+shift};
+    } 
+    \#使用方法如下：
+    timeslice {
+        \#下面是一个死循环，一般情况下会垄断进程。
+        \#不过现在它跑着一个时间片环境里，定期的会cede给其他线程。
+        while () { }
+    };
+{% endhighlight %}
+
+- killall
+
+除当前运行的coro外，杀死/中断/取消所有coro。
+
+注意，如果调用killall的coro不是主coro，当他试图释放一些主解释资源的时候，可能释放不干净。会存在一些一次性的资源泄露。
+
+# Coro对象方法
+
+下面是一些你可以在coro对象上调用(或者创建)的方法。
+
+- new Coro \\&sub \[,@args...\]
+
+创建一个新的coro并返回它。当sub返回的时候，coro自动终止，就像你带着返回值调用`terminate`的效果一样。要让coro运行，你要先调用rady方法把它放进ready队列里。
+
+参考`async`和`Coro::State::new`查看更多关于coro环境的信息。
+
+- $success = $coro->ready
+
+将该coro放进它的ready队列的最后(每个优先级都有一个队列)并返回真。如果coro已经在ready队列里，不做任何操作并返回假。
+
+这保证里当所有高优先级的coro和同优先级先准备好了的coro都恢复后，调度器会自动恢复这个coro。
+
+- $coro->suspend
+
+挂起指定coro。一个挂起的coro和其他coro一样工作，不同的是调度器不会选择挂起的coro做真正的执行。
+
+当你想阻止某个coro运行又不打算销毁它，或者当你想暂时冻结某个coro(比方需要调试)等之后再恢复的时候，挂起就很有用了。
+
+前者的一个场景可能是这样：fork之后挂起所有其他的coro但保持住他们不调用析构器，不过你可以继续创建新的coro。
+
+- $coro->resume
+
+当指定coro被挂起后，它就可以被恢复。注意如果一个已经在ready队列里的coro被挂起，调度器可能会把它踢出去，你会失去这次激活。
+
+要避免这种情况的话，最好的办法是无条件的把挂起coro放进预备队列，每个同步机制都必然会保护自己不被虚假唤醒，Coro自然也有。
+
+- $state->is\_new
+
+如果Coro对象还是“新”的，返回真，额，新的意思是还没运行过。这些状态基本只是由要调用的代码引用和参数组成。消耗的其他资源很少。转移到新状态后会自动分配一个perl解释器。
+
+- $state->is\_zombie
+
+如果Coro对象被取消了，返回真。比如对象的资源因为`cancel`、`terminate`、`safe_cancel`释放了，或者可能就是简单的跑出范围了。
+
+“僵尸”这个名字源自UNIX文化，当一个进程已经退出，除了退出状态什么资源都没有了的时候，就会被叫做“僵尸”。
+
+- $is\_ready = $coro->is\_ready
+
+如果Coro对象在预备队列里，返回真。它最终会被调度器调控，除非Coro对象被销毁。
+
+- $is\_running = $coro->is\_running
+
+如果Coro对象正在运行，返回真。只有一个Coro对象可以处于运行状态(但一个Coro对象可以有多个运行中的Coro::States)。
+
+- $is\_suspended = $coro->is\_suspended
+
+如果Coro对象被挂起，返回真。挂起的Coro永远不会被调度。
+
+- $coro->cancel (arg...)
+
+终止指定Coro线程，强制返回指定参数作为状态(默认为空列表)。如果指定Coro就是当前Coro，则无法返回。
+
+这是一个相当残酷的释放coro的方式，而且还有一些限制——如果线程里有一个不希望被终止的C语言的回调，有些不忍言之事就要发生了；或者如果取消的线程上运行着复杂的清理程序，而这个清理程序又依赖于它的线程上下文，事情也不大会正常的工作。
+
+要运行的清理程序代码(比如`guard`代码块)不会有线程上下文，也不允许再切换到其他线程。
+
+另外，`->cancel`永远都是这么不管不顾的清理线程。所以如果你的清理代码很复杂或者你希望避免取消一个自己压根不知道怎么清理的C语言线程，建议使用`->throw`抛出异常，或者用`->safe_cancel`方法。
+
+传递给`->cancel`的参数不会被复制，而是被直接引用(比如：你传递了`$var`，在调用修改这个变量之后，你也需要修改传递给`join`的返回值，所以最好别用这个)。
+
+Coro的资源通常在这个调用返回之前就已经都释放或销毁掉了。不过这事可以被无限期的推迟，因为可能作为管理端的线程有时候要首先运行注销Coro对象。
+
+- $coro->safe\_cancel($arg...)
+
+和`->cancel`很像。不过本质上，它是“安全”的。所以当线程并不处于一个可终止的状态的时候，它会抛出一个异常。
+
+这个方法运行起来就像抛出一个不可被捕捉的异常——具体的说，它从线程的内部开始清理，所以所有的清理程序(比如`guard`块)，都是在线程的上下文中运行，并且可以随意阻塞。它的缺点就是不保证线程肯定可以终止，它可能会失败。而且，运行速度也比`cancel`和`terminal`慢。
+
+一个线程，当它还没有被运行，或者没有C语言的上下文附加且在SLF函数内。
+
+后面这两个的意思基本上就是线程不在被某些C函数(通常是XS模块)回调的perl函数里，也不在这些C函数通过Coro的XS级别的API调用运行中。
+
+当本函数可以正常终止线程时，返回真；否则报错(即要么返回真要么不返回)。
+
+为什么搞这么奇怪的接口？嗯，关于何时如何终止线程，有两种通用模式。一种是你希望当你想终止的时候就可以终止——当线程不可终止的时候，显然就会有问题了。所以需要`->safe_cancel`来报错。
+
+第二种模式是，你很友好的问下先，如果不碰巧，那就先不终止线程了。看起来就像这样：
+
+{% highlight perl %}
+ if (! eval { $coro->safe\_cancel }) {
+        warn "unable to cancel thread: $@";
+    }
+{% endhighlight %}
+
+然而，你不应该总是先尝试安全的取消然后失败了再强行`->cancel`。这样是没道理的：因为你肯定要不就在线程里自己搞定清理代码，要不就是没有。有的话，用`->safe_cancel`；没有的话，`->cancel`更直接快捷。
+
+- $coro->schedule\_to
+
+让当前线程进入休眠(类似[Coro::schedule](http://search.cpan.org/perldoc?Coro::schedule))，不过不会轮到ready队列的下一个线程，而是切换到给定的那个Coro对象(不管多少优先级)。coro的准备情况并不会被改变。
+
+这是一个为特殊情况准备的高级方法——我很乐意听到它被实际运用了。
+
+- $coro->cede\_to
+
+和`schedule_to`类似，但是是把当前线程放进ready队列里。它等效于暂时切换到给定的对象，过会儿再继续。
+
+这是一个为特殊情况准备的高级方法——我很乐意听到它被实际运用了。
+
+- $coro->throw (\[$scalar\])
+
+如果`$throw`被定义了，那它会在下一个合适的时间点被coro作为异常抛出。否则就清理掉这个异常对象。
+
+Coro会在每个类schedule函数返回时检查异常。这类函数包括`schedule`，`cede`，`Coro::Semaphore->down`，`Coro::Handle->readable`等等。大多数这些函数(都是Coro的一部分)检测这个情况，并且在异常pending的时候提前返回。
+
+异常对象会在`$@`中和另一个特殊标量一起被抛出。即，如果它是字符串，不会有行号和和新行追加进来(跟`die`不一样)。
+
+这可以被用来作为一个比`cancel`或者`safe_cancel`更柔和一些的询问一个coro是否结束的办法，虽然并不能保证异常一定会导致终止而且如果没有被捕获它可能会结束整个程序。
+
+你也可以理解`throw`是类似带信号(这种情况就是一个标量)的`kill`。
+
+- $coro->join
+
+等待coro中止并返回线程给`terminal`或`cancel`返回的任意值。`join`可以并发的被多个线程调用。然后一旦`$coro`中止，一切都会恢复并且给出一个返回值。
+
+- $coro->on\_destroy (\\&cb)
+
+注册一个回调函数在coro线程被销毁的时候被调用。具体的说是资源已经被释放，不过join还没开始。在任意情况下，只要`不`是die，这个回调函数都会传入终止/中止参数。
+
+每个coro可以有任意多个`on_destroy`回调，而且目前为止，一旦添加，不可以再删除了。
+
+- $oldprio = $coro->prio ($newprio)
+
+设置(当没有参数的时候就是获取)coro线程的优先级。高优先级的会比低优先级的更早运行。优先级是有符号整数，目前是3到-4之间。你可以参考使用PRIO\_\*\*\*常量(提前导入标签:prio获取)；
+
+{% highlight perl %}
+   PRIO\_MAX > PRIO\_HIGH > PRIO\_NORMAL > PRIO\_LOW > PRIO\_IDLE > PRIO\_MIN
+       3    >     1     >      0      >    -1    >    -3     >    -4
+   \# 设置优先级为高
+   current->prio (PRIO\_HIGH);
+{% endhighlight %}
+
+空闲的coro线程永远比其他存活的coro优先级要低。
+
+修改当前coro的优先级即时生效，但是修改ready队列里的只会在下次调度(到它)的时候才生效。或者这算个bug，未来某个版本会修正。
+
+- $newprio = $coro->nice ($change)
+
+类似`prio`方法，不过是从优先级中减去给定的值(也就是说值越大优先级越低，类似UNIX里的nice命令)。
+
+- $olddesc = $coro->desc ($newdesc)
+
+设置(当没有参数的时候就是获取)coro线程的描述。这只是与coro关联的无格式的字符串。
+
+这个方法只是简单的把`$coro->{desc}`成员设置为给定的字符串。你也可以自己修改这个成员。事实上，大家通常宁愿这样声明，比如在一个[Coro::Debug](http://search.cpan.org/perldoc?Coro::Debug)的会话里：
+
+{% highlight perl %}
+   sub my\_long\_function {
+      local $Coro::current->{desc} = "now in my\_long\_function";
+      ...
+      $Coro::current->{desc} = "my\_long\_function: phase 1";
+      ...
+      $Coro::current->{desc} = "my\_long\_function: phase 2";
+      ...
+   } 
+{% endhighlight %}
+
+# 全局函数
+
+- Coro::nready
+
+返回在ready状态(即通过调用`schedule`可以切换的)的coro线程个数。值为`0`的话，就意味着唯一可运行的就是当前运行的这个线程。所以`cede`是没效果的，而`schedule`会死锁到有哪个空闲函数激活别的coro。
+
+- my $guard = Coro::guard { ... }
+
+这个函数还存在，不过早晚被废弃，请使用`Guard::guard`函数。
+
+- unblock\_sub { ... }
+
+这个有用的工具接收一个块或者代码引用，然后“unblock”它，并返回一个新的代码引用。unblock意思是：调用新的代码引用会立刻返回，不阻塞，无返回值。而原本的代码会被另一个新的coro调用。
+
+这个函数存在的原因是：很多event库(比如[Event](http://search.cpan.org/perldoc?Event)库)是非线程安全(比较弱格式的可重入性)的。这意味着你在回调总不可以阻塞。否则你就可能收到崩溃的报警。我目前唯一知道可以不用`unblock_sub`就安全的event库就是[EV](http://search.cpan.org/perldoc?EV)了(但是当你所有的事件循环都被block后，你还是会进入死锁状态)。
+
+Coro会尝试在你在事件循环中被阻塞的时候捕获异常(FATAL:$Coro::IDLE blocked itself)。当然这只是近乎完美，而且还要求你不能用自己的循环实现。
+
+这个函数允许你的回调是阻塞的，因为他会在另一个可以被安全阻塞的coro里执行。一个很常见的例子就是当你用[Coro::AIO](http://search.cpan.org/perldoc?Coro::AIO)模块时，函数让你刷结果到磁盘上。
+
+简单的说：在有阻塞可能的函数里用`unblock_sub`代替`sub`。
+
+如果你的函数无所谓阻塞(比如给另一个coro发个信息，或者把其他coro整理到ready队列里)，那就没理由用`unblock_sub`了。
+
+注意你必须给C级别的事件循环中使用的回调函数使用`unblock_sub`。比如，当你使用一些用了[AnyEvent](http://search.cpan.org/perldoc?AnyEvent)(而且你用的是[Coro::AnyEvent](http://search.cpan.org/perldoc?Coro::AnyEvent))的模块，这些模块提供的回调函数又是另一些事件回调的结果，你可不能阻塞掉它们，那么用`unblock_sub`吧。
+
+- $cb = rouse\_cb
+
+创建并返回一个“唤醒式的回调”。这是一个代码引用，当被调用的时候，它就记下调用的参数副本，然后通知拥有这个回调的coro。
+
+- @args = rouse\_wait \[$cb\]
+
+等待特定的唤醒回调(或者是本coro中最后创建的那个)。
+
+一旦被调用(或者在`rouse_wait`之前被调用)，他将返回最初传递给唤醒回调的参数。在标量上下文中意味着是`最后`一个参数，就好比`rouse_wait`最后状态是`return ($a1,$a2,$a3...)`。
+
+参见下面__怎么等待回调__章节的实际使用例子。
+
+# 怎么等待回调
+
+对于一个coro线程，等待回调是非常常见的。当你在另一个事件驱动程序或者事件驱动库里使用coro的时候，很自然的触发它。
+
+通常时注册一个回调函数对应相应的事件，然后当这个事件触发的时候调用这些函数。不过，你可能只是想等待事件，简单到极致了。
+
+比如`AnyEvent->child`注册了一个回调到特定子进程退出的时候：
+ 
+{% highlight perl %}
+    my $child_watcher = AnyEvent->child (pid => $pid, cb => sub { ... });
+{% endhighlight %}
+
+不过在coro里，你通常只需要这么写：
+
+{% highlight perl %}
+    my $status = wait_for_child $pid;
+{% endhighlight %}
+
+Coro提供了两个特定的函数让这件事情变得很容易：C<Coro::rouse_cb>和C<Coro::rouse_wait>。
+
+第一个函数，C<rouse_cb>，生成并返回一个回调，当这个回调被调用时，会自动保存参数并通知创建该回调的coro。
+
+第二个函数，C<rouse_wait>，等待回调被调用(通过C<schedule>命令进入休眠)并返回传递给回调的初始参数。
+使用这两个函数，就可以很容易的实现上面说的C<wait_for_child>函数了：
+
+{% highlight perl %}
+    sub wait_for_child($) {
+       my ($pid) = @_;
+
+      my $watcher = AnyEvent->child (pid => $pid, cb => Coro::rouse_cb);
+
+       my ($rpid, $rstatus) = Coro::rouse_wait;
+       $rstatus
+    }
+{% endhighlight %}
+
+如果嫌C<rouse_cb>和C<rouse_wait>还不够灵活，你还可以用C<schedule>自己搞起：
+
+{% highlight perl %}
+    sub wait_for_child($) {
+       my ($pid) = @_;
+
+      # 把当前的coro存入$current,
+      # 然后提供一个结果变量传递给->child的闭包
+      my $current = $Coro::current;
+      my ($done, $rstatus);
+
+      # pass a closure to ->child
+      my $watcher = AnyEvent->child (pid => $pid, cb => sub {
+         $rstatus = $_[1]; # 记住$rstatus
+         $done = 1; # 标记$rstatus
+      });
+
+      #等待闭包被调用
+      schedule while !$done;
+
+      $rstatus
+    }
+{% endhighlight %}
+
+# 错误和限制
+
+- 后端用pthread派生
+
+当coro使用pthread后端编译(不建议，但在一些BSD平台上不得不用，因为BSD的libcs完全不可用)的时候，coro无法生成fork。解决办法：修复glibc然后用snner后端。
+
+- 每个进程的仿真(线程)
+
+这个模块不是perl的伪线程安全。所以你只能在第一个线程里使用coro(未来的版本可能去掉这个要求，实现每个线程自己的schedule，不过当前Coro::State模块还不支持)。我建议关闭线程支持使用进程。因为开启windows进程仿真后，插入速度只有perl代码的一半。
+
+注意，使用另一个进程创建出来的线程会崩溃(报错是空指针)。
+
+- coro切换不是信号安全的
+
+你千万不要从一个处理sighal句柄的进程(指的是%SIG，大多数事件库都提供安全的信号)里切换到其他coro线程。_除非_你确信自己的做法不会中断Coro函数！
+
+也就是说，你_绝对不_能调用任何可能阻塞当前coro的函数 —— `cede`，`schedule`，`Coro::Semaphore->down`或者其他使用了这些的函数。其他的命令，比如`ready`，则没问题。
+
+# windows进程仿真
+
+太多人看起来都对ithreads比较困惑（比如Chip Salzenberg就说我“无知，无能，愚蠢，上当了！”，而同一封邮件里他对perl的ithreads也是各种模糊的说法(比如说文件或者内存必须共享)，这说明他在这方面了解甚微——如果对Chip来说这都很难理解，估计对所有人都没那么容易搞明白的）。
+
+下面贴一段我在2009年perl聚会上分享的《脚本语言中的线程》的超浓缩版：
+
+所谓的“ithreads”最初是为了这两个理由才实现的：第一，在原生win32平台的perl上模拟unix进程；第二，替代旧的，真正的线程模型("5.005-threads")。
+
+最后的实现用线程替代了操作系统进程。进程和线程的区别是：同一个进程内的线程间是共享内存的（以及其他状态，比如文件）。而进程间可不会共享任何东西（至少语义上不会）。也就是说一个线程做的修改可以是其他线程可见的，而进程的修改是其他进程不可见的。
+
+“ithreads”就是这样工作的：创建新的ithreads进程时，所有状态都被复制（内存是物理上实际复制，文件和代码是逻辑上的复制）。然后，所有修改被隔离。在UNIX上，这个行为是通过操作系统进程实现的。不过UNIX通常会使用构建进系统的硬件来有效的做到这点。而windows进程仿真是通过软件模拟这个硬件操作(也很有效，不过当然还是比硬件慢很多)。
+
+所以，如上面说过的，加载代码，修改代码，修改数据结构，都只是所属ithreads内部可见。同一个OS进程内的其他ithreads是看不到的。
+
+这就是为什么“ithreads”根本没有给perl实现线程，而依然是进程的原因。在非windows平台上，它表现相当糟糕，就是因为你完全可以利用硬件定制的优势(比如fork模块，它可以给你(i-)threads的API，而且快很多)。
+
+要在ithreads模型里共享数据，只能在线程间通过缓慢的复制语义来传输数据结构——共享数据是不存在的。
+
+i-threads交互密集型的基准测试显示结果相当糟糕（事实上糟糕到了没法直接利用多核优势的Coro都比它快上数量级。因为Coro可以在线程间共享数据，详见我的分享）。
+
+综上所述，i-threads是用线程来实现了进程，也就是用fork的进程来模拟，嗯，进程。启用i-threads完全是拖累perl程序的运行，在非windows平台下完全没有（顶多算微乎其微的有）实用性，反而是损害那些单线程的perl程序。
+
+这就是我避免用"ithreads"这个名字的原因，因为这完全是误导，听起来就跟它为perl实现了某种线程模型似的。我更喜欢的是“windows进程模拟”这个名字，这才更准确和真实的描述了它的实际作用和行为。
+
+# 另见
+
+事件循环集合: [Coro::AnyEvent](http://search.cpan.org/perldoc?Coro::AnyEvent)，[Coro::EV](http://search.cpan.org/perldoc?Coro::EV)，[Coro::Event](http://search.cpan.org/perldoc?Coro::Event)。
+
+调试: [Coro::Debug](http://search.cpan.org/perldoc?Coro::Debug)。
+
+支持/实用工具: [Coro::Specific](http://search.cpan.org/perldoc?Coro::Specific)，[Coro::Util](http://search.cpan.org/perldoc?Coro::Util)。
+
+锁和过程间通信: [Coro::Signal](http://search.cpan.org/perldoc?Coro::Signal)，[Coro::Channel](http://search.cpan.org/perldoc?Coro::Channel)，[Coro::Semaphore](http://search.cpan.org/perldoc?Coro::Semaphore)，<Coro::SemaphoreSet>，[Coro::RWLock](http://search.cpan.org/perldoc?Coro::RWLock)。
+
+I/O和定时器: [Coro::Timer](http://search.cpan.org/perldoc?Coro::Timer)，[Coro::Handle](http://search.cpan.org/perldoc?Coro::Handle)，[Coro::Socket](http://search.cpan.org/perldoc?Coro::Socket)，[Coro::AIO](http://search.cpan.org/perldoc?Coro::AIO)。
+
+和其他模块的结合: [Coro::LWP](http://search.cpan.org/perldoc?Coro::LWP)(不过实用的话建议选择[AnyEvent::HTTP](http://search.cpan.org/perldoc?AnyEvent::HTTP))，[Coro::BDB](http://search.cpan.org/perldoc?Coro::BDB)，[Coro::Storable](http://search.cpan.org/perldoc?Coro::Storable)，[Coro::Select](http://search.cpan.org/perldoc?Coro::Select)。
+
+XS API: [Coro::MakeMaker](http://search.cpan.org/perldoc?Coro::MakeMaker)。
+
+底层配置，线程环境及延续机制: [Coro::State](http://search.cpan.org/perldoc?Coro::State)。
+
+# 作者
+
+Marc Lehmann <schmorp@schmorp.de>
+http://home.schmorp.de/

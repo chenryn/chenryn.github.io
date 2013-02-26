@@ -1,0 +1,26 @@
+---
+layout: post
+title: resin与ipv6
+date: 2010-12-30
+category: web
+tags:
+  - resin
+---
+
+一台nginx+resin的应用服务器出现大量的ipv6下的CLOSE_WAIT。重启后十五分钟就累积到了1500+。
+
+调整resin的keepalive-timeout和nginx的proxy_read_timeout，没有丝毫改变。决定先关掉ipv6。
+
+如果要关掉整个linux的ipv6，需要修改/etc/modprobe.conf然后reboot，显然没法在生产环境上直接操作，只能寻求应用监听上的办法。
+
+修改sysctl -w net.ipv6.bindv6only=1，然后重启应用，赫然发现resin重启失败，只有perl进程，没有java进程了。改回0，java立刻启动成功。
+
+google了一下，在<a href="http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=560044">http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=560044</a>中看到了答案——原来java默认就是用ipv6。
+
+增加resin/bin/wrapper.pl相关行如下：
+
+$EXTRA_JAVA_ARGS="-Djava.util.logging.manager=com.caucho.log.LogManagerImpl";
+$EXTRA_JAVA_ARGS.=" -Djavax.management.builder.initial=com.caucho.jmx.MBeanServerBuilderImpl";
+$EXTRA_JAVA_ARGS.=" -Djava.net.preferIPv4Stack=true";#新增参数
+
+重启，就只在ipv4上了。

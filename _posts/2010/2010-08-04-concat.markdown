@@ -1,0 +1,23 @@
+---
+layout: post
+title: concat
+date: 2010-08-04
+category: CDN
+---
+
+今天逛到淘宝核心系统组的公开博客，然后知道了淘宝开源平台<a href="http://code.taobao.org/">http://code.taobao.org/</a>，刚出来的东东，上面开源了淘宝目前正在使用的key-value分布式存储tair和nginx的concet模块、Cookie模块，以及这个平台本身的代码……在回复中，淘宝的人说有关tair的update都会同步在这个平台上进行，而不是另起一个闭源分支，或者想新浪的sina-sdd那样放弃。据说九月份，淘宝还会放出它的分布式文件系统TFS来，毕竟时间不长，会不会“人亡政息”，有待考验……
+
+不过我对这个concet模块有点兴趣，从其英文介绍（淘宝真是，对国人也用英文）来看，是仿照apache的mod_concet用来合并js/css文件输出的。于是去找mod_concet资料来看。其官方发布在google上。说明很简单，安装方法、配置方法、效果……
+{% highlight css %}
+<link href=/a/a.css type=text/css>
+<link href=/a/b.css type=text/css>
+<link href=/a/c.css type=text/css>
+{% endhighlight %}
+统一写成<link href=/a/a.css,/a/b.css,/a/c.css type=text/css>就可以了。
+效果据说快20%-30%。
+写mod_concet模块的AOL工程师自己的截图如下：
+<img src="http://pic04.babytreeimg.com/foto/thumbs/59/14/67/3472f5340b8860e7e8f4_m.png" alt="" />
+其last-modified定义，则是选取了合并前的文件中MTIME最晚的那个。
+或许有些道理，因为浏览器对同一域名能开启的并发数有限，而太小的文件下载速度加不起来……
+不过js或者css不一定总是能写在一块的，留作一个记录吧~~
+

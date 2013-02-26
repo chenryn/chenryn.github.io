@@ -1,0 +1,81 @@
+---
+layout: post
+title: STF 2.0 安装测试
+category: perl
+---
+STF 更新到 2.0 版本，支持使用 redis 队列做任务分发，比原先的 Q4M 容易上手多了；新增了 cluster 概念，虽然目前看没什么用，不过估计以后肯定要在这方面做文章的。
+
+部署步骤如下：
+
+{% highlight bash %}
+    # 因为 stf 要求在 Perl5.12 以上运行，CentOS6 还是 5.10 的老版本，所以直接用 Debian 测试了
+    apt-get install -y memcached redis-server libmysqlclient-dev libdbd-mysql-perl
+    # 设置 mysql-server 包安装时需要的问答
+    echo mysql-server-5.5 mysql-server/root_password select 123456 | debconf-set-selections
+    echo mysql-server-5.5 mysql-server/root_password_again select 123456 | debconf-set-selections
+    apt-get install mysql-server-5.5
+
+    # 系统依赖解决，开始 perl 部分
+    git clone git://github.com/stf-storage/stf.git
+    cd stf
+    cpanm Redis Data::Dumper::Concise
+    cpanm --installdeps .
+
+    # 创建 mysql 库和用户
+    mysql -uroot -p -e 'create database stf'
+    mysql -uroot -p -e 'grant all privileges on stf.* to stf@"%" identified by "654321"'
+    # 默认监听本机，分布式系统肯定是要放开这个的
+    sed -i 's/127.0.0.1/0.0.0.0/' /etc/mysql/my.cnf
+    service mysql restart
+    # 导入 sql 建表
+    mysql -ustf -p stf < misc/stf.sql
+
+    # 给 worker 和 dispatcher 设置队列使用 redis
+    export STF_QUEUE_TYPE=Redis
+    export STF_REDIS_HOSTPORT=192.168.0.101:6379
+    # 所有的角色都要有自己独有的 hostid
+    export STF_HOST_ID=1
+    export STF_HOME=/root/stf
+
+    # 启动 dispatcher，这里目前还只会用 plack，不知道怎么用 nginx/apache
+    export USE_PLACK_REPROXY=1
+    # 研究阶段可以打开 debug 看系统是怎么分发怎么平衡怎么确定使用哪个storage的file的过程
+    export STF_DEBUG=1
+    plackup -a etc/dispatcher.psgi
+
+    # 启动 worker
+    ./bin/stf-worker
+
+    # 启动管理界面网站，可以通过 web 添加 cluster 和 storage
+    plackup -a etc/admin.psgi -p 9000 &
+
+    # 一个 cluster 下至少需要有 3 个 storage，这里用三个目录三个端口来模拟
+    mkdir -p /data{1,2,3}
+    export STF_STORAGE_ROOT=/data1
+    plackup -a etc/storage.psgi -p 8888 &
+    export STF_STORAGE_ROOT=/data2
+    plackup -a etc/storage.psgi -p 8889 &
+    export STF_STORAGE_ROOT=/data3
+    plackup -a etc/storage.psgi -p 8890 &
+
+{% endhighlight %}
+
+然后上 9000 端口的 web 添加 cluster 和 storage，如下截图：
+
+![cluster](/images/uploads/stf-admin1.png)
+
+![storage](/images/uploads/stf-admin.png)
+
+最后测试一下上传下载，如果上面 psgi 是 DEBUG 运行的，就可以看到详细的过程了。
+
+{% highlight bash %}
+    lwp-request -m PUT http://192.168.0.101/bucket
+    ^D
+    lwp-request -m PUT http://192.168.0.101:5000/bucket/test.txt
+    test
+    ^D
+    lwp-request http://192.168.0.101:5000/bucket/test.txt
+    ls /data1/p/e/g/k/pegkuclninhsyqxftuzpwcuhgughpa.txt
+    ls /data2/p/e/g/k/pegkuclninhsyqxftuzpwcuhgughpa.txt
+{% endhighlight %}
+

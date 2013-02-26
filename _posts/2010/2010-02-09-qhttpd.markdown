@@ -1,0 +1,14 @@
+---
+layout: post
+title: qhttpd
+date: 2010-02-09
+category: web
+---
+
+今天偷菜极不顺利，QQ空间老坏，看着那个Qhttpd的502提示页面就郁闷，决定自己也安一个看看。
+<a href="http://www.qdecoder.org/qhttpd/download.qsp">http://www.qdecoder.org/qhttpd/download.qsp</a>
+话说网上人都说QQ的视频服务器用的是qhttpd，Qzone用的是自己的qzhttpd呀。为啥农场的错误是qhttpd呢？
+以上，过完年在说。呵呵
+过年回来鸟~~去韩国下载了qhttpd来看，默认安装配置什么的，真的超级简单——功能也超级简单（连logformat都没有）。如果想要玩出花样来，好吧，从源代码开始，慢慢写C去吧~~~
+
+

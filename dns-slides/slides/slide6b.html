@@ -1,0 +1,221 @@
+<!-- BEGIN slide -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>DNS查询过程</title>
+<meta name="Content-Type" content="text/html; charset=gb2312" />
+<meta name="generator" content="Spork v0.21" />
+<link rel='icon' href='favicon.png' />
+  <link rel="stylesheet" type="text/css" href="" />
+<style type="text/css"><!--
+/* BEGIN index.css */
+hr {
+    color: #202040;
+    height: 0px;
+    border-top: 0px;
+    border-bottom: 3px #202040 ridge;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+a:link {
+    color: #123422;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #123333;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+    font-size: 24pt;
+    margin: 6pt;
+}
+
+div p {
+    font-size: 18pt;
+    margin-top: 12pt;
+    margin-bottom: 12pt;
+    margin-left: 6pt;
+    margin-right: 6pt;
+}
+
+small {
+    font-size: 9pt;
+    font-style: italic;
+}
+
+#topbar {
+    background: hotpink;
+    color: blue;
+    position:absolute;
+    right: 5px;
+    left: 5px;
+    top: 5px;
+    height: 50px;
+}
+
+#bottombar {
+    background: hotpink;
+    color: blue;
+    position: fixed;
+    right: 5px;
+    left: 5px;
+    bottom: 5px;
+    height: 50px;
+    z-index: 0;
+}
+
+.top_spacer {
+    height: 0px;
+    margin: 0px 0px 0px 0px;
+    padding: 1px 0px 0px 0px;
+}
+
+.spacer {
+    bottom: 5px;
+    height: 50px;
+}
+
+#content {
+    background:#fff;
+    margin-left: 20px;
+    margin-right:20px;
+    margin-top: 80px;
+}
+
+
+#logo {
+    position: fixed;
+    right: 40px;
+    bottom: 51px;
+    width: 130px;
+    height: 150px;
+    z-index:3;
+    background-image: url(/palm90.png);
+    background-repeat: no-repeat;
+}
+/* END index.css */
+
+--></style>
+<script type="text/javascript">
+// BEGIN controls.js
+function nextSlide() {
+    window.location = 'slide6c.html#end';
+}
+
+function prevSlide() {
+    window.location = 'slide6a.html';
+}
+
+function indexSlide() {
+    window.location = 'index.html';
+}
+
+function startSlide() {
+    window.location = 'start.html';
+}
+
+function closeSlide() {
+    window.close();
+}
+
+function handleKey(e) {
+    var key;
+    if (e == null) {
+        // IE
+        key = event.keyCode
+    } 
+    else {
+        // Mozilla
+        if (e.altKey || e.ctrlKey) {
+            return true
+        }
+        key = e.which
+    }
+    switch(key) {
+        case 27: closeSlide(); break
+        case 36: indexSlide(); break
+        case 32: nextSlide(); break
+        case 100: nextSlide(); break
+        case 46: nextSlide(); break
+        case 97: prevSlide(); break
+        case 44: prevSlide(); break
+        case 112: startSlide(); break
+        default: //xxx(e.which)
+    }
+}
+
+document.onkeypress = handleKey
+document.onclick = nextSlide
+// END controls.js
+
+</script>
+</head>
+<body>
+<div id="topbar">
+<table width='100%'>
+<tr>
+<td width="13%">DNS</td>
+<td align="center" width="73%">
+    <a accesskey="s" href="start.html">DNS - DNS协议及应用简介</a>
+</td>
+<td align="right" width="13%">
+    #6
+</td>
+</tr>
+</table>
+</div>
+<!-- END top -->
+
+<div id="content">
+<div class="top_spacer"></div>
+
+<h2>DNS查询过程</h2>
+<ul>
+<li>举例：</li>
+
+<ul>
+<li>电脑发出“可递归”&#40;RFC1034中定义的&#34;recursive&#34;&#41;查询的请求到自己配置的LDNS服务器上</li>
+<li>LDNS检查自己的权威认证区——一般是没有的</li>
+<li>LDNS检查自己的非权威缓存信息</li>
+
+<ul>
+<li>有，返回结果，完毕</li>
+<li>没有，向其他NS查询</li>
+</ul></ul></ul>
+<small>continued...</small>
+
+</div>
+<!-- BEGIN bottom -->
+<div id="bottombar">
+<table width="100%">
+<tr>
+<td align="left" valign="middle">
+    <div style="display:none">
+    <a accesskey='p' href="slide6a.html"></a> |
+    <a accesskey='i' href="index.html"></a> |
+    <a accesskey='n' href="slide6c.html#end"></a>
+    </div>
+</td>
+<td align="right" valign="middle">
+    Copyright &copy; 2012 RENN
+</td>
+</tr>
+</table>
+</div> 
+<div id="logo"></div>
+<div class="spacer">
+<a name="end"></a>
+</div>
+</body>
+</html>
+
+
+<!-- END slide -->

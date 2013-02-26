@@ -1,0 +1,178 @@
+---
+layout: post
+title: 修改dbname常见的一个错误NID-00135及解决…
+date: 2009-11-03
+category: database
+tags:
+  - oracle
+---
+
+oracle自带有nid用以修改dbname。查看其命令语法如下表所示：
+
+    DBNEWID: Release 10.2.0.4.0 - Production on Wed Jun 24 20:06:08 2009
+    Copyright (c) 1982, 2007,
+    Oracle.    All
+    rights reserved.
+    Keyword
+    Description                                        (Default)
+    ----------------------------------------------------
+    TARGET            Username/Password                            (NONE)
+    DBNAME            New
+    database name                            (NONE)
+    LOGFILE
+    Output Log
+    (NONE)
+    REVERT            Revert
+    failed
+    change
+    NO
+    SETNAME
+    Set a new database name
+    only
+    NO
+    APPEND            Append
+    to output log
+    NO
+    HELP                Displays
+    these
+    messages                NO
+其动作描述用“=”表示。
+
+假设某oracle数据库sys密码为123456，欲更名dbname为aaa，则其修改dbname的命令应如下行所示：
+
+nid target=sys/123456 dbname=aaa
+
+网上关于修改dbname的博客文章和论坛问答，基本都是在windows平台上的操作。其提示要点，在于运行nid系统命令之前，必须将数据库置于mount状态下。以此类推，在linux下的操作步骤，应该如下：
+{% highlight sql %}
+sql > shutdown
+immediate;
+sql > startup mount;
+sql > host nid target=sys/123456 dbname=aaa
+{% endhighlight %}
+但我按此步骤进行之后，却提示如下字段：
+    NID-00135: There are 1 active threads
+    Change of database name failed during validation - database is
+    intact.
+    DBNEWID - Completed with validation errors.
+经过多机试验，发现这个错误并非偶然出现一两次而已，至于windows平台下，为何无人提起，就有待日后研究了。
+关于这个错误，关键是检查两个地方。
+第一是表空间与数据文件的状态：
+    SQL> select
+    file#,status,name from
+    v$datafile;
+    FILE#
+    STATUS    NAME
+    ---------- -------
+    --------------------------------------------------------------------------------
+    1
+    SYSTEM    /u01/app/oracle/oradata/db1/system01.dbf
+    2
+    ONLINE    /u01/app/oracle/oradata/db1/undotbs01.dbf
+    3
+    ONLINE    /u01/app/oracle/oradata/db1/sysaux01.dbf
+    4
+    ONLINE    /u01/app/oracle/oradata/db1/usertbs.dbf
+    5
+    ONLINE    /u01/app/oracle/oradata/db1/raocl.dbf
+正常情况下，其状态应该是online或者offline。但如果因为历史操作的原因，导致某数据文件的状态变成了recovery，那么就会出问题了。
+解决方法也简单，drop掉出错的数据文件就行了。
+第二是归档文件的设置：
+    SQL> archive log
+    list
+    Database log
+    mode                            Archive
+    Mode
+    Automatic
+    archival
+    Enabled
+    Archive
+    destination                        /u01/app/oracle/product/10.2.0/db1/dbs/arch
+    Oldest online log
+    sequence
+    31
+    Next log sequence to
+    archive
+    33
+    Current log
+    sequence
+    33
+    SQL> host ls $ORACLE_HOME/dbs
+    alert_db1.log
+    arch1_29_689269707.dbf    control01.ctl
+    initdw.ora    spfiledb1.ora.bak
+    arch1_25_689269707.dbf    arch1_30_689269707.dbf    control02.ctl
+    init.ora
+    arch1_26_689269707.dbf    arch1_31_689269707.dbf    db1_ora_4704.trc    lkAAA
+    arch1_27_689269707.dbf    arch1_32_689269707.dbf    hc_db1.dat                lkDB1
+    arch1_28_689269707.dbf    cntrldb1.dbf                        initdb1.ora
+    orapwdb1
+如果没有设置归档文件路径或者没有归档文件存在，nid也会出错。
+设置归档文件模式、路径并手工归档的命令分别如下：
+    SQL> alter database archivelog;
+    SQL> alter system
+    set log_archive_dest_1='location=/u01/app/oracle/oradata/db1/arch';
+    SQL> alter system
+    archive log current;
+注意：归档文件模式也要在mount下设置。
+确认完成这两步以后，在重新运行nid系统命令，出现如下字段，即可成功更改dbname了。
+    Control Files in database:
+    /u01/app/oracle/product/10.2.0/db1/dbs/control01.ctl
+    /u01/app/oracle/product/10.2.0/db1/dbs/control02.ctl
+    Change database ID and database
+    name DB1 to AAA? (Y/[N]) => Y
+    Proceeding with operation
+    Changing database ID from 1283133323 to
+    1845742016
+    Changing database name from DB1
+    to AAA
+    Control
+    File
+    /u01/app/oracle/product/10.2.0/db1/dbs/control01.ctl -
+    modified
+    Control
+    File
+    /u01/app/oracle/product/10.2.0/db1/dbs/control02.ctl -
+    modified
+    Datafile
+    /u01/app/oracle/oradata/db1/system01.dbf - dbid changed, wrote new
+    name
+    Datafile
+    /u01/app/oracle/oradata/db1/undotbs01.dbf - dbid changed, wrote new
+    name
+    Datafile
+    /u01/app/oracle/oradata/db1/sysaux01.dbf - dbid changed, wrote new
+    name
+    Datafile
+    /u01/app/oracle/oradata/db1/usertbs.dbf - dbid changed, wrote new
+    name
+    Datafile
+    /u01/app/oracle/oradata/db1/raocl.dbf - dbid changed, wrote new
+    name
+    Datafile
+    /u01/app/oracle/oradata/db1/temp01.dbf - dbid changed, wrote new
+    name
+    Control
+    File
+    /u01/app/oracle/product/10.2.0/db1/dbs/control01.ctl - dbid
+    changed, wrote new name
+    Control
+    File
+    /u01/app/oracle/product/10.2.0/db1/dbs/control02.ctl - dbid
+    changed, wrote new name
+    Instance
+    shut down
+    Database name changed to
+    AAA.
+    Modify parameter file and generate a new password file before restarting.
+    Database ID for database AAA
+    changed to 1845742016.
+    All previous backups and archived redo logs for this database are
+    unusable.
+    Database has been shutdown, open
+    database with RESETLOGS option.
+    Succesfully changed database
+    name and
+    ID.
+    DBNEWID - Completed succesfully.
+至于引起这个错误的深层次原因，从之前有过的其他操作猜测，会不会是scn不一致的原因？？如果是这个原因，那或许只要很简单的CKPT就可以了。找时间试验一下。
+

@@ -1,0 +1,280 @@
+----
+presentation_topic: DNS
+presentation_title: DNS - DNS协议及应用简介
+presentation_place: 人人网
+presentation_date: May 25, 2012
+----
+== 什么是DNS
+
+* 网络的原始时代
+** We are the cowboys over the WWW(wild wild west)~ BUT
++** 采用IP地址访问——真滴记不住啊有木有??!!
++** 在NIC的hosts.txt里记录主机名与IP地址的映射关系
+*** NIC互联网信息中心，不是网络适配器~~
+*** 几天NIC更新一次，大家去下载——12306抢票的感觉有木有!!
++** "We will encourage you to develop the three great virtues of a programmer: laziness, impatience, and hubris." -- LarryWall
++** 大家都想要自己独立的够酷的名字空间
++** DNS(Domain Name System)诞生了
+----
+== DNS设计
+* 能够指明网络地址、路由等信息
+* 分布式存储(数据正确性，失败时使用缓存数据)
+* 数据格式支持多协议传输(FTP/EMAIL/SSH/RSYNC/SQL...)
+* 支持多协议访问(TCP/UDP)
+----
+== DNS组成
+* 域名空间和资源记录
+** 域名空间是一个树状结构
+** 资源记录是和名字相关的数据
+* 名字服务器
+** 服务器端程序，用来保留域名空间和资源记录
+** 一般只保存域名空间的一个子集，作为这个子集的权威。
+** 一个子集内的信息又算一个区(zone)
+** 其他信息通过其他名字服务器查询
+* 解析器
+** 客户端程序，可以访问至少一个名字服务器，接收返回的结果或者转向其他名字服务器查询
+----
+== 域名空间
+* 树状结构的每个结点都对应一个资源集(可能为空)
+* 每个结点的标记为0-63字节
+** 0字节标记为根记录(.)
+** 标记对大小写不敏感
+* 结点的域名由从结点到根的标记连接组成
+** 每个域名的结点最多不超过127个
+** 一般实现中域名长度不超过255字节
+----
+== DNS查询过程
+* 递归查询
+** 要点：“请对方辩友正面回答！”
+** 客户端请求必须得到一个yes or no的响应——NXDOMAIN或NOERROR
+** 一般情况下，电脑客户端都会使用递归查询
++* 迭代查询
+** 要点：“今人不见古时月，今月曾经照古人”
+** 服务器端(今人)返回一个可能知道该域名(古月)解析结果的名字服务器(古人)，然后客户端重新去那台查询
+----
+== DNS查询过程
+* 举例：
+** 电脑发出“可递归”(RFC1034中定义的"recursive")查询的请求到自己配置的LDNS服务器上
++** LDNS检查自己的权威认证区——一般是没有的
+** LDNS检查自己的非权威缓存信息
+*** 有，返回结果，完毕
+*** 没有，向其他NS查询
++** 配置了forwarder的话，只向forwarder的NS发请求，这个请求依然是“可递归”
+** 否则向根DNS发出“迭代”(RFC1034中的大多数情况下仅仅把它叫"non-recursive"，偶尔叫iterative)请求
+*** 全世界只有13个根DNS，所以根是不会响应递归请求的
++** 根DNS返回顶级域(.com./.net./.org.等等)DNS的IP给LDNS
+** LDNS向顶级域权威DNS发出“迭代”请求
+** 顶级域权威DNS返回对应一级域的权威DNS的IP
+** LDNS向一级域权威DNS发出“迭代”请求
+** 一级域权威DNS查找到对应主机名的资源记录，返回结果
+** LDNS将结果返回给电脑，结束本次“递归”查询
+----
+== DNS查询过程
+{ image: http://hi.csdn.net/attachment/201108/26/0_1314324260OQ6b.gif }
+ http://technet.microsoft.com/zh-cn/library/cc775637(v=ws.10) 
+----
+== DNS查询结构体
+前面讲的是RFC1034《DOMAIN NAMES - DOMAIN CONCEPTS AND FACILITIES》里关于DNS的概念阐述。
+
+然后说一下RFC1035《DOMAIN NAMES - IMPLEMENTATION AND SPECIFICATION》里关于DNS的实现阐述。
+
+ ftp://ftp.rfc-editor.org/in-notes/rfc1035.txt 
+----
+== UDP报文的结构
+* 报头
+                                   1  1  1  1  1  1
+     0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                      ID                       |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |QR|   Opcode  |AA|TC|RD|RA|   Z    |   RCODE   |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                    QDCOUNT                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                    ANCOUNT                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                    NSCOUNT                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                    ARCOUNT                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+这张图大家都用，汗~顶上一个数字表示这列是1bit，后面10-15bit分成两行写了，……
+** ID：占2bytes，客户端生成，服务器端返回时靠这个对应客户端的请求
+** QR(Question Response)：占1bit，0代表查询，1代表响应
+** Opcode：占4bits，0代表标准查询，1代表反向查询，2代表服务器状态查询，3-15没啥用，过去还有个完全查询已经废弃了
+** AA(Authoritative Answer)：占1bit，1代表权威响应，0代表非权威响应
+** TC(TrunCation)：占1bit，是否截断报文——UDP一个报文只有512bytes
+** RD(Recursion Desired)：占1bit，客户端生成，服务器端沿袭，1代表启用递归查询
+** RA(Recursion Available)：占1bit，服务器端生成，1代表服务器支持递归查询
+*** 这里我们看到实际没有关于迭代的设置，所以RFC中更多的把迭代叫成非递归
+** Z：占3bits，保留字段，设0
+** RCODE：占4bits，服务器端生成的响应返回码。0:正常，1:格式错误，2:DNS错误，3:域名不存在，4:查询类型不支持，5:拒绝查询
+** QDCOUNT：占2bytes，查询记录的个数
+** ANCOUNT：占2bytes，回复记录的个数
+** NSCOUNT：占2bytes，权威记录的个数
+** ARCOUNT：占2bytes，额外记录的个数
+----
+== UDP报文的结构
+* 查询
+                                    1  1  1  1  1  1
+      0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                                               |
+    /                     QNAME                     /
+    /                                               /
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                     QTYPE                     |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                     QCLASS                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+** QNAME：一般就是查询的域名了。被编码成labels序列，每个label包括：1byte表示后续字符串长度+字符串。最后一个label以0长度+空字符串表示域名结束
+*** QNAME可能是奇数个btyes，不需要填充完整
+*** 使用label的原因是为了压缩报文，因为可能一个域名查询多个TYPE，所以后面的重复label可以用指针代替
+*** 在目前的DNS实现中，对一个报文发送多个查询的情况，要求QNAME必须一致，否则递归查询碰上两个不同QNAME权威NS不一致的情况就完蛋鸟~
+** QTYPE：查询类型
+** QCLASS：查询协议
+----
+== UDP 报文的结构
+* 响应
+                                    1  1  1  1  1  1
+      0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                                               |
+    /                                               /
+    /                      NAME                     /
+    |                                               |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                      TYPE                     |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                     CLASS                     |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                      TTL                      |
+    |                                               |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                   RDLENGTH                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--|
+    /                     RDATA                     /
+    /                                               /
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+** RDLENGTH：占2bytes，表示RDATA的长度
+** RDATA：响应记录，长度与格式不定。比如最常见的话，如果TYPE==A，CLASS==IN，那么RDATA就是占位4bytes的ARPA网络地址	
+ http://www.iana.org/assignments/dns-parameters 
++* 权威
+* 附加
+这两个格式和响应一样，不赘述
+
+关于附加(Additional)资源记录，在EDNS和DNSSEC中会用来存放OPT记录数据，分别用来支持超过512字节的UDF包和确认是否支持DNSSEC。
+----
+== 资源记录(Resource Record)
+* 常见RR(TYPE)：
+** SOA(Start Of Authority)
+放在zone的最开始，有且仅有一个。用来描述负责这个zone的名字服务器，版本信息等。举例BIND配置说明:
+
+     @    IN      SOA          renren.com. root.renren.com.  ( 
+                                    2012051401      ; Serial 
+                                    3600            ; Refresh 
+                                    300             ; Retry 
+                                    3600000         ; Expire 
+                                    3600 )          ; Minimum 
+
++*** @代表整个zone
++*** renren.com.代表本机主机名
+*** root.renren.com.代表本机管理员邮箱root@renren.com
++*** serial代表zone版本，每次变动都应该自增，方便从服务器校验同步
++*** refresh代表从服务器同步间隔——现在一般采用主服务器notify的方式
++*** expire废弃时间——超过这个时间从依然连不上主，就自杀……
++*** minimum代表zone内记录的默认TTL，非权威DNS做缓存时不能超过这个时间
+----
+== 资源记录(Resource Record)
+* 常见基础RR(TYPE)：
+** A(Address)
+*** 主机名对应的IPv4地址
++*** AAAA代表的就是IPv6地址，因为IPv6是128位，4倍于IPv4的32位，所以写4个A
+** CNAME(Canonical NAME)
+*** 别名
++*** DNAME，在RFC2672中定义，bind9里已经实现，类似CNAME。但CNAME之后对应的是具体主机，而DNAME用处是别名掉整个域
+** TXT
+*** 返回文本信息，可能用来描述这个记录
++*** 但其实有HINFO专门做主机信息描述资源记录
+** MX(Mail Exchanger)
+*** 邮件服务器主机，比A记录多一个优先级定义，数值越低越优先
+** NS(Name Server)
+*** 本zone的权威名字服务器
+** PTR(Pointer Record)
+*** 主要用来实现反向解析
++*** 小提示：互联网上，60%的DNS查询是反向解析，正向只有40%
+** TSIG(Transaction Signature)
+*** 签名加密动态更新记录
+----
+== 资源记录(Resource Record)
+* 协议类RR(class):
+** IN(internet)
+** CS(csnet)
+** HS(hesiod)
+** CH(chaos)
++** 虽然都没见过，不过还是要修正前面A记录的说明，32位IP地址只是IN情况下的；如果是CH，应该是16位八进制Chaos地址域名
+----
+== 资源记录(Resource Record)
+* 查询类RR(QTYPE):
+** AXFR(Authoritative Zone Transfer)
+*** 请求传输整个zone的资源
+** IXFR(Increamental Zone Transfer)
+*** AXFR的改进版，根据serial数值传输变更了的资源
+** MAILA
+*** 废弃了，现在都是用MX
+** *
+*** 请求所有记录
+ http://en.wikipedia.org/wiki/PTR_record 
+----
+== DNS应用
+* DNS负载均衡
+因为A记录可以返回多个，所以在LVS没有诞生的中古时代，人们是使用DNS做负载均衡的
+
+问题：没有健康检查，没有权重设置，没有哈希分布，没有……
+* 动态DNS
+上面这些其实都不是问题。通过自定义函数返回不同的IP即可。DNS做负载均衡真正的问题是：
++ TTL时间内没办法改变客户端访问路由！
+
+所以最后动态DNS的应用场合就变成了CDN系统全局调度器。
+----
+== CDN系统内的Dynamtic DNS
+* 要点：根据ip地址段对应的view，返回不同的IP地址
+* 常见应用：Bind9、TinyDNS、WINMyDNS
+* 运维难点：收集足够准确的IP段信息
++ 小设想：一般情况下，我们都说DDNS上收到的localDNS的IP，真的么？
++         上面的协议实现部分，我们其实并没有看到DNS报文里有哪存放ip的，也就是说：ip还是TCP/IP层的事情。
+          实际根据的是迭代查询的原理！
+          那么我们如果在上海搭建一个'recursion yes;'的bind，然后在北京的dns上配置forwarder到上海，最终权威NS建连的IP是上海！
+好吧，正过来想一想：如果每个客户端上都自带一个支持迭代查询的dnsproxy，那么ip收集也就方便了。
+----
+== 偏门武器谱
+一本正经说这么多，最后来几个有趣的DNS应用：
+
+* 反垃圾邮件白名单
+    dig TXT 21cn.com
+* 天天背单词之英汉字典
+    echo "function j() { dig $1.jianbing.org txt +short | perl -pe's/\\(\d{1,3})/chr $1/eg; s/\"//g' }" >> ~/.bashrc
+    source !$
+    j apple
+* 翻墙
+ http://code.kryo.se/iodine/
+ http://blog.codingnow.com/2011/06/dns_tunnel.html 
+----
+
+    #!/human/mouth
+    use active;
+    use ME;
+    use Topic qw/DNS/;
+    
+    my $topic = Topic::DNS->new( slide => 'Spork');
+    my $me = ME->bind([ qw/mouth ears/ ]);
+    while( $me->say($topic) or my $ears = $me->listen() ) {
+        kill STOP => $me->say($topic);
+        my $question = <$ears>;
+        say "这个问题问得好！";
+        say $ears $topic->answer($question);
+        kill CONT => $me->say($topic);
+    };
+    say "真的木问题鸟";
+    $topic->close();
+    __END__
+

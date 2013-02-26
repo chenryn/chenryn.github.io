@@ -1,0 +1,29 @@
+---
+layout: post
+title: awk调用shell变量
+date: 2009-11-03
+category: bash
+tags:
+  - awk
+---
+
+今天的问题：因为某个原因，需要长期探测对某机器的ping值情况。期望的输出格式是“丢包率 响应时间均值”。
+
+写个小脚本，最后echo一下，自然好办的很。不过在crontab里看到之前大都有一条任务写的是ping 1.2.3.4，于是想：能不能让这个脚本的内容也尽量写在一句话里呢？
+
+连动命令的话，输出结果都分了行。于是开始摸索awk的内外变量调用问题。
+
+网上说明很多，大都是BEGIN或者-v的办法。一一试过后，发现其结果也都是分行显示的。
+
+最后大海淘沙般找出了适用的写法。结果全在'"`的区分上——而且我至今不知道为啥非得按如下写法才行：
+{% highlight bash %}
+ls=`ping -c 5 1.2.3.4 | grep loss | awk -F, '{print $3}'`;ping -c 5 1.2.3.4 | grep rtt | awk -F/ '{print "'"$ls"' avg " $5 "ms"}'
+{% endhighlight %}
+执行显示结果如下：
+0% packet loss avg 17.486ms
+——————————————————————————————
+时隔近月，在熟悉了awk的变量以后，我发现其实没有这么复杂，只要下面这样一句就简单搞定了：
+{% highlight bash %}
+ping -c 5 1.2.3.4|awk 'BEGIN{RS="##";FS=",|/"}{print $3,$5,$8“ms”}'
+{% endhighlight %}
+执行结果同上。
