@@ -2,6 +2,8 @@
 layout: post
 title: perl 模块打包加入外部依赖程序
 category: perl
+tags:
+  - CPAN
 ---
 
 Perl 社区并不是所有的东西都发布在 CPAN 上。甚至专门有一个 `Module::ThirdParty` 模块记录这些非 CPAN 的 perl 项目列表。其中最有名的应该就属写博客的 `Movable Type` 和做监控的 `SmokePing` 了。
