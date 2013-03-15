@@ -3,6 +3,11 @@ layout: post
 title: Linux系统调优读书笔记
 date: 2012-04-30
 category: linux
+tags:
+  - tunning
+  - monitor
+  - ruby
+  - hadoop
 ---
 
 今天在图书馆看书，摘抄一些有意思的细节。
