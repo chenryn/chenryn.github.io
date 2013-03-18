@@ -107,6 +107,4 @@ if ('<TMPL_VAR NAME="SSH">' == 'open') {
 </body>
 </html>
 {% endhighlight %}
-用apache分别发布cgi目录和静态目录。然后访问一下；如下图：
-
-<a href="http://chenlinux.com/wp-content/uploads/2011/06/QQ截图未命名.png"><img class="alignnone size-medium wp-image-2465" title="QQ截图未命名" src="http://chenlinux.com/wp-content/uploads/2011/06/QQ截图未命名-297x300.png" alt="" width="297" height="300" /></a>
+用apache分别发布cgi目录和静态目录。然后访问一下；OK。

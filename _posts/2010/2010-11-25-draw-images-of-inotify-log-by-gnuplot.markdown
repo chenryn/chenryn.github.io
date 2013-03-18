@@ -47,19 +47,22 @@ echo "`date +%F-%T` $PURGE_URL" >> purge.log
 cache_purge $PURGE_URL
 done
 {% endhighlight %}
+
 然后运行如下命令，分别得到html/js/css的每分钟更新量：（有点小瑕疵，即当某分钟html无更新时js和css也无法记录，不过这种概率应该不高）
 
+{% highlight bash %}
 cat /home/tools/purge.log |awk -F"[:|-]" '/html/{a[$4":"$5]++}/js/{b[$4":"$5]++}/css/{c[$4":"$5]++}END{for(i in a){print i,a[i],b[i],c[i]}}'|sort
+{% endhighlight %}
 
 得到文件类似如下：
 
-11:23 28 15
-11:24 10 7
-11:25 224 37 13
-11:26 470 192
-11:27 344 187 1
-11:28 441 77 2
-11:29 419 8
+    11:23 28 15
+    11:24 10 7
+    11:25 224 37 13
+    11:26 470 192
+    11:27 344 187 1
+    11:28 441 77 2
+    11:29 419 8
 
 然后创建gnuplot.conf如下：
 {% highlight tcl %}
@@ -79,6 +82,7 @@ set title "DPD expires"
 set grid
 plot "log" using 1:2 title "html/min","log" using 1:3 title "js/min","log" using 1:4 title "css/min"
 {% endhighlight %}
-运行cat gnuplot.conf|gnuplot就得到log.png了，如下：
 
-<a href="http://chenlinux.com/wp-content/uploads/2010/11/log.png"><img class="alignnone size-full wp-image-2075" title="log" src="http://chenlinux.com/wp-content/uploads/2010/11/log.png" alt="" width="600" height="150" /></a>
+运行 `cat gnuplot.conf|gnuplot` 就得到 log.png 了，如下：
+
+![gnuplot-log](/images/uploads/log.png)
