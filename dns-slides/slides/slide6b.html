@@ -180,12 +180,10 @@ document.onclick = nextSlide
 <h2>DNS查询过程</h2>
 <ul>
 <li>举例：</li>
-
 <ul>
 <li>电脑发出“可递归”&#40;RFC1034中定义的&#34;recursive&#34;&#41;查询的请求到自己配置的LDNS服务器上</li>
 <li>LDNS检查自己的权威认证区——一般是没有的</li>
 <li>LDNS检查自己的非权威缓存信息</li>
-
 <ul>
 <li>有，返回结果，完毕</li>
 <li>没有，向其他NS查询</li>

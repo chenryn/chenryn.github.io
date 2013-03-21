@@ -181,7 +181,6 @@ document.onclick = nextSlide
 use active;
 use ME;
 use Topic qw/DNS/;
-
 my $topic = Topic::DNS-&gt;new&#40; slide =&gt; &#39;Spork&#39;&#41;;
 my $me = ME-&gt;bind&#40;[ qw/mouth ears/ ]&#41;;
 while&#40; $me-&gt;say&#40;$topic&#41; or my $ears = $me-&gt;listen&#40;&#41; &#41; {

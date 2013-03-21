@@ -195,7 +195,6 @@ document.onclick = nextSlide
 </pre>
 <ul><ul>
 <li>QNAME：一般就是查询的域名了。被编码成labels序列，每个label包括：1byte表示后续字符串长度+字符串。最后一个label以0长度+空字符串表示域名结束</li>
-
 <ul>
 <li>QNAME可能是奇数个btyes，不需要填充完整</li>
 <li>使用label的原因是为了压缩报文，因为可能一个域名查询多个TYPE，所以后面的重复label可以用指针代替</li>

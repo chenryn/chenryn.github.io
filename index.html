@@ -4,7 +4,6 @@ title: 三斗室
 tagline: 与poem斗 与stock斗 与tech斗 其乐无穷
 ---
 {% include JB/setup %}
-
 {% for post in paginator.posts %}
   <div class="full" style='background-color: #FFF;'>
     <h1 class="entry-title">
@@ -31,7 +30,6 @@ tagline: 与poem斗 与stock斗 与tech斗 其乐无穷
   </div>
   <div class="rule"><hr/></div>
 {% endfor %}
-
 {% if paginator.total_pages > 1 %}
   {% include paginator.html %}
 {% endif %}

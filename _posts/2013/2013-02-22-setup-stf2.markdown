@@ -79,3 +79,26 @@ STF 更新到 2.0 版本，支持使用 redis 队列做任务分发，比原先�
     ls /data2/p/e/g/k/pegkuclninhsyqxftuzpwcuhgughpa.txt
 {% endhighlight %}
 
+__2013 年 03 月 20 日更新__
+
+前面测试记录的，都是纯 perl 的部分。实际运用的时候，有些地方是可以用 nginx 来替代的。
+
+源代码包中，apache-sample.conf 比 nginx-sample.conf 要全面的多。不过其实还是 nginx 配置起来容易，比如给 dispatcher.psgi 加上 nginx 代理，只需要这样就可以了：
+
+{% highlight nginx %}
+server {
+    listen 80;
+    server_name stf;
+    location / {
+        proxy_pass http://192.168.0.101:5000/;
+    }
+    location /reproxy {
+        internal;
+        set $reproxy $upstream_http_x_reproxy_url;
+        proxy_pass $reproxy;
+    }
+}
+{% endhighlight %}
+
+然后我们就可以直接通过 `http://192.168.0.101/bucket/test.txt` 来访问了。
+

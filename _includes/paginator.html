@@ -1,6 +1,5 @@
 <div id="post-pagination" class="pagination pagination-centered">
   <ul class="pages nav nav-pills">
-
   {% if paginator.previous_page %}
     <li>
     {% if paginator.previous_page == 1 %}
@@ -14,7 +13,6 @@
       <a href="#">Previous</a>
     </li>
   {% endif %}
-
   {% if paginator.page == 1 %}
     <li class="page active">
       <a href="#">1</a>
@@ -24,7 +22,6 @@
       <a href="/">1</a>
     </li>
   {% endif %}
-
   {% for count in (2..paginator.total_pages) %}
     {% if count == paginator.page %}
     <li class="page active">
@@ -36,7 +33,6 @@
     </li>
     {% endif %}
   {% endfor %}
-
   {% if paginator.next_page %}
     <li>
       <a href="/page{{paginator.next_page}}">Next</a>
@@ -46,7 +42,5 @@
       <a href="#">Next</a>
     </li>
   {% endif %}
-
   </ul>
 </div>
-

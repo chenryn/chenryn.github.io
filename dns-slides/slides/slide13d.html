@@ -180,38 +180,31 @@ document.onclick = nextSlide
 <h2>资源记录(Resource Record)</h2>
 <ul>
 <li>常见基础RR&#40;TYPE&#41;：</li>
-
 <ul>
 <li>A&#40;Address&#41;</li>
-
 <ul>
 <li>主机名对应的IPv4地址</li>
 <li>AAAA代表的就是IPv6地址，因为IPv6是128位，4倍于IPv4的32位，所以写4个A</li>
 </ul>
 <li>CNAME&#40;Canonical NAME&#41;</li>
-
 <ul>
 <li>别名</li>
 <li>DNAME，在RFC2672中定义，bind9里已经实现，类似CNAME。但CNAME之后对应的是具体主机，而DNAME用处是别名掉整个域</li>
 </ul>
 <li>TXT</li>
-
 <ul>
 <li>返回文本信息，可能用来描述这个记录</li>
 <li>但其实有HINFO专门做主机信息描述资源记录</li>
 </ul>
 <li>MX&#40;Mail Exchanger&#41;</li>
-
 <ul>
 <li>邮件服务器主机，比A记录多一个优先级定义，数值越低越优先</li>
 </ul>
 <li>NS&#40;Name Server&#41;</li>
-
 <ul>
 <li>本zone的权威名字服务器</li>
 </ul>
 <li>PTR&#40;Pointer Record&#41;</li>
-
 <ul>
 <li>主要用来实现反向解析</li>
 </ul></ul></ul>
