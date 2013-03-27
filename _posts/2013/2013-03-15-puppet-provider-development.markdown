@@ -111,3 +111,7 @@ Puppet::Type.type(:package).provide :cpan, :parent => Puppet::Provider::Package 
 end
 {% endhighlight %}
 
+在一台没有安装 cpanm 等命令的主机上运行 `puppet agent --debug`，可以看到这么一行输出：
+
+    debug: Puppet::Type::Package::ProviderCpan: file cpanm does not exist
+

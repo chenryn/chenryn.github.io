@@ -45,6 +45,28 @@ XSlate 提供了 `dump` 语法糖，让我们可以直接使用 `<: $session | d
     true;
 {% endhighlight %}
 
+__2013 年 03 月 25 日更新__
+
+今天莫莫也换成 Xslate 模板，顺带告诉我这里一个更通用和优雅的修改方式：
+
+{% highlight perl %}
+    package DancerApp;
+    use Dancer ':syntax';
+    use Dancer::Session::Abstract;
+    use Dancer::Plugin::Auth::Extensible;
+
+    Dancer::Session::Abstract->attributes( qw(username) );
+
+    get '/' => sub :RequireLogin { template 'index' };
+    ...;
+    
+    true;
+{% endhighlight %}
+
+这样可以在各种 Session 引擎下通用了。
+
+__更新完毕__
+
 * 第二个坑：flashmessage 的处理
 
 这是一个外加模块，叫做 `Dancer::Plugin::FlashMessage` 。用它配合模版的 layout 功能，可以很方便的给应用提供全局的消息通知。使用方法如下：
