@@ -4,6 +4,8 @@ title: Projects
 ---
 <div class="row">
 之前经常看到一些稀奇古怪又很好玩的东西，转头就忘了，从今天开始，在这里记录一些工作用得上用不上能用得上不用用得上的名词，免得以后再忘了~~不定期更新。<br />
+2013-03-27<br />
+Haml: Ruby模板系统<a href="http://haml.info/docs/yardoc/">http://haml.info/docs/yardoc/</a><br />
 2013-03-18<br />
 HAR(HTTP Archive)：规范中文版<a href="http://weizhifeng.net/har-12-spec-chinese-edtion.html">http://weizhifeng.net/har-12-spec-chinese-edtion.html</a><br />
 2013-02-23<br />

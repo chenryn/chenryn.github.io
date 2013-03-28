@@ -3,6 +3,7 @@ layout: default
 title: Links
 ---
 <ul class="xoxo blogroll">
+<li><a href="http://www.jedi.be/blog/">Jong En Dynamische Informatica</a></li>
 <li><a href="http://www.planetdevops.net/">planetdevops</a></li>
 <li><a href="http://www.kitchensoap.com/" title="《网站运维》作者，Etsy 运维">Kitchen Soap</a></li>
 <li><a href="http://blog.johngoulah.com" title="Musings of linux, open source, cloud computing and systems">John Goulah</a></li>
