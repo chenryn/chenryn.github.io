@@ -1,6 +1,6 @@
 _site/*
 _theme_packages/*
-
+publish.sh
 Thumbs.db
 .DS_Store
 

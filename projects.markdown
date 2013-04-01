@@ -4,6 +4,8 @@ title: Projects
 ---
 <div class="row">
 之前经常看到一些稀奇古怪又很好玩的东西，转头就忘了，从今天开始，在这里记录一些工作用得上用不上能用得上不用用得上的名词，免得以后再忘了~~不定期更新。<br />
+2013-04-01<br />
+Batman.js: A client-side framework for Rails developers with CoffeeScript<a href="http://batmanjs.org/">http://batmanjs.org/</a><br />
 2013-03-27<br />
 Haml: Ruby模板系统<a href="http://haml.info/docs/yardoc/">http://haml.info/docs/yardoc/</a><br />
 2013-03-18<br />
