@@ -62,7 +62,7 @@ sed -i '167,176s/^#//' local_settings.py
 python manage.py syncdb
 
 cd /opt/graphite/conf
-rename 's/.example//' *.conf.example
+rename 's/.example//' *.example
 
 cd /opt/graphite/
 # 会监听 2003 端口

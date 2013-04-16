@@ -8,27 +8,33 @@ tags:
 ---
 
 今天研究puppet dashboard。主要有ENC和reports两个功能。其中ENC功能相当扯淡，因为你在web上点击添加的class/node/group，是没有任何依赖性检查(比如node命名是否符合fqdn，class是否存在)的，随便咋填绝无报错和拒绝！而且也没有提供类似report的导入工具，一旦启用就要完全重新手工输入所有配置……所以无论是从导入角度还是管理角度，自己实现一个靠谱点的ENC都是有必要的。    
+
 关于puppet的ENC配置，参见[ENC的文档](http://docs.puppetlabs.com/guides/external_nodes.html)    
+
 主要就是修改puppet.conf里两个配置：    
-node_terminus，由plain修改成exec；external_nodes，由none修改为ENC脚本的路径。    
+
+* `node_terminus`，由plain修改成exec；
+* `external_nodes`，由none修改为ENC脚本的路径。    
+
 类似如下：
+
     [master]    
     node_terminus = exec    
     external_nodes = /etc/puppet/webui/external_nodes    
+
 脚本输入输出的说明：    
 
     Its only argument is the name of the node to be classified, and it returns a YAML document describing the node.
 
 注意到此为止配置修改不算结束！文档中提到，puppet是支持同时开启ENC和site.pp配置的。puppet会自动merge两个配置。但是debug运行时可以看到，这个merge是按照node级别进行的。也就是说：    
 
-1. puppet master收到一个node的请求，如果node_terminus配置为exec，输出node的fqdn给external_nodes；    
-2. 收到external_nodes的返回，为一个yaml体或者空；    
+1. puppet master收到一个node的请求，如果 `node_terminus` 配置为exec，输出node的fqdn给 `external_nodes`；    
+2. 收到 `external_nodes` 的返回，为一个yaml体或者空；    
 3. 加载site.pp，这是按照文本顺序进行的。如果都是import "module"，那么最后就进入module的parameter和template处理。    
-4. 如果碰到import "node/*.pp"这样的配置，则开始加载node/*.pp中的node配置；    
-5. 如果node/*.pp中的node在当前的node object中不存在，那么新建这个object。    
-6. 如果已经存在，那么覆盖为后来的这个node配置。    
+4. 如果已经存在，检查是全局变量还是类，全局变量的话报错，类的话覆盖为site.pp中最后定义的类。    
+__2013年4月10日更新：感谢[@liu.cy](http://weibo.com/liucy1983)指出这里变量和类的区别__
 
-所以为了方便起见，请删除掉site.pp中的import "node/*.pp"这行配置。我在这里就被郁闷了很久。
+所以为了方便起见，请删除掉site.pp中的`import "node/*.pp"` 这行配置。我在这里就被郁闷了很久。
 
 然后是我这里的想法是尽量不更改pp的语法，只是提供一个把group里的ip到fqdn的转化然后查找cluster配置组合成yaml。    
 也就是说有一个group的配置目录，其配置文件为"groupname.pp"，内容如下：
@@ -46,7 +52,7 @@ group "groupname" {
 {% endhighlight %}
 那么以后服务器组有啥变更，只需要修改一下iplist就好了，不用重启puppet进程。    
 
-所以有两个脚本，一个是external_node脚本：    
+所以有两个脚本，一个是 `external_node` 脚本：
 {% highlight perl %}
 #!/bin/env perl
 use warnings;
