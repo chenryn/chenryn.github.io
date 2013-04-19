@@ -5,6 +5,7 @@ date: 2012-06-08
 category: monitor
 tags:
   - ganglia
+  - python
   - ats
 ---
 
