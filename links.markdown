@@ -35,6 +35,6 @@ title: Links
 <li><a href="http://blog.liulantao.com/" title="lax" target="_blank">Lax</a></li>
 <li><a href="http://l09.me/" title="风声" target="_blank">风声</a></li>
 <li><a href="http://shellblog.info/" title="莫言" target="_blank">莫言</a></li>
-<li><a href="http://mooser.me/" title="牛氓" target="_blank">mooser</a></li>
+<li><a href="http://mooser.me/" title="牛氓" target="_blank">牛氓</a></li>
 <li><a href="http://http://www.yinwang.org/" title="当然我在扯淡" target="_blank">当然我在扯淡</a></li>
 </ul>

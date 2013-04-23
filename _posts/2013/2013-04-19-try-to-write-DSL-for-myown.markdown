@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 
+title: 给自己写个运维语言(Newbie::Gift 介绍)
 category: perl
 ---
 
