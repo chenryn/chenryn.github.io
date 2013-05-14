@@ -70,3 +70,80 @@ stat 是 perl 默认的函数，不过返回的数组在 mode 和 time 方面可
 {% endhighlight %}
 
 `import` 和 `export_to_level` 都是 `Exporter` 模块的方法，`NG.pm` 里继承了 `Exporter`。
+
+2013 年 05 月 06 日更新
+==========================
+
+借鉴了 CPAN 上 Rubyish、Perl6::*、Perl5i::* 等模块的思路，也加上了 autobox ，不过为了不破坏原先的 Array、Hashtable 等的设计，autobox 只管理标量的操作。现在可以这样：
+
+{% highlight perl %}
+use Test::More;
+use Test::Deep;
+use lib '../lib';
+use NG;
+
+cmp_deeply 2->to(4), NG::Array->new(2, 3, 4);
+is "test"->length, 4, "string length";
+cmp_deeply "Hello World"->lc->words, NG::Array->new('hello', 'world');
+
+done_testing;
+{% endhighlight %}
+
+关于 autobox 的用法也蛮有趣的，详见代码。
+
+2013 年 05 月 14 日更新
+==========================
+
+实现了 `def_class` 关键词。这是在许大师的 spec 里就规划好了的。正好用上了前几天和莫言，牛氓请教的符号表的知识。
+
+新增了一个默认属性叫meta，所有用 `def_class` 实现的类，会自动记录他们(包括他们的用 `def_class` 实现的父类)的属性和方法到meta属性里。
+
+原先想用 `def_class` 实现 `NG::Object` 类；但是又想让 `def_class` 实现的类的默认基类为 `NG::Object`。结果思路绕晕了，所以最后 `NG::Object` 还是用 bless 直接实现的，所以也单独写了一个 `sub meta {}`。
+
+为此阅读了一下 `Moo` 和 `Moos` 的代码。原来他们都是把属性和方法也实现为类。然后再有 `*::Meta` 类来记录这些属性和方法的类。我这里就只是存了一个 hash 到 默认 meta 属性里。
+
+不过 meta 属性和 `def_class` 的其他属性不同的是：其他属性是使用 `sub :lvalue {}` 定义的，可以修改，meta 是普通 `sub {}` 的。
+
+lvalue 的说明见 `perldoc perlsub` 文档。在这里还是个比较有趣的用法的，这个用法来自 `Newbie::Gift` 项目另一位参与者 [fmpdceudy](https://github.com/fmpdceudy)。
+
+目前 `def_class.t` 设计并通过的测试如下：
+
+
+{% highlight perl %}
+use Test::More;
+use Test::Deep;
+use lib '../lib';
+use NG;
+ 
+def_class Animal => ['sex', 'leg_color'] => {
+    sound => sub {
+         return 1;
+    },
+    run => sub {
+         return 100;
+    },
+};
+
+def_class Dog => Animal => ['head_color'] => {
+    eat => sub {
+        shift->head_color = shift;
+    },
+    run => sub {
+        shift->head_color;
+    },
+};
+
+my $y = Animal->new;
+isa_ok $y, 'Animal';
+is $y->run, 100, 'animal run ok';
+
+my $x = Dog->new;
+isa_ok $x, 'Dog';
+$x->eat('bone');
+is $x->run, 'bone', 'eat ok';
+is $x->sound, 1, 'parent sound ok';
+cmp_deeply $x->meta->{methods}, [qw/dump run sound eat/], 'list all methods ok';
+
+done_testing;
+{% endhighlight %}
+
