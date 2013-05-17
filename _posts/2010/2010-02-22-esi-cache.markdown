@@ -1,44 +1,85 @@
 ---
 layout: post
-title: ESI & CACHE
+title: ESI & CACHE 介绍
 date: 2010-02-22
 category: CDN
 tags:
   - squid
 ---
 
-今天看到一个叫做ESI的东东，以此为线索，一路链接下去，颇为有趣，摘抄些新闻/博客段落来，算作长眼了：
-首先是《CSDN09大会见闻》，其中提到康神的讲演《网站的那些事儿》，介绍了大规模网站架构上的种种工具和技术“比如做数据切分的Mysql Proxy，分布式缓存的Memory Cached，Web服务器缓存的Squid，页面优化的Y!Slow，页面切分方面的js拼接和iframe拼接（呵呵，怪不得搜狐的页面都是js加载，对搜索引擎很不友好），前端服务器Lighttpd,Squid3,ESI等。也提到了架构设计中扩展性，可用性和一致性三者的关系，优化时应让让一致性延迟。提到目前网站系统一般都是三层结构DB层，逻辑层和前端层，而可扩展度方面DB< 逻辑 <前端，原因就是有状态的最难扩展，无状态的最容易扩展，所以主张优化时尽量减少DB中存储的状态，将逻辑前移，最后总结优化的大方向就是：逻辑前移，善用缓存（无处不在的缓存）和数据冗余（方便查询）。”
-从中得到几个信息——1、搜狐的架构康神插手了；2、squid对ESI的支持限于3.0版本以上（这点很重要，因为其他任何地方都没写明）；3、缓存无处不在~~
-然后是ESI的概念原理。“ESI（Edge Side Include）通过使用简单的标记语言来对那些可以加速和不能加速的网页中的内容片断进行描述，每个网页都被划分成不同的小部分分别赋予不同的缓存控制策略，使Cache服务器可以根据这些策略在将完整的网页发送给用户之前将不同的小部分动态地组合在一起。通过这种控制，可以有效地减少从服务器抓取整个页面的次数，而只用从原服务器中提取少量的不能缓存的片断，因此可以有效降低原服务器的负载，同时提高用户访问的响应时间”
-从中得到几个信息——1、ESI不是一门新语言，而只是嵌入在html里的一种标记，首先要求对网页进行模板式的规划，然后由支持ESI的cache服务器根据“HTTP请求标题或用户的cookie信息”自行组装返回给browser；2、我想到lighttpd和nginx的流媒体支持，也是根据cookie信息，获取拖拽的指定帧定位。不过没找到这两个对esi的cache处理文章，毕竟他们的主业还是webserver……
-然后是计算机世界网中关于ESI的介绍。内容较长，不贴了，要点如下：1、ESI最多支持三级递归，可以在包含文档中再嵌套进一步ESI标记；2、ESI支持基于布尔比较或者环境变量的条件处理；3、ESI支持cgi环境变量，比如cookie；4、ESI支持开发者定制失败动作（这不就是我梦寐以求的东东？呵呵，夸张鸟~）5、ESI提供内容无效规范进行内容管理（cache的purge不再头疼？）；5、ESI是基于XML语言的，现有一个java的定制标签库JESI帮助生成jsp代码，这个东东我想是ESI标准被诸多寡头接受的重要原因，不然去哪找来一大批专门写ESI的设计员呢；6、ESI的主要开发和推动者，是CDN老大akaimai和DB老大oracle！！再次验证康神的话，Optimization=Cache+Data。
-最后，说一下squid3如何支持ESI。
-src-configure参数如下：
---enable-esi           
-Enable ESI for accelerators. Requires libexpat.
-Enabling ESI will cause squid to follow the Edge
-Acceleration Specification (www.esi.org). This
-causes squid to IGNORE client Cache-Control headers.
-DO NOT use this in a squid configured as a web
-proxy, ONLY use it in a squid configured for
-webserver acceleration.
-squid.conf参数如下：
-{% highlight squid %}
-httpd_accel_surrogate_id unset-id
-http_accel_surrogate_remote on
-esi_parser custom
-{% endhighlight %}
-写到最后郁闷了一下，这个东东，为了cache而发明出来了，却是得写在web上的。那我这篇博文，该归哪个类别呢？——或者这也验证了工作中的一点郁闷吧，cache的问题，经常出在web上，我们做CDN的，能怎么办呢？
-ESI网站
-<a href="http://www.akamai.com/html/support/esi.html">http://www.akamai.com/html/support/esi.html</a>
-<a href="http://www.w3.org/TR/esi-lang">http://www.w3.org/TR/esi-lang</a>
-<hr />
+今天看到一个叫做 ESI 的东东，以此为线索，一路链接下去，颇为有趣，摘抄些新闻/博客段落来，算作长眼了：
 
- 2010年8月1日：
+首先是《CSDN09大会见闻》，其中提到康神的讲演《网站的那些事儿》，介绍了大规模网站架构上的种种工具和技术“比如做数据切分的 Mysql Proxy，分布式缓存的 MemoryCached，Web 服务器缓存的 Squid，页面优化的 Y!Slow，页面切分方面的 js 拼接和 iframe 拼接（呵呵，怪不得搜狐的页面都是 js 加载，对搜索引擎很不友好），前端服务器 Lighttpd, Squid3, ESI 等。也提到了架构设计中扩展性，可用性和一致性三者的关系，优化时应让让一致性延迟。提到目前网站系统一般都是三层结构 DB 层，逻辑层和前端层，而可扩展度方面DB < 逻辑 < 前端，原因就是有状态的最难扩展，无状态的最容易扩展，所以主张优化时尽量减少DB中存储的状态，将逻辑前移，最后总结优化的大方向就是：逻辑前移，善用缓存（无处不在的缓存）和数据冗余（方便查询）。”
+
+从中得到几个信息——
+
+1. 搜狐的架构康神插手了；
+2. squid对ESI的支持限于3.0版本以上（这点很重要，因为其他任何地方都没写明）；
+3. 缓存无处不在~~
+
+然后是ESI的概念原理。
+
+__“ESI（Edge Side Include）通过使用简单的标记语言来对那些可以加速和不能加速的网页中的内容片断进行描述，每个网页都被划分成不同的小部分分别赋予不同的缓存控制策略，使Cache服务器可以根据这些策略在将完整的网页发送给用户之前将不同的小部分动态地组合在一起。通过这种控制，可以有效地减少从服务器抓取整个页面的次数，而只用从原服务器中提取少量的不能缓存的片断，因此可以有效降低原服务器的负载，同时提高用户访问的响应时间”__
+
+从中得到几个信息——
+
+1. ESI不是一门新语言，而只是嵌入在html里的一种标记，首先要求对网页进行模板式的规划，然后由支持ESI的cache服务器根据“HTTP请求标题或用户的cookie信息”自行组装返回给browser；
+2. 我想到lighttpd和nginx的流媒体支持，也是根据cookie信息，获取拖拽的指定帧定位。不过没找到这两个对esi的cache处理文章，毕竟他们的主业还是webserver……
+
+然后是计算机世界网中关于ESI的介绍。内容较长，不贴了，要点如下：
+
+1. ESI最多支持三级递归，可以在包含文档中再嵌套进一步ESI标记；
+2. ESI支持基于布尔比较或者环境变量的条件处理；
+3. ESI支持cgi环境变量，比如cookie；
+4. ESI支持开发者定制失败动作（这不就是我梦寐以求的东东？呵呵，夸张鸟~）
+5. ESI提供内容无效规范进行内容管理（cache的purge不再头疼？）；
+6. ESI是基于XML语言的，现有一个java的定制标签库JESI帮助生成jsp代码，这个东东我想是ESI标准被诸多寡头接受的重要原因，不然去哪找来一大批专门写ESI的设计员呢；
+7. ESI的主要开发和推动者，是CDN老大akaimai和DB老大oracle！！再次验证康神的话，Optimization=Cache+Data。
+
+最后，说一下squid3如何支持ESI。
+
+./configure参数如下：
+
+    --enable-esi           
+    Enable ESI for accelerators. Requires libexpat.
+    Enabling ESI will cause squid to follow the Edge
+    Acceleration Specification (www.esi.org). This
+    causes squid to IGNORE client Cache-Control headers.
+    DO NOT use this in a squid configured as a web
+    proxy, ONLY use it in a squid configured for
+    webserver acceleration.
+
+squid.conf参数如下：
+
+{% highlight squid %}
+    httpd_accel_surrogate_id unset-id
+    http_accel_surrogate_remote on
+    esi_parser custom
+{% endhighlight %}
+
+写到最后郁闷了一下，这个东东，为了cache而发明出来了，却是得写在web上的。那我这篇博文，该归哪个类别呢？——或者这也验证了工作中的一点郁闷吧，cache的问题，经常出在web上，我们做CDN的，能怎么办呢？
+
+ESI网站:
+
+<http://www.akamai.com/html/support/esi.html>
+<http://www.w3.org/TR/esi-lang>
+
+__2010年8月1日：__
+
 ESI指令集
+=============
+
+### include 标签
+
+首先尝试 include 页面 `1.html`，如果不存在就显示 `2.html`，如果还不存在，就忽略这条 esi
+
+{% highlight html %}
 <esi:include src="http://example.com/1.html" alt="http://bak.example.com/2.html" onerror="continue"/>
-include页面1.html，如果不存在就显示2.html，如果还不存在，就忽略这条esi
+{% endhighlight %}
+
+### case when 标签
+
+{% highlight html %}
 <esi:choose> 
     <esi:when test="$(HTTP_COOKIE{group})=='Advanced'"> 
         <esi:include src="http://www.example.com/advanced.html"/> 
@@ -50,7 +91,11 @@ include页面1.html，如果不存在就显示2.html，如果还不存在，就�
         <esi:include src="http://www.example.com/new_user.html"/> 
     </esi:otherwise>
 </esi:choose>
-一个类似case的esi语句
+{% endhighlight %}
+
+### try catch 标签
+
+{% highlight html %}
 <esi:try> 
     <esi:attempt>
         <esi:comment text="Include an ad"/> 
@@ -61,22 +106,40 @@ include页面1.html，如果不存在就显示2.html，如果还不存在，就�
         <a href=www.akamai.com>www.example.com</a>
     </esi:except> 
 </esi:try>
-一个类似if-else的esi语句
+{% endhighlight %}
+
+### remove 标签
+
+如果服务器可执行 ESI，就只执行 include；如果不可，只好识别标准的HTML
+
+{% highlight html %}
 <esi:include src="http://www.example.com/ad.html"/> 
 <esi:remove> 
   <a href="http://www.example.com">www.example.com</a>
 </esi:remove>
-如果esi可执行，就只执行include；如果不可，正好识别href；
+{% endhighlight %}
+
+### esi变量
+
+{% highlight html %}
 <esi:vars>
   <img src="http://www.example.com/$(HTTP_COOKIE{type})/hello.gif" />
 </esi:vars>
-设定esi变量。变量都是从request-header中获得的，squid只支持标准的esi协议，即只识别下列header。
-     addVariable ("HTTP_ACCEPT_LANGUAGE", 20, new ESIVariableLanguage); 
-     addVariable ("HTTP_COOKIE", 11, new ESIVariableCookie); 
-     addVariable ("HTTP_HOST", 9, new ESIVariableHost); 
-     addVariable ("HTTP_REFERER", 12, new ESIVariableReferer); 
-     addVariable ("HTTP_USER_AGENT", 15, new ESIVariableUserAgent(*this)); 
-     addVariable ("QUERY_STRING", 12, new ESIVariableQuery(uri)); 
-逻辑表达式:
-==<>!&amp;|，!&amp;|都只能用于表达式之间的关系，本身不具有真义，所以类似shell的(1 &amp; 2)是不成立的。
+{% endhighlight %}
+
+变量都是从request-header中获得的，squid只支持标准的esi协议，即只识别下列header。
+
+{% highlight c %}
+    addVariable ("HTTP_ACCEPT_LANGUAGE", 20, new ESIVariableLanguage); 
+    addVariable ("HTTP_COOKIE", 11, new ESIVariableCookie); 
+    addVariable ("HTTP_HOST", 9, new ESIVariableHost); 
+    addVariable ("HTTP_REFERER", 12, new ESIVariableReferer); 
+    addVariable ("HTTP_USER_AGENT", 15, new ESIVariableUserAgent(*this)); 
+    addVariable ("QUERY_STRING", 12, new ESIVariableQuery(uri)); 
+{% endhighlight %}
+
+### 逻辑表达式
+
+`==`,`!=`,`<`,`>`,`<=`,`>=`,`!`,`&`,`|`都只能用于表达式之间的关系，本身不具有真义，所以类似shell的(1 & 2)是不成立的。
+
 ESI必须由web端在response-header中声明Surrogate-Control: content="ESI/1.0"。启用ESI后，Set-Cookie、Cache-Control、Last-Modified无效。
