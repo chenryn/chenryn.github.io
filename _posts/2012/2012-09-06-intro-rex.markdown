@@ -1,7 +1,10 @@
 ---
 layout: post
 title: (R)?ex介绍
-category: perl
+category: devops
+tags:
+  - perl
+  - rex
 ---
 
 按说这文章好像轮不到我写。几个线上运用着的哥们都不出手，我勉强记录一些[官网](http://rexify.org/)上没写example但实际应该蛮常用的功能吧：
