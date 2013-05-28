@@ -1,8 +1,9 @@
 ---
 layout: post
 title: Puppet 自定义 Provider
-category: puppet
+category: devops
 tags:
+  - puppet
   - ruby 
 ---
 

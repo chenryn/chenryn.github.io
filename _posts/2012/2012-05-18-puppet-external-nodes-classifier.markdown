@@ -2,9 +2,10 @@
 layout: post
 title: 【puppet系列】puppet使用ENC定义节点
 date: 2012-05-18
-category: puppet
+category: devops
 tags:
   - perl
+  - puppet
 ---
 
 今天研究puppet dashboard。主要有ENC和reports两个功能。其中ENC功能相当扯淡，因为你在web上点击添加的class/node/group，是没有任何依赖性检查(比如node命名是否符合fqdn，class是否存在)的，随便咋填绝无报错和拒绝！而且也没有提供类似report的导入工具，一旦启用就要完全重新手工输入所有配置……所以无论是从导入角度还是管理角度，自己实现一个靠谱点的ENC都是有必要的。    

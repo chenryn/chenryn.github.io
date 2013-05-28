@@ -4,6 +4,7 @@ title: Links
 ---
 <ul class="xoxo blogroll">
 <li><a href="http://devopsanywhere.blogspot.jp/">devopsanywhere</a></li>
+<li><a href="http://www.icylife.net/blog/">心路</a></li>
 <li><a href="http://www.jedi.be/blog/">Jong En Dynamische Informatica</a></li>
 <li><a href="http://www.planetdevops.net/">planetdevops</a></li>
 <li><a href="http://www.kitchensoap.com/" title="《网站运维》作者，Etsy 运维">Kitchen Soap</a></li>

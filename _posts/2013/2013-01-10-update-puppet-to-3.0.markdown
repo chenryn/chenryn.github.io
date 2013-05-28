@@ -1,7 +1,9 @@
 ---
 layout: post
 title: 升级 Puppet 到 3.0 及其他附件简介
-category: puppet
+category: devops
+tags:
+  - puppet
 ---
 
 今天把 puppet 从2.7 升级到了 3.0。同时放弃了之前通过 ENC 定义所有 top scope variable 的做法，改成只定义一个 role 变量，然后在各个 module 里根据 $role 加载不同的module::role ，把变量都写在 module::role 里。

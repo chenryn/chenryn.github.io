@@ -1,7 +1,9 @@
 ---
 layout: post
 title: 使用 Foreman 来监控统计 puppet 的 reports 信息
-category: puppet
+category: devops
+tags: 
+  - puppet
 ---
 foreman 是社区比较推荐的一款 puppet 辅助工具。可以用来实现 ENC 控制，class 编写，Facts 变量统计和 reports 分析查询等等。
 

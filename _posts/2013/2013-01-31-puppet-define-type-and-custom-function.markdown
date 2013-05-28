@@ -1,8 +1,9 @@
 ---
 layout: post
 title: Puppet 自定义 type 和 function
-category: puppet
+category: devops
 tags:
+  - puppet
   - ruby
 ---
 Puppet 除了原有 DSL 以外，还提供了不少接口方便大家开发插件来更简单的完成一些高级功能。

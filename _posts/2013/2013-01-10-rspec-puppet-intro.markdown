@@ -1,8 +1,9 @@
 ---
 layout: post
 title: 给 puppet 写 Rspec 测试用例
-category: puppet
+category: devops
 tags:
+  - puppet
   - ruby
 ---
 上文提到 github 给 puppet 开发的几个附件。其中有扩展 rspec 的 rubygems 模块叫做 rspec-puppet。官网见：<http://rspec-puppet.com>
