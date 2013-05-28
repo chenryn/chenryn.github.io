@@ -7,7 +7,7 @@ tags:
   - puppet
 ---
 
-首先要申明，rex 和 puppet 本质上是不同的，puppet 追求的是状态，rex 追求的是操作。puppet 用户经常关系的是 agent 运行了没，而 rex 用户关心的是怎么写 Rexfile 能让中控运行 rex 时的命令参数更简洁漂亮(个人感受==!)。所以哪怕在本文中列举的这些资源写法很类似，也请读者们注意：rex 的资源关键词命名，都是带有动作性的，比如 `create`，`add`，`install`，`upload`，`download`，`sync` 等等。
+首先要申明，rex 和 puppet 本质上是不同的，puppet 追求的是状态，rex 追求的是操作。puppet 用户经常关心的是 agent 运行了没，而 rex 用户关心的是怎么写 Rexfile 能让中控运行 rex 时的命令参数更简洁漂亮(个人感受==!)。所以哪怕在本文中列举的这些资源写法很类似，也请读者们注意：rex 的资源关键词命名，都是带有动作性的，比如 `create`，`add`，`install`，`upload`，`download`，`sync` 等等。
 
 因为 rex 基于并发 ssh 连接，所以它有一些操作是 puppet 所没有的，比如 `tail`，`file_append`，`fdisk`，`sysctl` 和 `iptables` 等等，这里暂时不列举。总的来说，本文目的是总结类似的部分，而不是不同的用法……
 
@@ -163,6 +163,8 @@ Directory 资源
 
 ### rex 写法
 
+rex 中采用 rsync 来完成目录文件的同步：
+
 {% highlight perl %}
     mkdir('/usr/local/murder');
     sync 'dist/*' => '/usr/local/murder', {
@@ -190,6 +192,12 @@ Shell 资源
     run "cmd", sub {
         my ($out, $err) = @_;
     };
+{% endhighlight %}
+
+这个回调函数可以不要，那么 `run` 命令返回输出到变量。这种用法在单行命令中最常用，比如这样：
+
+{% highlight bash %}
+    rex -H '192.168.0.[10..30]' -e 'say run "df -h"'
 {% endhighlight %}
 
 User/Group 资源
@@ -246,8 +254,7 @@ Service 资源
 ### rex 写法
 
 {% highlight perl %}
-    service apache2,
-      ensure => "started";
+    service apache2 => ensure => "started";
     service apache2 => "start";
 {% endhighlight %}
 
@@ -275,7 +282,7 @@ Mount 资源
        options => [qw/noatime async/];
 {% endhighlight %}
 
-Facter 资源
+Facts 变量和模板
 ==================================
 
 ### puppet 写法
@@ -286,30 +293,48 @@ Facter 资源
     $::lsbdistid
 {% endhighlight %}
 
-另一种是在 `*.erb` 里的写法：
+另一种是在 `*.erb` 里的写法，值得注意的是变量的作用域：
 
 {% highlight ruby %}
     <%= scope::lookupvar('ipaddress') %>
+    <%= scope::lookupvar('nginx::name') %>
 {% endhighlight %}
 
 ### rex 写法
 
-在 rex 中，远端主机的系统状态有多种获取方式，比如获取发行版：
+在 rex 中，远端主机的系统状态有多种获取方式，比如：
 
 {% highlight perl %}
+    # 全部，这些变量默认会传递给 template
+    my $sysinfo = Rex::Helper::System::info;
+
+    # 实际就是从上面info里取具体的变量
     my $lsd = get_operating_system;
+
+    # 这个慎用，会死人的
+    my @ns = netstat;
 {% endhighlight %}
 
-至于 rex 的模板，它没有使用 CPAN 上任何一种现成的模块，而是自己实现了一个，写法如下：
+也可以使用 `set` 指令，这种变量和使用 perl 标准 `my $name` 方式不同的是它可以直接在模板中读取：
 
 {% highlight perl %}
-    template('your.tpl', sysinfo => get_system_information() );
+    set name => 'CDN';
+{% endhighlight %}
+
+至于 rex 的模板，它默认没有使用 CPAN 上任何一种现成的模块，而是自己实现了一个，写法如下：
+
+{% highlight perl %}
+    template('your.tpl', yourvars => \%hash );
 {% endhighlight %}
 
 然后在模板中这样引用：
 
 {% highlight perl %}
-    <%= $::sysinfo->{eth0_ip} %>
+    My variable is <%= $::yourvars->{key} %>
+    My name is <%= $::name %>
+    My lsd is <%= $::operatingsystem %>
 {% endhighlight %}
 
 明显有模仿 puppet 的痕迹，传递进模版的变量以 `$::` 开头，个人比较汗……
+
+所以个人建议还是更换成 CPAN 上的流行模板，比如 `Text::Xslate` 或者 `Text::MicroTemplate` 等等，使用 `set_template_option` 即可。
