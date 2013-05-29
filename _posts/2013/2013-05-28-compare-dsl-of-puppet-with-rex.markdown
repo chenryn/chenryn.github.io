@@ -7,7 +7,7 @@ tags:
   - puppet
 ---
 
-首先要申明，rex 和 puppet 本质上是不同的，puppet 追求的是状态，rex 追求的是操作。puppet 用户经常关心的是 agent 运行了没，而 rex 用户关心的是怎么写 Rexfile 能让中控运行 rex 时的命令参数更简洁漂亮(个人感受==!)。所以哪怕在本文中列举的这些资源写法很类似，也请读者们注意：rex 的资源关键词命名，都是带有动作性的，比如 `create`，`add`，`install`，`upload`，`download`，`sync` 等等。
+首先要申明，rex 和 puppet 本质上是不同的，puppet 追求的是状态，rex 追求的是操作。puppet 用户经常关心的是 agent 运行了没，而 rex 用户关心的是怎么写 Rexfile 能让中控运行 rex 时的命令参数更简洁漂亮(个人感受==!)。所以哪怕在本文中列举的这些资源写法很类似，也请读者们注意：rex 的资源关键词命名，都是带有动作性的，比如 `create`，`add`，`install`，`upload`，`download`，`sync` 等等。甚至精确的说，rex 里这些不是资源(`Puppet::Types::***`)，他们是 `Rex::Commands::***`。
 
 因为 rex 基于并发 ssh 连接，所以它有一些操作是 puppet 所没有的，比如 `tail`，`file_append`，`fdisk`，`sysctl` 和 `iptables` 等等，这里暂时不列举。总的来说，本文目的是总结类似的部分，而不是不同的用法……
 

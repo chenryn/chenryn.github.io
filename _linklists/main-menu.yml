@@ -1,0 +1,115 @@
+---
+- text: devopsanywhere
+  url: http://devopsanywhere.blogspot.jp/
+  title: ""
+- text: 心路
+  url: http://www.icylife.net/blog/
+  title: ""
+- text: Jong En Dynamische Informatica
+  url: http://www.jedi.be/blog/
+  title: ""
+- text: planetdevops
+  url: http://www.planetdevops.net/
+  title: ""
+- text: Kitchen Soap
+  url: http://www.kitchensoap.com/
+  title: "《网站运维》作者，Etsy 运维"
+- text: John Goulah
+  url: http://blog.johngoulah.com
+  title: "Musings of linux, open source, cloud computing and systems"
+- text: DBA Hacker
+  url: http://dbahacker.com/
+  title: "TB 杨德华"
+- text: eric
+  url: http://www.nginxs.com/
+  title: ""
+- text: Hello DBA
+  url: http://www.hellodb.net/
+  title: "Ali DBA 张瑞"
+- text: Laird-SA
+  url: http://blog.laird-sa.com/
+  title: ""
+- text: LinuxSEE
+  url: http://www.linuxsee.com/
+  title: ""
+- text: NoSQLfan
+  url: http://blog.nosqlfan.com/
+  title: "not only sql信息集散地"
+- text: OurMySQL
+  url: http://ourmysql.com/
+  title: ""
+- text: piol
+  url: http://www.puppeter.cn/
+  title: ""
+- text: MDLog:/sysadmin
+  url: http://www.ducea.com/
+  title: ""
+- text: sa note
+  url: http://www.sanote.org/
+  title: ""
+- text: serverfault
+  url: http://serverfault.com/
+  title: "stackexchange下属的系统工程师问答网站"
+- text: Timo
+  url: http://zauc.wordpress.com/
+  title: ""
+- text: 七月的夏天
+  url: http://julyclyde.org/
+  title: "新浪系统工程师"
+- text: 刘荣星
+  url: http://www.liurongxing.com/
+  title: ""
+- text: 回忆未来
+  url: http://blog.s135.com/
+  title: "金山·张宴"
+- text: 土豆运营团队
+  url: http://blog.ops.tudou.com/wp/
+  title: ""
+- text: 家欣的天空
+  url: http://www.91tuanfang.com/
+  title: "安居客运维"
+- text: 应用交付学习之路
+  url: http://www.cnadn.net/
+  title: "F5工程师"
+- text: 扛一肩记忆
+  url: http://scmbob.org/
+  title: "杭州NSN工程师，shell高人~"
+- text: 扶凯
+  url: http://www.php-oa.com/
+  title: "CC SA"
+- text: 蚊子世界
+  url: http://www.wenzizone.cn/
+  title: ""
+- text: 运维小子
+  url: http://www.opboy.com
+  title: ""
+- text: 运维进行时
+  url: http://blog.liuts.com/
+  title: "TianYa SA 刘天斯"
+- text: lark's cloud
+  url: http://www.lark.net.cn/
+  title: "lark's cloud"
+- text: HeartOutside
+  url: http://log.heartoutside.com/
+  title: "HeartOutSide"
+- text: Lax
+  url: http://blog.liulantao.com/
+  title: "lax"
+- text: 风声
+  url: http://l09.me/
+  title: "风声"
+- text: 莫言
+  url: http://shellblog.info/
+  title: "莫言"
+- text: 牛氓
+  url: http://mooser.me/
+  title: "牛氓"
+- text: 当然我在扯淡
+  url: http://http://www.yinwang.org/
+  title: "当然我在扯淡"
+- text: NoOps
+  url: http://noops.me/
+  title: ""
+- text: 云端分布式搜索技术
+  url: http://www.searchtech.pro/
+  title: ""
