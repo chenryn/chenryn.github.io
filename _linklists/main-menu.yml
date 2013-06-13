@@ -1,4 +1,10 @@
 ---
+- text: "Code as Craft"
+  url: http://codeascraft.com/
+  title: "Etsy 运维团队博客"
+- text: dotCloud-Blog
+  url: http://blog.dotcloud.com/
+  title: "dotCloud 官方博客"
 - text: devopsanywhere
   url: http://devopsanywhere.blogspot.jp/
   title: ""
@@ -76,7 +82,7 @@
   title: "杭州NSN工程师，shell高人~"
 - text: 扶凯
   url: http://www.php-oa.com/
-  title: "CC SA"
+  title: "音悦台技术经理"
 - text: 蚊子世界
   url: http://www.wenzizone.cn/
   title: ""
@@ -85,7 +91,7 @@
   title: ""
 - text: 运维进行时
   url: http://blog.liuts.com/
-  title: "TianYa SA 刘天斯"
+  title: "前天涯SA 刘天斯"
 - text: lark's cloud
   url: http://www.lark.net.cn/
   title: "lark's cloud"
@@ -113,3 +119,6 @@
 - text: 云端分布式搜索技术
   url: http://www.searchtech.pro/
   title: ""
+- text: TheGeekStuff
+  url: http://www.thegeekstuff.com/
+  title: "各种超酷Linux命令用法"
