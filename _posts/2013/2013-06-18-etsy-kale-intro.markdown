@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Etsy 的 Kale 系统
+title: 【Etsy 的 Kale 系统】简介、部署和应用
 category: monitor
 tags:
   - python
@@ -13,7 +13,7 @@ tags:
 
 监控大户 Etsy 最近有公布了一个全新的监控分析系统，叫 Kale，博客地址：<http://codeascraft.com/2013/06/11/introducing-kale/>。
 
-目前的介绍内容比较简单。两个组件 `skyline` 和 `oculus` 之间的关系也还没搞清楚。大概上， `skyline` 是一个 python 程序，接受 `cPickle` 和 `MessagePack` 两种数据包，解压后的数据格式类似 `graphite` 接收的，然后存在 `Redis-server` 中。在 webapp 上提供一个类似 `rrdtool` 的功能，显示触发阈值线的趋势图(这步还没测试出来，很奇怪莫非只存一个metric显示不了？)。
+目前的介绍内容比较简单。两个组件 `skyline` 和 `oculus` 之间的关系也还没搞清楚。大概上， `skyline` 是一个 python 程序，接受 `cPickle` 和 `MessagePack` 两种数据包，解压后的数据格式类似 `graphite` 接收的，然后存在 `Redis-server` 中。在 webapp 上提供一个类似 `rrdtool` 的功能，显示触发阈值线的趋势图(不触发的不会显示，自动过滤了)。
 
 安装步骤：
 
@@ -43,6 +43,10 @@ tags:
 {% endhighlight %}
 
 `oculus` 是一个 rack 应用，需要定时从 `skyline` 中导入数据到 `ElasticSearch` 中。同时，`oculus` 还提供了一个 `ElasticSearch` 分析器插件，可以在 ES 中完成 `FastDTW` 和 `Euclidian` 两种位移算法（用来给不同时间序列的近似度打分）。在rack 页面上，提供搜索框，你可以提交一个 metric 名称——经过测试，目前应该是采用完全匹配的方式搜索——然后展示这个 metric 的图形，以及按照 score 打分排序的近似时间序列。
+
+* 欧几里德算法原理：根据两点的坐标系计算直线距离；
+* 动态时间归整原理：将时间序列进行延伸或者缩短，然后再计算。
+<http://www.cnblogs.com/kemaswill/archive/2013/04/18/3028610.html>
 
 安装步骤：
 
