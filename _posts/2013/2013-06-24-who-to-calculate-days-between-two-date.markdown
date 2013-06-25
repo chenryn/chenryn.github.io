@@ -36,7 +36,7 @@ sub trans {
     mktime(
         0, 0, 0, $str[2],
         $str[1] - 1,
-        ( substr( $str[0], 0, 2 ) - 19 ) . substr( $str[0], 2, 2 )
+        $str[0] - 1900,
     );
 }
 my $dt1 = trans('1999-05-21');
