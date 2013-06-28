@@ -1,6 +1,6 @@
 ---
 layout: post
-title: squid & gzip
+title: squid3 的 gzip 支持
 date: 2009-12-30
 category: squid
 ---
@@ -29,8 +29,7 @@ cd ../squid-3.1.0.9/
 ./configure --enable-ecap
 make
 make install
-cat >> etc/squid.conf
-<<EOF
+cat >> etc/squid.conf <<EOF
 ecap_enable on
 ecap_service gzip_service respmod_precache 0
 ecap://www.vigos.com/ecap_gzip

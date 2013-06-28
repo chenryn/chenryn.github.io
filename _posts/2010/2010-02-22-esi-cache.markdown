@@ -1,6 +1,6 @@
 ---
 layout: post
-title: ESI & CACHE 介绍
+title: ESI 语言介绍
 date: 2010-02-22
 category: CDN
 tags:

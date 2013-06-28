@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 折腾awk & shell 变量
+title: 折腾 awk 内调用 shell 变量
 date: 2010-06-07
 category: bash
 tags:
