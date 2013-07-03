@@ -76,31 +76,43 @@ http://search.test.com/zhlc/index.html
 http://search.test.com/zhlc/index.aspx?oid=1
 http://search.test.com/zhlc/index.aspx?oid=1&pid=2
 {% endhighlight %}
+
 不过虽然awk也是流处理，但作为squid的外挂program测试却没法真起作用。所以只能用perl（网上看到也有用php和python的）。
+
 采用rewrite方法后，squid日志记录如下：
-1264603532.881   1147 59.151.*.* TCP_MISS/200 86230 GET http://www.test.com/zhlc/images/header.jpg - DIRECT/1.2.3.173 image/jpeg "http://www.test.com/zhlc/" "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; QQPinyinSetup 620; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"
+
+    1264603532.881   1147 59.151.*.* TCP_MISS/200 86230 GET http://www.test.com/zhlc/images/header.jpg - DIRECT/1.2.3.173 image/jpeg "http://www.test.com/zhlc/" "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; QQPinyinSetup 620; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"
+
 虽然http_status显示的200，不过www.test.com的源站IP为1.2.3.172，search.test.com的源站IP为1.2.3.173，可见squid已经将请求转发给search.test.com了。
-由上面的流程可知，squid是先检查acl，然后rewrite，再检查HIT/MISS，所以当设定了search.test.com/.*的cache
-deny后，所有www.test.com/zhlc/.*的重复访问也都是MISS。
+
+由上面的流程可知，squid是先检查acl，然后rewrite，再检查HIT/MISS，所以当设定了search.test.com/.*的 cache_deny 后，所有www.test.com/zhlc/.*的重复访问也都是MISS。
+
 b) 第二种方法，不属于专门的跳转重定向，算是个妙用吧：
+
 Squid为了美观方便，提供了一些错误信息的定制功能。之前的源站错误跳转，就是修改了ERROR_DIRECTORY里html的meta标签做的。除此以外，针对error_diretory里的ACCESS_DENIED页面，还有专门的另一个configure参数进行定制——deny_info。其用法如下：
+
 {% highlight squid %}
 acl test url_regex -i ^http://www.test.com/zhlc/.*
 http_access deny test
 deny_info http://search.test.com/zhlc/ test
 {% endhighlight %}
-如果需要显示的信息已经编辑在error_diretory里了，那就可以直接写文件名而不用写url。Squid.conf.default中举例是deny_info
-ERR_CUSTOM_ACCESS_DENIED bad_guys。
+如果需要显示的信息已经编辑在error_diretory里了，那就可以直接写文件名而不用写url。Squid.conf.default中举例是 `deny_info ERR_CUSTOM_ACCESS_DENIED bad_guys`。
+
 这个deny_info，常用的地方是防盗链。在deny盗链的同时，加上一个源站的logo图片url，正好让盗链网站替自己做宣传~~
+
 采用deny_info方法后，squid日志记录如下：
-1264661272.822 2 59.151.*.* TCP_DENIED/302 320 GET http://www.test.com/zhlc/ - NONE/- text/html "-" "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; QQPinyinSetup 620; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"
-1264661273.753 854 59.151.*.* TCP_MISS/200 9166 GET http://search.test.com/zhlc/ - DIRECT/1.2.3.173 text/html "-" "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; QQPinyinSetup 620; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"
+
+    1264661272.822 2 59.151.*.* TCP_DENIED/302 320 GET http://www.test.com/zhlc/ - NONE/- text/html "-" "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; QQPinyinSetup 620; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"
+    1264661273.753 854 59.151.*.* TCP_MISS/200 9166 GET http://search.test.com/zhlc/ - DIRECT/1.2.3.173 text/html "-" "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; QQPinyinSetup 620; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"
+
 显示的是TCP_DENIED/302。
 
 c) 两个方法比较
 
 最表面可见的不同，就是当IE访问http://www.test.com/zhlc/时，第一种方法地址栏依然显示（httpwatch也一样）http://www.test.com/zhlc/，而第二种方法也显示为http://search.test.com/zhlc/了。
+
 根据之前论述可知，第一种访问时，clinet提出第一个http://www.test.com/zhlc/请求，squid在流程第三步改写url，从search源站取回html代码，查询到相关资源（即http://www.test.com/zhlc/.*），然后重复请求过程，逐一改写，从search源站取回所有文件；
+
 第二种访问时，client提出第一个http://www.test.com/zhlc/请求，squid在流程第二步检查出相匹配的acl规则，返回deny信息给client，即请IE浏览器显示http://search.test.com/zhlc/，然后client重新开始一次链接建立过程，经dns解析等步骤，连上search.test.com的，取回http://search.test.com/zhlc/.*。
 
 ## 五、客户页面分析
@@ -118,6 +130,7 @@ c) 两个方法比较
 ## 六、总结
 
 某客户页面跳转试验至此，因为squid处理流程和客户源站代码等多方面原因，只能采用统一跳转至http://search.test.com/zhlc/单一页面的方法，确保客户在IE地址栏里看到有跳转的效果……
+
 最后，总结试验中的两种办法，其改写过程，可以归纳成rewrite是squid-origin过程的，deny_info是squid-client过程的。
 
 
