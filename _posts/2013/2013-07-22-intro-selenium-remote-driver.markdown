@@ -79,3 +79,4 @@ IDE 截图如下：
 
 注：在最近一期 PerlWeekly 对 Perl 社区创业公司 Lokku/Nestoria 的[访谈](http://blogs.perl.org/user/ovid/2013/07/perl-startups-lokkunestoria.html)中，Lokku 公司 CTO，Alex Balhatchet 也提到准备使用 Selenium 改造公司的自动化测试。
 
+补：刚发现 Selenium 的 PHP 客户端，是 Facebook 写的。
