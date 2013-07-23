@@ -131,3 +131,7 @@ rex stop --name=myvbox
 {% endhighlight %}
 
 事实上，本文最开头的默认 box 模板生成的命令，就是通过前一步生成的 Rexfile 里定义的 `task "init", sub {...};` 实现的。
+
+__2013 年 07 月 23 日附注：__
+
+虽然如此，但是 Vagrant 目前已经成为开源社区风头正劲的一个产品，其开放的 plugin 机制导致周边产品大量出现，已经形成了一个不错的社区氛围。还是建议大家了解 Vagrant 。目前 vagrant-plugin 列表见：<https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Plugins>。

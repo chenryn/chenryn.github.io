@@ -1,8 +1,8 @@
 ---
 layout: post
-title: squid自动配置脚本
+title: squid 自动配置脚本
 date: 2009-11-03
-category: bash
+category: devops
 tags:
   - squid
   - web
@@ -61,6 +61,7 @@ ssh.exp如下：
 {% endhighlight %}
 
 conf.sh如下：
+
 {% highlight bash %}
     #!/bin/bash
     NR=$(cat $2|wc -l)
@@ -105,7 +106,7 @@ conf.sh如下：
     squid.conf
 {% endhighlight %}
 
-而这样配置句段的顺序就反过来了，还得用sed -n "1!G;h;$!d"命令倒序读取——最开始用cat命令，结果cat在读取abc这个文件的时候会自动把空格前后的内容分段读出，于是改用sed。至于倒序之后，再怎么插入，就没有研究了。因为当时我发现了可以直接将文件a插入文件b的方法～～
+而这样配置句段的顺序就反过来了，还得用 `sed -n "1!G;h;$!d"` 命令倒序读取——最开始用cat命令，结果cat在读取abc这个文件的时候会自动把空格前后的内容分段读出，于是改用sed。至于倒序之后，再怎么插入，就没有研究了。因为当时我发现了可以直接将文件a插入文件b的方法～～
 
 del的时候，其实在操作上还有一个办法。就是每次的配置不单以#abc开头，还用一个#abcEND结尾。这样，ENDNR就不用计算，直接取echo $CFNR|awk '{print $NF}'就行了。
 
