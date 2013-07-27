@@ -100,7 +100,7 @@
   title: "HeartOutSide"
 - text: Lax
   url: http://blog.liulantao.com/
-  title: "lax"
+  title: "刘兰涛"
 - text: 风声
   url: http://l09.me/
   title: "风声"
@@ -128,3 +128,6 @@
 - text: UsefulShare
   url: http://www.usefulshare.com
   title: "当当网安全运维"
+- text: 纸飞机
+  url: http://paperplane.ruhoh.com/
+  title: "深入研究puppet"
