@@ -80,3 +80,31 @@ IDE 截图如下：
 注：在最近一期 PerlWeekly 对 Perl 社区创业公司 Lokku/Nestoria 的[访谈](http://blogs.perl.org/user/ovid/2013/07/perl-startups-lokkunestoria.html)中，Lokku 公司 CTO，Alex Balhatchet 也提到准备使用 Selenium 改造公司的自动化测试。
 
 补：刚发现 Selenium 的 PHP 客户端，是 Facebook 写的。
+
+__2013 年 07 月 25 日补__
+
+`Selenium` 的另一个功能是自己插入 `javascript` 到页面里执行。比如我们可以利用 HTML5 的 `WebTiming` 特性测试页面的下载时间：
+
+{% highlight perl %}
+    my $webtiming = q{
+        var performance = window.performance
+                       || window.webkitPerformance
+                       || window.mozPerformance
+                       || window.msPerformance
+                       || {};
+        var timings     = performance.timing || {};
+        return timings;
+    };
+    $driver->get("http://stackoverflow.com/");
+    my $res = $driver->execute_script($webtiming);
+    for ( sort keys %$res ) {
+        printf "%s %s\n", $_, $res->{$_}/1000;
+    };
+{% endhighlight %}
+
+`WebTiming` 详细列出了每个阶段的时间。如果 js 写的好，可以写具体某个点触发，就更好了。
+
+__2013 年 07 月 26 日补__
+
+`Selenium::Remote::Driver` 只发送操作命令到远端服务器，不具有操作本地浏览器功能。所以无法像 Ruby 的 `Selenium::WebDriver` 那样控制本地浏览器，甚至包括插入 `.xpi` 插件到自定义的 profile 里完成更复杂的功能：比如用 `Firebug`。有一个 Ruby 模块叫 [capybara-firebug](https://github.com/jfirebaugh/capybara-firebug)，就是利用这个办法扩展了 `capybara` 测试框架。
+
