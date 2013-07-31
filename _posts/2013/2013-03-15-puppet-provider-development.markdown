@@ -49,7 +49,11 @@ Puppet::Type.type(:package).provide :cpan, :parent => Puppet::Provider::Package 
       list = execute(pmodlist_command).lines.map {|set| pmodsplit(set) }.reject {|x| x.nil? }
     end
 
-    list
+    if name = options[:justme]
+      return list.shift
+    else
+      return list
+    end
   end
 
   def self.pmodsplit(desc)
@@ -98,6 +102,7 @@ Puppet::Type.type(:package).provide :cpan, :parent => Puppet::Provider::Package 
     hash[:ensure][0]
   end
 
+  # 请求本地是否存在具体某个包
   def query
     self.class.pmodlist(:justme => resource[:name], :local => true)
   end
