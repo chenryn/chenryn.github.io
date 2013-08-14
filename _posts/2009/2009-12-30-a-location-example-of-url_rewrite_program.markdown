@@ -6,7 +6,9 @@ category: squid
 ---
 
 上文提到，squid大多数的rewrite_program是用perl编写的。现在就转几个简洁明了的redirect.pl。虽说我至今没把perl基础教程看完。不过从中领会一下squid的rewrite流程，还是可以的：
+
 例一：这是最简单的url转向，把http://www.baidu.com/转到https://www.google.com:
+
 {% highlight perl %}
 #!/usr/bin/perl -w
 $|=1;
@@ -22,7 +24,9 @@ while () {
     }
 }
 {% endhighlight %}
+
 例二：这个的功效，是当第一次访问外网网站时，先跳转到公司主页一次，之后再访问就不再限制。
+
 {% highlight perl %}
 #!/usr/bin/perl -w
 use strict;
