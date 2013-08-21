@@ -8,6 +8,10 @@ category: perl
 
 一天中最让大家惊奇和感兴趣的无疑是胡松涛带来的 3D 打印机以及每人都有的 Perl 小挂件 —— 没错，就是用 3D 打印出来的小东西。
 
+![large](/images/uploads/3d_perlchina.jpg)
+
+![small](/images/uploads/3d_perl.jpg)
+
 最遗憾的是来自alibaba的两位演讲者因为公司问题临时退出。
 
 DeNA 的演讲者是一位由程序员转职的产品经理，明显演讲的技巧水平是要高过我们这些纯码农的，节奏控制完全值得学习。
