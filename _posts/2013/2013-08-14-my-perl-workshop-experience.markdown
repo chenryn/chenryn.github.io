@@ -41,3 +41,7 @@ BJPW 之后第二天就开始 YAPC::EU，国外大神基本都在欧洲讨论 Fu
 
 最后吐槽一个，全天没有 Perl6 的演讲，结果文化衫上是 Perl6 的蝴蝶。。。其实如果能让广州那个 `MoarVM` 的开发者叫来讲讲也挺好的。
 
+附另外两位同仁的大会感受博文：
+
+1. [@赵涛Alick](http://www.weibo.com/alickzhao) 的 《[Perl China 2013 活动后记](http://wp-awesome.rhcloud.com/2013/08/18/perl-china-2013-notes/)》
+2. Aka.Why 的 《[参加Beijing Perl Workshop 2013后感](http://blog.aka-cool.net/blog/2013/08/12/learn-from-beijing-perl-workshop-2013/)》
