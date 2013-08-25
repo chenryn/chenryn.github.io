@@ -2,63 +2,68 @@
 title: About
 layout: default
 ---
-<h1><a href="/about">About Me</a></h1>
-<p>
-  网名: chenryn，中文名: 饶琛琳, English Name: Jeff
-<p>
-</p>
-  编程轨迹：Bash -> Perl
-</p>
-<p>
-  微博: @ARGV
-</p>
-<p>
-  QQ: 251562081
-</p>
-<ul>
-    <li>交大不成器学生</li>
-    <li>格律诗词围观者</li>
-    <li>A股狂飙幻想症</li>
-    <li>伪沉迷PERL</li>
-    <li>略懂CDN</li>
-</ul>
 
-<h2><a href="#resume">经历</a></h2>
-<ul>
-    <li>2012.04 至 今 <a href="http://www.renren.com/">人人网</a> 低调打杂<br />
-            - 折腾puppet自动化<br />
-            - 预备折腾logstash弹性分析<br />
-    </li>
-    <li>2011.08 至 2012.04 <a href="http://www.dyxnet.com/">第一线通信集团</a> 带头打杂<br />
-            - 负责第一线CDN架构设计，全局负载均衡算法优化和缓存加速应用的性能优化；<br />
-            - 设计并完成日志分析和图形展示系统，为客户及机房的资源核算提供计费依据；<br />
-            - 设计并完成云端高性能监控系统，利用消息队列的方式降低监控主机的负载并提供分布式支持，保证监控计划的准点高效执行；<br />
-            - 设计针对港台客户的多语言版本网站的Cookie特征缓存方案，比通用的透传回源方式大大节约了回源带宽，真正做到缓存加速；<br />
-            - 测试业内主要虚拟化操作平台xen/kvm/vmware/openvz等的性能、功能、易用性等；并与网络部门一起规划第一线CDH（云端专属服务器）产品设计。<br />
-            - 测试业内主要IAAS运营商的产品，从功能特性、设备性能和平均价位上做出产品竞争性分析，协助销售团队最终锁定中型传统企业为销售对象，并配合其实际测试运营；<br />
-            - 设计运营相关信息（客户、节点和设备）的记录方案和流程；<br />
-            - 编写相关运维文档，并督促文档流程在实际中的执行；<br />
-            - 定期举行针对销售、售前和运维的技术培训和案例分享。<br />
-    </li>
-    <li>2010.06 至 2011.08 <a href="http://www.china.com/">中华网科技(北京)有限公司</a> 打杂主力<br />
-            - 日常工作负责中华网门户china.com下主要频道及系统的排障、更新和扩容，撰写系统运维规范，积极跟进业内技术动态，催进团队提升：<br />
-            - 根据基调等数据定期对全网CDN质量进行评估，并与各CDN厂商协商优化；<br />
-            - 设计并主导完成CDN质量自主监控系统，与第三方监控数据形成对比，掌握真实网民的访问数据；<br />
-            - 利用inotify完成对新闻图片等内容的实时监控和缓存更新；<br />
-            - 分析中华网论坛系统架构，对静态url进行详细归总，提出优化意见并实施操作，最终将请求命中比由70%提升到85%，字节命中比由30%提升到48%，缓解了存储读写压力；<br />
-            - 分析中华网图库系统架构，采用nginx_cache_purge方式，减少链路逻辑，在保证响应速度的前提下节约了服务器；<br />
-            - 撰写netapp存储升级方案，并顺利操作完成；<br />
-            - 完成多机房内网链路监控和故障应急处理预案的指定和部署，尽量确保网民访问的正常；<br />
-            - 编写shell/perl脚本，细化nagios监控项，完成对应用系统TCP连接详情、网卡流量，netapp的ops、diskio，squid性能，mysql性能的nagios监控，并自定义pnp插件绘图模板，优化显示效果；<br />
-            - 完成不同版本/编译参数/文件系统下的性能测试，以此进行公司生产线lemp的标准化工作。<br />
-    </li>
-    <li>2009.07 至 2011.06 <a href="http://www.21vnet.com/">世纪互联集团</a> 打杂龙套<br />
-            - 日常工作主要负责静态小文件加速项目组的工单审核把关和故障分析，协助大文件项目组进行特殊需求的功能开发：<br />
-            - 完成squid、nginx、rsnyc、fms等常见CDN系统平台的快速搭建，并根据不同客户源站情况进行针对性的特殊配置和架构优化；<br />
-            - 为应对某客户春节流量突发，分析其加速内容属性，利用google_pertools，重编译squid，提高了设备性能和使用率，安全渡过假期高峰；<br />
-            - 利用consistent_hash模块，重编译nginx，解决现有缓存服务器集群的大容量存储问题。<br />
-            - 编写shell脚本，配合cacti、nagios等开源系统，完成对全国多节点大规模集群服务器组的系统性能及加速效果的监控、报警和管理；<br />
-            - 针对不同客户的需求，利用perl编写squid和apache的md5防盗链模块功能；<br />
-            - 调整系统参数，解决xen虚拟时钟中断导致缓存不正常的问题。<br />
-    </li>
-</ul>
+Personal Informations                  
+===================================
+
+* Name: Rao Chenlin (Jeff)
+* Age: 25
+* Tel：151-0112-7811
+* Blog: <http://chenlinux.com>
+* Email：[rao.chenlin@gmail.com](mailto://rao.chenlin@gmail.com)
+* QQ: 251562081
+* GitHub: [chenryn](https://github.com/chenryn)
+* CPAN: [chenryn](https://metacpan.org/author/CHENRYN)
+* Twitter: [@chenryn](http://twitter.com/chenryn)
+* Weibo: [@ARGV](http://weibo.com/chenlinux)
+
+Skills
+===================================
+
+* Familiar with Linux and website administration(LVS, Apache, Nginx, Resin, Squid, Bind);
+* Familiar with shell/Perl programming;
+* Familiar with monitoring system such as Nagios, Cacti, Ganglia, Logstash;
+* Familiar with configuration management tools such as Puppet, Rexify;
+* Knowledge in Ruby, MySQL, xen, TCP/IP etc.
+
+Working Experiences                 
+===================================
+ 
+**2012.04	System Engineer                           renren.com**
+
+1. Wrote the Page Speed Anaylsis system that can analysis and visualize data collected from frontpages, this help us to know the access qualities of real users.
+1. Built the distributed log processing system using logstash, And port the official JRuby source code to MRI 1.8.7.
+1. Deploy Puppet to manage 400+ CDN servers and Wrote a website to manage the puppet master manifests and nodes’ role.
+1. Deploy Murder system to distribute large files to CDN servers.
+1. Test the limit QPS of Nginx with different settings in a 10Gibps network environment.
+1. Test and compare the performance of ApacheTrafficServer and Squid for a 1SSD+3SATA server which had to cache 30 millons 10KB files.
+1. Test CGroup effect and using cpuset/memory subsystem to limit large jobs of Hadoop.
+
+**2010.06	Senior System Engineer                     China.com**
+
+1. Wrote documents and specifications about system operation.
+1. Follow up the industry's technology trends, and testing for online using.
+1. Assess the quality of the CDN based on networkbech etc, and consultation with those CDNs for optimization.
+1. Analysis the architecture of club.china.com(the most important forum of CDC),and do some optimiziton to keep the request hit radio from 70% to 85% and the byte hit radio from 30% to 48%.This ease the IO loadavg of NetApp storages.
+1. Wrote the scheme and upgrading the NetApp storages successfully cooperate with the NetApp engineer.
+1. Wrote the scripts to monitor the failure of network link between more than one IDC and auto proxy the accesses of users to other IDCs.
+1. Wrote some templates of pnp4nagios to draw rrd images just like cacti do.
+1. Wrote some bash/perl scripts to enhance the nagios plugins, and using [Mod_Gearman](http://omdistro.org/) to distribute the check jobs.
+
+**2008.07	CDN operation engineer                     21vianet**
+
+1. Responsible for daily operation of static acceleration and fault analysis.
+1. Built the common platforms of CDN(squid, nginx, lighttpd, rsync, apache, fms etc)
+1. Do the special configuration and structure optimization for the different customer sites.
+1. Complete the monitoring and management of national multi-node cluster server group with some open source software like cacti, nagios, zabbix and own shell scripts.
+
+Education
+===================================
+
+Beijing Jiaotong University | Information and Communication Engineering | Bachelor
+
+Some Others
+===================================
+
+1. Give a speech of "[ElasticSearch in DevOps life](http://conference.perlchina.org/bjpw2013/talk/4885)" at PerlChina Beijing Workshop 2013;
+1. Writing a book about linux operation and devops which would be published the next year.
