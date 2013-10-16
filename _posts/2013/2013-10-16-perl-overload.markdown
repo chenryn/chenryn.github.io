@@ -48,6 +48,6 @@ print $obj;
 
 输出结果：
 
-   1 overloaded.
-   3 overloaded.
-   2
+    1 overloaded.
+    3 overloaded.
+    2
