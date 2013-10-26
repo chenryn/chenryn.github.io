@@ -29,7 +29,7 @@ Skills
 Working Experiences                 
 ===================================
  
-**2012.04	System Engineer                           renren.com**
+**2012.04	Senior R&D Engineer                           renren.com**
 
 1. Wrote the Page Speed Anaylsis system that can analysis and visualize data collected from frontpages, this help us to know the access qualities of real users.
 1. Built the distributed log processing system using logstash, And port the official JRuby source code to MRI 1.8.7.
@@ -50,7 +50,7 @@ Working Experiences
 1. Wrote some templates of pnp4nagios to draw rrd images just like cacti do.
 1. Wrote some bash/perl scripts to enhance the nagios plugins, and using [Mod_Gearman](http://omdistro.org/) to distribute the check jobs.
 
-**2008.07	CDN operation engineer                     21vianet**
+**2008.07	CDN Operation Engineer                     21vianet**
 
 1. Responsible for daily operation of static acceleration and fault analysis.
 1. Built the common platforms of CDN(squid, nginx, lighttpd, rsync, apache, fms etc)
