@@ -4,6 +4,9 @@ title: Projects
 ---
 <div class="row">
 之前经常看到一些稀奇古怪又很好玩的东西，转头就忘了，从今天开始，在这里记录一些工作用得上用不上能用得上不用用得上的名词，免得以后再忘了~~不定期更新。<br />
+2013-10-29<br />
+docker: lxc 的简洁接口使用，可以有类似git commit一样的镜像管理，比 Vagrant 更加方便。<br />
+Serf: Golang 的自动发现和管理<a href="http://www.serfdom.io/">http://www.serfdom.io/</a>。<br />
 2013-04-01<br />
 Batman.js: A client-side framework for Rails developers with CoffeeScript<a href="http://batmanjs.org/">http://batmanjs.org/</a><br />
 2013-03-27<br />
