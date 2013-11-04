@@ -77,8 +77,6 @@ classes:
 environment: production
 parameters:
   role: loadbalancer
-
-}
 {% endhighlight %}
 
 要点
