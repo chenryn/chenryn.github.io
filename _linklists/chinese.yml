@@ -1,28 +1,7 @@
 ---
-- text: "Code as Craft"
-  url: http://codeascraft.com/
-  title: "Etsy 运维团队博客"
-- text: dotCloud-Blog
-  url: http://blog.dotcloud.com/
-  title: "dotCloud 官方博客"
-- text: devopsanywhere
-  url: http://devopsanywhere.blogspot.jp/
-  title: ""
 - text: 心路
   url: http://www.icylife.net/blog/
   title: ""
-- text: Jong En Dynamische Informatica
-  url: http://www.jedi.be/blog/
-  title: ""
-- text: planetdevops
-  url: http://www.planetdevops.net/
-  title: ""
-- text: Kitchen Soap
-  url: http://www.kitchensoap.com/
-  title: "《网站运维》作者，Etsy 运维"
-- text: John Goulah
-  url: http://blog.johngoulah.com
-  title: "Musings of linux, open source, cloud computing and systems"
 - text: DBA Hacker
   url: http://dbahacker.com/
   title: "TB 杨德华"
@@ -53,9 +32,6 @@
 - text: sa note
   url: http://www.sanote.org/
   title: ""
-- text: serverfault
-  url: http://serverfault.com/
-  title: "stackexchange下属的系统工程师问答网站"
 - text: Timo
   url: http://zauc.wordpress.com/
   title: ""
@@ -128,20 +104,13 @@
 - text: UsefulShare
   url: http://www.usefulshare.com
   title: "当当网安全运维"
-- text: neilb
-  url: http://neilb.org/
-  title: "The good,the bad,and the beautiful"
 - text: 纸飞机
   url: http://paperplane.ruhoh.com/
   title: "深入研究puppet"
 - text: ChinaXing
   url: http://www.chinaxing.org/
-- text: Aka.Why
-  url: http://blog.aka-cool.net/
-- txt: kindle
+- text: kindle
   url: http://blog.sectop.org/
-- txt: "reddit perl 频道"
-  url: http://www.reddit.com/r/perl/
-- txt: "Liuyu's blog"
+- text: "Liuyu's blog"
   url: http://bubbyroom.com/
   title: "守住每一天"

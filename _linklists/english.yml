@@ -1,0 +1,36 @@
+---
+- text: "Code as Craft"
+  url: http://codeascraft.com/
+  title: "Etsy 运维团队博客"
+- text: dotCloud-Blog
+  url: http://blog.dotcloud.com/
+  title: "dotCloud 官方博客"
+- text: devopsanywhere
+  url: http://devopsanywhere.blogspot.jp/
+  title: ""
+- text: Jong En Dynamische Informatica
+  url: http://www.jedi.be/blog/
+  title: ""
+- text: planetdevops
+  url: http://www.planetdevops.net/
+  title: ""
+- text: Kitchen Soap
+  url: http://www.kitchensoap.com/
+  title: "《网站运维》作者，Etsy 运维"
+- text: John Goulah
+  url: http://blog.johngoulah.com
+  title: "Musings of linux, open source, cloud computing and systems"
+- text: serverfault
+  url: http://serverfault.com/
+  title: "stackexchange下属的系统工程师问答网站"
+- text: TheGeekStuff
+  url: http://www.thegeekstuff.com/
+  title: "各种超酷Linux命令用法"
+- text: neilb
+  url: http://neilb.org/
+  title: "The good,the bad,and the beautiful"
+- text: Aka.Why
+  url: http://blog.aka-cool.net/
+- text: "reddit perl 频道"
+  url: http://www.reddit.com/r/perl/
+

@@ -66,8 +66,16 @@
         </div>
         <div class="well sidebar-nav">
           <ul id="linklists" class="nav nav-list">
-            <li class="nav-header">友情链接</li>
-            {% for link in site.linklists.main-menu.links %}
+            <li class="nav-header">友情链接(英文)</li>
+            {% for link in site.linklists.english.links %}
+              <li><a href="{{ link.url }}" title="{{ link.title }}">{{ link.text }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="well sidebar-nav">
+          <ul id="linklists" class="nav nav-list">
+            <li class="nav-header">友情链接(中文)</li>
+            {% for link in site.linklists.chinese.links %}
               <li><a href="{{ link.url }}" title="{{ link.title }}">{{ link.text }}</a></li>
             {% endfor %}
           </ul>
