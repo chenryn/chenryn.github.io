@@ -33,4 +33,8 @@
   url: http://blog.aka-cool.net/
 - text: "reddit perl 频道"
   url: http://www.reddit.com/r/perl/
-
+- text: "~jpetazzo"
+  url: http://jpetazzo.github.io/
+- text: "Performance Planet"
+  url: http://www.perfplanet.com/
+  title: "News and views from the web performance blogosphere"

@@ -97,3 +97,4 @@ puppet：轻量级集中式配置管理软件。官网：<a href="http://www.pup
         puppet北京用户组博客：<a href="http://www.comeonsa.com">http://www.comeonsa.com/</a><br />
         从系统镜像分发到服务状态检测，大型数据中心运维的一揽子计划~<br />
 </div><br />
+
