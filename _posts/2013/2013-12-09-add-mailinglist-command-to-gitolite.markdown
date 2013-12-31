@@ -7,7 +7,7 @@ tags:
   - linux
   - ssh
 ---
-<iframe src="http://www.slideshare.net/slideshow/embed_code/29033320" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+<embed src='http://www.docin.com/DocinViewer-737880351-144.swf' width='100%' height='600' type=application/x-shockwave-flash ALLOWFULLSCREEN='true' ALLOWSCRIPTACCESS='always'></embed>
 
-请翻墙观看，或者上微盘下载
+或者上微盘下载
 <http://vdisk.weibo.com/s/CW3E1ZROXE9g>
