@@ -1,0 +1,56 @@
+---
+layout: post
+title: 【翻译】2013 年 9 月的 kibana 周报
+category: logstash
+tags:
+  - elasticsearch
+  - kibana
+---
+
+本文来自Elasticsearch官方博客，2013年9月19日的文章[this week in kibana](http://www.elasticsearch.org/blog/this-week-in-kibana/)，作为kibana3重要的使用说明，翻译如下：
+
+直方图零填充
+=============
+
+直方图面板经过了一番改造，实现了正确的零填充。也就是说，当一个间隔内查询收到0个结果的时候，就显示为0，而不是绘制一条斜线连接到下一个点。零填充也意味着堆叠式直方图从顶端到底部的次序将保持不变。
+
+此外，堆叠提示栏现在允许你在累积和个人模式之间自由选择。
+
+![](http://www.elasticsearch.org/content/uploads/2013/09/Screen-Shot-2013-09-18-at-3.13.27-PM.png)
+
+数组字段的微分析
+=================
+
+数组字段现在可以在微分析面板上单独或者分组处理。比如，如果我有一个tags数组，我即可以看到前10个最常见的tags，也可以看到前10个最常见的tags组合。
+
+![](http://www.elasticsearch.org/content/uploads/2013/09/Screen-Shot-2013-09-18-at-3.16.07-PM.png)
+![](http://www.elasticsearch.org/content/uploads/2013/09/Screen-Shot-2013-09-18-at-3.16.21-PM.png)
+
+`_source` 作为默认的表字段
+=========================
+
+如果你没有给你的表选择任何字段，Kibana现在默认会给你显示 `_source` 里的 json 数据，直到你选择了具体的字段。
+
+![](http://www.elasticsearch.org/content/uploads/2013/09/Screen-Shot-2013-09-18-at-3.14.00-PM.png)
+
+可配置的字段截取
+==================
+
+注意到下面截图中 `_source` 字段末尾的"..."了吗？表格字段能被一个可以配置的"因子"截断。所谓因子就是，表格的列数除以它，得到一个字段的最大长度，然后各字段会被很好的截断成刚好符合这个长度。比如，如果我的截断因子是300，而表格有3列，那么每个字段会被截断成最大100个字符，然后后面跟上'...'。当然，字段的完整内容还是可以在细节扩展视图里看到的。
+
+![](http://www.elasticsearch.org/content/uploads/2013/09/Screen-Shot-2013-09-18-at-3.17.19-PM.png)
+
+关于细节视图
+==============
+
+你可能已经知道单击表格某行后可以看到包含这个事件的字段的表格。现在你可以选择你希望如何观察这个事件的细节了，包括有语法高亮的JSON以及原始的未高亮的JSON。
+
+![](http://www.elasticsearch.org/content/uploads/2013/09/Screen-Shot-2013-09-18-at-3.17.47-PM.png)
+
+更轻，更快，更小，更好
+=======================
+
+Kibana有了一个全新的构建系统！新的系统允许我们构建一个优化的，小巧的，漂亮的新Kibana。当你升级的时候它还可以自动清除原来的缓存，定期构建的Kibana发布在 <http://download.elasticsearch.org/kibana/kibana/kibana-latest.zip> ，zip包可以直接解压到你的web服务器里。
+
+如果愿意，你也可以从 [Github repository](https://github.com/elasticsearch/kibana) 开始运行。不用复制整个项目，只需要上传 src/ 目录到服务器就可以了。不过我们强烈建议使用构建好的版本，因为这样性能好很多。
+

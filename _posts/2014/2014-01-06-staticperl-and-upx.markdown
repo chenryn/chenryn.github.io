@@ -40,3 +40,14 @@ staticperl 官网上有一句很霸气的描述：“perl, libc, 100 modules, al
 {% endhighlight %}
 
 就得到压缩后的超小型perl了。这个perl内含了AE、Socket、common::sense、List::Util 等一系列常用模块可以直接使用。不过大小依然有 1.7MB 。看来是 Perl5.14 本身大小也变大了。
+
+__补充__
+
+按照评论里的建议，改用 `--lzma` 选项再压缩一次：
+
+{% highlight bash %}
+# upx -d smallperl.bin
+# upx --lzma smallperl.bin
+{% endhighlight %}
+
+结果到 1.4MB 大小。

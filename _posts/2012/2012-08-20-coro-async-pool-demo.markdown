@@ -33,14 +33,12 @@ sub coro_get {
 {% highlight perl %}
 sub coro_pool_get {
     my ($count, $urls) = @_;
-    my $limit = Coro::Semaphore->new( $Coro::POOL_SIZE );
-    my $sem = Coro::Semaphore->new( 1 );
+    my $sem = Coro::Semaphore->new( 1 - $Coro::POOL_SIZE );
     my $ua = new FurlX::Coro;
     my $data;
     for( 1 .. $count ){
         my $url = $urls->[int(rand($#{$urls}+1))];
-        $limit->down;
-        async_pool { my $res = $ua->get("$url"); $data->{'code'}->{$res->status}++; $sem->up; $limit->up; }; 
+        async_pool { my $res = $ua->get("$url"); $data->{'code'}->{$res->status}++; $sem->up; }; 
     };
     $sem->down;
     return $data;

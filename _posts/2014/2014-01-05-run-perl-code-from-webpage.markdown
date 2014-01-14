@@ -56,7 +56,7 @@ __END__
 {% highlight perl %}
 use Dancer::Plugin::Ajax;
 use File::Temp qw(tempfile);
-use IPC::Run qw(run timeout);
+use IPC::Run qw(start harness timeout);
 ajax '/run' => sub {
     my $code = param('code');
     my @cmd = qw(docker run -m 128m -u tour -v /tmp/:/tmp:ro perl-tour perl);
@@ -64,7 +64,17 @@ ajax '/run' => sub {
     binmode($fh, ':utf8');
     print $fh $code;
     push @cmd, $temp;
-    run \@cmd, \$in, \$out, \$err, timeout(5) or debug($?);
+    my $h;
+    eval {
+        $h = harness \@cmd, \$in, \$out, \$err, timeout(5);
+        start $h;
+        $h->finish;
+    };
+    if($@) {
+        my $x = $@;
+        $h->kill_kill;
+        return $x;
+    };
     unlink $temp;
     return to_json({
         Errors => [ split(/\n/, $err) ],
