@@ -1,0 +1,82 @@
+---
+layout: post
+title: 【翻译】Kibana3 里程碑 4
+category: logstash
+tags:
+  - elasticsearch
+  - kibana
+---
+
+本文来自Elasticsearch官方博客，2013年11月5日的文章[Kibana 3: mileston 4](http://www.elasticsearch.org/blog/kibana-3-milestone-4/)，作为kibana3 Milestone 4重要的使用说明，翻译如下：
+
+Kibana 3: Milestone 4 已经发布，带来了一系列性能、易用性和可视化上的提升。让我们来看看这些重大改变。如果你还在Milestone 3上，先看看之前[这篇博客](http://chenlinux.com/2014/01/14/this-week-in-kibana-20130919)里的新特性介绍。
+
+一个全新的界面
+==============
+
+Kibana 面板改造成了一个标签更突出，按键和链接更易用，风格全新的样子。改造结果提高了可用度，因为有了更高效的空间利用设计，来支持更大的数据密度和更一致的UI。
+
+![Kibana的新界面](http://www.elasticsearch.org/content/uploads/2013/11/Screen-Shot-2013-10-31-at-3.45.06-PM.png)
+
+一致性查询和过滤布局
+======================
+
+为了改善UI，查询和过滤面板现在有自己的可折叠、下拉的区域，具体位置在导航栏的下方。以后不再需要你自己摆放这些基本面板的布局了，它们默认会包含在每一个仪表盘里。和很多Kibana的特性一样，你也可以在仪表盘配置对话框里禁用这个一致性布局。
+
+100%全新的时间范围选择器
+=========================
+
+如果你熟悉Kibana这两年来的历史，你可能知道曾经存在过好几个时间选择器方案。新的时间选择器经过了完全的重写，不仅占用空间比原来的小，也更容易使用。把这个重要组件移出主仪表盘后，Kibana 现在有更多空间专注于重要数据和图表。还有，新的过滤格式实现了Elasticsearch的[时间运算](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-date-format.html#date-math)，所以不用每次重新选择一个时间范围来移动你的时间窗口了，每个搜索都能自动更新这个窗口。
+
+![全新的时间选择器](http://www.elasticsearch.org/content/uploads/2013/11/Screen-Shot-2013-10-31-at-3.44.17-PM.png)
+
+可过滤的字段列表
+===================
+
+利用表格的"类型->过滤器映射"特性，可以简单而快速的找到字段。
+
+![可过滤的字段列表](http://www.elasticsearch.org/content/uploads/2013/11/Screen-Shot-2013-10-31-at-3.46.52-PM.png)
+
+即时(ad-hoc) facets
+===============
+
+然后，当你找到了这些字段，就可以利用即时 facets 快速分析他们。只需要点击一个字段然后选择可视化即可查看到前10个匹配该字段的term。
+
+![](http://www.elasticsearch.org/content/uploads/2013/11/Screen-Shot-2013-10-31-at-3.45.42-PM.png)
+
+研究起来也更加简单了
+
+![](http://www.elasticsearch.org/content/uploads/2013/11/Screen-Shot-2013-10-31-at-3.45.57-PM.png)
+
+不需要添加面板，饼图可以直接悬浮出现！
+
+动态的仪表盘和url参数
+=======================
+
+Kibana 3: Milestone 4现在可以通过URL参数获取输入！这个备受期待的特性体现为两个方式：模板化的仪表盘和脚本化的仪表盘。Kibana 3: Milestone 4附带两个可以和Logstash完美配合的示例，在此基础上你可以构建自己的仪表盘。模板化仪表盘的创建非常简单，导出当前仪表盘结构成文件，编辑文件然后保存添加进你的 app/dashboards 目录既可以了。比如，从 [logstash.json](https://github.com/elasticsearch/kibana/blob/v3.0.0milestone4/src/app/dashboards/logstash.json) 里摘录下面一段：
+
+{% highlight json %}
+  "0": {
+    "query": "{{ARGS.query || '*'}}",
+    "alias": "",
+    "color": "#7EB26D",
+    "id": 0,
+    "pin": false
+  }
+{% endhighlight %}
+
+模板化仪表盘用"handlebar 语法"添加动态区段到基于JSON的仪表盘结构里。比如这里我们就用一个表达式替换掉了查询键的内容：_使用URL里的请求参数，如果不存在，使用'*'。_ 现在我们可以用下面这条URL访问这个仪表盘了：
+
+    http://kibana.example.com/index.html#/dashboard/file/logstash.json?query=extension:zip
+
+更灵活的脚本化仪表盘
+=====================
+
+脚本化仪表盘在处理URL参数的时候更加强大，它能运用上Javascript的全部威力构建一个完整的仪表盘对象。同样用 app/dashboards 里的 [logstash.js](https://github.com/elasticsearch/kibana/blob/v3.0.0milestone4/src/app/dashboards/logstash.js) 举例。因为脚本化仪表盘完全就是javascript，我们可以执行复杂的操作，比如切割URL参数。如下URL中，我们搜索_最近2天内的`HTML`, `CSS` 或者 `PHP`，然后在表格里显示 `request`, `response` 和 `user agent`。_注意URL本身路径从 __file__变成了__script__：
+
+    http://localhost:8000/index.html#/dashboard/script/logstash.js?query=html,css,php&from=2d&fields=request,response,agent
+
+立刻下载
+=========
+
+Milestone 4对作者和使用者都是一个飞跃。它功能更强大，当然使用也更简单。Kibana 继续集成在 Logstash 里，最新发布的 [Logstash 1.2.2](http://logstash.net/docs/1.2.2/) 中就带有。Kibana现在也可以直接用elasticsearch.org官网下载，地址见：<http://www.elasticsearch.org/overview/kibana/installation/>。

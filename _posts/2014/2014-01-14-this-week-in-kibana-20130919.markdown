@@ -7,7 +7,7 @@ tags:
   - kibana
 ---
 
-本文来自Elasticsearch官方博客，2013年9月19日的文章[this week in kibana](http://www.elasticsearch.org/blog/this-week-in-kibana/)，作为kibana3重要的使用说明，翻译如下：
+本文来自Elasticsearch官方博客，2013年9月19日的文章[this week in kibana](http://www.elasticsearch.org/blog/this-week-in-kibana/)，作为kibana3 Milestone 3重要的使用说明，翻译如下：
 
 直方图零填充
 =============

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 【翻译】kibana: 发生什么变化了？ 
+title: 【翻译】kibana发生什么变化了？
 category: logstash
 tags:
   - elasticsearch
