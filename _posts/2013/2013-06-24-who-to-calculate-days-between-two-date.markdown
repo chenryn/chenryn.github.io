@@ -46,3 +46,41 @@ print( ( $dt2 - $dt1 ) / ( 60 * 60 * 24 ) );
 
 这里就是要注意，`mktime` 里的 `month` 是以 0 开始的，`year` 是从 1900 开始的。
 
+__2014 年 01 月 22 日更新：__
+
+在2013 年底的 advent calendar 和 perlmaven 上学习到了另外两个模块，这里补充一下：
+
+## Time::Piece 模块
+
+这个模块是 Perl5 的corelist 模块，所以不用另外安装就能使用：
+
+{% highlight perl %}
+use Time::Piece;
+my $t1 = Time::Piece->strptime('2013-06-26', '%Y-%m-%d');
+my $t2 = Time::Piece->strptime('2012-06-21 GMT', '%Y-%m-%d %Z');
+print +($t1 - $t2)->days;
+{% endhighlight %}
+
+Time::Piece 模块重载了加减号，所以直接两个时间相减后就得到了 Time::Seconds 对象，然后调用 `days` 方法返回具体天数就可以了。
+
+这里有个奇怪的问题，在采用 `strptime` 方法解析创建对象的时候，`%Z` 格式似乎除了 `GMT` 之外写其他的都会爆出：
+
+    Error parsing time at /usr/lib/perl/5.14/Time/Piece.pm line 469.
+
+这个真的很诡异了。
+
+## DateTime::Moonpig 模块
+
+这个模块是最近出的，属于 DateTime 模块的接口封装和优化。
+
+{% highlight perl %}
+use DateTime::Moonpig;
+my $t3 = DateTime::Moonpig->new(year => 2013, month => 6, day => 26, time_zone => 'America/New_York');
+my $t4 = DateTime::Moonpig->new(year => 2012, month => 6, day => 21, time_zone => 'GMT');
+print int( ($t3 - $t4) / (60 * 60 * 24) );
+{% endhighlight %}
+
+从示例可以看出两点优化：
+
+1. 可以灵活调整 DateTime::Moonpig 对象的时区，而不用分别 `use DateTime;use DateTime::TimeZone`；
+2. 直接加减返回的不再是那个不好用的 `DateTime::Duration` 对象而是秒数。
