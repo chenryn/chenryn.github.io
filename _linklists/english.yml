@@ -41,3 +41,9 @@
 - text: "Cuddle Tech"
   url: http://cuddletech.com/blog/
   title: "Use UNIX or die"
+- text: 'No time to wait'
+  url: http://showmetheco.de/
+  title: 'Viacheslav Tykhanovskyi(PocketIO/Text::Haml)'
+- text: 'Dataloop.IO'
+  url: http://blog.dataloop.io/
+  title: 'A new SaaS monitoring tool for DevOps & Operations'
