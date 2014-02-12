@@ -1,36 +1,15 @@
 ---
-- text: 心路
-  url: http://www.icylife.net/blog/
-  title: ""
-- text: DBA Hacker
-  url: http://dbahacker.com/
-  title: "TB 杨德华"
 - text: eric
   url: http://www.nginxs.com/
   title: ""
 - text: Hello DBA
   url: http://www.hellodb.net/
   title: "Ali DBA 张瑞"
-- text: Laird-SA
-  url: http://blog.laird-sa.com/
-  title: ""
-- text: LinuxSEE
-  url: http://www.linuxsee.com/
-  title: ""
 - text: NoSQLfan
   url: http://blog.nosqlfan.com/
   title: "not only sql信息集散地"
 - text: OurMySQL
   url: http://ourmysql.com/
-  title: ""
-- text: piol
-  url: http://www.puppeter.cn/
-  title: ""
-- text: MDLog:/sysadmin
-  url: http://www.ducea.com/
-  title: ""
-- text: sa note
-  url: http://www.sanote.org/
   title: ""
 - text: Timo
   url: http://zauc.wordpress.com/
@@ -44,12 +23,6 @@
 - text: 回忆未来
   url: http://blog.s135.com/
   title: "金山·张宴"
-- text: 土豆运营团队
-  url: http://blog.ops.tudou.com/wp/
-  title: ""
-- text: 家欣的天空
-  url: http://www.91tuanfang.com/
-  title: "安居客运维"
 - text: 应用交付学习之路
   url: http://www.cnadn.net/
   title: "F5工程师"
@@ -61,9 +34,6 @@
   title: "音悦台技术经理"
 - text: 蚊子世界
   url: http://www.wenzizone.cn/
-  title: ""
-- text: 运维小子
-  url: http://www.opboy.com
   title: ""
 - text: 运维进行时
   url: http://blog.liuts.com/
@@ -77,35 +47,20 @@
 - text: Lax
   url: http://blog.liulantao.com/
   title: "刘兰涛"
-- text: 风声
-  url: http://l09.me/
-  title: "风声"
 - text: 莫言
   url: http://niubie.me/
   title: "莫言"
-- text: 牛氓
-  url: http://mooser.me/
-  title: "牛氓"
-- text: 当然我在扯淡
-  url: http://http://www.yinwang.org/
-  title: "当然我在扯淡"
 - text: NoOps
   url: http://noops.me/
   title: "小米运维部"
 - text: 云端分布式搜索技术
   url: http://www.searchtech.pro/
   title: ""
-- text: TheGeekStuff
-  url: http://www.thegeekstuff.com/
-  title: "各种超酷Linux命令用法"
-- text: 聊逍遥兮容与
-  url: http://muxueqz.laou.me
-  title: "muxueqz"
 - text: UsefulShare
   url: http://www.usefulshare.com
   title: "当当网安全运维"
 - text: 纸飞机
-  url: http://paperplane.ruhoh.com/
+  url: http://junqili.com/
   title: "深入研究puppet"
 - text: ChinaXing
   url: http://www.chinaxing.org/
