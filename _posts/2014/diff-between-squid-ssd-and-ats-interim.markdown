@@ -41,4 +41,4 @@ squid-ssd 方案，学习的是 Writeback 模式，这种模式极大的缓解�
 
 相反，阅读了 ats 的文档说明后，发现 ats 的 interim 方案学习的是 Writearound 模式，而且默认的 tunable 那点还设的比较高， sata 设备上一个缓存对象要累积 2 次读取请求(最低可以修改到1，不能到0)后，才会缓存到 ssd 设备里去。
 
-这一点从另一个细节上也可以反映出来：ats 的监控数据中，`Total Cache Size` 是只计算了 `storage.config` 里写的那些 sata 设备容量的，不包括 interim 在的 ssd 设备容量。
+这一点从另一个细节上也可以反映出来：ats 的监控数据中，`proxy.process.cache.bytes_total` 是只计算了 `storage.config` 里写的那些 sata 设备容量的，不包括 interim 在的 ssd 设备容量。

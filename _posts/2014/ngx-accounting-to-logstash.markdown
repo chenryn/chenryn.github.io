@@ -23,11 +23,13 @@ http_accounting 是 Nginx 的一个第三方模块，会每隔5分钟自动统�
 
 ```
 input {
-    syslog {}
+    syslog {
+        port => 29124
+    }
 }
 filter {
     grok {
-        match => [ "message", "^%{SYSLOGTIMESTAMP:timestamp}\|\| pid:\d+\|from:\d{10}\|to:\d{10}\|accounting_id:(?<accounting>\w+)\|requests:(?<req>\d+)\|bytes_out:(?<size>\d+)\|(?:200:(?<count_200>\d+)\|?)?(?:206:(?<count_206>\d+)\|?)?(?:301:(?<count_301>\d+)\|?)?(?:302:(?<count_302>\d+)\|?)?(?:304:(?<count_304>\d+)\|?)?(?:400:(?<count_400>\d+)\|?)?(?:401:(?<count_401>\d+)\|?)?(?:403:(?<count_403>\d+)\|?)?(?:404:(?<count_404>\d+)\|?)?(?:499:(?<count_499>\d+)\|?)?(?:500:(?<count_500>\d+)\|?)?(?:502:(?<count_502>\d+)\|?)?(?:503:(?<count_503>\d+)\|?)?" ]
+        match => [ "message", "^%{SYSLOGTIMESTAMP:timestamp}\|\| pid:\d+\|from:\d{10}\|to:\d{10}\|accounting_id:%{WORD:accounting}\|requests:%{NUMBER:req:int}\|bytes_out:%{NUMBER:size:int}\|(?:200:%{NUMBER:count.200:int}\|?)?(?:206:%{NUMBER:count.206:int}\|?)?(?:301:%{NUMBER:count.301:int}\|?)?(?:302:%{NUMBER:count.302:int}\|?)?(?:304:%{NUMBER:count.304:int}\|?)?(?:400:%{NUMBER:count.400:int}\|?)?(?:401:%{NUMBER:count.401:int}\|?)?(?:403:%{NUMBER:count.403:int}\|?)?(?:404:%{NUMBER:count.404:int}\|?)?(?:499:%{NUMBER:count.499:int}\|?)?(?:500:%{NUMBER:count.500:int}\|?)?(?:502:%{NUMBER:count.502:int}\|?)?(?:503:%{NUMBER:count.503:int}\|?)?"
     }
     date {
         match => [ "timestamp", "MMM dd YYY HH:mm:ss", "MMM  d YYY HH:mm:ss", "ISO8601" ]
@@ -41,5 +43,6 @@ output {
 ```
 
 然后运行 `java -jar logstash-1.3.3-flatjar.jar agent -f logstash.conf` 即可完成收集入库！
-
 再运行 `java -jar logstash-1.3.3-flatjar.jar web` 即可在9292端口访问到 Kibana 界面。
+
+上面这个 grok 写的很难看，不过似乎也没有更好的办法～下一步会研究在这个基础上合并 skyline 预警。
