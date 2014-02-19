@@ -21,7 +21,6 @@ http_accounting 是 Nginx 的一个第三方模块，会每隔5分钟自动统�
 
 `logstash.conf` 示例如下：
 
-```
     input {
         syslog {
             port => 29124
@@ -40,7 +39,6 @@ http_accounting 是 Nginx 的一个第三方模块，会每隔5分钟自动统�
             embedded => true
         }
     }
-```
 
 然后运行 `java -jar logstash-1.3.3-flatjar.jar agent -f logstash.conf` 即可完成收集入库！
 再运行 `java -jar logstash-1.3.3-flatjar.jar web` 即可在9292端口访问到 Kibana 界面。
