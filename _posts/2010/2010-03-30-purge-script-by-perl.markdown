@@ -14,7 +14,7 @@ squid的purge，一般有两种方式，squidclient -m purge url或者http reque
 #!/usr/bin/perl -w
 use IO::Socket;
 #检测脚本参数个数
-unless (@ARGV &gt; 0) { die "usage: $0 url" }
+unless (@ARGV > 0) { die "usage: $0 url" }
 #打开ip列表文件，定义文件句柄HOST
 open(HOST,"./ip");
 #定义连接结束符，然后翻倍（汗这个方式~）
@@ -29,10 +29,10 @@ while (defined($ip=<HOST>)){
     #从参数中默认读取url变量
     foreach $document ( @ARGV ) {
         #利用IO::Socket::INET模块定义TCP80连接，port可以读取/etc/services文件里的定义
-        $remote = IO::Socket::INET-&gt;new( Proto     => "tcp",
-                                            PeerAddr  => $ip,
-                                            PeerPort  => "http(80)",
-                                          );
+        $remote = IO::Socket::INET->new( Proto     => "tcp",
+                                         PeerAddr  => $ip,
+                                         PeerPort  => "http(80)",
+                                       );
         unless ($remote) { die "cannot connect to http daemon on $ip" }
         #立即输出
         $remote->autoflush(1);
