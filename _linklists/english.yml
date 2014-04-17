@@ -53,4 +53,6 @@
 - text: TheGeekStuff
   url: http://www.thegeekstuff.com/
   title: "各种超酷Linux命令用法"
-
+- text: Planet Perl 6
+  url: http://planeteria.org/perl6/
+  title: "Perl6 文集"
