@@ -118,3 +118,12 @@ httping是一个模拟ping输出的http请求客户端。从1.5开始支持发�
 
 注2：网上看到有人写server和client的demo演示fastopen，但其实不对，demo代码里print的数据是正常三次握手以后socket收到的。这点开tcpdump才能确认到底是什么时候发送的数据。
 
+--------------------------------------------------------
+
+**2014 年 04 月 18 日更新：**
+
+今天改用 wireshark 看了一下数据包，在第一个 SYN 包没有带请求数据的时候，其实最末尾可选项里是有 fastopen 的，截图如下。看来还是服务器端的问题。下一步研究 `tcp_recvmsg()` 函数去。
+
+![](/images/uploads/wireshark-fastopen.png)
+
+
