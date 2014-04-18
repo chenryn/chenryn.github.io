@@ -28,7 +28,7 @@ Linux Deepin的王勇从武汉过来送给教主一个新的笔记本电脑，�
 
 ![irc](/images/uploads/sayhi.jpg)
 
-为了演示 Unicode 支持，教主还联系中文环境，直接从字库里搜索了"龙、龖、龘、![������ 这个字在Unicode扩展B字库里其实有，但是网页上不好打出来啊](http://140.111.1.40/sword/swordc/sc18365/c18365.jpg)"出来，然后问：为什么没有五个龙叠在一起的字呢？哈哈，看来他是把汉字当做纯象形文字来学习了。于是就少不了著名的"biangbiang面"啦：
+为了演示 Unicode 支持，教主还联系中文环境，直接从字库里搜索了"![从一个龙到四个龙，不过后面几个都是Unicode扩展字库里的字，UTF8都不支持，我好不容易找到却没法通过jekyll build编译，只好截图了](/images/uploads/long.png)"出来，然后问：为什么没有五个龙叠在一起的字呢？哈哈，看来他是把汉字当做纯象形文字来学习了。于是就少不了著名的"biangbiang面"啦：
 
 ![](/images/uploads/biang.jpg)
 
