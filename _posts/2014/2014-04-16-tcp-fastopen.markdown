@@ -102,7 +102,7 @@ httping是一个模拟ping输出的http请求客户端。从1.5开始支持发�
 
     stap -e 'probe kernel.function("tcp_sendmsg") {printf("%d %x\n",$msg->msg_namelen,$msg->msg_flags)}'
 
-另一个终端运行最开始提到的 `httping -F` 命令，看到前一个终端输出结果为 `16 20000040`，查 `tcp.h` 可以看到 `MSG_FASTOPEN` 是 `0x20000000`，`MSG_DONTWAIT` 是 `0x40`，也就是说 httping 也没问题。
+另一个终端运行最开始提到的 `httping -F` 命令，看到前一个终端输出结果为 `16 20000040`，查 `socket.h` 可以看到 `MSG_FASTOPEN` 是 `0x20000000`，`MSG_DONTWAIT` 是 `0x40`，也就是说 httping 也没问题。
 
 现在比较郁闷的一点是：在 `net/ipv4/tcp.c` 里，`tcp_sendmsg()` 函数会判断 `if ((flags & MSG_FASTOPEN))`，就调用 `tcp_sendmsg_fastopen()` 函数来处理。但是试图用 systemtap 来调查这个函数的时候，会报一个错：
 
