@@ -18,6 +18,7 @@ date: 2014-04-18 15:15:15
 
 * 第 3 页，loadavg 三个值的含义分别为 1、5、15 分钟的平均负载，书中误作 1、5、10 分钟 -- by [@flydragon-bj](http://weibo.com/u/1791163113)
 * 第 28 页，代码示例中的 `printf("%s\n",)` 中的换行符 `\n` 误作 `/n`。
+* 第 107 页，说"如第二章提到的 nagios/ganlia 等系统的监控原理"，把 ganglia 写成了 ganlia。(而且这部分是原计划中第一章的内容，后来因为篇幅原因书中并没有介绍 ganglia。) -- by [@newestbie](http://weibo.com/newestbie)
 
 重大更新
 ======================
