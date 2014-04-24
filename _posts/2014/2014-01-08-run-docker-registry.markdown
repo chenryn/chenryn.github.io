@@ -38,7 +38,7 @@ sh run.sh
 # 在私有仓库注册用户
 docker login 127.0.0.1:5000
 # 给要提交的镜像打标签
-docker tag <CONTAINER ID> 127.0.0.1:5000/tagname
+docker tag <IMAGE ID> 127.0.0.1:5000/tagname
 # 推送到私有仓库
 docker push 127.0.0.1:5000/tagname
 {% endhighlight %}
