@@ -18,7 +18,7 @@ tags:
 
 脚本本身修改起来难度不大，结果如下：
 
-{% highlight perl6 %}
+{% highlight perl %}
 #!/usr/bin/env perl6
 use v6;
 use DBIish;
