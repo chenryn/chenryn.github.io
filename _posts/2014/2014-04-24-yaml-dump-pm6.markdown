@@ -38,8 +38,8 @@ sub MAIN($node) {
     my $res;
     if ( !$ret ) {
         $res = {
-# Perl5 的 qw() 在 Perl6 里直接写成 <> 即可。
-            classes     => [<puppetd repos>],
+# Perl5 的 qw() 在 Perl6 里直接写成 <> 。也不用再通过 [] 来指明是引用
+            classes     => <puppetd repos>,
             environment => 'testing',
         };
     }
