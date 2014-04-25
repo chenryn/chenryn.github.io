@@ -24,12 +24,14 @@ use v6;
 use DBIish;
 use YAML;
 my $base_dir = "/etc/puppet/webui";
+# 函数在 Perl6 中依然使用 sub 关键字定义，不过有个超酷的特性是 multi sub
+# 脚本中没有用到，但是在 YAML::Dumper 中遍地都是，这里也提一句。
 # MAIN 函数在 Perl6 里可以直接用 :$opt 命令参数起 getopt 的作用
 # 不过 ENC 脚本就是直接传一个主机名，用不上这个超酷的特性
 sub MAIN($node) {
 # connect 方法接收参数选项是 |%opts，所以可以把哈希直接平铺写
 # 这个 | 的用法一个月前在《Using Perl6》里看到过
-    my $dbh = DBIish.connect( 'SQLite', database => "{$base_dir}/node_info_backup.db" );
+    my $dbh = DBIish.connect( 'SQLite', database => "{$base_dir}/node_info.db" );
     my $sth = $dbh.prepare("select * from node_info where node_fqdn = ?");
     $sth.execute("$node");
     my $ret = $sth.fetchrow_hashref;
@@ -66,6 +68,7 @@ sub MAIN($node) {
                 $res{'classes'}{'nginx'}{'iplist'} = @needs;
             }
             else {
+# Perl5 的 undef 不再使用，可以使用 Nil 或者 Any 对象
                 $res{'classes'}{$class} = Nil;
             }
         }
@@ -154,3 +157,5 @@ YAML 模块修改对比如下：
 最后提一句，目前 ENC 脚本在 perl5、perl6-m、perl6-p、perl6-j 上的运行时间大概分别是 0.13、1.5、2.8、12s。MoarVM 还差 Perl5 十倍，领先 parrot 一倍。不过 JVM 本身启动时间很长，这里不好因为一个短时间脚本说它太慢。
 
 另外还试了一下如果把我修改过的 YAML::Dumper 类直接写在脚本里运行，也就是不编译成 moarvm 模块，时间大概是 2.5s，比 parrot 模块还快点点。
+
+不过如何把 perl6 脚本本身编译成 moarvm 的 bytecode 格式运行还没有研究出来，直接 `perl6-m --target=mbc --output=name.moarvm name.pl6` 得到的文件运行 `moar name.moarvm` 的结果运行会内存报错。
