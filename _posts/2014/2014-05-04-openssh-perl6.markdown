@@ -52,20 +52,30 @@ say @ret.perl;
 
 * class 的定义和 attr 的定义和[用法](http://doc.perl6.org/language/classtut)
 * try-catch 的用法
-  也可以不写 try，直接 `CATCH {}` 
+
+    也可以不写 try，直接 `CATCH {}` 
+
 * qqx{} 的用法
-  这是变动比较大的地方，`qqx` 后面只能用 `{}` 不能用其他字符对了。Perl6 提供另外的 `shell()` 指令，返回 `Proc::Status` 对象。
-  不过这个对象其实也就是个状态码，不包括标准输出、错误输出什么的。
+
+    这是变动比较大的地方，`qqx` 后面只能用 `{}` 不能用其他字符对了。Perl6 提供另外的 `shell()` 指令，返回 `Proc::Status` 对象。
+    不过这个对象其实也就是个状态码，不包括标准输出、错误输出什么的。
+
 * 字符串连接符 ~ 的用法
 * multi method 的定义和用法
 * [函数 signature](http://doc.perl6.org/type/Method#signature) 的定义和用法(可选参数那里定义了但是还没用上)
-* >> 操作符的用法
-  这里其实相当于是 `.finish for @t`。这个怪怪的操作符据说可以在可能的时候自动线程化数组操作，所以返回顺序不会跟`.map`一样。
+* `>>` 操作符的用法
+
+    这里其实相当于是 `.finish for @t`。这个怪怪的操作符据说可以在可能的时候自动线程化数组操作，所以返回顺序不会跟`.map`一样。
+
 * xx 操作符的用法
-  Perl5 里有 `x` 操作符，Perl6 里又增加了 `xx`、 `X` 和 `Z` 等操作符。分别是[字符扩展成数组](http://doc.perl6.org/language/operators#infix_xx)、[数组扩展成多维数组](http://doc.perl6.org/language/operators#infix_X)和[多数组压缩单个数组](http://doc.perl6.org/language/operators#infix_Z)(也就是zip操作)。
+
+    Perl5 里有 `x` 操作符，Perl6 里又增加了 `xx`、 `X` 和 `Z` 等操作符。
+    分别是[字符扩展成数组](http://doc.perl6.org/language/operators#infix_xx)、[数组扩展成多维数组](http://doc.perl6.org/language/operators#infix_X)和[多数组压缩单个数组](http://doc.perl6.org/language/operators#infix_Z)(也就是zip操作)。
+
 * Channel 和 Thread 对象的用法
-  在 roast 测试集里，只有 thread 和 lock 的[测试用例](https://github.com/perl6/roast/blob/master/S17-lowlevel/lock.t)。
-  semaphore 其实也支持(因为 MoarVM 是基于 libuv 的嘛，libuv 支持它当然也支持)，但是连测试用例都没写……
+
+    在 roast 测试集里，只有 thread 和 lock 的[测试用例](https://github.com/perl6/roast/blob/master/S17-lowlevel/lock.t)。
+    semaphore 其实也支持(因为 MoarVM 是基于 libuv 的嘛，libuv 支持它当然也支持)，但是连测试用例都没写……
 
 默认的并发编程会采用 `ThreadPoolScheduler` 类，稍微看了一下，默认设置的线程数是 16。考虑下一步是仿照该类完善我的小脚本呢，还是重新学习一下 `Supply` 或者 `Promise` 看看到底怎么用。
 
