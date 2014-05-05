@@ -20,6 +20,7 @@ date: 2014-04-18 15:15:15
 * 第 28 页，代码示例中的 `printf("%s\n",)` 中的换行符 `\n` 误作 `/n`。
 * 第 107 页，说"如第二章提到的 nagios/ganlia 等系统的监控原理"，把 ganglia 写成了 ganlia。(而且这部分是原计划中第一章的内容，后来因为篇幅原因书中并没有介绍 ganglia) -- by [@newestbie](http://weibo.com/newestbie)
 * 第 145 页，elasticsearch 请求可以发往集群中任何一个 `node` ，误作任何一个 `master node`(要是只能 master node 的话，JAVA 客户端本身就用不了了，显然不可能)。 --  by wss8848
+* 第 13 页，%w 计算公式贴的还是 %r 的，正确的分子应该是 `wr_sec`。 -- by 曹海峰
 
 重大更新
 ======================
