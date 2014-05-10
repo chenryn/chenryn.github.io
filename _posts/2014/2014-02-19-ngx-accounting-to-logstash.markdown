@@ -76,6 +76,32 @@ http_accounting 是 Nginx 的一个第三方模块，会每隔5分钟自动统�
 
 ![](/images/uploads/logstash-ngx-accounting.png)
 
-==================================
-
 上面这个 grok 写的很难看，不过似乎也没有更好的办法～下一步会研究在这个基础上合并 skyline 预警。
+
+---------------------------------------------
+
+2014 年 5 月 10 日更新：
+
+在 [logstash/docs](http://logstash.net/docs/1.4.1/) 上发现一个 filter 叫 kv，很适合这个场景，可以大大简化 grok 工作，新的 filter 配置如下：
+
+
+    filter {
+        grok {
+            match => [ "message", "^%{SYSLOGTIMESTAMP:timestamp}\|\| pid:\d+\|from:\d{10}\|to:\d{10}\|accounting_id:%{WORD:accounting}\|requests:%{NUMBER:req:int}\|bytes_out:%{NUMBER:size:int}\|%{DATA:status}"
+        }
+        kv {
+            target => "code"
+            source => "status"
+            field_split => "|"
+            value_split => ":"
+        }
+        ruby {
+            code => "n={};event['code'].each_pair{|x,y|n[x]=y.to_i};event['code']=n"
+        }
+        date {
+            match => [ "timestamp", "MMM dd YYY HH:mm:ss", "MMM  d YYY HH:mm:ss", "ISO8601" ]
+        }
+    }
+
+不晓得为什么 filter/mutate 不提供转换 Hash 的功能，所以只能把这行写在 filter/ruby 里面。kv 截出来的 value 默认都是字符串类型。
+
