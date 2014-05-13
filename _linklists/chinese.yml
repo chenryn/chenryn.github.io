@@ -14,15 +14,9 @@
 - text: Timo
   url: http://zauc.wordpress.com/
   title: ""
-- text: 七月的夏天
-  url: http://julyclyde.org/
-  title: "新浪系统工程师"
 - text: 刘荣星
   url: http://www.liurongxing.com/
   title: ""
-- text: 回忆未来
-  url: http://blog.s135.com/
-  title: "金山·张宴"
 - text: 应用交付学习之路
   url: http://www.cnadn.net/
   title: "F5工程师"
@@ -32,15 +26,9 @@
 - text: 扶凯
   url: http://www.php-oa.com/
   title: "音悦台技术经理"
-- text: 蚊子世界
-  url: http://www.wenzizone.cn/
-  title: ""
-- text: 运维进行时
-  url: http://blog.liuts.com/
-  title: "前天涯SA 刘天斯"
 - text: lark's cloud
   url: http://www.lark.net.cn/
-  title: "lark's cloud"
+  title: "王剑"
 - text: HeartOutside
   url: http://log.heartoutside.com/
   title: "HeartOutSide"
@@ -64,8 +52,11 @@
   title: "深入研究puppet"
 - text: ChinaXing
   url: http://www.chinaxing.org/
-- text: kindle
-  url: http://blog.sectop.org/
 - text: "Liuyu's blog"
   url: http://bubbyroom.com/
   title: "守住每一天"
+- text: Aka.Why
+  url: http://blog.aka-cool.net/
+- text: LairdNote
+  url: http://blog.l8ii.com/
+  title: "刘侨"

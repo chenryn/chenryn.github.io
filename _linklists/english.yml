@@ -2,9 +2,6 @@
 - text: "Code as Craft"
   url: http://codeascraft.com/
   title: "Etsy 运维团队博客"
-- text: dotCloud-Blog
-  url: http://blog.dotcloud.com/
-  title: "dotCloud 官方博客"
 - text: devopsanywhere
   url: http://devopsanywhere.blogspot.jp/
   title: ""
@@ -29,8 +26,6 @@
 - text: neilb
   url: http://neilb.org/
   title: "The good,the bad,and the beautiful"
-- text: Aka.Why
-  url: http://blog.aka-cool.net/
 - text: "reddit perl 频道"
   url: http://www.reddit.com/r/perl/
 - text: "~jpetazzo"
@@ -50,9 +45,6 @@
 - text: MDLog:/sysadmin
   url: http://www.ducea.com/
   title: ""
-- text: TheGeekStuff
-  url: http://www.thegeekstuff.com/
-  title: "各种超酷Linux命令用法"
 - text: Planet Perl 6
   url: http://planeteria.org/perl6/
   title: "Perl6 文集"
