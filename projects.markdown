@@ -5,6 +5,9 @@ group: navigation
 ---
 <div class="row">
 之前经常看到一些稀奇古怪又很好玩的东西，转头就忘了，从今天开始，在这里记录一些工作用得上用不上能用得上不用用得上的名词，免得以后再忘了~~不定期更新。<br />
+2014-05-15<br />
+packetbeat: 通过 pcap 抓包，然后导入 elasticsearch 通过 kibana 展示分析结果。<br />
+Net::Frame 模块: 可以通过 pcap/dnet 修改来源 IP 构建 IP 包发送出去。<br />
 2013-10-29<br />
 docker: lxc 的简洁接口使用，可以有类似git commit一样的镜像管理，比 Vagrant 更加方便。<br />
 Serf: Golang 的自动发现和管理<a href="http://www.serfdom.io/">http://www.serfdom.io/</a>。<br />
