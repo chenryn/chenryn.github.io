@@ -10,7 +10,7 @@ tags:
 
 kibana 图表类型中有个 stats 类型，返回对应请求的某指定数值字段的数学统计值，包括最大值、最小值、平均值、方差和标准差(当前通过 logstash-1.4.1 分发的 kibana 版本还只支持单列显示，前天，即 5 月 15 日刚[更新了 Kibana 3.1 版](http://www.elasticsearch.org/blog/kibana-3-1/)，支持多列同时显示)。这个 stats 图表是利用 Elasticsearch 的 facets 功能来实现的。而在 Elasticsearch 1.0 版本以后，新出现了一个更细致的功能叫 aggregation，按照官方文档所说，会慢慢的彻底替代掉 facets。具体到 1.1 版本的时候， aggregation 里多了一项 percentile，可以具体返回某指定数值字段的区间分布情况。这对日志分析可是大有帮助。对这项功能，Elasticsearch 官方也很得意的专门在博客上写了一篇报道：[Averages can be misleading: try a percentile](http://www.elasticsearch.org/blog/averages-can-dangerous-use-percentile/)。
 
-周五晚上下班前，我突然决定试试给 Kibana 加上 percentile 图表类型。因为群里正好唯品会的同学说到他们仿造 trend 类型做了 stat_trend 图表，我想 percentile 从数据结构到展示方法跟 stats 都很像，应该难度不大，正好作为学习 angularjs 的入手点好了。
+周五晚上下班前，我突然决定试试给 Kibana 加上 percentile 图表类型。因为群里正好携程的同学说到他们仿造 trend 类型做了 stat_trend 图表，我想 percentile 从数据结构到展示方法跟 stats 都很像，应该难度不大，正好作为学习 angularjs 的入手点好了。
 
 花了半天多的时间，基本搞定这件事情，中间几度碰到难题，这里记录一下：
 
