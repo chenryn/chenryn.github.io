@@ -5,6 +5,10 @@ group: navigation
 ---
 <div class="row">
 之前经常看到一些稀奇古怪又很好玩的东西，转头就忘了，从今天开始，在这里记录一些工作用得上用不上能用得上不用用得上的名词，免得以后再忘了~~不定期更新。<br />
+2014-05-19<br />
+dashing: 基于 sinatra 和 batman.js 做的界面，可以拖动面板到页面其他位置，有利于监控UI定制。<a href="http://shopify.github.io/dashing/">http://shopify.github.io/dashing/</a><br />
+APM: 主要就是 java 写的业务系统的数据收集。目前在 github 上看到两个。一个是 Splunk 的 <a href="https://github.com/damiendallimore/SplunkJavaAgent">Agent</a>，一个是韩国人写的 <a href="https://github.com/owlab/fresto">fresto</a>。<br />
+<br />
 2014-05-15<br />
 packetbeat: 通过 pcap 抓包，然后导入 elasticsearch 通过 kibana 展示分析结果。<br />
 Net::Frame 模块: 可以通过 pcap/dnet 修改来源 IP 构建 IP 包发送出去。<br />
