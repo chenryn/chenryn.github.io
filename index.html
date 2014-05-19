@@ -6,9 +6,9 @@ tagline: 与poem斗 与stock斗 与tech斗 其乐无穷
 {% include JB/setup %}
 {% for post in paginator.posts %}
   <div class="full" style='background-color: #FFF;'>
-    <h1 class="entry-title">
+    <h2 class="entry-title">
       <a href="{{ post.url }}" title="{{ post.title }}" rel="bookmark">{{ post.title }}</a>
-    </h1>
+    </h2>
     <p class="alt-font tight">
       <span class="date full-date">
         <abbr class="published" title="{{ post.date }}">{{ post.date | date_to_string }}</abbr>
@@ -22,7 +22,7 @@ tagline: 与poem斗 与stock斗 与tech斗 其乐无穷
       {% endfor %}
     </p>
     <div class="entry-content full-content" style='background-color: #FFF; margin-left: 24px; padding: 10px;'>
-      {{ post.content | truncatehtml: 350 }}
+      {{ post.excerpt }}
       <a href="{{ post.url }}" class="read_more span2 pull-right">继续阅读……</a>
       <div class="clear"></div>
     </div>
