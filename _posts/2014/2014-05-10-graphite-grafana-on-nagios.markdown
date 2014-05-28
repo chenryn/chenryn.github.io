@@ -1,6 +1,6 @@
 ---
 layout: post
-title:
+title: 用 Graphite 存储 Nagios 数据
 category: monitor
 tags:
   - nagios
