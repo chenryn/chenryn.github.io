@@ -31,7 +31,7 @@ http_accounting 是 Nginx 的一个第三方模块，会每隔5分钟自动统�
             match => [ "message", "^%{SYSLOGTIMESTAMP:timestamp}\|\| pid:\d+\|from:\d{10}\|to:\d{10}\|accounting_id:%{WORD:accounting}\|requests:%{NUMBER:req:int}\|bytes_out:%{NUMBER:size:int}\|(?:200:%{NUMBER:count.200:int}\|?)?(?:206:%{NUMBER:count.206:int}\|?)?(?:301:%{NUMBER:count.301:int}\|?)?(?:302:%{NUMBER:count.302:int}\|?)?(?:304:%{NUMBER:count.304:int}\|?)?(?:400:%{NUMBER:count.400:int}\|?)?(?:401:%{NUMBER:count.401:int}\|?)?(?:403:%{NUMBER:count.403:int}\|?)?(?:404:%{NUMBER:count.404:int}\|?)?(?:499:%{NUMBER:count.499:int}\|?)?(?:500:%{NUMBER:count.500:int}\|?)?(?:502:%{NUMBER:count.502:int}\|?)?(?:503:%{NUMBER:count.503:int}\|?)?"
         }
         date {
-            match => [ "timestamp", "MMM dd YYY HH:mm:ss", "MMM  d YYY HH:mm:ss", "ISO8601" ]
+            match => [ "timestamp", "MMM dd HH:mm:ss", "MMM  d HH:mm:ss" ]
         }
     }
     output {
@@ -51,7 +51,7 @@ http_accounting 是 Nginx 的一个第三方模块，会每隔5分钟自动统�
 
 点击 Event Over Time 柱状图右上角第二个的 `Configure` 小图标，弹出图表配置框：
 
-* 在 `Panel` 选项卡中修改 `Chart value` 的 `count` 为 `total`，`Value Field` 设置为 size；
+* 在 `Panel` 选项卡中修改 `Chart value` 的 `count` 为 `total`，`Value Field` 设置为 size，**勾选 `Seconds` 项，转换 size 的累加值成每秒带宽(不然 interval 变化会导致累加值变化)**；
 * 在 `Style` 选项卡中修改 `Chart Options` 的 `Bars` 勾选项为 `Lines`，`Y Format` 为 bytes；
 * 在 `Queries` 选项卡中修改 `Charted Queries` 为 `selected`，然后点中右侧列出的请求中所需要的那项(当前只有一个，就是`*`)。
 
@@ -98,10 +98,34 @@ http_accounting 是 Nginx 的一个第三方模块，会每隔5分钟自动统�
         ruby {
             code => "n={};event['code'].each_pair{|x,y|n[x]=y.to_i};event['code']=n"
         }
-        date {
-            match => [ "timestamp", "MMM dd YYY HH:mm:ss", "MMM  d YYY HH:mm:ss", "ISO8601" ]
-        }
     }
 
 不晓得为什么 filter/mutate 不提供转换 Hash 的功能，所以只能把这行写在 filter/ruby 里面。kv 截出来的 value 默认都是字符串类型。
+
+---------------------------------------------
+
+2014 年 5 月 28 日更新：
+
+发现默认的 LVS 检查导致的 400 会记录到默认的 accounting 组("default")里，虽然不占带宽，却占不少请求数。这类日志可以在 logstash层面就干掉：
+
+    filter {
+        grok {
+            match => [ "message", "^%{SYSLOGTIMESTAMP:timestamp}\|\| pid:\d+\|from:\d{10}\|to:\d{10}\|accounting_id:%{WORD:accounting}\|requests:%{NUMBER:req:int}\|bytes_out:%{NUMBER:size:int}\|%{DATA:status}"
+        }
+        if [accounting] == 'default' {
+            drop { }
+        } else {
+            kv {
+                target => "code"
+                source => "status"
+                field_split => "|"
+                value_split => ":"
+            }
+            ruby {
+                code => "n={};event['code'].each_pair{|x,y|n[x]=y.to_i};event['code']=n"
+            }
+        }
+    }
+
+另外说明一下，`ngx_http_accounting_module` 中设定 `http_accounting_id` 这步是预先处理的，所以只能写固定字符串，不能用 `$host` 之类的 nginx.conf 变量。
 
