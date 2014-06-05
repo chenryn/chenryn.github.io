@@ -26,7 +26,7 @@ tags:
 
 而在 PDL 里可以写作：
 
-{% highlight python %}
+{% highlight perl %}
     my $A = $x->dummy(0)->append(1);
 {% endhighlight %}
 
