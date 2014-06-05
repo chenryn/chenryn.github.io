@@ -12,9 +12,38 @@ category: devops
 
 运行起来以后，会在当前目录下生成一个 `avlog.db` 库，记录聊天记录，同时生成一个 QQ 群号命名的目录，里面按日期存放当天的聊天记录的 HTML 文件。直接用 nginx 发布出来就好啦！
 
-基本功能就是这样，下一步扩展优化的话，主要有几步：
+照搬 avbot 官网 demo 页面做好了 logstash 群聊天记录的查看搜索页，见：<http://logstash.chenlinux.com/>
 
-1. 需要写一个 index.html 来做索引链接和搜索。avbot 本身在 6176 端口提供了一个 `/search?channel=*&q=*date=` 的搜索入口，但是亲测发现似乎只有搜索英文才行，搜中文会直接把全部内容都返回出去，这可不行(奇怪的是官方demo没这个问题，明天得找找是不是中文编码不对)。因为有 sqlite，如果写 web 页做起来应该很简单，不过我想联系一下 js，而且现在跑在国外服务器上，也不像用动态网页占资源。
-2. 如果想跟 github 做 hubot 一样用 qqbot 来推动 devops，那么让机器人自己发信息就是很重要的一步。本来应该直接 `curl -XPOST ip:6176/message` 就可以发的。但是亲测发现虽然返回 done 响应，而且 sqlite 里也插入了内容，但是实际 QQ 群里没收到！这一步比较奇怪，因为如果我在 QQ 群窗口里发 `.qqbot help` 指令，是可以收到 avbot 发出的响应的，这说明并不是 WebQQ 改过协议了。
+下一步可以做的事情是做自动应答。已经测试过可以通过 RPC 接口收发消息。不过昨天碰到的一个怪事情是，没能准确收到 QQ 群号，于是变成了 none，结果发送就一直失败。这个重启进程让他重新获得一次就可以了。
 
-BTW，想了解 logstash 群聊天内容的，可以先按照右边 url 的格式自己去 <http://logstash.chenlinux.com/none/20140604.html> 查看原始 html 内容。
+收消息示例：
+
+    curl 'http://localhost:6176/message'
+    {
+        "protocol": "qq",
+        "channel": "315428175",
+        "room":
+        {
+            "code": "3614128622",
+            "groupnumber": "315428175",
+            "name": "Logstash"
+        },
+        "op": "0",
+        "who":
+        {
+            "code": "225519360",
+            "nick": "田间",
+            "name": "田间",
+            "qqnumber": "",
+            "card": ""
+        },
+        "preamble": "qq(田间): ",
+        "message":
+        {
+            "text": "我们这暂时没运维   "
+        }
+    }
+
+发消息示例：
+
+    curl -XPOST http://localhost:6176/message -d '{"protocol":"qq","channel":"315428175","message":{"text":"Hi, my name is logstashbot, this message came from curl command!"}}'
