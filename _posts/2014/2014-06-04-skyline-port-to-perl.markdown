@@ -16,7 +16,9 @@ tags:
 
 <script src="https://gist.github.com/chenryn/43315b6c7ddaf9c39aab.js"></script>
 
-要承认 PDL 在上手方面比不过 numpy，比如取数组长度，PDL 里居然写作 `$p->nelem`；取数组最后一个元素的值，更是要写作 `$p->index($p->nelem - 1)` 这么长！相比在 numpy 方面几乎看起来还是跟操作原生的 python 类型一样。。妈蛋 PDL 你多重载几个操作符会死啊！
+~~要承认 PDL 在上手方面比不过 numpy，比如取数组长度，PDL 里居然写作 `$p->nelem`；取数组最后一个元素的值，更是要写作 `$p->index($p->nelem - 1)` 这么长！相比在 numpy 方面几乎看起来还是跟操作原生的 python 类型一样。。妈蛋 PDL 你多重载几个操作符会死啊！~~
+
+**2014 年 06 月 09 日更新：在blogs.perl.org上得到指点，可以用 `$p->at(-1)` 来获取。PDL 自己的文档里 `->at()` 的示例都是获取数组的……**
 
 稍微复杂一点的多维操作 PDL 还是很方便的。比如程序里 `least_squares` 检验法的时候，numpy 有这么一句：
 
