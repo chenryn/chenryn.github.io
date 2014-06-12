@@ -1,0 +1,224 @@
+---
+layout: post
+title: Perl 编程的个人惯例
+category: perl
+---
+
+Perl 代码规范可以参考著名的《Perl 最佳实践》一书。当然，PBP 上的规定比较严格，实际生活中绝对多数 Perl 程序都无法通过以 PBP 规范编写的 Perl::Critic 模块的校验。所以，本文仅以部分常见用法作为示例。
+
+##  格式化 
+
+所有已经完成功能的 Perl 脚本，强烈推荐使用 Perl::Tidy 模块格式化其内容。具体命令为：
+
+    perltidy your.pl && mv your.pl.tdy your.pl
+
+##  模板 
+
+为调试和使用方便，强烈建议在所有 Perl 程序开始位置使用如下模板：
+
+{% highlight perl %}
+    use warnings;
+    use strict;
+    use utf8;
+{% endhighlight %}
+
+这个模板最重要最常见的作用，就是说，程序内不允许直接使用未经初始化的变量，强制要求指定变量作用域范围，也不允许跨越词法作用域调用变量。
+
+此外，考虑 CentOS6 已经成为我们线上主流操作系统，建议继续添加下行模板：
+
+{% highlight perl %}
+    use 5.010;
+{% endhighlight %}
+
+10 版本是 Perl5 的一次重大更新，添加了 state 变量、say 指令、// 判断符、%+ 正则捕获哈希、given-when流程和 ~~ 智能匹配符，都是比较常用和好用的功能。
+
+##  注释与文档 
+
+Perl 注释以 '#' 号开头，但是并没有提供方便的读取注释的方法。所以如果有需要，建议书写 POD 式的文档型注释。CPAN 提供有一系列模块处理程序内部的 POD 文档，比如可以直接从 POD 生成 --help 输出，README 文本等等。
+
+POD 格式包括：
+
+### 标题
+
+{% highlight perl %}
+  =pod
+
+  标记文档开始
+
+  =head1 大标题
+
+  标记为标题文档，类似 HTML 的 &lt;h1&gt; ，同理还有 head2/3/4
+
+  =over
+
+  标记一段落开始
+
+  =item 元素
+
+  标记该段落中某个列表元素
+
+  =back
+
+  标记该段落结束。over 和 back 在用 POD 书写函数注释的时候非常常见，每个函数上面一对
+{% endhighlight %}
+
+### 代码示例
+
+直接空四格，这点类似 markdown
+
+### 变量和链接格式的快捷书写方式
+
+  C&lt;code&gt; 内含代码中如果本身带有<和>符号的，可以写作 C<< code >>的形式
+
+  L<name> 内含name为 CPAN 模块名，自动生成该模块在 CPAN 上的 url 地址连接
+
+##  modern perl 
+
+### OOP
+
+Perl5 采用 bless 指令将一个数据结构跟一个类名结合到一起就成为了类，其最简写法如下：
+
+{% highlight perl %}
+    package Foo { sub new { bless shift, {} } }
+{% endhighlight %}
+
+但是不推荐如此构建类。强烈推荐使用 Moo 模块完成 Perl5 的 OOP。文档见： https://metacpan.org/pod/Moo
+
+最常用的属性、继承和角色三大功能示例如下：
+
+{% highlight perl %}
+    package Foo {
+       use Moo;
+    }
+    package Bar::Roles {
+        use Moo::Role;
+        requires 'length';
+        sub width { return 'bar' };
+    }
+    package Foo::Bar {
+        use Moo;
+        extends 'Foo';
+        with 'Bar::Roles';
+        has name => ( is => 'ro', default => sub { return 'foo' } );
+        has hight => ( is => 'lazy' );
+        sub _build_hight {
+            my $self = shift;
+            return $self->name . $self->width;
+        };
+        sub length { return shift->hight };
+    }
+    my $fb = Foo::Bar->new( name => 'myfoo' );
+    print $fb->length;                            # myfoobar
+{% endhighlight %}
+
+### TODO
+
+Perl5 有独特的 TODO 语法叫 '...'，在没有实现的地方，使用这个指令就可以了。不运行到这个地方就毫无影响，到这里就会直接显示“Unimplemented at line N”的返回。
+
+示例如下：
+
+{% highlight perl %}
+    sub somthing_todo {
+        ...
+    }
+{% endhighlight %}
+
+### 正则
+
+正则式是　Perl5 最强大和头疼的地方。这里不好说太多。只能说，能找到 CPAN 模块实现的，就不要自己写正则了。。。
+
+如果要写，尽量使用 '/x' 开启多行模式，然后每行写注释。
+
+最常用的正则模块有 Regexp::Common 和 Regexp::Log。
+
+日志处理方面，对 IP 归类 建议采用 Net::IP::Match::Trie 模块。此外，前缀树优化在 Perl5.14 开始成为正则引擎默认行为，所以请尽量使用新版本。
+
+### 文件操作
+
+open指令请使用三参数结构避免歧义以及恶意文件名问题：
+
+{% highlight perl %}
+   open my $fh, '>', 'data.txt' or die "$!";
+{% endhighlight %}
+
+在 5.10.1 以后，autodie 模块进入 corelist，所以可以这样：
+
+{% highlight perl %}
+   use autodie;
+   open my $fh, '>', 'data.txt';
+{% endhighlight %}
+
+更好的版本，推荐 Path::Tiny 模块，这是最近一年来在 metacpan 上多次周评分榜单第一的模块。
+
+{% highlight perl %}
+    use Path::Tiny;
+    my $f = path('data.txt');
+    # 不存在就先创建
+    $f->touch unless $f->exists;
+    # 读取全部内容
+    print $f->slurp;
+    # 按行读取内容
+    while ($f->lines) { print };
+    # 写入内容
+    $f->spaw('new data');
+    # 追加内容
+    $f->append('newer data');
+    # 目录操作
+    my $d = path('/tmp');
+    for ( $d->children( qr/^\.\w$/ ) ) { print $_->stat };
+    # 类似 File::Find
+    my $iter = $d->iterator({recurse => 1});
+    while ( my $next = $iter->() ) { print $_->stringify }
+{% endhighlight %}
+
+而 File::Find 的 更好的替代版本，推荐 Path::Iterator::Rule 模块，速度也比上面 Path::Tiny 里的 '$d->iterator()' 要好。
+        
+### 网络操作
+
+HTTP 客户端一直以来一般使用 LWP::UserAgent 模块，不过作为小规模应用，推荐使用 HTTP::Tiny 模块，因为该模块已经在 Perl5.14 版本进入 corelist，在简单请求下性能也比 LWP 要好，不少模块已经在迁移依赖到 HTTP::Tiny 上。
+
+而对于高性能需求，推荐使用 AnyEvent::HTTP 模块，基于 EV 事件驱动库，示例如下：
+
+{% highlight perl %}
+    use AnyEvent::HTTP;
+    use AnyEvent;
+    my $cv = AnyEvent->condvar;
+    for my $url ( @urls ) {
+        $cv->begin;
+        http_get $url, sub {
+            my ($data, $headers) = @_;
+            $cv->end;
+        }
+    }
+    $cv->recv;
+{% endhighlight %}
+
+如需并发控制，事件流程的同步控制等功能，推荐使用 Promises 或者 Future 模块。同名的相关概念目前在 JS 和 Scala 中都有。
+
+对于 HTML 解析，较为规范的情况下，不要再使用正则解析，而通过 DOM 树本身来做。以 XPath 路径查询的，推荐 Web::Scraper 模块；以 CSS 选择器查询的，推荐 Mojo::UserAgent 配合 Mojo::DOM 模块完成。示例如下：
+
+{% highlight perl %}
+    say Mojo::UserAgent->new->get('www.perl.org')->res->dom->html->head->title->text;
+{% endhighlight %}
+
+非 HTTP 的网络编程，一般使用 IO::Socket::INET 模块，这里推荐继续使用 AnyEvent::Socket 模块，以利用 AnyEvent 的事件驱动性能。示例如下：
+
+{% highlight perl %}
+    tcp_server undef, 8888, sub { my ($fh, $host, $port) = @_; syswrite $fh "hello"; }
+    tcp_connect 'localhost', 8888, sub { my $fh = shift; sysread $fh, my $msg, 8; print $msg; }
+{% endhighlight %}
+
+### web 编程
+
+CGI.pm 已经从 Perl5.20 开始准备移出 corelist，所以不要再使用 CGI 做 web 编程了，Plack/PSGI 才是王道。作为简单应用，推荐使用 Dancer 微框架，完整的复杂应用，可以使用 Mojolicious 框架。
+
+Dancer 框架示例如下：
+
+{% highlight perl %}
+    use Dancer;
+    get '/:name' => sub {
+        return 'hello '.param('name');
+    };
+    dance;
+{% endhighlight %}
+

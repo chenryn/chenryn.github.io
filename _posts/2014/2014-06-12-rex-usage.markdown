@@ -1,0 +1,221 @@
+---
+layout: post
+title: Rex 简明手册
+category: devops
+tags:
+  - perl
+  - puppet
+  - rex
+---
+
+##  简介 
+
+Rex 是 Perl 编写的基于 SSH 链接的集群配置管理系统，语法上类似 Puppet DSL。官网中文版见 <http://rex.perl-china.com> 。
+
+##  常用命令参数 
+
+rex 命令参数很多，不过因为我们的环境是 krb 认证的，所以有些参数只能写在 Rexfile 里。所以一般固定在存放了 Rexfile 的 /etc/puppet/webui 下执行命令，很多配置就自动加载了。那么还需要用到的命令参数基本就只有下面几个：
+
+-Tv： 查看当前 Rexfile 里定义了哪些 Task 任务，以及服务器组。
+
+-H： 指定 Task 将在哪些 Host 上执行。这里比较方便的地方是支持 `10.5.16.[95..110]` 这样的写法。
+
+-G： 指定 Task 将在哪些 Group 上执行。Group 的定义方式很多，Rex 默认支持的有直接在 Rexfile 里通过 group 指令指定，通过 ini 配置文件设定等等。目前我是实现了一个 `groups_db` 指令，来从我们的 sqlite 里获取。`groups_db('cdnbj::nginx')` 就会自动生成一个名叫 'cdnbj::nginx' 的服务器组，包括 cdnbj 里所有部署了 nginx 的服务器。
+
+-e： 指定一个临时任务。通常是'say run "ipconfig"'这样的简单命令形式。如果需要复杂逻辑，还是在 Rexfile 里书写 Task。
+
+-q：指定运行日志级别，有 -q 和 -qq。
+
+-d：指定运行日志级别，有 -d 和 -dd。
+
+##  Rexfile 介绍 
+
+参数设置部分：
+
+{% highlight perl %}
+    set connection => "OpenSSH";
+    user "root";
+    krb5_auth;
+    parallelism 10;
+{% endhighlight %}
+
+这四行指定采用 kerberos 认证，并发 10 个进程执行 ssh 命令。
+
+{% highlight perl %}
+    desc "install puppet agent";
+    task "puppet_install", sub {
+    }
+    before "puppet_install", sub {
+    }
+    after "puppet_install", sub {
+    }
+{% endhighlight %}
+
+这几行就是 Rexfile 的任务定义主体格式。task 指令定义任务，任务会在具体的 -H 或者 -G 服务器上执行。其他都是可选项，desc内容会在 -Tv 的时候显示；before 和 after 定义的任务会在执行对应 task 之前或之后，在'''rex命令执行处，即10.4.1.21本地'''执行。
+
+##  常用指令介绍 
+
+* run
+
+运行命令。如果有回调函数，那么会把 stdout 和 stderr 传给回调函数；如果没有，直接把 stdout 作为返回值。
+
+比如：
+
+{% highlight perl %}
+    say run "uptime";
+    run "nginx -v", sub { my ($out, $err) = @_; say $err };
+{% endhighlight %}
+
+* file
+
+分发文件。语法类似 Puppet 的 file。支持 source、template、ensure、on_change 等操作。注意：rex 是顺序执行 Rexfile 的，所以不用设置 Puppet 的 require 指令。
+
+比如：
+
+{% highlight perl %}
+    file "/etc/yum.repos.d/xiaonei-private.repo",
+      source => "repos/xiaonei-private.repo";
+    file "/etc/nginx/nginx.conf",
+      content => template("templates/etc/nginx/nginx.conf.tpl"),
+      owner  => "nginx",
+      group  => "nginx",
+      mode   => 644,
+      ensure => 'file',
+      on_change => sub { service nginx => "restart"; };
+    file "/etc/nginx/conf.d",
+      ensure => "directory", 
+{% endhighlight %}
+
+* pkg
+
+安装软件包，在早期版本命令写作 `install package => "nginx"` ，最近改成 `pkg` 了，更像 Puppet 语法了。
+
+也支持传递数组作为 pkg 内容。另外，rex 还 提供了一个 update_package_db 指令，用于执行 `yum clean all` 或者 `apt-get update` 操作。这点是 Puppet 欠缺的。
+
+比如：
+
+{% highlight perl %}
+   update_package_db();
+   my $packages = case operating_system,
+      Debian => ["apache2", "libphp5-apache2"],
+      CentOS => ["httpd", "php5"],
+   pkg $packages,
+     ensure => "present";
+{% endhighlight %}
+
+ensure 也支持 present、absent、latest 等几种含义。同 Puppet。
+
+* account
+
+用户管理原先用 `create_user` 和 `create_group` 指令，最近把 `create_user` 更新为 `account` 指令。
+
+比如：
+
+{% highlight perl %}
+  create_group 'puppet';
+  account "puppet",
+    ensure   => "present",
+    uid      => 509,
+    home     => '/home/puppet',
+    comment  => 'Puppet Account',
+    expire   => '2015-05-30',
+    groups   => ['puppet'],
+    password => 'puppet',
+    system   => 1,
+    no_create_home => TRUE,
+    ssh_key        => "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQChUw...";
+{% endhighlight %}
+
+* tail
+
+用来同时观测多台主机的日志的最新追加情况。应该是比较有用的一个小功能。代码如下：
+
+{% highlight perl %}
+   tail "/var/log/syslog", sub {
+     my ($data) = @_;
+     my $server = Rex->get_current_connection()->{'server'};
+     print "$server>> $data\n";
+   };
+{% endhighlight %}
+
+##  远程主机详情相关变量 
+
+Puppet 有专门的 Facts 变量来判定远程主机的详情。Rex 因为走 SSH 连接，不会在远程主机上跑一个 agent 来收集这些信息，所以还是通过远程执行命令的方式来提供相关内容。目前常用的几个函数(也可以认为是变量)有：
+
+* is_redhat
+
+这个用来判断操作系统是否是 RedHat 系列。之前因为有一批 Debian 的机器，所以 Rexfile 里一直有这么个操作逻辑：
+
+{% highlight perl %}
+    if ( is_debian ) {
+    } elsif ( is_redhat ) {
+    } else {
+    }
+{% endhighlight %}
+
+* operating_system_version
+
+这个用来判断具体的操作系统版本号。比如 CentOS5 跟 CentOS6 应该应用的操作就不一样，甚至 CentOS6.5 和 CentOS6.2 也有可能不一致。
+
+比如 Rexfile 里的 1w10 任务：
+
+{% highlight perl %}
+    if ( is_redhat and operating_system_version >= 64 )
+    }
+{% endhighlight %}
+
+* route
+
+rex 可以收集的信息比 puppet 要多很多，比如网络相关、sysctl 相关等等。Rexfile 里的 1w10 任务用到了 route 信息来获取默认网关和网卡接口。
+
+{% highlight perl %}
+    my ($default_route) = grep {
+      $_->{"flags"} =~ m/UG/ && (
+        $_->{"destination"} eq "0.0.0.0" ||
+        $_->{"destination"} eq "default" )
+      } route;
+    if ($default_route) {
+        my $default_gw = $default_route->{"gateway"};
+        my $default_if = $default_route->{"iface"};
+        run "ip route change default via ${default_gw} dev ${default_if} initcwnd 10 initrwnd 10";
+    };
+{% endhighlight %}
+
+* connection
+
+在多台主机执行任务的时候，大多希望在输出的时候看到某条结果是哪个主机返回的。前面 tail 任务就用到了，不过写起来非常复杂的样子。其实 rex 提供给更简洁一点的写法。就是 connection->server。
+
+{% highlight perl %}
+  task 'tellmewhoyouare', sub {
+    say connection->server;
+  }
+{% endhighlight %}
+
+当前连接的服务器的整个信息，也可以通过 `get_system_information` 指令来获取，这两个指令其实是等同的。不过根据字面意思一般用来不同语境下。
+
+这些信息如果要完整查看，可以通过 `dump_system_information` 指令来查看。这个命令跟 `print Dumper get_system_information()` 不一样的是，会把每个键作为单独变量。而这些变量就是可以直接用于 rex 的 template 里的内嵌变量。比如：
+
+{% highlight perl %}
+  listen <%= $eth0_ip %>:80;
+  visible_hostname <%= $hostname %>
+{% endhighlight %}
+
+不在 `dump_system_information` 清单里的变量，也想在 template 里使用的，就必须显式传递。这点和 Puppet 不一致，puppet 在 template 里可以通过 `scope.lookupvar()` 指令获取任意pp类里设定的变量，这一点完全无视词法作用域的存在==！
+
+比如：
+
+{% highlight perl %}
+   file '/etc/elasticsearch/elasticsearch.yml',
+     content => template('files/es.yml.tmpl', conf => {
+       clustername => 'logstash'
+     });
+{% endhighlight %}
+
+对应的 es.yml.tmpl 里写作：
+
+{% highlight perl %}
+  clustername: <%= $conf->{'clustername'} %>
+{% endhighlight %}
+
+这样才行。
+
