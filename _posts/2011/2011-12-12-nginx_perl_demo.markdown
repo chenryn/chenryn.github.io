@@ -9,11 +9,14 @@ tags:
 ---
 
 因为空闲时间比较多，所以在CPAN上乱翻，看到了nginx_perl这个项目(原名Nginx::Engine)，现在托管在github.com上。地址见：
-https://github.com/zzzcpan/nginx-perl
+<https://github.com/zzzcpan/nginx-perl>
+
 这个模块的目的，是在nginx内置官方perl模块的基础上，实现一系列异步非阻塞的api。用connector/writer/reader完成类似proxy的功能（这里因为是交给perl完成，所以不单单局限在http上了），用take_connection/give_connection完成类似websocket的功能，用ssl_handshaker完成ssl的解析，用timer完成定时器，用resolver完成域名解析…使用方法简单来说，就是用main_count_inc/finalize_request控制计数器，用NGX_READ/NGX_WRITE/NGX_CLOSE等控制callback。
-其他内容和apache的mod_perl，或者nginx.org的perl类似。最新版的POD地址如下：
-http://zzzcpan.github.com/nginx-perl/Nginx.html
+
+其他内容和apache的mod_perl，或者nginx.org的perl类似。最新版的POD地址见：<http://zzzcpan.github.com/nginx-perl/Nginx.html>
+
 最后举例一个自己写的简单的例子：
+
 {% highlight perl %}
 package HelloWorld;
 use Nginx;
@@ -75,5 +78,7 @@ sub handler {
     return NGX_DONE;
 };
 1;{% endhighlight %}
+
 另：源码中带有一个真正的反向http的例子Nginx::Util和一个Redis的例子。并且与nodejs读取redis的性能做了对比。可以参见~~
+
 <strong style="display:block;margin:12px 0 4px"><a href="http://www.slideshare.net/chenryn/perlnginx" title="Perl在nginx里的应用" target="_blank">Perl在nginx里的应用</a></strong>
