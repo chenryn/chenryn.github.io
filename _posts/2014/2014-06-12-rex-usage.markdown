@@ -8,9 +8,7 @@ tags:
   - rex
 ---
 
-##  简介 
-
-Rex 是 Perl 编写的基于 SSH 链接的集群配置管理系统，语法上类似 Puppet DSL。官网中文版见 <http://rex.perl-china.com> 。
+Rex 是 Perl 编写的基于 SSH 链接的集群配置管理系统，语法上类似 Puppet DSL。官网中文版见 <http://rex.perl-china.com> 。本文仅为本人在部门 Wiki 上编写的简介性文档。
 
 ##  常用命令参数 
 

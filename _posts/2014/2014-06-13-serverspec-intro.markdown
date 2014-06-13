@@ -71,7 +71,7 @@ describe "puppetmaster" do
   context file('/etc/nginx/sites-enabled/puppet') do
     it { should be_linked_to '/etc/puppet/webui/ngx_puppetmaster.conf' }
     it { should be_readable.by_user('nobody') }
-    its(:content) { should match /\n  server 127.0.0.1:18140;/ }
+    its(:content) { should match /\n\s*server 127.0.0.1:18140;/ }
   end
   context command("nginx -t") do
     it { should return_stderr /ok/ }

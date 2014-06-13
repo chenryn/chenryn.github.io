@@ -6,11 +6,7 @@ tags:
   - dancer
 ---
 
-## 简介
-
-Dancer 是 Perl 的 web 开发框架，在 metacpan 上有 100 多个 like。其语法结构都起源自 Ruby 的 sinatra 框架，sinatra 曾经在自己官网上悬挂“perldancer is good”标语以示对 perldancer 的支持。
-
-Dancer 官网见： <http://perldancer.org/>
+Dancer 是 Perl 的 web 开发框架，在 metacpan 上有 100 多个 like。其语法结构都起源自 Ruby 的 sinatra 框架，sinatra 曾经在自己官网上悬挂“perldancer is good”标语以示对 perldancer 的支持。Dancer 官网见： <http://perldancer.org/> 本文系本人在部门 Wiki 上稍微写的几行介绍性质的笔记。
 
 ## 简单示例
 
@@ -24,11 +20,11 @@ Dancer 作为微框架，可以直接单文件快速运行简单的 web 功能�
     dance;
 {% endhighlight %}
 
-然后直接通过 perl test.pl 命令既可以在 localhost:3000 运行起来一个 hello world 页面了。
+然后直接通过 `perl test.pl` 命令既可以在 localhost:3000 运行起来一个 hello world 页面了。
 
 ## 目录结构
 
-完整的 Dancer 应用，可以通过 dancer -a MyApp 命令创建，目录结构如下：
+完整的 Dancer 应用，可以通过 `dancer -a MyApp` 命令创建，目录结构如下：
 
     MyApp/
     ├── bin
@@ -95,7 +91,14 @@ Dancer 作为微框架，可以直接单文件快速运行简单的 web 功能�
 * Plack::Middleware::Deflater
 * Plack::Middleware::ETag
 
-上面两个作为给 public/ 下文件加缓存和压缩的优化。
+上面两个作为给 public/ 下文件加缓存和压缩的优化。在 config.yml 里添加如下配置即可使用：
+
+{% highlight yaml %}
+plack_middlewares:
+  -
+    - Plack::Middleware::Deflater
+    - Plack::Middleware::ETag
+{% endhighlight %}
 
 * Dancer::Plugin::Auth::Extensible
 
@@ -124,6 +127,25 @@ Dancer 作为微框架，可以直接单文件快速运行简单的 web 功能�
             person => database->quick_select('users', { id => params->{id} }),
         };
     };
+{% endhighlight %}
+
+如果在 config.yml 定义了多个库，则通过 `database('name')` 的方式来调用。
+
+{% highlight yaml %}
+  Database:
+    connections:
+      puppet:
+        driver: "SQLite"
+        database: "/etc/puppet/webui/node_info.db"
+      cdnmanage:
+        driver: "mysql"
+        database: "cdnmanage"
+        host: "127.0.0.1"
+        port: 3306
+        username: "user"
+        password: "pass"
+        connection_check_threshold: 10
+        on_connect_do: ["SET NAMES 'utf8'", "SET CHARACTER SET 'utf8'" ]
 {% endhighlight %}
 
 更完善的 ORM 使用，见 Dancer::Plugin::DBIC 插件，他使用的是 DBIx::Class 框架做 ORM，示例如下：

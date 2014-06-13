@@ -4,7 +4,7 @@ title: Perl 编程的个人惯例
 category: perl
 ---
 
-Perl 代码规范可以参考著名的《Perl 最佳实践》一书。当然，PBP 上的规定比较严格，实际生活中绝对多数 Perl 程序都无法通过以 PBP 规范编写的 Perl::Critic 模块的校验。所以，本文仅以部分常见用法作为示例。
+Perl 代码规范可以参考著名的《Perl 最佳实践》一书。当然，PBP 上的规定比较严格，实际生活中绝对多数 Perl 程序都无法通过以 PBP 规范编写的 Perl::Critic 模块的校验。本文仅为本人在部门 Wiki 上以部分常见用法作为示例的介绍性文档。
 
 ##  格式化 
 
@@ -47,7 +47,7 @@ POD 格式包括：
 
   =head1 大标题
 
-  标记为标题文档，类似 HTML 的 &lt;h1&gt; ，同理还有 head2/3/4
+  标记为标题文档，类似 HTML 的 <h1> ，同理还有 head2/3/4
 
   =over
 
@@ -70,7 +70,7 @@ POD 格式包括：
 
   C&lt;code&gt; 内含代码中如果本身带有<和>符号的，可以写作 C<< code >>的形式
 
-  L<name> 内含name为 CPAN 模块名，自动生成该模块在 CPAN 上的 url 地址连接
+  L&lt;name&gt; 内含name为 CPAN 模块名，自动生成该模块在 CPAN 上的 url 地址连接
 
 ##  modern perl 
 
