@@ -45,9 +45,7 @@ tags:
 云南 0871
 浙江 0571{% endhighlight %}
 然后用如下perl脚本归并：
-{% highlight perl %}#!/usr/bin/perl
-use strict;
-use warnings;
+{% highlight perl %}#!/usr/bin/perl -w
 my($quhao, $qqwry) = @ARGV;
 $code = read_area_code($quhao);
 overwrite_iplist($qqwry, $code);
@@ -109,7 +107,7 @@ sub overwrite_iplist {
         if ( $last_province_n == $province_n && $last_isp_n == $isp_n ) {
 	    $last_end_ip_n = $end_ip_n;
 	} else {
-	    printf "%010s %010s %04s %s\n", $last_begin_ip_n, $last_end_ip_n, $last_province_n, $last_isp_n;
+	    printf "%010s %010s %04s %s\n", $last_begin_ip, $last_end_ip, $last_province_n, $last_isp_n;
 	    ($last_begin_ip_n, $last_end_ip_n, $last_province_n, $last_isp_n) = ($begin_ip_n, $end_ip_n, $province_n, $isp_n);
 	};
     };
