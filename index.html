@@ -22,7 +22,11 @@ tagline: 与poem斗 与stock斗 与tech斗 其乐无穷
       {% endfor %}
     </p>
     <div class="entry-content full-content" style='background-color: #FFF; margin-left: 24px; padding: 10px;'>
-      {{ post.excerpt }}
+{% if post.content contains '</p>' %}
+    {{ post.content | split:'</p>' | first }}
+{% else %}
+    {{ post.content | truncatehtml: 100 }}
+{% endif %}
       <a href="{{ post.url }}" class="read_more span2 pull-right">继续阅读……</a>
       <div class="clear"></div>
     </div>

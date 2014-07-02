@@ -3,8 +3,8 @@
 permalink: /:year/:month/:day/:title 
 
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md", "chenryn.github.com"]
-auto: true
-pygments: true
+highlighter: pygments
+excerpt_separator: ""
 paginate: 25
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
