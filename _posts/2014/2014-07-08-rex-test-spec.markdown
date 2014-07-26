@@ -19,9 +19,16 @@ tags:
         context run("nginx -t"), "nginx.conf testing", sub {
             like its('stdout'), qr/ok/;
         };
-        context file("/etc/nginx.conf"), sub {
-            is its('ensure'), 'present';
-            like its('content'), qr/listen\s+80;/;
+        context file("~/.ssh/id_rsa"), sub {
+            is its('ensure'), 'file';
+            is its('mode'), '0600';
+            like its('content'), qr/name\@email\.com/;
+        };
+        context file("/data"), sub {
+            is its('ensure'), 'directory';
+            is its('owner'), 'www';
+            is its('mounted_on'), '/dev/sdb1';
+            isnt its('writable');
         };
         context service("nginx"), sub {
             is its('ensure'), 'running';
