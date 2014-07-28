@@ -75,10 +75,15 @@ for my $item (@$items) {
     );
     my $pdl = pdl(map {$_->{value}} @{ $sitems->history( time_from => time() - 24 * 3600 ) });
     bin(hist($pdl));
+    my $lline = pct($pdl, 0.25);
+    my $uline = pct($pdl, 0.75);
+    my $low = 2 * $lline - $uline;
+    my $up  = 2 * $uline - $lline;
+    say $pdl->where($pdl>$up | $pdl<$low);
 }
 {% endhighlight %}
 
-这里使用了 [Zabbix2::API](https://metacpan.org/pod/Zabbix2::API) 模块，相对比 [zabbix 官方博客示例](http://blog.zabbix.com/getting-started-with-zabbix-api/1381/)直接使用 [JSON::RPC](https://metacpan.org/pod/JSON::RPC) 模块，以及 python 的 pyzabbix 模块来说，Zabbix2::API 模块封装的非常好，history 是作为 item 对象的属性出现，而不是单独再请求一次 `history.get`。
+这里使用了 [Zabbix2::API](https://metacpan.org/pod/Zabbix2::API) 模块，相对比 [zabbix 官方博客示例](http://blog.zabbix.com/getting-started-with-zabbix-api/1381/)直接使用 [JSON::RPC](https://metacpan.org/pod/JSON::RPC) 模块，以及 python 的 pyzabbix 模块来说，Zabbix2::API 模块封装的非常好，history 是作为 item 对象的属性出现，而不是单独再请求一次 `history.get`；item 的 name 等属性也非常友好和有用。
 
 另外，不知道为什么，使用 pyzabbix 模块就一直无法正常使用，而自己写 requests 和 json 却没问题。上面的 perl 脚本用 python 改写就是下面这样：
 
@@ -121,7 +126,6 @@ def zabbixCall(method='', params={}, auth=''):
   return r.json()['result']
 
 authId = zabbixLogin(ZABBIX_USR, ZABBIX_PWD)
-print('Get Auth ID: ' + authId)
 params = {
   'groupids':21,
   'hostids':11036,
@@ -130,7 +134,6 @@ params = {
 items = zabbixCall('item.get', params, authId)
 
 begin = time.mktime(datetime.now().timetuple()) - 3600 * HOURS
-print('Begin loop for history...')
 for item in items:
   params = {
     'output':'extend',
