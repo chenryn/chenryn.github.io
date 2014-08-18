@@ -28,7 +28,7 @@ tags:
 
 你可以打开默认可用的 `logstash.json` 文件，看看有什么奇特的地方，没错，就是下面这样：
 
-    "query": "\{\{ARGS.query || '*'\}\}"
+    "query": "{<span>{</span>ARGS.query || '*'}}"
 
 而你自己保存下来的 JSON，这里都会是具体的数据。所以，要让自己的 JSON 布局也支持动态仪表板的话，按照这个写法也都加上 `ARGS.query` 就好了！
 
