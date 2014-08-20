@@ -10,7 +10,9 @@ tags:
 
 在 logstash 的官网上，针对这个问题采用的办法是讲异常值计数 output 到 `statsd` 中，然后可以用通过观测 `graphite` 图形变化来判断异常。(或者配合 nagios 的 `check_graphite` 插件？) 官网说明见：<http://logstash.net/docs/1.1.13/tutorials/metrics-from-logs>
 
-如果不想一直盯着页面看的话，可以利用另外几个插件来实现类似的做法，比如我要监控访问日志，如果其中 504 状态码每分钟超过 100 次，就报警出来。logstash 配置如下：
+如果不想一直盯着页面看的话，可以利用另外几个插件来实现类似的做法，比如我要监控访问日志，如果其中 504 状态码<del>每分钟</del>超过 100 次，就报警出来。logstash 配置如下：
+
+**2014 年 08 月 20 日注：上面说法有误，`rate_1m` 的含义是：最近 1 分钟内的每秒速率！**
 
 {% highlight ruby %}
     input {
@@ -31,7 +33,9 @@ tags:
         }
         ruby {
             tags => "metric"
-            code => "event.cancel if event['@fields']['error.504.rate_1m'] < 100"
+#            code => "event.cancel if event['@fields']['error.504.rate_1m'] < 100"
+#           2014/08/20: 每秒速率，所以要乘以60s。另，新版本没有了@fields，都存在顶级field里。
+            code => "event.cancel if event['error.504.rate_1m']*60 < 100"
         }
     }
     output {
