@@ -30,15 +30,15 @@ wget http://download.elasticsearch.org/hadoop/elasticsearch-hadoop-2.1.0.Beta1.z
 import org.apache.spark.SparkConf
 import org.elasticsearch.spark._
 
-# 更多 ES 设置，见<http://www.elasticsearch.org/guide/en/elasticsearch/hadoop/2.1.Beta/configuration.html>
+// 更多 ES 设置，见<http://www.elasticsearch.org/guide/en/elasticsearch/hadoop/2.1.Beta/configuration.html>
 val conf = new SparkConf()
 conf.set("es.index.auto.create", "true")
 conf.set("es.nodes", "127.0.0.1")
 
-# 在spark-shell下默认已建立
-#import org.apache.spark.SparkContext    
-#import org.apache.spark.SparkContext._
-#val sc = new SparkContext(conf)
+// 在spark-shell下默认已建立
+// import org.apache.spark.SparkContext    
+// import org.apache.spark.SparkContext._
+// val sc = new SparkContext(conf)
 
 val numbers = Map("one" -> 1, "two" -> 2, "three" -> 3)
 val airports = Map("OTP" -> "Otopeni", "SFO" -> "San Fran")
@@ -79,6 +79,15 @@ entries.saveToEs("spark/docs")
 ============
 
 Spark 还有 Spark streaming 子项目，用于从其他网络协议读取数据，比如 flume，kafka，zeromq 等。官网上有一个配合 `nc -l` 命令的示例程序。
+
+{% highlight java %}
+import org.apache.spark.streaming._
+val ssc = new StreamingContext(sc, Seconds(1))
+val lines = ssc.socketTextStream("localhost", 9999)
+...
+ssc.start()
+ssc.awaitTermination()
+{% endhighlight %}
 
 有时间我会继续尝试 Spark 其他功能。
 
