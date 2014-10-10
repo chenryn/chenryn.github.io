@@ -11,7 +11,6 @@ tags:
 ---------------------
 
 今天，我们<del>自豪高兴满意控制不住地兴奋过头欣喜若狂</del>相当高兴得给大家分享一下 Kibana 项目的未来，以及 Kibana 4 的第一个 beta 版本。
-We’re <del>proud delighted jazzed uncontrollably excited over the top ecstatic</del> pretty darn happy, to share the future of Kibana, and the first beta release of Kibana 4 with you today.
 
 ## 我现在就要！快给我！
 
