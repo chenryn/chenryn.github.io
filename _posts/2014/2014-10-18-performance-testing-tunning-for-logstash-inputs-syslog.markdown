@@ -10,7 +10,7 @@ tags:
 
 最近因为项目需要，必须想办法提高 logstash indexer 接收 rsyslog 转发数据的性能。首先，就是要了解 logstash 到底能收多快？
 
-之前用 libev 库写过类似功能的程序，所以一开始也是打算找个能在 JRuby 上运行的 netty 封装的。找到了 [foxbat](https://github.com/m0wfo/foxbat) 库，不过最后发现效果跟官方的标准 socket 实现差不多。（这部分另篇讲述）
+之前用 libev 库写过类似功能的程序，所以一开始也是打算找个能在 JRuby 上运行的 netty 封装。找到了 [foxbat](https://github.com/m0wfo/foxbat) 库，不过最后发现效果跟官方的标准 socket 实现差不多。（这部分另篇讲述）
 
 后来又发现另一个库：[jruby-netty](https://github.com/jordansissel/experiments/tree/master/ruby/jruby-netty/syslog-server)，注意到这个作者就是 logstash 作者 jordansissel！
 
@@ -90,3 +90,41 @@ LogStash::Inputs::Syslog 中，TCPServer 对每个 client 单独开一个 Thread
 * 在 inputs/file 的前提下，outputs/stdout{dots} 比 outputs/elasticsearch{http} 处理速度快一倍，即有 15k。
 * 下载了 heka 的二进制包，通过下面配置测试其接受 syslog 输入，并以 logstash 的 schema 输出到文件的性能。结果是每秒 30k，跟之前优化后的 logstash 基本一致。
 
+{% highlight ini %}
+[hekad]
+maxprocs = 48
+
+[TcpInput]
+address = ":5140"
+parser_type = "token"
+decoder = "RsyslogDecoder"
+
+[RsyslogDecoder]
+type = "SandboxDecoder"
+filename = "lua_decoders/rsyslog.lua"
+
+[RsyslogDecoder.config]
+type = "mweibo"
+template = '<%pri%>%TIMESTAMP% %HOSTNAME% %syslogtag%%msg:::sp-if-no-1st-sp%%msg:::drop-last-lf%\n'
+tz = "Asia/Shanghai"
+
+[ESLogstashV0Encoder]
+es_index_from_timestamp = true
+fields = ["Timestamp", "Payload", "Hostname", "Fields"]
+type_name = "%{Type}"
+
+# [ElasticSearchOutput]
+# message_matcher = "Type == 'nginx.access'"
+# server = "http://10.13.57.35:9200"
+# encoder = "ESLogstashV0Encoder"
+# flush_interval = 50
+# flush_count = 5000
+
+[counter_output]
+type = "FileOutput"
+path = "/tmp/debug.log"
+message_matcher = "TRUE"
+encoder = "ESLogstashV0Encoder"
+{% endhighlight %}
+
+heka 文档称 maxprocs 设置为 cpu 数的两倍。不过实际测试中，不配置跟配置总共也就差一倍的性能。
