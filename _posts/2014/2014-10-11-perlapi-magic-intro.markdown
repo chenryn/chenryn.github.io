@@ -23,7 +23,7 @@ category: perl
 
   `sv_magicext` 函数说明见 perlapi 文档的 "[SV-Body Allocation](http://perldoc.perl.org/perlapi.html#SV-Body-Allocation)" 部分。
 
-Magic 主要有两个作用，一个叫 Hook Method，一个叫 Template。我们都很熟悉的 Moose 框架就是利用的 Magic 的 Template 实现的。而这里，用到的是 Hook Method。
+Magic 主要有两个作用，一个叫 Hook Method，一个叫 Managed Data。我们都很熟悉的 Moose 框架就是利用的 Magic 的 Managed Data 实现的。而这里，用到的是 Hook Method。
 
 Scalar::Watcher 模块文档较少，虽然好用但是不好懂。我在 CPAN 上发现另一个模块，[Variable::Magic](https://metacpan.org/pod/Variable::Magic) 。文档写的很详细。其中的 `set` 方法就是跟 Scalar::Watcher 类似的作用，大家可以读一读这个模块的文档。
 
