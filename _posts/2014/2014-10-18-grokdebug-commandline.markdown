@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 在终端命令行上调试 grok 表达式
+date: 2014-10-18 23:43:00
 category: logstash
 tags:
   - ruby

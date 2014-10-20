@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Rsyslog 性能数据 impstats 直接写入 Elasticsearch
+date: 2014-10-18 21:48:00
 category: logstash
 tags:
   - rsyslog

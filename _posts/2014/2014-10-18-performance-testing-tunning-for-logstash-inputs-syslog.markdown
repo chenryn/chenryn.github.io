@@ -1,6 +1,7 @@
 ---
 layout: post
 title: LogStash::Inputs::Syslog 性能测试与优化
+date: 2014-10-18 00:01:00
 category: logstash
 tags:
   - syslog
@@ -52,6 +53,8 @@ logstash 配置文件见上。然后测试启动命令如下：
 性能成几何级的下降！
 
 而另外通过 `input { generator { count => 3000000 } }` 测试可以发现，logstash 本身空数据流转的性能也不过就是每秒钟几万条。所以，优化点就在后面的 filter 上。
+
+*注：空数据流转的测试采用 inputs/generator 插件*
 
 LogStash::Inputs::Syslog 中，TCPServer 对每个 client 单独开一个 Thread，但是这个 Thread 内要顺序完成 `@codec.decode`，`@grok_filter.filter` 和 `@date_filter.filter` 三大步骤后，才算完成。而我们都知道：Logstash 配置中 filter 阶段的插件是可以多线程完成的。所以，解决办法就来了：
 
