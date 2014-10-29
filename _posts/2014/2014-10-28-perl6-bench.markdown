@@ -1,0 +1,207 @@
+---
+layout: post
+title: 用 perl6-bench 做 perl6 性能对比
+category: perl
+---
+
+Perl6 成员上周在奥地利大会上做了一次大聚集，写了不少博客讲过去几个月的优化以及未来几个月的优化。但是我发现似乎从8月以来就一直没有正式的 perl6-bench 的图表报告了。于是想：干脆自己跑一把吧。
+
+perl6-bench 项目地址见：<https://github.com/japhb/perl6-bench>。
+
+项目的主程序 `bench` 本身是用 Perl6 写的。所以运行前，得先安装好 Rakudo Star：
+
+    wget http://rakudo.org/downloads/star/rakudo-star-2014.09.tar.gz
+    tar zxvf rakudo-star-2014.09.tar.gz
+    cd rakudo-star-2014.09
+    perl Configure.pl --backend=moar --gen-moar
+
+编译完成后，会在 rakudo-star 目录下创建一个 `install` 子目录，里面有 `bin`，`lib` 等编译完成的文件，把这个 bin 加入到你的 $PATH 里去。
+
+    sed -i 's!\(PATH=.*\)$!\1:~/download/rakudo-star-2014.09/install/bin!' ~/.bash_profile
+    source ~/.bash_profile
+
+项目的测试程序 `timeall` 是用 Perl5 写的。运行前，也得安装几个 CPAN 模块：
+
+    cpanm Capture::Tiny Data::Alias DateTime JSON JSON::XS List::MoreUtils
+
+然后就可以开始测试了：
+
+    ./bench setup
+
+这个命令会在 `components` 子目录下逐一 clone 下来各种可以测试的 perl6 实现的源代码 git 库，包括有：
+
+    arane   niecza  nqp-jvm   nqp-parrot  perl5    rakudo-jvm   rakudo-parrot
+    moarvm  nqp-js  nqp-moar  parrot      perlito  rakudo-moar
+
+
+下面就开始正式测试了。用时同样会比较长，和上面 git clone 一样，都建议放在 screen 里运行。
+
+然后设定本次测试你打算对比哪些：
+
+    export CHECKOUTS='perl5/v5.20.1 rakudo-jvm/2014.10 rakudo-moar/2014.10 rakudo-moar/2014.09'
+
+这个写法规范是：git 库名/git tag名
+
+然后运行：
+
+    ./bench extract $CHECKOUTS
+
+这一步会分别 checkout 具体的 tag 到同级的新目录里，然后开始编译：
+
+    ./bench build   $CHECKOUTS
+
+然后运行测试程序：
+
+    ./bench time    $CHECKOUTS
+
+一共有 65 个测试，测试项在 `microbenchworks.pl` 文件的大数组里定义了。
+我在测试中发现，第 15/65 测试用例，在 `nqp-moar` 时会死循环运行，无法正常完成测试，已回报给作者。
+
+最后运行结果对比评分：
+
+    ./bench compare $CHECKOUTS
+
+结果显示，moar 比 jvm 领先一些，比 perl5 还差着呢：
+
+    ==> perl6-bench version 997c920 (ignoring startup time and compile time)
+    --- showing PEAK RATE (/s), TIMES SLOWER THAN FASTEST (x), and SUMMARY SCORES (skipping incomplete data)
+    
+                                    - Perl 5 -   -------------- Perl 6 --------------
+                                     v5.20.1      2014.10      2014.09      2014.10  
+                                       perl5       rakudo       rakudo       rakudo  
+    TEST                               perl5          jvm       moarvm       moarvm  
+                                    -------------------------------------------------
+    empty                                --             0/s          4/s          4/s
+                                        FAIL         34.0x         1.0x         1.1x 
+    zero                                 --             0/s          4/s          4/s
+                                        FAIL         33.3x         1.0x         1.1x 
+    hello                                --             0/s          4/s          4/s
+                                        FAIL         33.2x         1.0x         1.1x 
+    while_empty                     26678545/s     223006/s    1730328/s    3403743/s
+                                         1.0x       119.6x        15.4x         7.8x 
+    while_empty_native              26800035/s   1291144447/s   27583644/s   168949423/s
+                                        48.2x         1.0x        46.8x         7.6x 
+    while_bind                           --        249216/s    1682441/s    3381083/s
+                                        FAIL         13.6x         2.0x         1.0x 
+    while_concat                    13404147/s      26589/s     166714/s     206047/s
+                                         1.0x       504.1x        80.4x        65.1x 
+    while_concat_native             13400671/s      65891/s    4138382/s    5216637/s
+                                         1.0x       203.4x         3.2x         2.6x 
+    while_int2str                    6026835/s      57112/s     364208/s     455797/s
+                                         1.0x       105.5x        16.5x        13.2x 
+    while_int2str_native             6283498/s     111754/s     543142/s     671402/s
+                                         1.0x        56.2x        11.6x         9.4x 
+    while_int2str_concat             8711901/s       7006/s      89566/s      93480/s
+                                         1.0x      1243.5x        97.3x        93.2x 
+    while_int2str_concat_native      8403097/s      13824/s     153347/s     167585/s
+                                         1.0x       607.9x        54.8x        50.1x 
+    while_push_join                  3656434/s      15223/s      18917/s     111952/s
+                                         1.0x       240.2x       193.3x        32.7x 
+    while_push                       7821809/s      90685/s      21289/s     239678/s
+                                         1.0x        86.3x       367.4x        32.6x 
+    while_pushme                    14440088/s    3184098/s    1225845/s    1560029/s
+                                         1.0x         4.5x        11.8x         9.3x 
+    while_array_set                  6171761/s     112655/s     276032/s     335751/s
+                                         1.0x        54.8x        22.4x        18.4x 
+    while_hash_set                   1525235/s      58647/s     158810/s     171691/s
+                                         1.0x        26.0x         9.6x         8.9x 
+    postwhile_nil                   36412794/s     515093/s    2939870/s    4147168/s
+                                         1.0x        70.7x        12.4x         8.8x 
+    postwhile_nil_native            36083908/s   1676476937/s   34716639/s   167547820/s
+                                        46.5x         1.0x        48.3x        10.0x 
+    loop_empty                      24051967/s     257307/s    1686547/s    3321511/s
+                                         1.0x        93.5x        14.3x         7.2x 
+    loop_empty_native               24181034/s   2276716196/s   28050857/s   193967640/s
+                                        94.2x         1.0x        81.2x        11.7x 
+    for_empty                       33943008/s     894886/s    2315939/s    2515590/s
+                                         1.0x        37.9x        14.7x        13.5x 
+    for_bind                             --       1571035/s    2331450/s    2586230/s
+                                        FAIL          1.6x         1.1x         1.0x 
+    for_assign                      17713024/s    1532922/s    2006784/s    2391570/s
+                                         1.0x        11.6x         8.8x         7.4x 
+    for_assign_native               17765094/s    1658168/s    1895988/s    2006162/s
+                                         1.0x        10.7x         9.4x         8.9x 
+    for_postinc                     16640609/s     386218/s    1398445/s    1802886/s
+                                         1.0x        43.1x        11.9x         9.2x 
+    for_postinc_native              16670507/s    1037555/s    1859233/s    1994065/s
+                                         1.0x        16.1x         9.0x         8.4x 
+    for_concat                      14998496/s      29144/s     182410/s     205988/s
+                                         1.0x       514.6x        82.2x        72.8x 
+    for_concat_native               15053529/s      49506/s    1353377/s    1465293/s
+                                         1.0x       304.1x        11.1x        10.3x 
+    for_concat_2                     8646049/s      15854/s     107213/s     117943/s
+                                         1.0x       545.4x        80.6x        73.3x 
+    for_concat_2_native              8659225/s      23751/s     791213/s     986208/s
+                                         1.0x       364.6x        10.9x         8.8x 
+    for_push                         8496867/s     122034/s      25166/s     333166/s
+                                         1.0x        69.6x       337.6x        25.5x 
+    for_array_set                    7810807/s      57463/s     286036/s     388650/s
+                                         1.0x       135.9x        27.3x        20.1x 
+    for_hash_set                     1567864/s      32265/s     168643/s     171446/s
+                                         1.0x        48.6x         9.3x         9.1x 
+    reduce_range                     4964114/s     181283/s     318258/s     345797/s
+                                         1.0x        27.4x        15.6x        14.4x 
+    reduce_int_comb_range             470778/s       1495/s       3355/s       3406/s
+                                         1.0x       314.8x       140.3x       138.2x 
+    any_equals                       2646212/s      15684/s      61867/s      81787/s
+                                         1.0x       168.7x        42.8x        32.4x 
+    trim_string                     13660958/s   33565139/s    9291330/s   17910365/s
+                                         2.5x         1.0x         3.6x         1.9x 
+    split_string_constant            5615519/s     100014/s     133572/s     171231/s
+                                         1.0x        56.1x        42.0x        32.8x 
+    split_string_regex               2017912/s       4137/s      12573/s      16553/s
+                                         1.0x       487.8x       160.5x       121.9x 
+    charrange                         363103/s       3416/s      19831/s      24667/s
+                                         1.0x       106.3x        18.3x        14.7x 
+    charrange_ignorecase              363529/s       3788/s      14433/s      17899/s
+                                         1.0x        96.0x        25.2x        20.3x 
+    visit_2d_indices_while           7276084/s     152635/s     746903/s    1484712/s
+                                         1.0x        47.7x         9.7x         4.9x 
+    visit_2d_indices_while_native   11180261/s     553619/s    1177498/s    1451682/s
+                                         1.0x        20.2x         9.5x         7.7x 
+    visit_2d_indices_loop           10123295/s     177783/s     834515/s    1843586/s
+                                         1.0x        56.9x        12.1x         5.5x 
+    visit_2d_indices_loop_native    12457926/s   440172780/s    1227550/s    1431680/s
+                                        35.3x         1.0x       358.6x       307.5x 
+    visit_2d_indices_for             8548538/s     255887/s     675743/s     847728/s
+                                         1.0x        33.4x        12.7x        10.1x 
+    visit_2d_indices_cross           1367865/s       4685/s      31407/s      40470/s
+                                         1.0x       292.0x        43.6x        33.8x 
+    create_and_copy_2d_grid_cross     541914/s       2230/s      11564/s      13778/s
+                                         1.0x       243.0x        46.9x        39.3x 
+    create_and_iterate_hash_kv           --          1564/s      12248/s      12651/s
+                                        FAIL          8.1x         1.0x         1.0x 
+    rat_mul_div_cancel                  7439/s       4852/s      33910/s      40614/s
+                                         5.5x         8.4x         1.2x         1.0x 
+    rat_harmonic                        1080/s       1732/s      11089/s      11678/s
+                                        10.8x         6.7x         1.1x         1.0x 
+    rand                            10885068/s     230938/s     183511/s     213786/s
+                                         1.0x        47.1x        59.3x        50.9x 
+    array_set_xx                    13585287/s    1533694/s     545243/s     597926/s
+                                         1.0x         8.9x        24.9x        22.7x 
+    parse-json                            23/s          1/s          1/s          1/s
+                                         1.0x        29.6x        37.0x        22.8x 
+    parse-json-no-obj-creation           --             1/s          1/s          1/s
+                                        SKIP          1.4x         1.9x         1.0x 
+    rc-forest-fire                      1374/s          2/s          9/s          9/s
+                                         1.0x       588.4x       155.8x       146.7x 
+    rc-man-or-boy-test                187464/s        --         41252/s      39966/s
+                                         1.0x        FAIL          4.5x         4.7x 
+    rc-self-describing-numbers        219156/s        571/s        775/s        782/s
+                                         1.0x       383.9x       282.9x       280.1x 
+    rc-dragon-curve                   149131/s       1704/s       5937/s       6260/s
+                                         1.0x        87.5x        25.1x        23.8x 
+    rc-9-billion-names                  1821/s         93/s        216/s        500/s
+                                         1.0x        19.7x         8.4x         3.6x 
+    rc-mandelbrot                       1168/s        702/s       1440/s       1519/s
+                                         1.3x         2.2x         1.1x         1.0x 
+    spinner                              971/s          4/s          5/s          5/s
+                                         1.0x       228.7x       193.1x       182.9x 
+    rc-forest-fire-stringify           11162/s         25/s         35/s         41/s
+                                         1.0x       438.8x       314.7x       275.2x 
+    string-escape                    1448636/s        --           --           --   
+                                         1.0x        FAIL         FAIL         FAIL  
+                                    =================================================
+    SUMMARY SCORE                     2253.9         40.5        100.0        139.6  
+
+如何把数据用图的形式展示，我还没有找到办法。
