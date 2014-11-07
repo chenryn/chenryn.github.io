@@ -55,7 +55,16 @@ perl6-bench 项目地址见：<https://github.com/japhb/perl6-bench>。
     ./bench time    $CHECKOUTS
 
 一共有 65 个测试，测试项在 `microbenchworks.pl` 文件的大数组里定义了。
+
 我在测试中发现，第 15/65 测试用例，在 `nqp-moar` 时会死循环运行，无法正常完成测试，已回报给作者。
+
+./bench 还可以添加其他运行参数。比如 `./bech --verbose time $CHECKOUTS`。注意参数必须写在 "time" 前面。这是 Perl6 的 MAIN 函数特性：
+
+    multi MAIN ('time', *@components, :$variants?, :$tests?, :$tests-tagged?,
+                                  :$runs?, :$enough-time?, :$min-scaling-points?,
+                                  Bool :$verbose?) { }
+
+代码里用了 `*@components`，所有写在 "time" 后面的参数都会存入这个数组。
 
 最后运行结果对比评分：
 
