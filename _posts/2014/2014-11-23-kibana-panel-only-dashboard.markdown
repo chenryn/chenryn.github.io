@@ -58,7 +58,7 @@ dashboard.nav = [];
 
 效果如下：
 
-![single panel](http://photo.weibo.com/1035836154/wbphotos/large/mid/3780159570052868/pid/3dbd9afagw1eml6f9xqltj20lc0fuwfu)
+![single panel](http://ww1.sinaimg.cn/large/3dbd9afagw1eml6f9xqltj20lc0fuwfu.jpg)
 
 因为 `dashboard.services` 的定义没有做修改，所以这个其实照样支持你用鼠标拉动选择时间范围，支持你在 URL 后面加上 `?query=status:404&from=1h` 这样的参数，效果都是对的。只不过不会再让你看到这些文字显示在页面上了。
 
