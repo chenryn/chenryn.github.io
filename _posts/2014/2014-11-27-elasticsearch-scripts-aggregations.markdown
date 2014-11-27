@@ -44,6 +44,8 @@ doc[fieldname].value.split('.')[0..-2].join('.')
         }
     }'
 
+**注意这里一定要传递是 "not_analyzed" 的 字段过去！** ES 流程上是先过分词器再到 scripting 模块的，这里要是切一下，到你脚本里就不知道长啥样了……
+
 结果如下：
 
 {% highlight json %}
@@ -88,19 +90,19 @@ if (matcher.matches()) {
 
 同样等识别编译，然后发送这样的请求：
 
-curl '127.0.0.1:9200/logstash-2014.11.27/_search?pretty&size=0' -d '{
-    "aggs" : {
-        "ipaddr" : {
-            "terms" : {
-                "script" : "regex",
-                "params" : {
-                    "fieldname": "client_ip.raw",
-                    "pattern": "^((?:\d{1,3}\.?){3})\.\d{1,3}$"
+    curl '127.0.0.1:9200/logstash-2014.11.27/_search?pretty&size=0' -d '{
+        "aggs" : {
+            "ipaddr" : {
+                "terms" : {
+                    "script" : "regex",
+                    "params" : {
+                        "fieldname": "client_ip.raw",
+                        "pattern": "^((?:\d{1,3}\.?){3})\.\d{1,3}$"
+                    }
                 }
             }
         }
-    }
-}'
+    }'
 
 得到一模一样的结果。
 
