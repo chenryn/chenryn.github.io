@@ -22,7 +22,7 @@ perl6-bench 项目地址见：<https://github.com/japhb/perl6-bench>。
 
 项目的测试程序 `timeall` 是用 Perl5 写的。运行前，也得安装几个 CPAN 模块：
 
-    cpanm Capture::Tiny Data::Alias DateTime JSON JSON::XS List::MoreUtils
+    cpanm Capture::Tiny Data::Alias DateTime JSON JSON::XS List::MoreUtils IPC::Run
 
 然后就可以开始测试了：
 
