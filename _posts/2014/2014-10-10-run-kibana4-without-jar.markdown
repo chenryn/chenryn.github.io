@@ -33,7 +33,7 @@ npm install -g less
 # kibana 4 源码中在导入 lesshat 的时候都没写具体路径，所以要切换到对应目录下执行
 cd ../src/kibana/bower_components/lesshat/build
 # 编译 kibana 内的 *.less 文件为 *.css 文件
-for i in `find ../../.. -name [a-z]*.less|grep -v bower_components`;do
+for i in `find ../../.. -name '[a-z]*.less' | grep -v bower_components`;do
     ../../../../../node_modules/.bin/lessc $i ${i/.less/.css/}
 done
 # 进入代理服务器目录
