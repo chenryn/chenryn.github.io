@@ -57,7 +57,7 @@ Kibana 3: Milestone 4现在可以通过URL参数获取输入！这个备受期�
 
 {% highlight json %}
   "0": {
-    "query": "{{ARGS.query || '*'}}",
+    "query": "{<span>{</span>ARGS.query || '*'}}",
     "alias": "",
     "color": "#7EB26D",
     "id": 0,
