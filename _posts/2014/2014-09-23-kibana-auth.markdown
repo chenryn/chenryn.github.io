@@ -42,30 +42,37 @@ Kibana 作为一个纯 JS 项目，一直都没有提供完整的权限控制方
 
 方案采用了 Mojolicious 框架开发，代码少不说，最关键的是 Mojolicious 无额外的 CPAN 模块依赖，这对于不了解 Perl 但是又有 Kibana 权限控制需求的人来说，大大减少了部署方面的麻烦。
 
-```
-curl http://xrl.us/cpanm -o /usr/local/bin/cpanm
+{% highlight bash %}
+curl -Lk http://cpanmin.us -o /usr/local/bin/cpanm
 chmod +x /usr/local/bin/cpanm
 cpanm Mojolicious Authen::Simple::Passwd
-```
+{% endhighlight %}
 
 三行命令，就可以完成整个项目的安装需求了。然后运行目录下的:
 
-```
-hypnotoad script/kbnauth
-```
+    hypnotoad script/kbnauth
 
 就可以通过 80 端口访问这个带有权限控制的 kibana 了。
+
+__2015 年 1 月 6 日更新：__
+
+目前已经提供了 bundle 方式。有编译环境的可以直接用
+
+{% highlight bash %}
+./vendor/bin/carton install --cached
+./vendor/bin/carton exec local/bin/hypnotoad script/kbnauth
+{% endhighlight %}
 
 ## 权限赋值
 
 因为 `kibana-auth` 结构很简单，kibana 一般又都是内部使用，所以暂时还没做权限控制的管理页面。直接通过命令行方式即可赋权：
 
-```
+{% highlight bash %}
 curl  -XPOST http://127.0.0.1:9200/kibana-auth/indices/sri -d '{
   "prefix":["logstash-sri","logstash-ops"],
   "server":"192.168.0.2:9200"
 }'
-```
+{% endhighlight %}
 
 这样，sri 用户，就只能访问 192.168.0.2 集群上的 logstash-sri 或 logstash-ops 开头的日期型索引(即后面可以-YYYY, -YYYY.MM, -YYYY.MM.dd 三种格式)了。
 
@@ -90,5 +97,9 @@ curl  -XPOST http://127.0.0.1:9200/kibana-auth/indices/sri -d '{
 9. 仿 histogram 的 valuehistogram 面板(去除了 histogram 面板的 X 轴时间类型数据限制，可以用于做数据概率分布分析)
 10. 给 histogram 增强的 threshold 变色功能(利用了 `jquery.flot.threshold` 扩展)
 11. 单个面板自己的刷新按钮(避免调试的时候全页面刷新的麻烦)
+12. 重写 histogram 并增强了 uniq 去重统计模式(利用 CardinalityAggr 接口)
+13. 给 terms 增强的自定义脚本化字段聚合功能(利用 scriptField 方法)
+14. 给 filterSrv 增强的自定义脚本化过滤器功能，配合上条的点击生成(利用 scriptFilter 接口)
+15. 给 table 增强的导出 CSV 功能(利用 filesaver.js)
 
 效果截图同样在 [README](https://github.com/chenryn/kibana/blob/master/README.md) 里贴出。欢迎试用和反馈！
