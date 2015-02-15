@@ -25,24 +25,23 @@ object LogStash {
   case class Status(avg:Double = 0.0, count:Int = 0) {
     var countTrend = 0.0
     var avgTrend = 0.0
-    def +(avg:Double, count:Int): Status = {
-      val newStatus = Status(avg, count)
-      if (this.count > 0) {
-        newStatus.countTrend = (count - this.count).toDouble / this.count
+    def %(prev:Status): Status = {
+      if (prev.count > 0) {
+        this.countTrend = (this.count - prev.count).toDouble / prev.count
       }
-      if (this.avg > 0) {
-        newStatus.avgTrend = (avg - this.avg) / this.avg
+      if (prev.avg > 0) {
+        this.avgTrend = (this.avg - prev.avg) / prev.avg
       }
-      newStatus
+      this
     }
     override def toString = {
       s"Trend($avg, $count, $avgTrend, $countTrend)"
     }
   }
 
-  def updatestatefunc(newValue: Seq[(Double, Int)], oldValue: Option[Status]): Option[Status] = {
+  def updatestatefunc(newValue: Seq[Status], oldValue: Option[Status]): Option[Status] = {
     val prev = oldValue.getOrElse(Status())
-    var current = prev + ( newValue.map(_._1).sum, newValue.map(_._2).sum )
+    val current = if (newValue.size > 0) newValue.last % prev else Status()
     Some(current)
   }
 
@@ -63,13 +62,10 @@ object LogStash {
       if (rdd.count > 0) {
         sqc.jsonRDD(rdd).registerTempTable("logstash")
         val sqlreport = sqc.sql("SELECT message, COUNT(message) AS host_c, AVG(lineno) AS line_a FROM logstash WHERE path = '/var/log/system.log' AND lineno > 70 GROUP BY message ORDER BY host_c DESC LIMIT 100")
-        sqlreport.map(r => s"${r(0)} ${r(1)} ${r(2)}")
+        sqlreport.map(r => (r(0).toString -> Status(r(2).toString.toDouble, r(1).toString.toInt)))
       } else {
-        rdd
+        rdd.map(l => ("" -> Status()))
       }
-    }).map(l => {
-      val a = l.split(" ")
-      a(0) -> (a(2).toDouble, a(1).toInt)
     }).updateStateByKey(updatestatefunc).print()
 
     ssc.start()
@@ -78,6 +74,7 @@ object LogStash {
 }
 {% endhighlight %}
 
-这里有一点需要注意，也是耽误我时间最多的地方：`transform` 方法的参数和返回，代码里的定义是 `RDD[T]` 和 `RDD[U]`。我不懂 Java/Scala，以为是只要是 RDD 对象即可。实践证明，其实要 RDD 里的数据类型也保持一致。
+这里有一点需要注意，也是耽误我时间最多的地方：`transform` 方法的参数和返回，代码里的定义是 `RDD[T]` 和 `RDD[U]`。我不懂 Java/Scala，以为是只要是 RDD 对象即可。实践证明，其实要任意场合下返回的 RDD 里的数据类型也保持一致。
 
-放在上面示例里，就是 lines 里的数据是 `RDD[String]`，那么 transform 返回的数据也得是 `RDD[String]`，直接返回 `RDD[sql.Row]` 就不行。
+在上例中，就是 if 条件下返回的是 `RDD[Status]`，那么 else 条件下，也必须返回一个 `RDD[Status]`，如果直接返回原始的 rdd(也就是 `RDD[String]`)，就会报错。
+
