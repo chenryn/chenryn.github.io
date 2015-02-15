@@ -76,5 +76,5 @@ object LogStash {
 
 这里有一点需要注意，也是耽误我时间最多的地方：`transform` 方法的参数和返回，代码里的定义是 `RDD[T]` 和 `RDD[U]`。我不懂 Java/Scala，以为是只要是 RDD 对象即可。实践证明，其实要任意场合下返回的 RDD 里的数据类型也保持一致。
 
-在上例中，就是 if 条件下返回的是 `RDD[Status]`，那么 else 条件下，也必须返回一个 `RDD[Status]`，如果直接返回原始的 rdd(也就是 `RDD[String]`)，就会报错。
+在上例中，就是 if 条件下返回的是 `RDD[(String, Status)]`，那么 else 条件下，也必须返回一个 `RDD[(String, Status)]`，如果直接返回原始的 rdd(也就是 `RDD[String]`)，就会报错。
 
