@@ -18,12 +18,12 @@ Kibana 开发环境的搭建介绍可以在 [Kibana repository](https://github.c
 
 从 Kibana 根目录触发，field formatters 相关代码存在 `/src/ui/public/stringify` 目录下。目录结构如下所示：
 
-> /stringify
-> |--type  //包括各种 formatter
-> |--icons
-> |--editors  //formatter 用来请求和显示附加信息的 HTML 页面
-> |--__tests__
-> |--register.js //每个 formatter 都要在这里面注册
+ /stringify
+ |--type  //包括各种 formatter
+ |--icons
+ |--editors  //formatter 用来请求和显示附加信息的 HTML 页面
+ |--__tests__
+ |--register.js //每个 formatter 都要在这里面注册
 
 Kibana 4.1 里，formatters 位置则在 `/src/kibana/components/stringify`。如果你是看的 4.1 版，可能跟本文讲的路径稍有区别，请自动对应查找一下，本文以 git master 为准。
 
