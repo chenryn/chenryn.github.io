@@ -1,4 +1,5 @@
 # This is the default format. 
+gems: [jekyll-paginate]
 # For more see: https://github.com/mojombo/jekyll/wiki/Permalinks
 permalink: /:year/:month/:day/:title 
 
@@ -114,3 +115,4 @@ JB :
 markdown: kramdown
 kramdown:
   entity_output: symbolic
+
