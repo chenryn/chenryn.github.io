@@ -1,0 +1,143 @@
+---
+layout: post
+title: SIREn 插件试用
+category: elasticsearch
+---
+
+SIREn 是一个基于 Lucene 做的，专门针对 nested object 数据做优化的方案。其官网地址：<http://siren.solutions>。SIREn 自己并不提供完整的软件，而是以 Solr 或者 Elasticsearch 插件的形式存在。在 SIREn 官网首页写着，自己是 trush schemaless，high performance nested query。而我之前已经写博客说过，Elasticsearch 的 schemaless 是有限制的，同一个 index 下，field 的 mapping 是必须唯一一致的。否则，或者写入失败，或者搜索异常。
+
+那么我们来试一下这个 SIREn 看看。首先是下载运行：
+
+{% highlight bash %}
+# wget http://siren.solutions/download/siren-elasticsearch-1.4-bin.zip
+# unzip siren-elasticsearch-1.4-bin.zip
+# cd siren-elasticsearch-1.4-bin
+# ./example/bin/elasticsearch
+{% endhighlight %}
+
+然后我们尝试写入几条 mapping 有冲突的数据：
+
+{% highlight bash %}
+# curl -XDELETE "http://localhost:9200/napr"
+# curl -XPOST "http://localhost:9200/napr"
+# curl -XPUT "http://localhost:9200/napr/chargepoint/_mapping" -d '
+{
+    "chargepoint" : {
+        "properties" : {
+            "_siren_source" : {
+                "analyzer" : "concise",
+                "postings_format" : "Siren10AFor",
+                "store" : "no",
+                "type" : "string"
+            }
+        },
+        "_siren" : {}
+    }
+}'
+# curl -XPUT "http://localhost:9200/napr/chargepoint/1" -d '
+{
+    "ChargeDeviceName": "1c Design Limited, Glasgow (1)",
+    "Accessible24Hours": false
+}'
+# curl -XPUT "http://localhost:9200/napr/chargepoint/2" -d '
+{
+    "ChargeDeviceName": "2c Design Limited, Glasgow (2)",
+    "Accessible24Hours": "true"
+}'
+# curl -XPUT "http://localhost:9200/napr/chargepoint/3" -d '
+{
+    "ChargeDeviceName": "3c Design Limited, Glasgow (3)",
+    "Accessible24Hours": 123
+}'
+# curl -XPUT "http://localhost:9200/nepr/chargepoint/4" -d '
+{
+    "ChargeDeviceName": "4c Design Limited, Glasgow (4)",
+    "Accessible24Hours": [123, 234, 345, 456]
+}'
+{% endhighlight %}
+
+ok，三条数据都写入成功了。
+
+然后我们用原始的 Elasticsearch 语法尝试去获取『大于100』的数据：
+
+{% highlight bash %}
+# curl -XPOST "http://localhost:9200/nepr/_search?q=Accessible24Hours:>100"
+{"took":16,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
+{% endhighlight %}
+
+可以看到，搜索结果是空。
+
+而用 SIREn 的树状结构语法获取：
+
+{% highlight bash %}
+# curl -XPOST "http://localhost:9200/nepr/_search" -d '
+{
+  "query": {
+    "tree" : {
+      "node" : {
+        "attribute" : "Accessible24Hours",
+        "query" : "xsd:long([100 TO *])"
+      }
+    }
+  }
+}'
+{"took":29,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":2,"max_score":4.0,"hits":[{"_index":"nepr","_type":"chargepoint","_id":"4","_score":4.0,"_source":
+{
+    "ChargeDeviceName": "4c Design Limited, Glasgow (4)",
+    "Accessible24Hours": [123, 234, 345, 456]
+}},{"_index":"nepr","_type":"chargepoint","_id":"3","_score":1.0,"_source":
+{
+    "ChargeDeviceName": "3c Design Limited, Glasgow (3)",
+    "Accessible24Hours": 123
+}}]}}%
+{% endhighlight %}
+
+yes，我们拿到了这条数据！
+
+更复杂一点，我们再来:
+
+{% highlight bash %}
+# curl -XPOST "http://localhost:9200/nepr/_search" -d '
+{
+  "query": {
+    "tree" : {
+      "node" : {
+        "attribute" : "Accessible24Hours",
+        "range" : [2,3],
+        "query" : "xsd:long([10 TO *])"
+      }
+    }
+  },
+  "aggs": {
+    "1": {
+      "terms": {
+        "field": "ChargeDeviceName"
+      }
+    }
+  }
+}'
+{% endhighlight %}
+
+这里添加了一个 `range` 选项，SIREn 对所有的数组默认就做 nested 处理了，所有是有序的。这个选项的意思就是，只对数组中第 2 到 3 位节点的数据做搜索请求。这下，搜索结果变成了：
+
+{% highlight json %}
+{"took":9,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":1,"max_score":2.0,"hits":[{"_index":"nepr","_type":"chargepoint","_id":"4","_score":2.0,"_source":
+    {
+            "ChargeDeviceName": "4c Design Limited, Glasgow (4)",
+                "Accessible24Hours": [123,234,345,456]
+    }}]},"aggregations":{"1":{"buckets":[{"key":"4","doc_count":1},{"key":"4c","doc_count":1},{"key":"design","doc_count":1},{"key":"glasgow","doc_count":1},{"key":"limited","doc_count":1}]}}}%
+{% endhighlight %}
+
+可以看到，因为 `_id` 为 3 的文档里 Accessible24Hours 字段只有一个值，所以无法匹配上从第二个值开始的多个值的对比，也就没被过滤出来了。
+
+-------------------------
+
+不过 SIREn 目前比较尴尬的是，他只基于 ES 做了 query 部分，aggregation 部分还是老样子，必须类型一致才行，这也导致 SIREn 示例文件数据里把一些冲突日志去掉了的原因。
+
+如果使用的是 Solr，SIREn 插件的做法是只定义两个 field，一个是 UUID，一个是 JSON。然后 siren 处理的所有数据存在这个 JSON 字段里(类似 ES 插件里的那个 `_siren_source` 字段)。这也就能达到全部 JSON schemaless。此外，SIREn 的 Solr 插件还实现了 nested facet 支持，也可以尝试。
+
+总之，SIREn 扩展采用树形方式自行处理一个在 ES、Solr 看来多出来的字段，而并不影响原有字段的处理流程。所以，这对 ES 有几个影响：
+
+* 其他字段还是会判断数据类型并生成 mapping，所以写入依然会有问题。
+* aggregation 还是走 ES 的实现，导致根据 number 过滤出来的文档，在 aggregation 时却会按照 boolean(即 mapping 中的记录)检测，aggregation 请求直接报错不计算。
+* 重复一遍树状索引数据，导致膨胀率翻倍增高。实测，一段大小约为 30MB 的数据，在 ES 默认环境中会膨胀到 50MB，而在开启 SIREn 插件的环境下则膨胀到了 120MB！
