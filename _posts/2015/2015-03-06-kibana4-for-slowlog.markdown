@@ -17,7 +17,7 @@ tags:
 
 所以，如果日志收集的时候没有用 Logstash 的，这时候就得自己处理了。下面是我写的一个示例：
 
-{% highlight python %}
+```python
 #!/usr/bin/env pypy
 #coding:utf-8
 import re
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     options,args = getOptions()
     if options.logTag == '':
         get_log(grokFpmSlow.fpmSlow(options.logTag))
-{% endhighlight %}
+```
 
 python 水平很烂，大家看看就好，大概流程其实跟 Logstash 差不多。
 
@@ -111,7 +111,7 @@ python 水平很烂，大家看看就好，大概流程其实跟 Logstash 差不
 
 上面的 python 脚本，只是做到根据正则表达式合并多行数据，以及收到处理结果后发送给 ES 集群。具体的处理，则在 common/grokFpmSlow.py 中完成:
 
-{% highlight python %}
+```python
 #/usr/bin/pypy
 #coding:utf-8
 import re
@@ -129,7 +129,7 @@ class fpmSlow():
         ret['slow'] = {k: v for k, v in enumerate(re.split(r'\[\w{18}\] ', ret.pop('message'))) if k > 0 }
         ret["@timestamp"] = datetime.datetime.strptime(ret.pop("timestamp"), "%d-%b-%Y %H:%M:%S").strftime("%FT%T+0800")
         return ret
-{% endhighlight %}
+```
 
 类属性中的 `start_regexp` 对应 Logstash/Codecs/MultiLine 中的 pattern，`msg_regexp` 对应 Logstash/Filters/Grok 中的 match。这些都是标准的正则，根据日志的实际情况写就好了。
 
@@ -154,7 +154,7 @@ class fpmSlow():
 
 会转换成下面这样的字典：
 
-{% highlight python %}
+```python
 {
   "pool": "www",
   "pid": "13557",
@@ -177,7 +177,7 @@ class fpmSlow():
     "12": "menu_execute_active_handler() /opt/www/inkebook/index.php:21"
   }
 }
-{% endhighlight %}
+```
 
 现在，数据就算处理完毕，可以写入 ES 了。
 

@@ -9,7 +9,7 @@ category: web
 
 <span style="color:#000000;font-family:Verdana;font-size:x-small;"><span style="font-family:Verdana;font-size:x-small;"><span style="font-family:Verdana;font-size:x-small;">java.io.IOException: Server returned HTTP response code: 401 for URL: <a href="http://gundong:gdxw6354@editornew.china.com/interface/addcategory.php?parentid=2&amp;id=2&amp;name=gbox_%D0%C7%BC%CA%D5%F9%B0%D4&amp;groupname=game&amp;code=satrcraft&amp;m=09286f9d135d5debe7052bea42a27eef">http://test:test1234@test.domain.com/interface/addcategory.php?parentid=2&amp;id=2&amp;name=gbox_%D0%C7%BC%CA%D5%F9%B0%D4&amp;groupname=game&amp;code=satrcraft&amp;m=09286f9d135d5debe7052bea42a27eef</a></span></span></span>
 原来用的是IO的方式，我用telnet模拟一下，结果还真是这样：
-{% highlight bash %}[root@cms ~]# telnet test.domain.com 80
+```bash[root@cms ~]# telnet test.domain.com 80
 Trying 123.124.125.126...
 Connected to test.domain.com (123.124.125.126).
 Escape character is '^]'.
@@ -20,11 +20,11 @@ Date: Tue, 11 Jan 2011 03:39:37 GMT
 Server: Apache/1.3.37 (Unix) PHP/4.4.9
 WWW-Authenticate: Basic realm="CMS-Testdotcom"
 Connection: close
-Content-Type: text/html; charset=iso-8859-1{% endhighlight %}
+Content-Type: text/html; charset=iso-8859-1```
 查了一下HTTP协议，原来auth是走的另外一个header完成Authorization，其格式是Authorization: Basic 'encoded_base64(user:passwd)'。服务器会自动的用decoded_base64()解析字符串得到真正的用户名和密码。原来wget和curl这些工具不单单是发个请求这么简单啊~~
 
 重新试验，先计算test:test1234的base64值：
-{% highlight bash %}[root@cms ~]# echo test:test1234|openssl base64
+```bash[root@cms ~]# echo test:test1234|openssl base64
 dGVzdDp0ZXN0MTIzNAo=
 [root@cms ~]# telnet test.domain.com 80
 Trying 123.124.125.126...
@@ -39,5 +39,5 @@ Server: Apache/1.3.37 (Unix) PHP/4.4.9
 X-Powered-By: PHP/4.4.9
 Connection: close
 Content-Type: text/html
-2 || 2|| gbox_星际争霸 || satrcraft || game <br/>09286f9d135d5debe7052bea42a27eef<br/>2Connection closed by foreign host.{% endhighlight %}
+2 || 2|| gbox_星际争霸 || satrcraft || game <br/>09286f9d135d5debe7052bea42a27eef<br/>2Connection closed by foreign host.```
 果然就可以了~~

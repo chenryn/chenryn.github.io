@@ -22,7 +22,7 @@ tags:
 23:54 423.512
 23:59 390.676
 然后编写gnuplot的配置文件如下：
-{% highlight bash %}
+```bash
 [root@Zabbix cache]# cat log.conf
 set terminal png truecolor size 550,250    #指定输出成png图片，且图片大小为550×250，需要ligpng支持，采用默认颜色设定
 set output "log.png"    #指定输出png图片的文件名
@@ -35,7 +35,7 @@ set ylabel "Mbps"    #Y轴标题
 set title "image.tuku.china.com flow"    #图片标题
 set grid    #显示网格
 plot "test.log" using 1:2 title "access_flow"    #从test.log文件中读取第一列和第二列作为X轴和Y轴数据，示例名"log_flow"
-{% endhighlight %}
+```
 最后运行cat log.conf | gnuplot命令，就生成了log.png文件，如下：
 <img src="/images/uploads/gnuplot.png" alt="" />
 就是不知道X轴上这个01/01怎么消除掉……

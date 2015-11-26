@@ -1,6 +1,6 @@
 ---
 layout: post
-title: apache防盗链（mod_perl试用二）
+title: apache防盗链(modperl试用二)
 date: 2010-05-26
 category: web
 tags:
@@ -9,8 +9,10 @@ tags:
 ---
 
 上回提到的防盗链方式是在strings上加上key和time，uri本身是不变的，这种方式其实现在不是很主流，主流的方式是将计算得出的加密串直接改在uri的路径里。比如下面将要提到的例子。要求其实和早先那个[squid防盗链](/2010/01/30/anti-hotlinking-in-nginx-lighttpd-squid)的一模一样，就是改成用apache来跑。
+
 Test.pm内容如下：
-{% highlight perl %}
+
+```perl
 package Test;
 use strict;
 use warnings;
@@ -44,16 +46,16 @@ sub handler {
     }
 }
 1;
-{% endhighlight %}
+```
 
 然后在httpd.conf中加上如下配置：
 
-{% highlight apache %}
+```
 PerlPostConfigRequire /home/apache2/perl/start.pl
 SetHandler modperl
 PerlTransHandler Test
 PerlSetVar Secret abcdef
-{% endhighlight %}
+```
 
 这里需要注意几点，根据modperl的处理流程，修改uri的时候，handler还没有走到对文件进行寻址，所以无法区分文件路径等信息，故而 `PerlTransHandler` 配置不能在 `<Directory>` 和 `<Location>` 里面。
 

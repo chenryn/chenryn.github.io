@@ -16,7 +16,7 @@ tags:
 
 aggregations 接口最大的特点是层级关系。不过也不是可以完全随便嵌套的，原先 date_histogram facets 里的 global 参数，被拆分成了 global aggregation，但是这个 global aggregation 就强制要求必须用在顶层。所以最后 request 相关代码就变成了这个样子：
 
-{% highlight javascript %}
+```javascript
 var aggr = $scope.ejs.DateHistogramAggregation(q.id);
 if($scope.panel.mode === 'count') {
   aggr = aggr.field($scope.panel.time_field);
@@ -32,6 +32,6 @@ request = request.agg(
     )
   )
 ).size($scope.panel.annotate.enable ? $scope.panel.annotate.size : 0);
-{% endhighlight %}
+```
 
 完整的代码已经提交到 github，见 <https://github.com/chenryn/kibana-authorization/commit/6cb4d28a6c610d28680fffdb81c9f6c83cfaf488>

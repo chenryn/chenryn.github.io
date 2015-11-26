@@ -12,7 +12,7 @@ tags:
 
 中控端脚本如下：
 
-{% highlight perl %}
+```perl
 #!/usr/bin/perl
 use Modern::Perl;
 use AnyEvent;
@@ -64,11 +64,11 @@ $redis->subscribe(
     }
 );
 $cv->recv;
-{% endhighlight %}
+```
 
 分布在各地的客户端脚本如下：
 
-{% highlight perl %}
+```perl
 #!/usr/bin/perl
 use Modern::Perl;
 use AnyEvent;
@@ -138,6 +138,6 @@ sub httptest {
         $redisp->publish('report', $data);
     };
 }
-{% endhighlight %}
+```
 
 这里需要单独建立两个 `$redisr` 和 `$redisp` ，因为前一个已经用来 subscribe 之后就不能同时用于 publish 了，会报错。从理解上这是个很扯淡的事情，不过实际运行结果就是如此。。。

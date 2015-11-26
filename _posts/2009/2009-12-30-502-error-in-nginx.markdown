@@ -40,7 +40,7 @@ proxy_buffers 4 16k;
 5. https转发配置错误
 
 正确的配置方法
-{% highlight nginx %}
+```nginx
 server_name www.xok.la;
 location /myproj/repos {
     set $fixed_destination $http_destination;
@@ -52,5 +52,5 @@ location /myproj/repos {
     proxy_set_header Destination $fixed_destination;
     proxy_pass http://subversion_hosts;
 }
-{% endhighlight %}
+```
 

@@ -8,9 +8,9 @@ category: squid
 公司新进客户，要求加速它的论坛，比较奇怪的是，整个论坛居然都是https协议的网页。所以得做443端口的配置。
 如果只是端口，一个https_port 443就够了。麻烦的地方在证书（之前就有客户死活不肯给证书，于是只能给做个端口转发，顶天了算是路由优化，何苦往CDN里投钱……）。
 在拿到证书后，squid.conf里添加这么一句，SSL配置就算是完成了。但测试的时候问题可就多多了
-{% highlight squid %}
+```squid
 https_port 443 cert=/test_ssl/server.cer key=/test_ssl/server.key defaultsite=bbs.test.com
-{% endhighlight %}
+```
 客户源站在江苏电信，之前的普通静态加速时，为了更好的达到回源效果，所有的网通节点服务器都采用了二级代理的方式，通过BGP回源。    
 在按照普通域名走父方式配置完毕后，wget该客户的论坛首页做测试，所有的网通节点返回的状态码倒是200，可首页文件总字节数，只有209！用IE打开一看，赫然是一个“Hello
 World！”暴汗……    

@@ -14,7 +14,7 @@ tags:
 很容易找到了目前使用的模板：nagios/share/pnp/templates.dist/default.php，不过看到目录下已经有不少其他的模板文件，为啥一个都没用上呢？
 
 从nagios/share/pnp/include/function.inc.php里看到了doFindTemplate()，定义如下：
-{% highlight php %}
+```php
 if (is_readable($conf['template_dir'].'/templates/' . $template . '.php')) {
 $template_file = $conf['template_dir'].'/templates/' . $template . '.php';
 }elseif (is_readable($conf['template_dir'].'/templates.dist/' . $template . '.php')) {
@@ -24,7 +24,7 @@ $template_file = $conf['template_dir'].'/templates/default.php';
 }else {
 $template_file = $conf['template_dir'].'/templates.dist/default.php';
 }
-{% endhighlight %}
+```
 也就是说其实pnp是找不到对应check_command的模板，才使用了最后的default.php！
 
 正巧，default.php里输出了check_command到rra上，可以看到，几乎所有的命令输出都是"Check Command check_nrpe"。
@@ -32,7 +32,7 @@ $template_file = $conf['template_dir'].'/templates.dist/default.php';
 也就是说，pnp设计者很贴心的设计了自动查找命令模板的功能，却没有考虑到nagios最广泛的应用插件nrpe……
 
 在pnp官网文档<a href="http://docs.pnp4nagios.org/pnp-0.4/tpl?s[]=template">http://docs.pnp4nagios.org/pnp-0.4/tpl?s[]=template</a>上指出，rrd使用模板是读取了perfdata中相应的xml文件，xml内容类似如下几行：
-{% highlight xml %}
+```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <NAGIOS>
 <DATASOURCE>
@@ -53,7 +53,7 @@ $template_file = $conf['template_dir'].'/templates.dist/default.php';
 <MIN>0</MIN>
 <MAX>0</MAX>
 </DATASOURCE>
-{% endhighlight %}
+```
 这些标签都是给模板使用的，比如default.php中输出命令的那行就是：
 $def[$i] .= 'COMMENT:"Check Command ' . $TEMPLATE[$i] . '\r" ';
 

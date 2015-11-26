@@ -10,7 +10,7 @@ tags:
 
 部署过程如下：
 
-{% highlight bash %}
+```bash
 # 安装这个包以便使用 mock 命令在 chroot 环境下打包
 yum install -y fedora-packager
 # 下载我的而不是原作者的，因为里面 aufs 和 lxc 的下载链接都已经更新了，原来的404了
@@ -33,7 +33,7 @@ yum localinstall --nogpgcheck kernel-ml-aufs-3.10.5-1.el6.x86_64.rpm lxc-0.8.0-3
 
 echo 'none                    /sys/fs/cgroup          cgroup  defaults        0 0' > /etc/fstab
 reboot
-{% endhighlight %}
+```
 
 kernel 文件来自 RHEL，不过我试了下，在我的Fedora19上也正常可用。3.10.5 和 3.2 相比，第一 3.10 将会是未来一段时间内 kernel 的主线支持；第二 docker 官方说在 3.8 之前有点小 bug 可能会被触发。
 

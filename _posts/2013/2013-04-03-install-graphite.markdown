@@ -11,7 +11,7 @@ Graphite 是近来比较流行的类 rrd tool 系统。不过官网的安装文�
 
 由于是事后追忆，同样不保证好用……
 
-{% highlight bash %}
+```bash
 apt-get install python-pip libapache2-mod-wsgi subversion git
 git clone https://github.com/graphite-project/graphite-web.git
 git clone https://github.com/graphite-project/carbon.git
@@ -70,7 +70,7 @@ cd /opt/graphite/
 
 # 通过 socket 发送本机的 loadavg 到 2003 端口
 python /opt/graphite/examples/example-client.py
-{% endhighlight %}
+```
 
 效果如下：
 

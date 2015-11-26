@@ -27,7 +27,7 @@ a) Squid支持调用外部程序脚本改写url，即redirect_program（2.6以�
 URL IP/FQDN IDENT METHOD
 Rewrite处理时，也就是对这四个字段进行处理，一般地说，也就处理第一个字段——$url。
 《squid中文权威指南》中提供了标准的perl脚本，演示了处理办法。我们测试脚本时，只需要创建一个文本文件写出url，对文件执行脚本即可。某客户测试过程如下示，为说明方便，也使用了其他shell命令做比较：
-{% highlight bash %}
+```bash
 [root@tinysquid1 etc]# cat testurl.lst
 http://www.test.com/zhlc/
 http://www.test.com/zhlc/images/1.jpg
@@ -75,7 +75,7 @@ http://search.test.com/zhlc/images/1.jpg
 http://search.test.com/zhlc/index.html
 http://search.test.com/zhlc/index.aspx?oid=1
 http://search.test.com/zhlc/index.aspx?oid=1&pid=2
-{% endhighlight %}
+```
 
 不过虽然awk也是流处理，但作为squid的外挂program测试却没法真起作用。所以只能用perl（网上看到也有用php和python的）。
 
@@ -91,11 +91,11 @@ b) 第二种方法，不属于专门的跳转重定向，算是个妙用吧：
 
 Squid为了美观方便，提供了一些错误信息的定制功能。之前的源站错误跳转，就是修改了ERROR_DIRECTORY里html的meta标签做的。除此以外，针对error_diretory里的ACCESS_DENIED页面，还有专门的另一个configure参数进行定制——deny_info。其用法如下：
 
-{% highlight squid %}
+```squid
 acl test url_regex -i ^http://www.test.com/zhlc/.*
 http_access deny test
 deny_info http://search.test.com/zhlc/ test
-{% endhighlight %}
+```
 如果需要显示的信息已经编辑在error_diretory里了，那就可以直接写文件名而不用写url。Squid.conf.default中举例是 `deny_info ERR_CUSTOM_ACCESS_DENIED bad_guys`。
 
 这个deny_info，常用的地方是防盗链。在deny盗链的同时，加上一个源站的logo图片url，正好让盗链网站替自己做宣传~~
@@ -118,13 +118,13 @@ c) 两个方法比较
 ## 五、客户页面分析
 
 在日志分析过程中，还发现一个问题，当squid首先从search.test.com源站取回html代码后，为什么调用的相关页面资源url请求也都是www.test.com的呢？看http://www.test.com/zhlc/页面代码，发现如下：
-{% highlight html %}
+```html
 <link href="/zhlc/style/reset.css" rel="stylesheet" type="text/css"/>
 <link href="/zhlc/style/main.css" rel="stylesheet" type="text/css"/>
 <script src="/zhlc/Scripts/AC_RunActiveContent.js" type="text/javascript">
 <a href="#"><img src="/zhlc/images/logo.jpg" width="154" height="80" border="0"/></a>
 ……
-{% endhighlight %}
+```
 其页面代码都使用了相对路径，所以才导致了从search端取回的代码依然调用www的url的现象。
 
 ## 六、总结

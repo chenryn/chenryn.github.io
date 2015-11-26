@@ -11,8 +11,8 @@ tags:
 probind最近一次更新也是2003/05/24的事情了。所以也没期待它能多么适应现在的bind体系，不过作为代码看看还是可以的。
 创建mysql用户和库，然后把程序解压到webroot目录，然后执行mysql -u named -p named < etc/mktables.sql，这就是install的步骤。但是这个时候访问首页是有一堆报错的，提示你dns服务器的默认配置（外部检测用dns，管理员邮箱等等）没配置。这个需要通过./tools/settings.php去添加——但是首页上没有链接点击，得自己手敲url，汗……
 然后，probind更新的时候，估计php还是以version4为主，所以里头用的还是$HTTP_GET_VARS和$HTTP_POST_VARS等全局变量。奇怪的是我把php.ini里的register_global改成On后重启httpd了，页面依然没变，不得已在./inc/lib.inc文件的开头加上了两句
-{% highlight php %}$HTTP_GET_VARS = &$_GET;
-$HTTP_POST_VARS = &$_POST;{% endhighlight %}才好。
+```php$HTTP_GET_VARS = &$_GET;
+$HTTP_POST_VARS = &$_POST;```才好。
 OK，现在正式看到probind的页面了。demo地址：<a href="http://chenlinux.com/probind/">点这里</a>
 主要就是一个zone的管理，有add、delete、browse三个页面，前两个就是标准的表单，倒是browse里有个test，蛮好玩的，调用bin/testns脚本，使用perl的Net::DNS模块测试zone内的正/反向解析是否正常。
 然后就是record的管理，在browse zones里点进zone就可以编辑record了，主要就是主机名、解析ip。

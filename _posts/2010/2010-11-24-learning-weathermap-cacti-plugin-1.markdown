@@ -15,7 +15,7 @@ weathermap是一个利用php的gd库画图的程序，它可以自主运行，�
 当然，这么可怕的事情，肯定会有多种手段来完成报警，不至于靠人眼盯着weathermap来汇报。但毕竟算是个功能上的缺失。
 
 很巧，在zenoss（和cacti类似的另一款监控软件）的wiki上，看到有网友修改的perl版的weathermap，网址如右：<a href="http://community.zenoss.org/docs/DOC-2543">http://community.zenoss.org/docs/DOC-2543</a>。其配置文件中的WIDTH标签，比php的多出了<%status-width(device name,component name)%>配置，其解释说“draw link with width 0 if it is down otherwise draw it with width_ok width”。相关代码如下：
-{% highlight perl %}
+```perl
 while($line=~m/<%status-width([^%]+)%>/)
 {
 my $tmp;
@@ -44,11 +44,11 @@ if ($line!~s/<%status-width([^%]+)%>/$res/)
 die ("Error 1");
 }
 }
-{% endhighlight %}
+```
 思路是通过wget数据获取状态，一旦错误就至width为0，否则读取正常设定值绘图。
 
 在原版的php中相关部分如下：
-{% highlight php %}
+```php
 if (preg_match("/^\s*WIDTH\s+(\d+)\s*$/i", $buffer, $matches))
 {
 if ($last_seen == 'LINK')
@@ -62,7 +62,7 @@ $this->width=$matches[1];
 $linematched++;
 }
 }
-{% endhighlight %}
+```
 显然只要在这里加上一个else{}就可以了。
 
 至于如何判定链路中断，有待继续学习~是外挂一个ping？或者读取rra中的数值？下一步先看懂Weathermap.class.php是怎么读取rra数值的吧~

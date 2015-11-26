@@ -12,13 +12,13 @@ Dancer 是 Perl 的 web 开发框架，在 metacpan 上有 100 多个 like。其
 
 Dancer 作为微框架，可以直接单文件快速运行简单的 web 功能。示例如下：
 
-{% highlight perl %}
+```perl
     use Dancer;
     get '/' => sub {
         return "hello world";
     };
     dance;
-{% endhighlight %}
+```
 
 然后直接通过 `perl test.pl` 命令既可以在 localhost:3000 运行起来一个 hello world 页面了。
 
@@ -93,21 +93,21 @@ Dancer 作为微框架，可以直接单文件快速运行简单的 web 功能�
 
 上面两个作为给 public/ 下文件加缓存和压缩的优化。在 config.yml 里添加如下配置即可使用：
 
-{% highlight yaml %}
+```yaml
 plack_middlewares:
   -
     - Plack::Middleware::Deflater
     - Plack::Middleware::ETag
-{% endhighlight %}
+```
 
 * Dancer::Plugin::Auth::Extensible
 
 给 route 加认证功能，有 require_role 和 require_user 两种形式，示例如下：
 
-{% highlight perl %}
+```perl
     get '/admin' => require_user 'admin' => sub {};
     post '/purge' => require_role qr/^purge_\w+/ => sub {};
-{% endhighlight %}
+```
 
 * Dancer::Plugin::Email
 
@@ -121,17 +121,17 @@ plack_middlewares:
 
 数据库插件，可以直接按照 DBI 操作，也提供了简单的 quick_select/insert 等指令。示例如下：
 
-{% highlight perl %}
+```perl
     get '/users/:id' => sub {
         template 'display_user', {
             person => database->quick_select('users', { id => params->{id} }),
         };
     };
-{% endhighlight %}
+```
 
 如果在 config.yml 定义了多个库，则通过 `database('name')` 的方式来调用。
 
-{% highlight yaml %}
+```yaml
   Database:
     connections:
       puppet:
@@ -146,11 +146,11 @@ plack_middlewares:
         password: "pass"
         connection_check_threshold: 10
         on_connect_do: ["SET NAMES 'utf8'", "SET CHARACTER SET 'utf8'" ]
-{% endhighlight %}
+```
 
 更完善的 ORM 使用，见 Dancer::Plugin::DBIC 插件，他使用的是 DBIx::Class 框架做 ORM，示例如下：
 
-{% highlight perl %}
+```perl
     get '/users/:user_id' => sub {
         my $user = schema('default')->resultset('User')->find(param 'user_id');
         # 如果只有一个默认的schema在config.yml里那么上面这行可以简写成下行
@@ -159,7 +159,7 @@ plack_middlewares:
             user => $user
         };
     };
-{% endhighlight %}
+```
 
 * Dancer::Plugin::ElasticSearch
 
@@ -169,7 +169,7 @@ elasticsearch 插件，类似 Dancer::Plugin::Database；所以同理，也有�
 
 页面消息提示插件。使用示例：
 
-{% highlight perl %}
+```perl
     hook before => sub {
         if (    request->uri =~ m#^/puppetdb/#
             and request->uri !~ m#^/puppetdb/api/#
@@ -179,7 +179,7 @@ elasticsearch 插件，类似 Dancer::Plugin::Database；所以同理，也有�
             redirect '/';
         }
     };
-{% endhighlight %}
+```
 
 然后在底层模板layouts/main.tt 中：
 
@@ -195,7 +195,7 @@ elasticsearch 插件，类似 Dancer::Plugin::Database；所以同理，也有�
 
 提供简便的数据库 CRUD 操作表单。目前 Puppet 的 SQLite 操作实例如下：
 
-{% highlight perl %}
+```perl
   simple_crud(
     db_connection_name => 'puppet',
     db_table           => 'node_info',
@@ -230,5 +230,5 @@ elasticsearch 插件，类似 Dancer::Plugin::Database；所以同理，也有�
         },
     },
   );
-{% endhighlight %}
+```
 

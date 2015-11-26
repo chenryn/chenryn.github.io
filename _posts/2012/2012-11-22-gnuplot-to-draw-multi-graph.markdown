@@ -9,7 +9,7 @@ tags:
 
 上文件：
 
-{% highlight bash %}
+```bash
     result=$1
     begin=`head -n 1 $result.txt | awk '{print $1}'`
     end=`tail -n 1 $result.txt | awk '{print $1}'`
@@ -42,7 +42,7 @@ tags:
     EOF
     
     cat conf/$result.conf | gnuplot
-{% endhighlight %}
+```
 
 注意：新增了一行xrange配置，如果不指定这个几张小图的xtics会不统一，而上面两张图的xtics又已经被unset了，结果看起来就跟不同步似的。
 

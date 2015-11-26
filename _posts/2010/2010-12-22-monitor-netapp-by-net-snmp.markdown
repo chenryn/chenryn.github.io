@@ -44,7 +44,7 @@ miscHighNfsOps：The total number of Server side NFS calls since the last boot. 
 最后在zenoss的maillist上看到了相同的问题，其中网友的回答是：NetApp使用的snmp协议是v1版本，无法直接提供64bits的计数，只能变通一下，改用这种拆分方式了。
 
 最后，举例一个监控ops的perl脚本。原脚本是centreon项目提供的，删除了一些和ops无关的语句。从中也可以学到Net::SNMP模块的使用，hash的解引用等~
-{% highlight perl %}#!/usr/bin/perl -w
+```perl#!/usr/bin/perl -w
 use strict;
 use Net::SNMP;
 use Getopt::Long;
@@ -163,4 +163,4 @@ $time_diff=$update_time if ($time_diff &lt; 0);
 my $nfs_ops = $nfs_diff / ( $time_diff );
 printf("Nfs ops : %.2f ops/sec ", $nfs_ops);
 printf("|nfsOps=".$nfs_ops."\n");
-exit($ERRORS{"OK"});{% endhighlight %}
+exit($ERRORS{"OK"});```

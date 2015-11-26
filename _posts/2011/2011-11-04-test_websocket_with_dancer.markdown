@@ -14,15 +14,15 @@ Plugin里硬编码很多。比较重要的地方就是"set plack_middlewares_map
 最后有三个register到Dancer的方法，'ws_on_message'、'ws_on_new_listener'和'ws_send'，前两个用来覆盖上面提到的get的两个route的具体信息，一般不用前面两个，因为这样就意味着页面的js里无法控制websocket了（个人理解，不知道对否？）后面那个类似把websocket改成普通的params方式请求响应（用curl/wget可以请求的那种）。
 <hr>
 好了，大概的机理就是这样，现在做个小东西试试看。cpanm和dancer的运用之前写过，就略过了。lib/WS_test.pm如下：
-{% highlight perl %}package WS_test;
+```perlpackage WS_test;
 use Dancer ':syntax';
 use Dancer::Plugin::WebSocket;
 get '/ws' => sub {
     template 'websocket';
 };
-true;{% endhighlight %}
+true;```
 views/websocket.tt如下：
-{% highlight perl %}
+```perl
 <html>
 <head>
 <script>
@@ -51,9 +51,9 @@ messages: <textarea id="ownmsg"></textarea><br />
 <input value="send" type=button onclick="send_msg()" />
 </body>
 </html>
-{% endhighlight %}
+```
 ok，然后启动server就行了：
-{% highlight bash %}sudo twiggy --listen :8080 bin/app.pl{% endhighlight %}
+```bashsudo twiggy --listen :8080 bin/app.pl```
 然后访问http://chenlinux.com:8080/ws/看看效果吧~一个小聊天室就出来了。
 不过还有点问题，就是根据加入聊天室的时间先后，信息看不全……估计应该是AnyMQ的问题，个人对MQ了解不多，还需要继续看代码……
 

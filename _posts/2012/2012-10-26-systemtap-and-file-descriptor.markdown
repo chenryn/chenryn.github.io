@@ -18,7 +18,7 @@ tags:
 
 大体来说，就是socket本身是不触及这个限制的，但是创建出来的socket必须和文件描述符关联起来(`sock_map_fd()` -- `sock_alloc_file()` -- `get_unused_fd_flags()` -- `alloc_fd()`)，这就相关了。在`alloc_fd()`中会读取当前进程(current)的fdtable，fdtable的结构由"linux/fdtable.h"定义如下：
 
-{% highlight c %}
+```c
     struct fdtable {
         unsigned int max_fds;
         struct file ** fd;      /* current fd array */
@@ -38,7 +38,7 @@ tags:
         struct file * fd_array[NR_OPEN_DEFAULT];
     };
     #define files_fdtable(files) (rcu_dereference((files)->fdt))
-{% endhighlight %}
+```
 
 打开fd的过程如下：
 
@@ -56,7 +56,7 @@ tags:
 
 都逃过之后才进入`expand_fdtable()`真正扩展。很好，现在我们看到之前就知道的ulimit/sysctl神马的是怎么限定的了。那么这第二个呢？我们可以找到files这个结构的init，如下：
 
-{% highlight c %}
+```c
     struct files_struct init_files = {
         .count          = ATOMIC_INIT(1),
         .fdt            = &init_files.fdtab,
@@ -69,15 +69,15 @@ tags:
         },
         .file_lock      = __SPIN_LOCK_UNLOCKED(init_task.file_lock),
     };
-{% endhighlight %}
+```
 
 这个`NR_OPEN_DEFAULT`可以在fdtable.h里看到就是`BITS_PER_LONG`。`BITS_PER_LONG`应该是32或者64，取决于CPU是32还是64位的了。
 
 其实这里还可以继续看`alloc_fdtable()`中怎么确定新扩展的`fdt->max_fds`的，如果nr大于sysctl的设定，那么nr会计算成
 
-{% highlight c %}
+```c
     ((sysctl_nr_open - 1) | (BITS_PER_LONG - 1)) + 1
-{% endhighlight %}
+```
 
 然后`copy_fdtable()`转移数据，奇怪的是看到转移完后，还判断了原有`fdt->max_fds > NR_OPEN_DEFAULT`才释放，我不清楚什么情况下会有`fdt->max_fds`小于init值了...
 
@@ -85,7 +85,7 @@ tags:
 
 修改工具我用到了systemtap大神器，不过我是菜鸟啦～脚本如下：
 
-{% highlight c %}
+```c
     #!/usr/bin/stap
     %{
     #include <linux/sched.h>
@@ -127,7 +127,7 @@ tags:
         kwrite(&(ss->rlim[RLIMIT_NOFILE].rlim_cur), THIS->val);
         CATCH_DEREF_FAULT();
     %}
-{% endhighlight %}
+```
 
 systemtap自己提供了一系列tapset函数，比如这里的execname(),task\_\*都是。注意systemtap是脚本语言的，所以这些函数直接在/usr/share/systemtap/下面可以看怎么写的。比如我上面定义的两个function就是仿照里面`task_max_file_handles()`写的。
 
@@ -137,10 +137,10 @@ kread/kwrite是systemtap-runtime提供的函数，封装的是put\_user/get\_use
 
 现在我们启动squid进程和stap脚本：
 
-{% highlight bash %}
+```bash
     ulimit -HSn 256;squid -D
     stap -g max_fds.stp 1024
-{% endhighlight %}
+```
 
 注意要加-g，否则不会加载内嵌C的。
 另开窗口发起一次请求，然后看到stap输出：
@@ -182,30 +182,30 @@ kread/kwrite是systemtap-runtime提供的函数，封装的是put\_user/get\_use
 
 在上面的缩小测试里不会触发问题，不过在增大的测试中，问题来了——`setrlimit()`函数会很诧异为毛自己参数里那个`&rl`的`rlim_cur`比`rlim_max`还大？然后悲剧的报出"etrlimit(RLIMIT\_NOFILE) failed: Invalid argument (22)"的错误……
 
-{% highlight c %}
+```c
     kwrite(&(ss->rlim[RLIMIT_NOFILE].rlim_max), THIS->val);
-{% endhighlight %}
+```
 
 * 对于squid还需要修改`Squid_MaxFD`全局变量
 
 上面都是对kernel里的socket和file的修改，在实际运用中，用户程序本身也会有各种判断。squid维护了一堆全局变量，比如`Squid_MaxFD`，`Biggest_FD`和`Number_FD`，这就是squidclient mgr:info里看到的关于文件描述符的那几个值。其中`Squid_MaxFD`是在init的时候根据主进程启动时的ulimit情况一次性设定的，即便child进程重启也不会变。而`Biggest_FD`则是由`fdUpdateBiggest()`函数每次更新。不巧的是，里面有这么一句判断：
 
-{% highlight c %}
+```c
     assert(fd < Squid_MaxFD);
-{% endhighlight %}
+```
 
 所以，光修改kernel里的限制，socket返回后在更新`Biggest_FD`时squid会直接挂掉……
 
 下面是修改squid进程里全局变量的办法，和修改kernel其实很类似：
 
-{% highlight c %}
+```c
 probe process("/usr/sbin/squid").function("fdUpdateBiggest@src/fd.c")        
 {                                                                            
     if ( $Squid_MaxFD < 65535 ) {                                            
         $Squid_MaxFD = 65535;                                                
     }                                                                        
 } 
-{% endhighlight %}
+```
 
 把上面两个修改加入到之前的文件，然后测试增大ulimit限制(记住ulimit要大于64，否则不起作用哟)，就没问题了。
 

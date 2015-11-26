@@ -11,11 +11,11 @@ tags:
 首先简单的通过编译--with-debug的nginx然后配置error_log debug;可以看到，nginx是在处理完Expires头后失败的。但是无法具体显示下一个头是在哪个地方。
 
 所以进nginx/src/http/modules/ngx_http_proxy_module.c里，找到ngx_http_proxy_process_header函数，其中是根据ngx_http_parse_header_line函数的结果做判断的。所以出去看nginx/src/http/ngx_http_parse.c里ngx_http_parse_header_line函数，结果发现，从nginx1.0.14开始，新增加了关于空的判断：
-{% highlight c %}
+```c
 if (ch == '\0') {
                     return NGX_HTTP_PARSE_INVALID_HEADER;
                 }
-{% endhighlight %}
+```
 变更记录：<http://trac.nginx.org/nginx/browser/nginx/tags/release-1.0.14/src/http>
 
 说明如下：
@@ -37,9 +37,9 @@ if (ch == '\0') {
 首先要自己启动/usr/local/nginx/sbin/nginx程序；
 
 然后运行systemtap命令：
-{% highlight bash %}
+```bash
 stap -e 'probe process("/usr/local/nginx/sbin/nginx").statement("ngx_http_parse_header_line@src/http/ngx_http_parse.c:855"){printf("%s\n",$$locals$$);}'
-{% endhighlight %}
+```
 
 最后发起出错的请求。查看stap的输出。类似下面这样：
 

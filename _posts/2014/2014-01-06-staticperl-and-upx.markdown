@@ -18,13 +18,13 @@ staticperl 官网上有一句很霸气的描述：“perl, libc, 100 modules, al
 
 测试过程如下：
 
-{% highlight bash %}
+```bash
 # cpanm App::Staticperl
 # staticperl install
 # staticperl instcpan AnyEvent AnyEvent::HTTP
 # staticperl mkperl -MAnyEvent -MAnyEvent::HTTP
 # staticperl mkapp myapp --boot myapp.pl -MAnyEvent -MAnyEvent::HTTP
-{% endhighlight %}
+```
 
 而如果是官网说的 [smallperl](http://staticperl.schmorp.de/smallperl.html)，则是采用 `mkbundle` 的方法。
 
@@ -34,10 +34,10 @@ staticperl 官网上有一句很霸气的描述：“perl, libc, 100 modules, al
 
 然后使用 upx：
 
-{% highlight bash %}
+```bash
 # apt-get install upx
 # upx --best smallperl.bin
-{% endhighlight %}
+```
 
 就得到压缩后的超小型perl了。这个perl内含了AE、Socket、common::sense、List::Util 等一系列常用模块可以直接使用。不过大小依然有 1.7MB 。看来是 Perl5.14 本身大小也变大了。
 
@@ -45,9 +45,9 @@ __补充__
 
 按照评论里的建议，改用 `--lzma` 选项再压缩一次：
 
-{% highlight bash %}
+```bash
 # upx -d smallperl.bin
 # upx --lzma smallperl.bin
-{% endhighlight %}
+```
 
 结果到 1.4MB 大小。

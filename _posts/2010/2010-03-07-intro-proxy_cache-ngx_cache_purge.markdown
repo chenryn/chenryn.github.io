@@ -26,7 +26,7 @@ nginx的类squid哈希式cache功能，据张宴说是基本稳定可用了，�
 sina的ncache模块，在我下载的最新的nginx0.8.34src上无法使用，而且ncache作者介绍说ncache的缓存不用内存，且其purge方式为标记为过期但并不更改文件内容直到下次访问请求以节省磁盘IO的负担；但根据我的试验，nginx的cache_purge模块则是采用了删除过期文件的方式进行（当然，proxy_cache的过期还是标记而不删除的，不然太耗IO了……）。
 
 然后贴一下，实验完成后的配置文件：
-{% highlight nginx %}
+```nginx
 user nobody nobody;
 worker_processes 1;
 google_perftools_profiles /tmp/tcmalloc;
@@ -136,7 +136,7 @@ http
         }
     }
 }
-{% endhighlight %}
+```
 配置完成。测试如下：
 wget http://www.test.com/List/j.Html -S -O /dev/null -e http_proxy=127.0.0.1
     --13:17:48--  http://www.test.com/List/j.Html
@@ -187,7 +187,7 @@ wget -S -O /dev/null -e http_proxy=127.0.0.1 "http://www.test.com/Search.ASP?Key
 完成。
 至于？的问题，目前针对需要，倒有另一个办法：
 在location / {}中，根据请求参数判断进行传递。即写成如下：
-{% highlight nginx %}
+```nginx
 location / {
     ……
     if ($is_args){
@@ -202,12 +202,12 @@ location ~* .*\.asp{
     add_header X-Cache "MISS from cache_test";
     proxy_pass http://backend;
 }
-{% endhighlight %}
+```
 不过依然有问题：
 
 1. nginx的if不支持&amp;&amp;或者||，万一有些类型（比如htm和jpg）又要求带？的也缓存，显然又和这个$is_args冲突；
 或许采用下面的办法能继续区分？（未试验）
-{% highlight nginx %}
+```nginx
 set $yn $is_args;
 if ($uri ~* .(htm|jpg)){
     set $yn "";
@@ -215,7 +215,7 @@ if ($uri ~* .(htm|jpg)){
 if ($yn){
     proxy_pass http://backend;
 }
-{% endhighlight %}
+```
 ；
 2. nginx的if中不单不支持proxy_cache，居然也不支持proxy_set_header等定义，只能单纯的proxy_pass。
 

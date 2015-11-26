@@ -10,7 +10,7 @@ category: perl
 然后是主要部分，通过Plack::Builder建立$app：
 1、初始化:"my $app = $self->psgi;"，这里是调用父层"use Shirahata -base;"的psgi()函数完成的。稍后再看这个。
 2、包装:取出前面说的allowfrom和front_proxy部分后，代码如下：
-{% highlight perl %}
+```perl
     $app = builder {
         enable 'Plack::Middleware::Lint';
         enable 'Plack::Middleware::StackTrace';
@@ -18,17 +18,17 @@ category: perl
             path => qr{^/(favicon\.ico$|static/)},
             root =>Path::Class::dir($self->root_dir, 'htdocs')->stringify;
         $app;
-    };{% endhighlight %}
+    };```
 真实加载顺序是倒序的，先加载Static.pm，用来服务静态文件，意即url路径为^/static/.*的，实际documentroot为./htdocs/；然后加载StackTrace.pm，用于开发调试的时候，向标准输出输出错误跟踪信息；最后是Lint.pm，用于检查请求/响应的格式是否正确。
 然后是加载运行，使用Plack::Loader运行上面build出来的$app。方法如下：
-{% highlight perl %}
+```perl
     my $loader = Plack::Loader->load(
         'Starlet',
         port => $self->port || 5000,
         host => $self->host || 0,
         max_workers => 2,
     );
-    $loader->run($app);{% endhighlight %}
+    $loader->run($app);```
 主要是两个参数，第一个是用来运行plack的服务器模块名称，常见的有starman/twiggy/corona/perlbal等等，这里写的这个Starlet，是基于HTTP::Server::PSGI模块添加预派生(prefork)/热部署(Server::Starter)/优雅重启等功能的一个服务器模块，原来叫的名字是"Plack::Server::Standalone::Prefork::Server::Starter"(简称PSSPSS)……
 
 然后去看前面说到的Shirahata.pm里的psgi()函数。

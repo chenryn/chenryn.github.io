@@ -11,7 +11,7 @@ category: perl
 其实用法上没什么特殊，无非是省略一点点xml代码，通过OO的方式自动生成而已。让我觉得蛮好玩的是官网上作者的声明。因为他曾经在维护公司一个付费的flash chart项目时，给甲方发信要求修改bug，等了一个月没反应。于是自己现学as语言开始自己搞= =！然后念念不忘的提示说：要重视客户的反馈。。。。。。哈哈
 这个项目目前用as3改写，所以新版本叫OFC2了，不过作者自己也说不太稳定，建议继续用OFC1.9.7，所以先不说Chart::OFC2，继续用Chart::OFC好了：
 
-{% highlight perl %}
+```perl
 
 get '/ofc_data' => sub {
     use Chart::OFC;
@@ -36,11 +36,11 @@ get '/ofc_test' => sub {
     template 'ofc';
 };
 
-{% endhighlight %}
+```
 
 然后ofc.tt是这样：
 
-{% highlight html %}
+```html
 
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -58,7 +58,7 @@ so.write("my_chart");
 </body>
 </html>
 
-{% endhighlight %}
+```
 
 运行即可。
 这里chart主要分两种，pie和grid。

@@ -14,7 +14,7 @@ MooseFS 是运用很广泛的一个分布式文件系统，其自带有一个 py
 
 笔者熟悉 Perl，所以就准备将这个处理流程改用 Perl 完成。结果发现原来 pack/unpack 在 Perl 和 Python 中，写法是不一样的。以 MooseFS 的 info 信息读取代码为例，Python 版如下：
 
-{% highlight python %}
+```python
 s = socket.socket()
 s.connect((masterhost, masterport))
 mysend(s, struct.pack(">LL", 510, 0))
@@ -24,11 +24,11 @@ if cmd == 511 and length == 76:
     data = myrecv(s, length)
     v1, v2, v3, memusage, total, avail, trspace, trfiles, respace, refiles, nodes, dirs, files, chunks, allcopies, tdcopies = struct.unpack(">HBBQQQQLQLLLLLLL", data)
     ver = '.'.join([str(v1), str(v2), str(v3)])
-{% endhighlight %}
+```
 
 而 Perl 版最终写完是这样的：
 
-{% highlight perl %}
+```perl
 my $s = IO::Socket::INET->new(
     PeerAddr => $host,
     PeerPort => $port,
@@ -43,7 +43,7 @@ if ( $cmd == 511 and $length == 76 ) {
     my ($v1, $v2, $v3, $memusage, $total, $avail, $trspace, $trfiles, $respace, $refiles, $nodes, $dirs, $files, $chunks, $allcopies, $tdcopies) = unpack('(SCCQQQQLQLLLLLLL)>', $data);
     my $ver = "$v1.$v2.$v3";
 };
-{% endhighlight %}
+```
 
 不同处主要有两点：
 

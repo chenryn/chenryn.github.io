@@ -22,7 +22,7 @@ tags:
 
 我们可以点开面板右上角的 inspect 按钮看生成的 curl 命令。其中 filtering 部分如下：
 
-{% highlight json %}
+```json
     "filter": {
       "bool": {
         "must": [
@@ -64,7 +64,7 @@ tags:
         ]
       }
     }
-{% endhighlight %}
+```
 
 前面两个不出意外，都是很标准的 api 示例的样子。比较特殊的是后面两个：
 

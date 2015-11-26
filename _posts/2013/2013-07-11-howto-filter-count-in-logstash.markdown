@@ -14,7 +14,7 @@ tags:
 
 **2014 年 08 月 20 日注：上面说法有误，`rate_1m` 的含义是：最近 1 分钟内的每秒速率！**
 
-{% highlight ruby %}
+```ruby
     input {
         stdin {
             type => "apache"
@@ -44,7 +44,7 @@ tags:
             command => "sendsms.pl -m '%{error\.504\.rate_1m}'"
         }
     }
-{% endhighlight %}
+```
 
 其中关键在两个 filter。 metrics 插件可以每5秒(前天刚更新了源码，这个值可以自己指定了)更新一次统计值，支持 `meter` 和 `timer` 两种，`timer` 除了 `count` 和 `rate_1|5|15m` 外，还可以统计 `min|max|stddev|mean` 和 `p1|5|10|90|95|99` 等详细数据。
 

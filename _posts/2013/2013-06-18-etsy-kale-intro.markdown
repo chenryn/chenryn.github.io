@@ -17,7 +17,7 @@ tags:
 
 安装步骤：
 
-{% highlight bash %}
+```bash
     pip install -r requirements.txt
     apt-get install -y numpy scipy
     pip install pandas patsy statsmodels msgpack_python
@@ -40,7 +40,7 @@ tags:
     # 测试是否正常
     cd ../utils
     ./seed_data.py
-{% endhighlight %}
+```
 
 `oculus` 是一个 rack 应用，需要定时从 `skyline` 中导入数据到 `ElasticSearch` 中。同时，`oculus` 还提供了一个 `ElasticSearch` 分析器插件，可以在 ES 中完成 `FastDTW` 和 `Euclidian` 两种位移算法（用来给不同时间序列的近似度打分）。在rack 页面上，提供搜索框，你可以提交一个 metric 名称——经过测试，目前应该是采用完全匹配的方式搜索——然后展示这个 metric 的图形，以及按照 score 打分排序的近似时间序列。
 
@@ -50,7 +50,7 @@ tags:
 
 安装步骤：
 
-{% highlight bash %}
+```bash
     # 只能用 0.20.5 版，0.90 版目前不支持
     wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.20.5.tar.gz
     tar zxvf elasticsearch-0.20.5.tar.gz
@@ -85,7 +85,7 @@ tags:
     thin start
     # 默认用户密码都是admin，需要先点击初始化
     gnome-open localhost:3000/admin
-{% endhighlight %}
+```
 
 `oculus` 的测试我是做出来了。如图：
 
@@ -93,7 +93,7 @@ tags:
 
 这个数据我是通过 perl 生成的随机数，所以也没什么近似队列了。展示一下脚本，这样说明我们可以通过其他脚本扩展 Kale 系统的用途。
 
-{% highlight perl %}
+```perl
     #!/usr/bin/env perl
     use strict;
     use warnings;
@@ -121,6 +121,6 @@ tags:
     );
     
     $cv->recv;
-{% endhighlight %}
+```
 
 从源码中，看到还有 `ganglia_to_skyline.rb` 脚本。目前看，`Kale` 应该是想着用 `skyline` 代替 `graphite-web`，得用 `redis` 来代替 `graphite-whisper`，不过我觉得似乎意义不是很大，还不如直接把数据存入 `ElasticSearch`，形成一套类似 `openTSDB` 的，但是完全基于 ES 的高扩展分布式方案。

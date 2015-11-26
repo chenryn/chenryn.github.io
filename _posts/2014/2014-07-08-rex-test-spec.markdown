@@ -13,7 +13,7 @@ tags:
 
 语法大概是这样的：
 
-{% highlight perl %}
+```perl
     use Rex::Test::Spec;
     describe "Nginx Test", sub {
         context run("nginx -t"), "nginx.conf testing", sub {
@@ -77,7 +77,7 @@ tags:
         };
     };
     done_testing;
-{% endhighlight %}
+```
 
 从 Rspec 学来的 context/describe/it/its 语法，保留了 Test::More 的 is/like/is_deeply/done_testing 语法。
 

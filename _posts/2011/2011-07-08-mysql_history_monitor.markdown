@@ -8,7 +8,7 @@ tags:
 ---
 
 上篇加了bash_history的监控，这篇说mysql_history的监控。不像bash4，mysql自始至终没有提供过syslog的代码，只能自己通过守护进程去实时获取~/.mysql_history的记录了。一个小脚本如下：
-{% highlight perl %}#!/usr/bin/perl -w
+```perl#!/usr/bin/perl -w
 use POE qw(Wheel::FollowTail);
 use Log::Syslog::Fast qw(:all);
 
@@ -45,6 +45,6 @@ sub to_rsyslog {
 #rsyslog开的是UDP的514端口；而LOG_LOCAL0和LOG_INFO都是syslog定义的，乱写的话会自动归入kernel | alert
   my $logger = Log::Syslog::Fast->new(LOG_UDP, "10.0.0.123", 514, LOG_LOCAL0, LOG_INFO, "mysql_231", "mysql_monitor");
   $logger->send($message ,time);
-};{% endhighlight %}
+};```
 
 当然，mysql的history其实不止一个位置，需要判断~

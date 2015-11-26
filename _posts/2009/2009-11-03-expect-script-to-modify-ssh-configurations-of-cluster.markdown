@@ -15,7 +15,7 @@ tags:
 目前的办法是这样的：
 
 cat ssh.exp
-{% highlight bash %}
+```bash
 #!/usr/bin/expect -f
 log_file exp.log
 set timeout -1
@@ -37,9 +37,9 @@ send "echo ListenAddress `/sbin/ifconfig eth0|awk '/inet /{print $2}'|awk -F: '{
 send "service sshd restartr"
 send "exitr"
 interact
-{% endhighlight %}
+```
 cat do.sh
-{% highlight bash %}
+```bash
 #!/bin/sh
 for ip in `cat ip.lst`
 do
@@ -47,4 +47,4 @@ do
 done
 cat exp.log | grep host | awk '{print $5}'|sort|uniq >> errorip
 echo "以下IP无法修改";cat errorip
-{% endhighlight %}
+```

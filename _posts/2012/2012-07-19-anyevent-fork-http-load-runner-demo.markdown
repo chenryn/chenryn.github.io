@@ -6,7 +6,7 @@ tags:
   - perl
 ---
 话不多说，先上第一版的代码：
-{% highlight perl %}
+```perl
 use Time::HiRes qw/time/;
 use AnyEvent::HTTP;
 use AnyEvent;
@@ -33,7 +33,7 @@ my @coro = map {
 } (1 .. $count);
 $_->join for @coro;
 print $cpus*$ARGV[0]/(time-$begin);
-{% endhighlight %}
+```
 
 上面这段脚本，作用是在每个进程中运行事件驱动的协程，以达到尽可能大的并发请求。
 
@@ -44,7 +44,7 @@ print $cpus*$ARGV[0]/(time-$begin);
 注意：本例测试的是HTTPS，AnyEvent::HTTP在TLS模式(即https请求)下，无法开启persistent连接。如果是普通http请求，开启persistent参数的qps应该会更高！
 
 然后上第二版的代码，改用了EV循环，性能比Coro协程提高了大概5%的样子。使用了fork多进程，并且绑定到不同的CPU核上。
-{% highlight perl %}
+```perl
 #!/usr/bin/perl
 use strict;
 use warnings;
@@ -109,7 +109,7 @@ sub ae_get {
     $cv->recv;
     return $data;
 }
-{% endhighlight %}
+```
 
 增加了简单的统计功能，包括每秒请求数、平均下载速度，状态码汇总等。因为不好计算header的长度，所以只计算body部分的下载速度。
 增加了url列表功能，每次请求会随机的抽取其中的一个url。

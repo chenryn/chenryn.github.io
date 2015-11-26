@@ -11,7 +11,7 @@ tags:
 
 通过 `transform` 方法，可以做到 SQL 请求的结果依然是 DStream 数据，这样就可以使用 `updateStateByKey` 方法了。下面是示例：
 
-{% highlight java %}
+```java
 import org.apache.spark.SparkConf
 import org.apache.spark.sql._
 import org.apache.spark.sql.SQLContext
@@ -72,7 +72,7 @@ object LogStash {
     ssc.awaitTermination()
   }
 }
-{% endhighlight %}
+```
 
 这里有一点需要注意，也是耽误我时间最多的地方：`transform` 方法的参数和返回，代码里的定义是 `RDD[T]` 和 `RDD[U]`。我不懂 Java/Scala，以为是只要是 RDD 对象即可。实践证明，其实要任意场合下返回的 RDD 里的数据类型也保持一致。
 

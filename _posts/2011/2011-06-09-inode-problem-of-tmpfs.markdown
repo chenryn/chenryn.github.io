@@ -26,12 +26,12 @@ df看，不管是tmpfs，还是logs所在的目录，都才用了不到30%。最
     use up all the memory on the machine; but enhances the scalability of
     that instance in a system with many cpus making intensive use of it.
 linux默认的RAM page大小是4k，好了来计算一下吧。
-{% highlight bash %}[root@bbs_squid4 ~]# df -i|awk '/tmpfs/{print $2}'
+```bash[root@bbs_squid4 ~]# df -i|awk '/tmpfs/{print $2}'
 504912
 [root@bbs_squid4 ~]# free -k|awk '/Mem/{print $2/4/2}'
-504912{% endhighlight %}
+504912```
 果然如此！
 那么真正的解决办法也就有了：
-{% highlight bash %}[root@localhost ~]# mount -t tmpfs -o size=2000M,mode=777,nr_inodes=0 tmpfs /tmpfs
+```bash[root@localhost ~]# mount -t tmpfs -o size=2000M,mode=777,nr_inodes=0 tmpfs /tmpfs
 [root@localhost ~]# df -i|grep tmpfs
-tmpfs                      0       0       0    -  /tmpfs{% endhighlight %}
+tmpfs                      0       0       0    -  /tmpfs```

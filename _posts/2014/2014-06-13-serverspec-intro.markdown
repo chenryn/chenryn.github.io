@@ -23,7 +23,7 @@ tags:
 
 下面是我写的这个 `puppet_spec.rb` 实例：
 
-{% highlight ruby %}
+```ruby
 require 'spec_helper'
 
 describe "system" do
@@ -83,7 +83,7 @@ describe process('rrdcached') do
   it { should be_running }
   its(:args) { should match /-j \/omd\/sites\/cdn\/var\/rrdcached/ }
 end
-{% endhighlight %}
+```
 
 基本上可以说跟 puppet 最常用的几个类型对应的测试就都在上面展示了。此外，Serverspec 与时俱进，还提供了 `cgroup` 和 `lxc` 的测试器。这里就没写了。
 

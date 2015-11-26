@@ -11,12 +11,12 @@ tags:
 
 首先还是先演示一下 spark 里传回调函数的用法，上一篇里用 DStream 处理模拟了 `SUM()`，这个纯加法是最简单的了，那么如果 `AVG()` 怎么做呢？
 
-{% highlight java %}
+```java
     val r = logs.filter(l => l.path.equals("/var/log/system.log")).filter(l => l.lineno > 70)
     r.map(l => l.message -> (l.lineno, 1)).reduceByKey((a, b) => {
       (a._1 + b._1, a._2 + b._2)
     }).map(t => AlertMsg(t._1, t._2._2, t._2._1/t._2._2)).print()
-{% endhighlight %}
+```
 
 这段跟之前做 SUM 的那段的区别：
 
@@ -27,7 +27,7 @@ tags:
 
 下面用 `updateStateByKey` ，演示一下如何计算每个窗口的平均值，跟上一个窗口的平均值的涨跌幅度，如果波动超过 10%，则输出：
 
-{% highlight java %}
+```java
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
@@ -84,7 +84,7 @@ object LogStash {
     ssc.awaitTermination()
   }
 }
-{% endhighlight %}
+```
 
 这里因为流数据只有 sum 和 count，但是又想留存两个 trend 数据，所以使用了一个新的 cast class，把 trend 数据作为 class 的 value member。对于 state 来说，看到的就是一整个 class 了。
 

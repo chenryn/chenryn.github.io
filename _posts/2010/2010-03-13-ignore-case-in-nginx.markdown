@@ -10,7 +10,7 @@ category: nginx
 首先找一个windows的origin，因为windows是不区分大小写，这样可以确保任意wget都能返回200的结果；
 
 然后按照上篇提到的方法配置nginx.conf（如下），stop&&start看看。
-{% highlight nginx %}
+```nginx
 upstream test{
     server 61.152.237.170:80;
 }
@@ -38,7 +38,7 @@ server {
         }
     }
 }
-{% endhighlight %}
+```
 这里没法直接把lc($uri)继续set成$uri，应该是内置变量的缘故……
 
 测试相关的access.log如下：
@@ -58,7 +58,7 @@ age.swf
 看起来缓存空间确实是节省下来了，不过真正的缓存目的还是没达到。
 
 再加上rewrite，变成下面这样：
-{% highlight nginx %}
+```nginx
 perl_set $url '
     sub {
         my $r = shift;
@@ -86,7 +86,7 @@ server {
         }
     }
 }
-{% endhighlight %}
+```
 测试变可以了：
 
     1268469316.852 -/200 416073 GET http://www.hapi.com.cn/flash/agE.swf PARENT/- "-" "Wget/1.10.2 (Red Hat modified)"

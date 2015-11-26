@@ -6,7 +6,7 @@ category: bash
 ---
 
 58同城：
-{% highlight bash %}
+```bash
 #!/bin/bash
 #该脚本仅用于58同城网站刷票
 #到达目的地
@@ -30,9 +30,9 @@ while true; do
         sleep 300
     fi
 done
-{% endhighlight %}
+```
 赶集网：
-{% highlight bash %}
+```bash
 #!/bin/bash
 #该脚本仅用于赶集网刷票
 #到达目的地
@@ -56,4 +56,4 @@ while true; do
         sleep 300
     fi
 done
-{% endhighlight %}
+```

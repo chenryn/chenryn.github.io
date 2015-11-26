@@ -11,11 +11,11 @@ SELinux 在国内是一个很少有人用的东西，一般来说，服务器上
 
 昨天在个人电脑的 Fedora 上搭建一个 webserver 发布几个文件，本来想着简单任务越快越好，几行命令完成：
 
-{% highlight bash %}
+```bash
 sudo yum install httpd
 sudo mv ~/src /var/www/html/
 sudo service httpd start
-{% endhighlight %}
+```
 
 结果居然一直返回 `403 Denied`！
 
@@ -27,7 +27,7 @@ sudo service httpd start
 
 最后还是在 apache 的 httpd 官方文档上找到了关于这个错误码的详细解释，原来还有一种可能性，就是 SELinux 的安全控制！这个可以通过下面这个命令看到：
 
-{% highlight bash %}
+```bash
 $ ls -lZ /var/www /var/www/html
 /var/www:
 drwxr-xr-x. root   root   system_u:object_r:httpd_sys_script_exec_t:s0 cgi-bin
@@ -35,14 +35,14 @@ drwxr-xr-x. apache apache system_u:object_r:httpd_sys_content_t:s0 html
 
 /var/www/html:
 drwxr-xr-x. chenlin.rao chenlin.rao unconfined_u:object_r:user_home_t:s0 src
-{% endhighlight %}
+```
 
 看到没有，这里这些文件的 SELinux 类型是不一样的，默认的 `/var/www/html` 是 `httpd_sys_content_t`，`/var/www/cgi-bin` 是 `httpd_sys_script_exec_t`，而从我家目录移过去的 `/var/www/html/src` 是 `user_home_t`！
 
 解决办法也很简单，把这个类型也改过来就好了：
 
-{% highlight bash %}
+```bash
 $ chcon -R -t httpd_sys_content_t /var/www/html/src
-{% endhighlight %}
+```
 
 这是第一次接触 SELinux 的安全管理，真的是好细致！

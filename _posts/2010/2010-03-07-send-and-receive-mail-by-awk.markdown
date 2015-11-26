@@ -12,7 +12,7 @@ tags:
 今天在CU上翻老帖，看到一个awk实现的收邮件方法。对POP3，对awk，都是很让人开眼界的。在原有基础上，针对性的略加改动，也就完成了SMTP的发邮件awk脚本。这回，可以光明正大的放进shell类别里了~~
 
 收邮件的脚本：
-{% highlight bash %}
+```bash
 #!/usr/bin/gawk -f
 BEGIN {
     #gawk调用socket的网络通信格式：/inet/<tcp|udp|raw>/<0|local_port>/<remote_host>/<remote_port>
@@ -36,10 +36,10 @@ BEGIN {
     print "QUIT" |& Service
     close(Service)
 }
-{% endhighlight %}
+```
 在POP3中，还可以使用TOP n m来获取data的前几行，NOOP来保持与server的连接，DELE来删除邮件。
 发邮件的脚本：
-{% highlight bash %}
+```bash
 #!/usr/bin/gawk -f
 BEGIN {
     Service = "/inet/tcp/0/mail.test.com/25"
@@ -70,7 +70,7 @@ BEGIN {
     
     close(Service)
 }
-{% endhighlight %}
+```
 好了，运行一下吧。
 
     # ./sendmail.awk && ./getmail.awk

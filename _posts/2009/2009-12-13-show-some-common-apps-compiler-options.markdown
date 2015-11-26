@@ -6,7 +6,7 @@ category: linux
 ---
 
 * nginx：
-{% highlight bash %}
+```bash
 [rao@localhost ~]$ /home/nginx/sbin/nginx -V|grep conf
 nginx version: 0.7.54
 built by gcc 4.1.2 20080704 (Red Hat 4.1.2-44)
@@ -49,11 +49,11 @@ CFLAGS
 "--disable-auth-basic"
 "CFLAGS=-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
 "$@"
-{% endhighlight %}
+```
 
 * php:
 
-{% highlight bash %}
+```bash
 [rao@localhost ~]$ php -i|grep configure
 Configure Command =>  './configure'
 '--build=x86_64-redhat-linux-gnu' '--host=x86_64-redhat-linux-gnu'
@@ -96,7 +96,7 @@ Configure Command =>  './configure'
 '--with-pdo-odbc=shared,unixODBC,/usr'
 '--with-pdo-mysql=shared,/usr' '--with-pdo-pgsql=shared,/usr'
 '--with-pdo-sqlite=shared,/usr' '--enable-dbase=shared'
-{% endhighlight %}
+```
 
 * mysql:
 据网上都说是cat /usr/bin/mysqlbug|grep conf，但我这的结果是压根没用……

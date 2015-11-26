@@ -7,7 +7,7 @@ tags:
   - php
   - squid
 ---
-{% highlight php %}
+```php
 <?php
 interface Flush_Cache
 {
@@ -50,5 +50,5 @@ $g_squid_servers = array('192.168.2.88:80');
 $flush_cache = new Flush_Cache_HTTP_Header_Impl();
 $flush_cache->flush('http://ent.cdqss.com/index.html');
 ?>
-{% endhighlight %}
+```
 

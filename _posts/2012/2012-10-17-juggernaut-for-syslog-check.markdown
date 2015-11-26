@@ -16,7 +16,7 @@ tags:
 
 举例中有ruby、js和python的样例，不过既然是用Redis传消息，那么改成perl的代码跟python的比差距也就很小了。
 
-{% highlight perl %}
+```perl
 #!/usr/bin/perl
 use AnyEvent;
 use Getopt::Long;
@@ -115,11 +115,11 @@ sub classify {
         'unknown';
     };
 };
-{% endhighlight %}
+```
 
 然后写html页面来接收。
 
-{% highlight html %}
+```html
 <html>
 <head>
   <meta name="charset" content="utf-8">
@@ -200,7 +200,7 @@ sub classify {
   </script>
 </body>
 </html>
-{% endhighlight %}
+```
 
 这里除了juggernaut的代码以外，还加上了chrome独有的webkitnotification功能，这样使用chrome的话，可以打开桌面通知，监控效果更佳～
 

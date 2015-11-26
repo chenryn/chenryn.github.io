@@ -123,10 +123,10 @@ $ curl -d "user=nickwolfe&password=12345" http://www.linuxidc.com/login.cgi
 到底该用GET模式还是POST模式，要看对面服务器的程序设定。
 
 一点需要注意的是，POST模式下的文件上的文件上传，比如
-{% highlight html %}
+```html
 <form method="POST" enctype="multipar/form-data" action="http://cgi2.tky.3web.ne.jp/~zzh/up_file.cgi">
 <input type=submit name=nick value="go">
-{% endhighlight %}
+```
 这样一个HTTP表单，我们要用curl进行模拟，就该是这样的语法：
 $ curl -F upload=@localfile -F nick=go http://cgi2.tky.3web.ne.jp/~zzh/up_file.cgi
 罗罗嗦嗦讲了这么多，其实curl还有很多很多技巧和用法比如 https的时候使用本地证书，就可以这样

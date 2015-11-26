@@ -12,7 +12,7 @@ category: nginx
 具体是什么cpu可以grep name /proc/cpuinfo查看，如果是inter xeon，就写--with-cpu-opt=pentium，如果是AMD，就写--with-cpu-opt=opteron。这样编译针对特定CPU以及增加GCC的优化。
 
 针对优化后的结果，我们进行测试，结果表明使用-O2以及以上的参数，可以微量增加性能1%左右，而O2和O3基本可以认为是相同的。
-{% highlight bash %}
+```bash
 ./http_load -parallel 100 -seconds 10 urls
 10811 fetches, 100 max parallel, 5.23252e+06 bytes, in 10 seconds
 1.默认参数 -O
@@ -45,5 +45,5 @@ msecs/first-response: 44.8366 mean, 69.904 max, 3.928 min
 1099.4 fetches/sec, 532109 bytes/sec
 msecs/connect: 44.7226 mean, 61.445 max, 0.596 min
 msecs/first-response: 45.4883 mean, 287.113 max, 3.336 min
-{% endhighlight %}
+```
 

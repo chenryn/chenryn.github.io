@@ -13,7 +13,7 @@ tags:
 
 今天有空，稍微写了个例子，可以比较方便的定义类似grok_pattern的方式完成对accesslog的json序列化。不过配置方式比Grok还是麻烦不少，以后真用的话，再考虑config的办法吧，这里主要是为了展示Message::Passing::Filter::XXX的编写：
 
-{% highlight perl %}
+```perl
     #!/usr/bin/perl
     package Message::Passing::Filter::GrokLike;
     use Moo;
@@ -61,7 +61,7 @@ tags:
         $message;
     };
     true;
-{% endhighlight %}
+```
 
 --------------
 

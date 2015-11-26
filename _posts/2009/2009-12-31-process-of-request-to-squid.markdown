@@ -29,7 +29,7 @@ category: squid
 
 第二个办法，还在squid本身上做文章。我注意到，处理流程的4.2步上，squid是同时检查源站和cache_peer的。那么，在源站故障的时候，cache_peer可以设成其他服务器顶上。这样的情况，不单解决一个url跳转，还能做一个源站备份。配置如下：
 
-{% highlight squid %}
+```squid
 nonhierarchical_direct off
 prefer_direct on
 cache_peer 192.168.1.1 parent 80 0 no-query originserver name=S1
@@ -39,7 +39,7 @@ acl myservice dstdomain .site.com
 cache_peer_access S1 allow myservice
 cache_peer_access S2 allow myservice
 cache_peer_access S3 allow myservice
-{% endhighlight %}
+```
 
 第一句的意思，就是当originserver挂了，不可层叠的请求（即hierarchy_stoplist定义的）就“可能”发往其他peer。
 

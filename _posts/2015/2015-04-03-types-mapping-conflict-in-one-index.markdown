@@ -20,7 +20,7 @@ tags:
 
 为了验证我的猜测，做了一个请求测试：
 
-{% highlight bash %}
+```bash
 # curl es.domain.com:9200/logstash-accesslog-2015.04.03/nginx/_search?q=_id:AUx-QvSBS-dhpiB8_1f1\&pretty -d '{
     "fields": ["requestTime", "bodySent"],
     "script_fields" : {
@@ -35,11 +35,11 @@ tags:
         }
     }
 }'
-{% endhighlight %}
+```
 
 得到的结果如下：
 
-{% highlight json %}
+```json
 {
   "took" : 43,
   "timed_out" : false,
@@ -66,13 +66,13 @@ tags:
     } ]
   }
 }
-{% endhighlight %}
+```
 
 果然！直接读取的字段，以及采用 `_source.fieldname` 方式读取的内容，都是正确的；而采用 `doc['fieldname'].value` 获取的内存数据，就不对。（0.54 存成 long 型会变成 4603039107142836552。这个 460 还正好能跟 540 凑成 1000，应该是某种特定存法，不过这里我就没深究了）
 
 再作下一步验证。我们知道，ES 数据的映射是根据第一条数据的类型确定的，之后的数据如何类型跟已经成型的映射不统一，那么写入会失败。现在这个 nginx 和 apache 两个类型在 requestTime 字段上的映射是不一样的，但是内存里却并没有按照映射来处理。那么，我往一个类型下写入另一个类型映射要求的数据，会报错还是会通过呢？
 
-{% highlight bash %}
+```bash
 # curl -XPOST es.domain.com:9200/test/t1/1 -d '{"key":1}'
 {"_index":"test","_type":"t1","_id":"1","_version":1,"created":true}
 # curl -XPOST es.domain.com:9200/test/t2/1 -d '{"key":2.2}'
@@ -89,7 +89,7 @@ tags:
 {"error":"RemoteTransportException[[10.10.10.10][inet[/10.10.10.10:9300]][indices:data/write/index]]; nested: MapperParsingException[failed to parse [key]]; nested: NumberFormatException[For input string: \"abc\"]; ","status":400}
 # curl -XGET es.domain.com:9200/test/_mapping
 {"test":{"mappings":{"t1":{"properties":{"key":{"type":"long"}}},"t2":{"properties":{"key":{"type":"double"}}}}}}
-{% endhighlight %}
+```
 
 结果出来了，在映射相互冲突以后，实际数据只要是 numeric detect 能通过的，就都通过了！
 

@@ -9,7 +9,7 @@ category: perl
 
 具体的说明，可以看[Perl6::Gather](http://search.cpan.org/~dconway/Perl6-Gather-0.42/lib/Perl6/Gather.pm)的POD说明，比较详细。其他的都是简单给个例子就是了。
 
-{% highlight perl %}
+```perl
 use Perl6::Gather;
 print gather {
     for (@data) {
@@ -18,11 +18,11 @@ print gather {
     }
     take 1,3,5,7,9 unless gathered;
 }
-{% endhighlight %}
+```
 
 相当于：
 
-{% highlight perl %}
+```perl
 my @arrays;
 for (@data) {
     push @arrays, $_ if $_ % 2;
@@ -30,7 +30,7 @@ for (@data) {
 }
 @arrays = (1,3,5,7,9) unless @arrays;
 print @arrays;
-{% endhighlight %}
+```
 
 省略的就是这个push用的临时@arrays变量。同样也可以是标量，用~gather就可以省略.=了，比gather前面多一个波浪号~。
 

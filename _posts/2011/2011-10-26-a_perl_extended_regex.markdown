@@ -6,7 +6,7 @@ category: perl
 ---
 
 今天傍晚，莫言在Q群里贴了一个他写的正则表达式，回来翻了翻perlre文档，基本算是看懂，赶紧记录下来：
-{% highlight perl %}my $ip = "192.168.0.1|192.168.0.2|192.168.0.1";
+```perlmy $ip = "192.168.0.1|192.168.0.2|192.168.0.1";
 if ( $ip =~ /
     ^
     (?:
@@ -23,7 +23,7 @@ if ( $ip =~ /
     $
     /x ) {
     print "match\n";
-}{% endhighlight %}
+}```
 根据<a href="http://perldoc.perl.org/perlre.html" title="perlre文档" target="_blank">perlre文档</a>的说明，一点一点解释。
 
 1. 首先是/x，用这个来去除regex里的空格，不然的话写在一行太难看懂了；
@@ -46,7 +46,7 @@ OK，解释完毕。其实，从后往前看，反而清晰一些~~
 另：perlre中在(??{CODE})段的表述中有如下一段话“In perl 5.12.x and earlier, because the regex engine was not re-entrant, delayed code could not safely invoke the regex engine either directly with "m//" or "s///"), or indirectly with functions such as "split".”，而(?R)和(??{CODE})做的是类似而简单的任务，所以如果linux发行版里带的perl版本不够高的话，这里就不能用(?1)的简单写法，需要自己再写一遍了。
 
 可以这么判断：
-{% highlight perl %}
+```perl
 my $re = $^V lt v5.14 ? '(?:\d{1,3}\.?){4}' : '(?1)';
 my $ip = "192.168.0.1|192.168.0.2|192.168.0.3|192.168.0.4|192.168.0.5";
 if ( $ip =~ m/
@@ -66,5 +66,5 @@ if ( $ip =~ m/
     /x ) {
     print "$1 match\n";
 }
-{% endhighlight %}
+```
 

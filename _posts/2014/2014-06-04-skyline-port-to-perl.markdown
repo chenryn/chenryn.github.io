@@ -22,15 +22,15 @@ tags:
 
 稍微复杂一点的多维操作 PDL 还是很方便的。比如程序里 `least_squares` 检验法的时候，numpy 有这么一句：
 
-{% highlight python %}
+```python
     A = np.vstack([x, np.ones(len(x))]).T
-{% endhighlight %}
+```
 
 而在 PDL 里可以写作：
 
-{% highlight perl %}
+```perl
     my $A = $x->dummy(0)->append(1);
-{% endhighlight %}
+```
 
 PDL 里也有 ones() 函数来生成全部由 1 构成的数组，不过我觉得上面这个写法明显更好理解最终目的，就是90°倒转数组然后每个元素作为子数组后面加第二个元素嘛。
 

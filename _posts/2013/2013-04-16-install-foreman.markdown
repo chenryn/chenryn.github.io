@@ -9,7 +9,7 @@ foreman 是社区比较推荐的一款 puppet 辅助工具。可以用来实现 
 
 鉴于我一直以来都是用 gem 安装 puppet，所以这里也就没法通过 yum/apt 来安装 foreman，只能源码操作了：
 
-{% highlight bash %}
+```bash
     git clone https://github.com/theforeman/foreman.git -b develop
     cd foreman
     bundle install --without postgresql mysql mysql2 
@@ -18,18 +18,18 @@ foreman 是社区比较推荐的一款 puppet 辅助工具。可以用来实现 
     RAILS_ENV=production bundle exec rake db:migrate
     rake puppet:import:hosts_and_facts RAILS_ENV=production
     ./script/rails server -p 3333 -e production -d
-{% endhighlight %}
+```
 
 然后就可以通过3333端口访问并查看刚才导入的 Facts 变量了，默认的用户名密码是 admin/changeme。
 
 新版本的 foreman，必须使用 smart-proxy 才能接收 reports。所以还要继续安装：
 
-{% highlight bash %}
+```bash
     git clone git://github.com/theforeman/smart-proxy.git
     cd smart-proxy
     sed -i 's/^#:puppet:.*/:puppet: true/' config/settings.yml
     ./bin/smart-proxy.rb
-{% endhighlight %}
+```
 
 foreman 提供了一个 [ruby 脚本](https://raw.github.com/theforeman/puppet-foreman/master/templates/foreman-report.rb.erb)，用来扩充 puppet 的 reports 功能。下载放到对应的 `${GEM_PATH}/gems/puppet-${version}/lib/puppet/reports/` 下，然后修改其中的 `$foreman_url` 变量即可。
 

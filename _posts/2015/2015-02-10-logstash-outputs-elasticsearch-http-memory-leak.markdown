@@ -34,14 +34,14 @@ Logstash 早年有三种不同的插件写数据到 Elasticsearch 中，分别�
 
 Logstash-1.5 和 Logstash-1.4 在 plugin API 方面没有什么变化，有写自己 plugin 的童鞋不用太过担心，可以放心测试然后升级使用。我目前发现的唯一一个变化就是：Logstash-1.5 改用 jackson 库替代原生 json 库了。所以原先可以直接：
 
-{% highlight ruby %}
+```ruby
     parsed = JSON.parse(msg)
-{% endhighlight %}
+```
 
 现在应该通过 logstash 内部方式调用：
 
-{% highlight ruby %}
+```ruby
     require 'logstash/json'
     parsed = LogStash::Json.load(msg)
-{% endhighlight %}
+```
 

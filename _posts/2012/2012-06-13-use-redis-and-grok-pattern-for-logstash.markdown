@@ -12,7 +12,7 @@ tags:
 
 然后修改agent.conf：
 
-{% highlight ruby %}
+```ruby
 input {
   file {
     type => "nginx"
@@ -28,13 +28,13 @@ output {
     type => "nginx"
   }
 }
-{% endhighlight %}
+```
 
 启动方式还是一样。
 
 接着修改server.conf:
 
-{% highlight ruby %}
+```ruby
 input {
   redis {
     host => "MyHome-1.domain.com"
@@ -55,14 +55,14 @@ output {
   elasticsearch { }
 
 }
-{% endhighlight %}
+```
 
 然后创建Grok的patterns目录，主要就是github上clone下来的那个咯~在目录下新建一个叫nginx的文件，内容如下：
 
-{% highlight ruby %}
+```ruby
 NGINXURI %{URIPATH}(?:%{URIPARAM})*
 NGINXACCESS \[%{HTTPDATE}\] %{NUMBER:code} %{IP:client} %{HOSTNAME} %{WORD:method} %{NGINXURI:req} %{URIPROTO}/%{NUMBER:version} %{IP:upstream}(:%{POSINT:port})? %{NUMBER:upstime} %{NUMBER:reqtime} %{NUMBER:size} "(%{URIPROTO}://%{HOST:referer}%{NGINXURI:referer}|-)" %{QS:useragent} "(%{IP:x_forwarder_for}|-)"
-{% endhighlight %}
+```
 
 Grok正则的编写，可以参考[wiki](https://github.com/logstash/logstash/wiki/Testing-your-Grok-patterns-%28--logstash-1.1.0-and-above-%29)进行测试。
 

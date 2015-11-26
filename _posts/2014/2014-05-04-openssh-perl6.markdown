@@ -16,7 +16,7 @@ Thread 示例
 
 说起来 Perl6 近年一直在宣传 Promise 啊，Supply 啊并发编程，但是 API 变化太快，2013 年中期 jnthn 演讲里演示的 `async` 用法，现在就直接报这个函数不存在了，似乎改成 `start` 了？天知道什么时候又变。所以还是用底层的 Thread 和 Channel 来写。话说其实这还是我第一次写 Thread 呢。
 
-{% highlight perl %}
+```perl
 use v6;
 class OpenSSH {
     has $!user = 'root';
@@ -47,7 +47,7 @@ say $ssh.exec('10.4.1.21', 'uptime');
 my @hosts = '10.4.1.21' xx 5;
 my @ret = $ssh.exec(@hosts, 'sleep 3;echo $$');
 say @ret.perl;
-{% endhighlight %}
+```
 
 很简陋的代码。首先一个是要确认 ssh 不用密码登陆，因为没有写 Expect；其次是没用 ThreadPool，所以并发操作不能太猛，会扭着腰的。
 
@@ -89,7 +89,7 @@ ThreadPoolScheduler 示例
 
 根据 [S17-concurrency 文档](https://github.com/perl6/specs/blob/master/S17-concurrency.pod) 的内容，改写了几行脚本，实现了 ThreadPool 的效果：
 
-{% highlight perl %}
+```perl
     multi method exec(@hosts, $cmd, :$parallel = 16) {
         my $c = Channel.new;
         my $s = ThreadPoolScheduler.new(max_threads => $parallel);
@@ -101,16 +101,16 @@ ThreadPoolScheduler 示例
         });
         return @hosts.map: { $c.receive };
     }
-{% endhighlight %}
+```
 
 这里把默认并发值改成了 16，跟 Rakudo 保持一致。如果不需要可调的话，这里其实可以直接写成 `$*SCHEDULER.cue({})`。
 
 然后调用方法也对应修改一下，考虑到辨识度，把并发值改成了命名参数。调用方法如下：
 
-{% highlight perl %}
+```perl
 my @hosts = slurp('iplist.txt').lines;
 my @ret = $ssh.exec(@hosts, 'sleep 3;echo $$', :parallel(5));
-{% endhighlight %}
+```
 
 运行可以看到，虽然 iplist.txt 里放了 40 个ip，但是并发的 ssh 只有 5 个。
 
@@ -123,7 +123,7 @@ Promise 示例
 
 考虑 ssh 这个场景可能不太用的上 Promise 的 `.in`、`.then`、`.anyof` 之类的流程控制(尤其 `.in` 这个还不一定能用，因为 Promise 底层也是用的 `$*SCHEDULER.cue()`，而这个在 MoarVM 上目前还不支持 :in/:at/:every 等参数)，就直接展示最简单的并发了：
 
-{% highlight perl %}
+```perl
     multi method exec(@hosts, $cmd, :$parallel = 16) {
         $*SCHEDULER = ThreadPoolScheduler.new(max_threads => $parallel);
         await @hosts.map: {
@@ -132,7 +132,7 @@ Promise 示例
             };
         };
     }
-{% endhighlight %}
+```
 
 简单来说，就是每个 `start {&c}` 创建一个 Promise 对象，根据 &c 的返回值自动作 `$p.keep($result)` 或  `$p.break(Exception)`。然后 `await(*@p)` 回收全部 Promise 的结果。
 

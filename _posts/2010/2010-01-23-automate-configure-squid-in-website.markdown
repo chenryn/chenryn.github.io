@@ -10,7 +10,7 @@ tags:
 ---
 
 [root@test data]# cat index.htm
-{% highlight html %}
+```html
 <html>
 <head>
 <title>饶琛琳专用21V-CDN流程系统</title>
@@ -78,9 +78,9 @@ adst.display='none';
 
 </body>
 </html>
-{% endhighlight %}
+```
 [root@BeiJingBGP-Dns-02 cgi-bin]# cat rt.cgi
-{% highlight bash %}
+```bash
 #!/bin/bash
 function filter(){
 sed '{
@@ -173,4 +173,4 @@ echo '<head><META HTTP-EQUIV="refresh" Content="0;URL=http://1.2.3.4/index.htm">
 esac
 
 echo "</html>"
-{% endhighlight %}
+```

@@ -39,15 +39,15 @@ tags:
 ## 轮转和优化
 
 移除旧日志在有基于时间的目录后变得异常简单：
-{% highlight bash %}
+```bash
 $ curl -XDELETE 'http://localhost:9200/old-index-name/'
-{% endhighlight %}
+```
 这个操作的速度非常快，和删除大小差不多的少量文件速度接近。你可以放进crontab里半夜来做。
 
 [Optimizing indices](http://www.elasticsearch.org/guide/reference/api/admin-indices-optimize.html)是在非高峰时间可以做的一件很不错的事情。因为它可以提高你的搜索速度。尤其是在你是基于时间做目录的情况下，更建议去做了。因为除了当前的目录外，其他都不会再改，你只需要对这些旧目录优化一次就一劳永逸了。
-{% highlight bash %}
+```bash
 $ curl -XPOST 'http://localhost:9200/old-index-name/_optimize'
-{% endhighlight %}
+```
 
 ## 分片和复制
 

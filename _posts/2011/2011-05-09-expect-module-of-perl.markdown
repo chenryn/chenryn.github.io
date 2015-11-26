@@ -9,13 +9,13 @@ category: perl
 
 先看的Net::SSH2模块，用户、主机、密钥都支持列表，也有$ssh-&gt;exec();，但是最后这步su - root密码还是没法完成；
 然后看的Net::SSH::Expect模块，其实就是在Expect模块外面加一层shell调用ssh命令。没有独立的参数指定密钥等，而是写在ssh_option=&gt;' -i id_rsa '里，更糟糕的情况是：在无密码登陆时，只能使用$ssh-&gt;run_ssh();而不能用$ssh-&gt;login();——但关于初次登陆的(yes/no)?的问题，却只在login()里有处理，run_ssh()里没有！可以修改Net/SSH/Expect.pm文件，在sub run_ssh()的return之前添加相关处理的语句：
-{% highlight perl %}
+```perl
 $exp->expect(1,
 [ qr/\(yes\/no\)\?\s*$/ => sub { $exp->send("yes\n"); exp_continue; } ],
-);{% endhighlight %}
+);```
 但运行的时候，一台内网机器，完成一次su -后ls的操作，居然平均需要消耗3s的时间。
 于是干脆使用原版的Expect模块，平均单次运行时间缩短到了1.3s，如下：
-{% highlight perl %}
+```perl
 #!/usr/bin/perl -w
 use Expect;
 #本来还打算用cgi模块改成web界面的，但运行时不时爆出“(70007)The timeout specified has expired:
@@ -71,4 +71,4 @@ $exp->expect(2, [
 );
 $exp->send("exit\n") if ($exp->expect(undef,'#'));
 $exp->send("exit\n") if ($exp->expect(undef,'$'));
-{% endhighlight %}
+```

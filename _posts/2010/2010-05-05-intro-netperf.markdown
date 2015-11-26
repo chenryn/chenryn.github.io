@@ -10,12 +10,12 @@ category: linux
 文中指出网络性能的五个衡量指标，前两个是可用性和响应时间，这也是最经常关注的，因为有最常见的ping命令；然后是利用率、可用带宽和剩余带宽。
 
 * 安装：
-{% highlight bash %}
+```bash
 wget ftp://ftp.netperf.org/netperf/netperf-2.4.5.tar.gz
 tar zxvf netperf-2.4.5.tar.gz -C /tmp
 cd /tmp/netperf-2.4.5
 ./configure && make && make install
-{% endhighlight %}
+```
 然后在服务器端运行/usr/local/bin/netserver启动服务，可以看到如下正确结果：
 
     Starting netserver at port 12865

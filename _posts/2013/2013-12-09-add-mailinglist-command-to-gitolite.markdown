@@ -26,7 +26,7 @@ gitolite 是一个很常用的 git 仓库管理软件，可以通过命令行方
 
 * 新增文件 src/commands/mailinglist 如下；
 
-{% highlight perl %}
+```perl
     #!/usr/bin/perl
     use strict;
     use warnings;
@@ -83,7 +83,7 @@ gitolite 是一个很常用的 git 仓库管理软件，可以通过命令行方
     }
     
     1;
-{% endhighlight %}
+```
 
 * 修改 src/lib/Gitolite/Rc.pm 如下：
 

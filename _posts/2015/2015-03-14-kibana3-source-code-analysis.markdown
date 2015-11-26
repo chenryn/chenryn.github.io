@@ -418,7 +418,7 @@ app.js 中，定义了整个应用的 routes，加载了 controller, directives 
 
 controller 里没太多可讲的。kibana 3 里，pulldown 其实跟 row 差别不大，看这简单的几行代码里，最关键的就是几个注入：
 
-{% highlight javascript %}
+```javascript
 define(['angular','app','lodash'], function (angular, app, _) {
   'use strict';
   angular.module('kibana.controllers').controller('RowCtrl', function($scope, $rootScope, $timeout,ejsResource, querySrv) {
@@ -441,7 +441,7 @@ define(['angular','app','lodash'], function (angular, app, _) {
     }
   );
 });
-{% endhighlight %}
+```
 
 这里面，注入了 `$scope`, `ejsResource` 和 `querySrv`。`$scope` 是控制器作用域内的模型数据对象，这是 angular 提供的一个特殊变量。`ejsResource` 是一个 factory ，前面已经讲过。`querySrv` 是一个 service，下面说一下。
 
@@ -453,7 +453,7 @@ kibana 3 里，比较有用和常用的 services 包括：
 
 dashboard.js 里提供了关于 Kibana 3 仪表板的读写操作。其中主要的几个是提供了三种读取仪表板布局纲要的方式，也就是读取文件，读取存在 `.kibana-int` 索引里的数据，读取 js 脚本。下面是读取 js 脚本的相关函数：
 
-{% highlight javascript %}
+```javascript
     this.script_load = function(file) {
       return $http({
         url: "app/dashboards/"+file.replace(/\.(?!js)/,"/"),
@@ -476,18 +476,18 @@ dashboard.js 里提供了关于 Kibana 3 仪表板的读写操作。其中主要
         return false;
       });
     };
-{% endhighlight %}
+```
 
 可以看到，最关键的就是那个 `new Function`。知道这步传了哪些函数进去，也就知道你的 js 脚本里都可以调用哪些内容了~
 
 最后调用的 `dash_load` 方法也需要提一下。这个方法的最后，有几行这样的代码：
 
-{% highlight javascript %}
+```javascript
       self.availablePanels = _.difference(config.panel_names,
         _.pluck(_.union(self.current.nav,self.current.pulldowns),'type'));
 
       self.availablePanels = _.difference(self.availablePanels,config.hidden_panels);
-{% endhighlight %}
+```
 
 从最外层的 `config.js` 里读取了 `panel_names` 数组，然后取出了 nav 和 pulldown 用过的 panel，剩下就是我们能在 row 里添加的 panel 类型了。
 
@@ -522,7 +522,7 @@ esVersion.js 里提供了对 ES 版本号的对比函数。之所以专门提供
 
 同样是之前讲过的 `app/partials/dashaboard.html` 里，加载了 `partials/roweditor.html` 页面。这里有一段：
 
-{% highlight html %}
+```html
     <form class="form-inline">
       <select class="input-medium" ng-model="panel.type" ng-options="panelType for panelType in dashboard.availablePanels|stringSort"></select>
       <small ng-show="rowSpan(row) > 11">
@@ -533,11 +533,11 @@ esVersion.js 里提供了对 ES 版本号的对比函数。之所以专门提供
     <div ng-show="!(_.isUndefined(panel.type))">
       <div add-panel="{{panel.type}}"></div>
     </div>
-{% endhighlight %}
+```
 
 这个 `add-panel` 指令，是有 `app/directives/addPanel.js` 提供的。方法如下：
 
-{% highlight javascript %}
+```javascript
           $scope.$watch('panel.type', function() {
             var _type = $scope.panel.type;
             $scope.reset_panel(_type);
@@ -550,7 +550,7 @@ esVersion.js 里提供了对 ES 版本号的对比函数。之所以专门提供
               });
             }
           });
-{% endhighlight %}
+```
 
 可以看到，其实就是 require 了对应的 `panels/xxx/module.js`，然后动态生成一个 div，绑定到对应的 controller 上。
 
@@ -558,7 +558,7 @@ esVersion.js 里提供了对 ES 版本号的对比函数。之所以专门提供
 
 还是在 `app/partials/dashaboard.html` 里，用到了另一个指令 `kibana-panel`：
 
-{% highlight html %}
+```html
             <div
               ng-repeat="(name, panel) in row.panels|filter:isPanel"
               ng-cloak ng-hide="panel.hide"
@@ -568,7 +568,7 @@ esVersion.js 里提供了对 ES 版本号的对比函数。之所以专门提供
               data-drop="true" ng-model="row.panels" data-jqyoui-options
               jqyoui-droppable="{index:$index,mutate:false,onDrop:'panelMoveDrop',onOver:'panelMoveOver(true)',onOut:'panelMoveOut'}">
             </div>
-{% endhighlight %}
+```
 
 当然，这里面还有 `resizable` 指令也是自己实现的，不过一般我们用不着关心这个的代码实现。
 
@@ -576,12 +576,12 @@ esVersion.js 里提供了对 ES 版本号的对比函数。之所以专门提供
 
 这个里面大多数逻辑跟 addPanel.js 是一样的，都是为了实现一个指令嘛。对于我们来说，关注点在前面那一大段 HTML 字符串，也就是变量 `panelHeader`。这个就是我们看到的实际效果中，kibana 3 每个 panel 顶部那个小图标工具栏。仔细阅读一下，可以发现除了每个 panel 都一致的那些 span 以外，还有一段是：
 
-{% highlight javascript %}
+```javascript
            '<span ng-repeat="task in panelMeta.modals" class="row-button extra" ng-show="task.show">' +
               '<span bs-modal="task.partial" class="pointer"><i ' +
                 'bs-tooltip="task.description" ng-class="task.icon" class="pointer"></i></span>'+
             '</span>'
-{% endhighlight %}
+```
 
 也就是说，每个 panel 可以在自己的 panelMeta.modals 数组里，定义不同的小图标，弹出不同的对话浮层。我个人给 table panel 二次开发加入的 exportAsCsv 功能，图标就是在这里加入的。
 
@@ -602,7 +602,7 @@ module.js 就是一个 controller。跟前面讲过的 controller 写法其实�
 
 然后一般 `$scope.init()` 都是这样的：
 
-{% highlight javascript %}
+```javascript
     $scope.init = function () {
       $scope.ready = false;
       $scope.$on('refresh', function () {
@@ -610,11 +610,11 @@ module.js 就是一个 controller。跟前面讲过的 controller 写法其实�
       });
       $scope.get_data();
     };
-{% endhighlight %}
+```
 
 也就是每次有刷新操作，就执行 `get_data()` 方法。这个方法就是获取 ES 数据，然后渲染效果的入口。
 
-{% highlight javascript %}
+```javascript
     $scope.get_data = function () {
       if(dashboard.indices.length === 0) {
         return;
@@ -687,7 +687,7 @@ module.js 就是一个 controller。跟前面讲过的 controller 写法其实�
         $scope.$emit('render');
       });
     };
-{% endhighlight %}
+```
 
 stats panel 的这段函数几乎就跟基础示例一样了。
 
@@ -707,7 +707,7 @@ stats panel 的这段函数几乎就跟基础示例一样了。
 
 module.html 就是 panel 的具体页面内容。没有太多可说的。大概框架是：
 
-{% highlight html %}
+```html
 <div ng-controller='stats' ng-init="init()">
  <table ng-style="panel.style" class="table table-striped table-condensed" ng-show="panel.chart == 'table'">
     <thead>
@@ -719,7 +719,7 @@ module.html 就是 panel 的具体页面内容。没有太多可说的。大概�
     </tr>
   </table>
 </div>
-{% endhighlight %}
+```
 
 主要就是绑定要 controller 和 init 函数。对于示例的 stats，里面的 `data` 就是 module.js 最后生成的 `$scope.data`。
 
@@ -731,17 +731,17 @@ editor.html 里，主要就是提供对 `$scope.panel` 里那些参数的修改�
 
 editor.html 里需要注意的是，为了每次变更都能实时生效，所有的输入框都注册到了刷新事件。所以一般是这样子：
 
-{% highlight html %}
+```html
       <select ng-change="set_refresh(true)" class="input-small" ng-model="panel.format" ng-options="f for f in ['number','float','money','bytes']"></select>
-{% endhighlight %}
+```
 
 这个 `set_refresh` 函数是在 `module.js` 里定义的：
 
-{% highlight javascript %}
+```javascript
     $scope.set_refresh = function (state) {
       $scope.refresh = state;
     };
-{% endhighlight %}
+```
 
 ## 总结
 

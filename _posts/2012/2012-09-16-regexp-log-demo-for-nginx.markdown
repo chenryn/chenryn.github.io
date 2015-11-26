@@ -8,7 +8,7 @@ tags:
 ---
 
 上面调用的Regexp::Log::Nginx是base Regexp::Log的实例，CPAN上已经提供了好些server的log regex，见<http://search.cpan.org/search?query=Regexp%3A%3Alog&mode=all>。
-{% highlight perl %}
+```perl
     #!/usr/bin/perl
     package Regexp::Log::Nginx;
     use warnings;
@@ -37,5 +37,5 @@ tags:
             '%xforwarderfor' => '(?#=xforwarderfor)\"(?#=xff).*?(?#!xff)\"(?#!xforwarderfor)',
     );
     1;
-{% endhighlight %}
+```
 

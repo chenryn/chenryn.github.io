@@ -40,7 +40,7 @@ tags:
 
 用doc values 替换内存 fielddata，你只需要向下面这样构建新字段就行：
 
-{% highlight json %}
+```json
 PUT /my_index
 {
   "mappings": {
@@ -54,7 +54,7 @@ PUT /my_index
     }
   }
 }
-{% endhighlight %}
+```
 
 有了这个映射表，要用这个字段数据都会自动从磁盘加载 doc values 而不是进到内存里。**注意**：目前 doc values 还不能在经过分词器的 `string` 字段上使用。
 

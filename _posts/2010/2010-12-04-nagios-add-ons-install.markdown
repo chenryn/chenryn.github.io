@@ -21,7 +21,7 @@ make完成后，将相应文件cp到指定目录，启动ndomod会报错libmysql
 2、pnp4nagios：
 之前使用的pnp0.4.*版本，今天下的是pnp0.6.*版本。整个url设计发生了较大变化。各监控项页面的url从pnp4nagios/index.php?host=&amp;service=变成了/pnp4nagios/graph?host=&amp;service=。而这个graph（rrd图像的url是/pnp4nagios/image?***）则通过apache的mod_rewrite实现。
 pnp自己编译时可以make出来一个httpd.conf。其中相关Rewrite的包括：
-{% highlight apache %}
+```apache
 <Directory '"/usr/local/pnp4nagios/share/">
 RewriteEngine On
 RewriteBase /pnp4nagios/
@@ -30,15 +30,15 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule .* index.php$0 [PT,L]
 </Directory>
-{% endhighlight %}
+```
 因为pnp编译时没有具体区分etc和share的路径，所以之后apache的发布路径也不同，为了方便，不再写directory。最后经过反复试验，可用配置如下：
-{% highlight apache %}
+```apache
 RewriteEngine On
 RewriteRule ^(application|modules|system) - [F,L]
 RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-d
 RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-f
 RewriteRule ^/nagios/pnp4nagios/(.*) /nagios/pnp4nagios/index.php$1 [PT,L]
-{% endhighlight %}
+```
 
 试验中发现几个apache与nginx的不同：
 1、rewriterule的转向url不能用^标记起始端！

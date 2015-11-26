@@ -12,7 +12,7 @@ tags:
 在选定sersync2进行command方式刷新后，需要对诸多域名的更新频率做个简单的分析，以了解编辑的操作习惯，方便选定调整时间、确定文件过期时间等等。
 
 经过测试，早command插件下，sersync输出的是file的全路径。考虑到实际情况是有大量servername和serveralias，运行如下脚本：
-{% highlight bash %}
+```bash
 #!/bin/bash
 MODIFY_FILE="$1"
 MODIFY_DIR=`echo $MODIFY_FILE|awk -F/ '{print $3}'`
@@ -46,13 +46,13 @@ PURGE_URL="http://$i$MODIFY_URI"
 echo "`date +%F-%T` $PURGE_URL" >> purge.log
 cache_purge $PURGE_URL
 done
-{% endhighlight %}
+```
 
 然后运行如下命令，分别得到html/js/css的每分钟更新量：（有点小瑕疵，即当某分钟html无更新时js和css也无法记录，不过这种概率应该不高）
 
-{% highlight bash %}
+```bash
 cat /home/tools/purge.log |awk -F"[:|-]" '/html/{a[$4":"$5]++}/js/{b[$4":"$5]++}/css/{c[$4":"$5]++}END{for(i in a){print i,a[i],b[i],c[i]}}'|sort
-{% endhighlight %}
+```
 
 得到文件类似如下：
 
@@ -65,7 +65,7 @@ cat /home/tools/purge.log |awk -F"[:|-]" '/html/{a[$4":"$5]++}/js/{b[$4":"$5]++}
     11:29 419 8
 
 然后创建gnuplot.conf如下：
-{% highlight tcl %}
+```tcl
 set terminal png xFFEEDD size 2048,512
 set output "log.png"
 set autoscale
@@ -81,7 +81,7 @@ set ylabel "purge"
 set title "DPD expires"
 set grid
 plot "log" using 1:2 title "html/min","log" using 1:3 title "js/min","log" using 1:4 title "css/min"
-{% endhighlight %}
+```
 
 运行 `cat gnuplot.conf|gnuplot` 就得到 log.png 了，如下：
 

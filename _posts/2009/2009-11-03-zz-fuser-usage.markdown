@@ -8,7 +8,7 @@ category: bash
 fuser：使用文件或者套节字来表示识别进程。我常用的他的两个功能：查看我需要的进程和我要杀死我查到的进程。
 
 比如当你想umount光驱的时候，结果系统提示你设备正在使用或者正忙，可是你又找不到到底谁使用了他。这个时候fuser可派上用场了。
-{% highlight bash %}
+```bash
 [root@lancy sbin]# umount /media/cdrom
 umount: /media/cdrom: device is busy
 umount: /media/cdrom: device is busy
@@ -18,7 +18,7 @@ eject: unmount of `/media/cdrom' failed
 [root@lancy sbin]# ps -ef |egrep '(4561|5382)' |grep -v grep
 root 4561 4227 0 20:13 pts/1 00:00:00 bash
 root 5382 4561 0 21:42 pts/1 00:00:00 vim Autorun.inf
-{% endhighlight %}
+```
 示例中，我想弹出光驱，系统告诉我设备忙着，于是采用fuser命令，参数是你文件或scoket，fuser将查出那些使用了他。
 
 4561c,5382c表示目前用两个进程在占用着/mnt/cdrom，分别是4561,5382,进程ID后的字母表示占用资源的方式，有下面几种表示：
@@ -41,24 +41,24 @@ root 5382 4561 0 21:42 pts/1 00:00:00 vim Autorun.inf
     - 重置所有的选项，将信息设回SIGKILL
 
 再看下面的例子
-{% highlight bash %}
+```bash
 [root@lancy sbin]# fuser -l
 HUP INT QUIT ILL TRAP ABRT IOT BUS FPE KILL USR1 SEGV USR2 PIPE
 ALRM TERM
 STKFLT CHLD CONT STOP TSTP TTIN TTOU URG XCPU XFSZ VTALRM PROF
 WINCH IO PWR SYS
 UNUSED
-{% endhighlight %}
+```
 现在我们试试fuser -k的威力：
-{% highlight bash %}
+```bash
 [root@lancy sbin]# fuser -k /mnt/cdrom
 /mnt/cdrom: 4561c 5382c
 kill 5382: 没有那个进程
 No automatic removal. Please use umount /media/cdrom
 [root@lancy sbin]# eject
-{% endhighlight %}
+```
 套节字方式的使用：
-{% highlight bash %}
+```bash
 [root@lancy sbin]# fuser -4 -n tcp 3306
 here: 3306
 3306/tcp: 5595
@@ -70,6 +70,6 @@ mysql 5595 5563 0 22:24 pts/0 00:00:00 /usr/libexec/mysqld
 [root@lancy sbin]# fuser -4 -n tcp 80
 here: 80
 80/tcp: 5685 5688 5689 5690 5691 5692 5693 5694 5695
-{% endhighlight %}
+```
 
 

@@ -9,7 +9,7 @@ tags:
 
 上篇写的页面上，留下一个超链接，查看每条任务的具体情况。现在完成这部分。
 首先修改数据库结构，上篇已经建了websync.websync_peer表，现在继续：
-{% highlight mysql %}
+```mysql
 create table websync_customer (
     uid int not null auto_increment primary key,
     user varchar(20) not null,
@@ -33,10 +33,10 @@ create table task_msg (
     key (node_id),
     constraint task_f foreign key task_id references websync_peer (id) on delete cascade on update cascade,
     constraint node_f foreign key node_id references remote_node (nid) on delete cascade on update cascade,
-) engine=innodb;{% endhighlight %}
+) engine=innodb;```
 主要内容，一是每个用户使用多少节点；二是各节点下载完url后反馈的md5值。
 然后新增dancer动作如下:
-{% highlight perl %}get '/checkstatus' => sub {
+```perlget '/checkstatus' => sub {
     my $task_id = params->{'id'};
     my $user = session->{'login'};
     my @status;
@@ -68,9 +68,9 @@ create table task_msg (
     };
     template 'checkstatus', { 'status' => \@status, };
 };
-{% endhighlight %}
+```
 对应的TT模板如下：
-{% highlight html %}<html>
+```html<html>
 <head></head>
 <body><table>
 <tr><th>TASK</th><td><% task %></td></tr>
@@ -80,9 +80,9 @@ create table task_msg (
 <td><% node.result %></td></tr>
 <% END %>
 </table></body>
-</html>{% endhighlight %}
+</html>```
 然后需要给admin加一个管理页面，勾选恰当的节点分配给客户。动作配置如下：
-{% highlight perl %}any ['get', 'post'] => '/nodeadd' => sub {
+```perlany ['get', 'post'] => '/nodeadd' => sub {
     if ( request->method() eq 'GET' ) {
         my $node_sth = database->prepare('select node_name,nid from remote_node order by nid');
         $node_sth->execute();
@@ -107,9 +107,9 @@ create table task_msg (
         my $add_sth = database->prepare('update remote_node set nodes = ? where user = ?');
         $add_sth->execute( $nodes, $user );
     };
-};{% endhighlight %}
+};```
 对应的TT模板如下：
-{% highlight html %}<html>
+```html<html>
 <head>
 <script type="text/javascript">
 function post_node() {
@@ -140,5 +140,5 @@ function post_node() {
 <input type="submit" value="submit">
 </form>
 </body>
-</html>{% endhighlight %}
+</html>```
 从度娘那抄了个jquery例子来用……

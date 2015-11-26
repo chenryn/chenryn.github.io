@@ -8,7 +8,7 @@ tags:
 ---
 
 话接上篇，继续完成这个perl脚本。花了今天一天的时间，基本定稿如下：
-{% highlight perl %}#!/usr/bin/perl -w
+```perl#!/usr/bin/perl -w
 use Net::Ping::External qw(ping);
 use Tie::File;
 use Getopt::Long;
@@ -203,4 +203,4 @@ sub get_contact {
     }
     return %hash;
 }
-{% endhighlight %}
+```

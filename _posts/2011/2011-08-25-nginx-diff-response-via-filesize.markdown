@@ -15,7 +15,7 @@ tags:
 
 因为手头没有服务器，以下内容都是凭空想象，看官们注意……
 首先是nginx.conf里的配置：
-{% highlight nginx %}http {
+```nginxhttp {
     perl_modules perl;
     perl_require SizeDiff.pm;
     server {
@@ -25,9 +25,9 @@ tags:
           perl SizeDiff::handler;
        }
     }
-}{% endhighlight %}
+}```
 然后是perl/SizeDiff.pm，如下：
-{% highlight perl %}package SizeDiff;
+```perlpackage SizeDiff;
 use Nginx::Simple;
 sub main {
     my $self = shift;
@@ -43,7 +43,7 @@ sub main {
     }
 };
 1
-{% endhighlight %}
+```
 大体应该就是上面这样。
 之前还考虑过如果不是push方式，可以在perl里考虑使用LWP获取header，不过仔细想想：第一，万一源站开启了chunked获取不到content-length呢？第二，就算可以，如果一个文件是1个G，那再去下载这1个G的文件下来，这个perl进程肯定挂了——官方wiki里可是连DNS解析时间都认为太长……也就是说，这个设想不适合在peer层，而是在loadbalance的角色，通过lwp的header结果，小文件upstream到后端的squid，大文件location到另外的nginx。
 另一个可改进的地方，就是self->location前面，可以结合Net::IP::Match::Regexp模块或者自己完成的类似功能，来针对self->remote_addr选择最近的服务器组IP，最后返回location("http://$ip$uri")这样。

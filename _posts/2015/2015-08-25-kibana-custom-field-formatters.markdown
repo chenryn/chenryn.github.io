@@ -29,7 +29,7 @@ Kibana 4.1 里，formatters 位置则在 `/src/kibana/components/stringify`。�
 
 现在，让我们在 `type` 目录 下创建一个文件叫 `Highlight.js`，下面是初始代码：
 
-{% highlight js %}
+```js
 define(function (require) {
   return function HighlightFormatProvider(Private) {
     var _ = require('lodash');
@@ -48,13 +48,13 @@ define(function (require) {
     return Highlight;
   };
 });
-{% endhighlight %}
+```
 
 每种字段格式，都实现为扩展 FieldFormat 的类。`Highlight.id` 用在 Kibana 内部跟踪 formatter，每个 formatter 必须采用不同的 id。`Highlight.title` 显示在 formatter 下拉选择框里，`Highlight.fieldType` 则描述自己适用于哪种类型的字段内容。
 
 `Highlight.prototype._convert` 是实际进行格式化的地方。包括有 text 和 html 两种方法。text 方法用于 tooltips, filters, legends, 和 axis markers。html 方法用于搜索表格内。两者都接收字段内容为输入，输出我们希望的展示内容。如果两个方法是一样的，可以直接赋值 `Highlight.prototype._convert` 为一个函数。给 error 单词加高亮的代码如下：
 
-{% highlight js %}
+```js
 Highlight.prototype._highlight = function (val, replace) {
   return _.escape(val).replace(/(error)/g, replace);
 };
@@ -68,15 +68,15 @@ Highlight.prototype._convert = {
     return this._highlight(val, '<mark>$&</mark>');
   }
 };
-{% endhighlight %}
+```
 
 只要字段内容中有 error 文本字样，我们就会根据 HTML 或者 text 场景选择包含进 mark 元素或者是转换成大写形式。注意这里使用的 `_.escape(val)` 语句，这句可以用来放置 HTML 注入和跨站脚本攻击。
 
 然后需要注册这个新的 field formatter。在 register.js 里添加：
 
-{% highlight js %}
+```js
 fieldFormats.register(require('ui/stringify/types/Highlight'));
-{% endhighlight %}
+```
 
 未来，我们(Kibana 开发组)可能会把这个功能以插件形式提供，届时注册方法会更加简单。
 
@@ -94,16 +94,16 @@ fieldFormats.register(require('ui/stringify/types/Highlight'));
 
 在 editor 目录，添加一个叫 `highlight.html` 的文件，内容如下：
 
-{% highlight js %}
+```js
 <div class="form-group">
   <label>Pattern</label>
   <input class="form-control" ng-model="editor.formatParams.pattern"/>
 </div>
-{% endhighlight %}
+```
 
 然后回到 Highlight.js 里，我们需要定义 `highlight.html` 作为我们的编辑页面，然后更新我们的 `_highlight` 方法，使用输入文本作为匹配时的正则表达式。
 
-{% highlight js %}
+```js
 Highlight.editor = require('ui/stringify/editors/highlight.html');
 Highlight.prototype._highlight = function (val, replace) {
   var escapedVal = _.escape(val);
@@ -118,7 +118,7 @@ Highlight.prototype._highlight = function (val, replace) {
   }
   return escapedVal.replace(highlightPattern, replace);
 };
-{% endhighlight %}
+```
 
 ## 示例
 
@@ -126,19 +126,19 @@ Highlight.prototype._highlight = function (val, replace) {
 
 我们可以增加一些输入字段，并且在模板中加入这个指令。也就是在 highlight.html 后面追加下面这段：
 
-{% highlight js %}
+```js
 <field-format-editor-samples inputs="editor.field.format.type.sampleInputs"></field-format-editor-samples>
-{% endhighlight %}
+```
 
 对应的，在 Highlight.js 里添加下面这段:
 
-{% highlight js %}
+```js
 Highlight.sampleInputs = [
   'Hello world',
   'The quick brown fox jumps over the lazy dog',
   '112345'
 ];
-{% endhighlight %}
+```
 
 最终结果如下：
 

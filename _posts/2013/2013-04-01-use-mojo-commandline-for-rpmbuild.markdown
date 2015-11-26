@@ -9,7 +9,7 @@ tags:
 
 我一直很喜欢 `Dancer` 里的 keyword 方式，所以很少使用 `Mojolicious` 框架来写网站，不过 `Mojo::UserAgent` 和 `Mojo::DOM` 在一起作为爬虫工具使用，真是太方便了。这两天需要自己打包 `tengine` ，考虑自动化因素，需要从 `tengine` 和 其他第三方模块的 `github` 托管网页上定期查询其更新，都是一行代码就搞定了。整个 `Build.PL` 如下：
 
-{% highlight perl %}
+```perl
 #!/usr/bin/env perl
 use Modern::Perl;
 use IPC::Run qw(run);
@@ -88,13 +88,13 @@ sub mail2author {
     my $body = $output ? "Build Error: $output" : "Build OK";
     p("http://email.notify.d.xiaonei.com/eml/tengine-build/chenlin.rao" => { DNT => 1 } => $body);
 }
-{% endhighlight %}
+```
 
 直接 `g` 就是 GET 方法， `p` 就是 POST 方法。然后 `->dom->at()` 后采用类似 `jQuery` 的写法就可以直接定位，然后还可以用 `->text` 来获取内容，或者 `->{attr}` 来获取属性值。
 
 顺带，今天刚知道原来 `Template` 模块也有 `filter` 可用。`tengine.spec.tt` 中就用了一个大写过滤：
 
-{% highlight bash %}
+```bash
 Summary:    a HTTP and reverse proxy server
 Name:       tengine
 Version:    [% TengineVersion %]
@@ -130,4 +130,4 @@ tar zxvf %{[% Module.0 FILTER upper %]}
 [% END %]
 
 ...;
-{% endhighlight %}
+```

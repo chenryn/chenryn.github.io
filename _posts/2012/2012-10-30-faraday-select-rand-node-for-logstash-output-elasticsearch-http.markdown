@@ -17,7 +17,7 @@ tags:
 介于logstash的应用是一直持续往es写数据的，所以replica调整这招用不上，顶多加大refresh时间而已。所以可以动手的地方主要就是第三条了。
 
 正好去翻了一下perl的Elasticsearch.pm的POD。发现原来perl模块本色默认就是这么做的。new的时候定义的server，是用来发送请求获取集群所有alive的nodes。然后会从这个nodes列表里选择(随机)一个创建真正的链接返回。获取nodes的API如下：
-{% highlight bash %}
+```bash
 curl http://192.168.1.33:9200/_cluster/nodes?pretty=1
 {
   "ok" : true,
@@ -37,11 +37,11 @@ curl http://192.168.1.33:9200/_cluster/nodes?pretty=1
     }
   }
 }
-{% endhighlight %}
+```
 这样显然可以在cluster较大的时候分担index的压力(search的时候压力在集群本身的cpu上)。我打算给我的pure-ruby branch里的faraday版的Logstash::Outputs::ElasticsearchHTTP也加上这个功能。
 <hr />
 大致简单实现如下：
-{% highlight ruby %}
+```ruby
   def select_rand_host
     require "json"
     begin
@@ -53,7 +53,7 @@ curl http://192.168.1.33:9200/_cluster/nodes?pretty=1
       end
     end
   end
-{% endhighlight %}
+```
 然后在`def register`里和`def flush`的`retry`前面都加上`select_rand_host()`就好了。当然比起perl的ElasticSearch::Transport里各种检查各种排除，我这个还是简单多了……
 另，在Ruby1.9里从数组返回随机元素可以直接调用`.sample`，真赞。不过谁让我都是1.8.7的版本呢……
 

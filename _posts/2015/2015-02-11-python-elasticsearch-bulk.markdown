@@ -10,7 +10,7 @@ tags:
 
 Elasticsearch 官方和社区提供了各种各样的客户端库，在之前的博客中，我陆陆续续提到和演示过 Perl 的，Javascript 的，Ruby 的。上周写了一版 Python 的，考虑到好像很难找到现成的示例，如何用 python 批量写数据进 Elasticsearch，今天一并贴上来。
 
-{% highlight python %}
+```python
 #!/usr/bin/env pypy
 #coding:utf-8
 
@@ -105,7 +105,7 @@ def get_log():
 
 if __name__ == '__main__':
     get_log()
-{% endhighlight %}
+```
 
 和 Perl、Ruby 的客户端不同，Python 的客户端只支持两种 transport 方式，urllib3 或者 thrift。也就是说，木有像事件驱动啊之类的办法。
 
@@ -132,10 +132,10 @@ if __name__ == '__main__':
 
 修改配置重启即可：
 
-{% highlight yaml %}
+```yaml
 indices.store.throttle.type：merge
 indices.store.throttle.max_bytes_per_sec：500mb
-{% endhighlight %}
+```
 
 关于这个问题，ES 也有讨论：[Should we lower the default merge IO throttle rate?](https://github.com/elasticsearch/elasticsearch/issues/6081)。或许未来会有更灵活的策略。
 

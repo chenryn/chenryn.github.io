@@ -11,7 +11,7 @@ tags:
 连续尝试了logstash的elasticsearch/elasticsearch_http/elasticsearch_river三个putput模块，发现其index/bulk/river三种插入方式的实际运行效果速度居然没有差异。而使用perl脚本测试，单例下index不到300msg/sec，bulk接近2500msg/sec，几乎翻了10倍。
 
 测试脚本如下：
-{% highlight perl %}
+```perl
     #!/usr/bin/perl -w
     use ElasticSearch;
     use JSON;
@@ -86,7 +86,7 @@ tags:
         );
     }
     print 1000 * 20 / (time - $begin);
-{% endhighlight %}
+```
 注意到这里bulk的数组是20个元素。实验证明超过20个会报出HTTP::Lite的错误(附带提示:ElasticSearch::Transport::\*的HTTPLite啊AEHTTP啊的模块都是要另外安装的)。而且在使用Logstash::Outputs::ElasticSearchHTTP时，flush_size的default值100也是无法使用的，也是改到20后才行。
 
 ps: 不知道为什么一起发github显示不了，只好拆开了，第一篇，关于ES的index速度测试。

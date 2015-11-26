@@ -8,16 +8,16 @@ SIREn 是一个基于 Lucene 做的，专门针对 nested object 数据做优化
 
 那么我们来试一下这个 SIREn 看看。首先是下载运行：
 
-{% highlight bash %}
+```bash
 # wget http://siren.solutions/download/siren-elasticsearch-1.4-bin.zip
 # unzip siren-elasticsearch-1.4-bin.zip
 # cd siren-elasticsearch-1.4-bin
 # ./example/bin/elasticsearch
-{% endhighlight %}
+```
 
 然后我们尝试写入几条 mapping 有冲突的数据：
 
-{% highlight bash %}
+```bash
 # curl -XDELETE "http://localhost:9200/napr"
 # curl -XPOST "http://localhost:9200/napr"
 # curl -XPUT "http://localhost:9200/napr/chargepoint/_mapping" -d '
@@ -54,22 +54,22 @@ SIREn 是一个基于 Lucene 做的，专门针对 nested object 数据做优化
     "ChargeDeviceName": "4c Design Limited, Glasgow (4)",
     "Accessible24Hours": [123, 234, 345, 456]
 }'
-{% endhighlight %}
+```
 
 ok，三条数据都写入成功了。
 
 然后我们用原始的 Elasticsearch 语法尝试去获取『大于100』的数据：
 
-{% highlight bash %}
+```bash
 # curl -XPOST "http://localhost:9200/nepr/_search?q=Accessible24Hours:>100"
 {"took":16,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
-{% endhighlight %}
+```
 
 可以看到，搜索结果是空。
 
 而用 SIREn 的树状结构语法获取：
 
-{% highlight bash %}
+```bash
 # curl -XPOST "http://localhost:9200/nepr/_search" -d '
 {
   "query": {
@@ -90,13 +90,13 @@ ok，三条数据都写入成功了。
     "ChargeDeviceName": "3c Design Limited, Glasgow (3)",
     "Accessible24Hours": 123
 }}]}}%
-{% endhighlight %}
+```
 
 yes，我们拿到了这条数据！
 
 更复杂一点，我们再来:
 
-{% highlight bash %}
+```bash
 # curl -XPOST "http://localhost:9200/nepr/_search" -d '
 {
   "query": {
@@ -116,17 +116,17 @@ yes，我们拿到了这条数据！
     }
   }
 }'
-{% endhighlight %}
+```
 
 这里添加了一个 `range` 选项，SIREn 对所有的数组默认就做 nested 处理了，所有是有序的。这个选项的意思就是，只对数组中第 2 到 3 位节点的数据做搜索请求。这下，搜索结果变成了：
 
-{% highlight json %}
+```json
 {"took":9,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":1,"max_score":2.0,"hits":[{"_index":"nepr","_type":"chargepoint","_id":"4","_score":2.0,"_source":
     {
             "ChargeDeviceName": "4c Design Limited, Glasgow (4)",
                 "Accessible24Hours": [123,234,345,456]
     }}]},"aggregations":{"1":{"buckets":[{"key":"4","doc_count":1},{"key":"4c","doc_count":1},{"key":"design","doc_count":1},{"key":"glasgow","doc_count":1},{"key":"limited","doc_count":1}]}}}%
-{% endhighlight %}
+```
 
 可以看到，因为 `_id` 为 3 的文档里 Accessible24Hours 字段只有一个值，所以无法匹配上从第二个值开始的多个值的对比，也就没被过滤出来了。
 

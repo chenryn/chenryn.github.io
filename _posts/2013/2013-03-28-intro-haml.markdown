@@ -6,7 +6,7 @@ Haml 是 Ruby 社区的一种 HTML 标记语言，它利用强制缩进和类似
 
 下面是一段官网上的快速入门，从标准的 erb 模板转变成 haml 模板：
 
-{% highlight ruby %}
+```ruby
 <div id='content'>
   <div class='left column'>
     <h2>Welcome to our site!</h2>
@@ -16,23 +16,23 @@ Haml 是 Ruby 社区的一种 HTML 标记语言，它利用强制缩进和类似
     <%= render :partial => "item" %>
   </div>
 </div>
-{% endhighlight %}
+```
 
 用 haml 只用这么写：
 
-{% highlight ruby %}
+```ruby
 #content
   .left.column
     %h2 Welcome to our site!
     %p= print_information
   .right{:id => "item#{item.id}"}
     = render :partial => "sidebar"
-{% endhighlight %}
+```
 
 看起来相当 cool，回头在 CPAN 上一翻，原来 perl 社区也有 port 过来的 [Text::Haml](https://metacpan.org/module/Text::Haml) 了。根据 perl 的特点有所改变，但是省键盘的特点依然在。
 
 下面是一个例子：
-{% highlight perl %}
+```perl
 use Text::Haml;
 my $haml = Text::Haml->new();
 my $hash = {
@@ -41,11 +41,11 @@ my $hash = {
 };
 print $haml->render_file('test.haml', %$hash);
 
-{% endhighlight %}
+```
 
 `test.haml` 如下：
 
-{% highlight perl %}
+```perl
 %html{ :xmlns => "http://www.w3.org/1999/xhtml", :lang => "zh"}
   %head
     %title= $title
@@ -56,11 +56,11 @@ print $haml->render_file('test.haml', %$hash);
         - for my $line ( keys %$content ) {
             .row-fluid= $content->{$line}
         - }
-{% endhighlight %}
+```
 
 生成的 HTML 内容如下：
 
-{% highlight html %}
+```html
 <html xmlns='http://www.w3.org/1999/xhtml' lang='zh'>
   <head>
     <title>my title</title>
@@ -76,7 +76,7 @@ print $haml->render_file('test.haml', %$hash);
     </div>
   </body>
 </html>
-{% endhighlight %}
+```
 
 Text::Haml 还提供了一个初始化参数 `vars_as_subs`，可以把变量变成同名函数，这样写起来就更像 ruby 了。不过目前只能是纯变量，复杂语句还是不行，所以好看不中用……
 
@@ -85,14 +85,14 @@ Text::Haml 向 Text::Xslate 学习，也提供了  `cache_dir`, `filter` 等等�
 [Template::Tookit](https://metacpan.org/module/Template::Tookit) 也有插件 [Template::Plugin::Haml](https://metacpan.org/module/Template::Plugin::Haml) 可以参看。
 
 ### wrapper.tt
-{% highlight perl %}
+```perl
 !!! 5
 %html
 [% content %]
-{% endhighlight %}
+```
 
 ### hello.tt
-{% highlight perl %}
+```perl
 [%- message='Hello World' %]
 [%- USE Haml -%]
 [%- WRAPPER wrapper.tt | haml -%]
@@ -107,6 +107,6 @@ Text::Haml 向 Text::Xslate 学习，也提供了  `cache_dir`, `filter` 等等�
    %li [% total=total+1 %][% total %]
   [%- END -%]
 [%- END -%]
-{% endhighlight %}
+```
 
 perl 三大 web 框架 Catalyst/Mojo/Dancer也都有对应的模板插件。

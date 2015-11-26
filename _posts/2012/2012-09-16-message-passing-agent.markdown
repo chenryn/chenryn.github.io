@@ -8,7 +8,7 @@ tags:
 ---
 
 最后编写一段日志收集的agent：
-{% highlight perl %}
+```perl
     #!/usr/bin/perl
     package NginxLogCollector;
     use Moo;
@@ -69,11 +69,11 @@ tags:
     }
     __PACKAGE__->start unless caller;
     1;
-{% endhighlight %}
+```
 目前就做到这步，之后从rabbitmq里往elasticsearch写的还没搞。从上面的chain可以很清除的看到和logstash一样的管道思想，input->decoder->filter->encoder->output。巧的是两种写法中，decode/encode那个写法跟puppet的DSL定义特别的像。哈哈～
 
 继续贴汇总入库的agent代码：
-{% highlight perl %}
+```perl
 #!/usr/bin/perl
 use Moo;
 use MooX::Options;
@@ -119,7 +119,7 @@ sub build_chain {
 }
 __PACKAGE__->start unless caller;
 1;
-{% endhighlight %}
+```
 总的来说，原有模块相互之间都有些不太协调，用的时候还是要自己改改。比如这里，原版的Output::ElasticSearch是吧之前传递过来的整个message放进@fields里的，这跟Filter::ToLogstash的message结构是完全冲突的。所以需要修改Output::ElasticSearch里的bulk_index()的data=>$data,就可以了，不要多改动。
 
 整个代码变动，参加个人github:<https://github.com/chenryn/Message-Passing.git>

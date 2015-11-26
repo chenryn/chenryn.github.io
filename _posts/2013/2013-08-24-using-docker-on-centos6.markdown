@@ -25,7 +25,7 @@ docker 目前已经在积极准备将代码 port 到 BtrFS 上以备未来，不
 
 下面通过最简单的已经打包完成的3.2内核来快速部署 docker 到 CentOS6 上，以便尝鲜：
 
-{% highlight bash %}
+```bash
 rpm -e kernel-firmware
 rpm -i http://get.docker.io/kernels/kernel-3.2.40_grsec_dotcloud-4.x86_64.rpm
 /sbin/dracut --add-drivers dm-mod --add-drivers linear "" 3.2.40-grsec-dotcloud
@@ -43,13 +43,13 @@ title CentOS (3.2.40_grsec_dotcloud-4.x86_64)
 	initrd /boot/initramfs-3.2.40-grsec-dotcloud.img
 EOF
 reboot
-{% endhighlight %}
+```
 
 内核的更新就是这些，记住这个包不支持 selinux，所以启动项里要加上 `selinux=0`。
 
 然后重启登录重启并选择了新内核的主机，继续安装一些依赖工具：
 
-{% highlight bash %}
+```bash
 wget "ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home%3A/awk2007%3A/fixes/Fedora_17/src/aufs-util-9999-14.1.src.rpm"
 sudo yum install glibc-static
 rpmbuild --rebuild aufs-util-9999-14.1.src.rpm
@@ -57,15 +57,15 @@ rpm -U /root/rpmbuild/RPMS/x86_64/aufs-util-9999-14.1.x86_64.rpm
 wget ftp://ftp.univie.ac.at/systems/linux/dag/redhat/el6/en/x86_64/dag/RPMS/lxc-0.8.0-1.el6.rf.x86_64.rpm
 wget http://apt.sw.be/redhat/el6/en/x86_64/dag/RPMS/lxc-libs-0.8.0-1.el6.rf.x86_64.rpm
 rpm -U lxc-0.8.0-1.el6.rf.x86_64.rpm lxc-libs-0.8.0-1.el6.rf.x86_64.rpm
-{% endhighlight %}
+```
 
 然后下载 docker 的二进制文件运行，用源代码的话比较麻烦，docker 是用 golang 写的……
 
-{% highlight bash %}
+```bash
 wget http://get.docker.io/builds/Linux/x86_64/docker-latest.tgz
 tar xzf docker-latest.tgz
 cd docker-latest
-{% endhighlight %}
+```
 
 启动 docker 进程，输出如下：
 

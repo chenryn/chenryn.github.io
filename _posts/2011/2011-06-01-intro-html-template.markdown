@@ -8,7 +8,7 @@ category: perl
 给我自己的学习计划做个开头，从html::template开始试用。
 首先利用上上篇的nmap.pl脚本，提取一些数据，然后展示在页面上。
 cgi脚本如下：
-{% highlight perl %}#!/usr/bin/perl -w
+```perl#!/usr/bin/perl -w
 use HTML::Template;
 use XML::Simple;
 use Net::MySQL;
@@ -70,9 +70,9 @@ sub mysql_query {
 #留着后续继续处理
 sub alert {
     print @_,"\n";
-}{% endhighlight %}
+}```
 然后是template文件server.tmpl：
-{% highlight html %}
+```html
 <html>
 <head>
 <title>Server Plate</title>
@@ -106,5 +106,5 @@ if ('<TMPL_VAR NAME="SSH">' == 'open') {
 </table></center><br><br><br><center>
 </body>
 </html>
-{% endhighlight %}
+```
 用apache分别发布cgi目录和静态目录。然后访问一下；OK。

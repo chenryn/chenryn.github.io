@@ -7,7 +7,7 @@ category: bash
 
 在写sh脚本的时候，常常需要运行时输入一些数据。之前已经知道用基本的$*，执行的情况，大概就是$0 $1 $2 $3……
 那么，那些系统命令里的参数又是怎么做出来的呢？我们自己的脚本如何搞出来$0-$1的效果呢？这就是getopts的作用了。举例如下：
-{% highlight bash %}
+```bash
 #!/bin/bash
 echo "OPTIND starts at $OPTIND"
 while getopts ":pq:" optname
@@ -32,7 +32,7 @@ do
     esac
     echo "OPTIND is now $OPTIND"
 done
-{% endhighlight %}
+```
 在使用getopts命令的时候，shell会自动产生两个变量OPTIND和OPTARG。
 
 OPTIND初始值为1，其含义是下一个待处理的参数的索引。只要存在，getopts命令返回true，所以一般getopts命令使用while循环；

@@ -31,7 +31,7 @@ zabbix 页面和接口，都没有提供这种信息查看方式。所以，我�
 
 而要实现在界面上，最简单的方式，参考 `include/items.inc.php` 里的 *get_item_by_hostid* 方法，可以定义函数如下：
 
-{% highlight php %}
+```php
 function get_items_by_groupid($groupid) {
         $items = array();
         $sql = 'SELECT DISTINCT key_ FROM items WHERE hostid IN (' .
@@ -43,7 +43,7 @@ function get_items_by_groupid($groupid) {
         }
         return $items;
 }
-{% endhighlight %}
+```
 
 这就可用了。
 
@@ -68,7 +68,7 @@ function get_items_by_groupid($groupid) {
 
 好，第一步，创建 `api/classes/CItemByGroup.php` 文件，内容如下：
 
-{% highlight php %}
+```php
 <?php
 class CItemByGroup extends CZBXAPI {
         public function get($groupid) {
@@ -83,30 +83,30 @@ class CItemByGroup extends CZBXAPI {
                 return $items;
         }
 }
-{% endhighlight %}
+```
 
 第二步，添加 `$classMap` 键值对，内容如下：
 
-{% highlight php %}
+```php
     'itembygroup' => 'CItemByGroup',
-{% endhighlight %}
+```
 
 第三步，添加对应方法，内容如下：
 
-{% highlight php %}
+```php
         /**
          * @return CItemByGroup
          */
         public static function ItemByGroup() {
                 return self::getObject('itembygroup');
         }
-{% endhighlight %}
+```
 
 这样，之前页面中直接使用 `get_items_by_groupid($groupid)` 的代码，就可以改写成：
 
-{% highlight php %}
+```php
 $items = API::ItemByGroup()->get($groupid);
-{% endhighlight %}
+```
 
 而在其他程序里，则可以用过 **itembygroup.get** 这个 RPC 接口获取相同结果了。
 
@@ -126,7 +126,7 @@ header 和 footer 是很顾名思义的。不过 `page_header.php` 里，通过 
 
 `menu.inc.php` 也很简单，跟前面 api 类似，也是一个大变量来控制菜单和页面的权限，这个变量叫 `$ZBX_MENU`。`$ZBX_MENU` 数组存放的，就是 zabbix web 顶部菜单大家看到的那几个标签，Monitoring、Report 等等。如果打算把页面加在顶部菜单上，那么就直接添加一个元素到 `$ZBX_MENU` 数组，如下：
 
-{% highlight php %}
+```php
         'sort' => array(
                 'label'                 => _('Sort'),
                 'user_type'             => USER_TYPE_ZABBIX_USER,
@@ -138,11 +138,11 @@ header 和 footer 是很顾名思义的。不过 `page_header.php` 里，通过 
                         )
                 )
          ),
-{% endhighlight %}
+```
 
 如果打算加到到次级菜单，比如放到 Monitoring 下面，那么找到 `view` 元素(其 label 为 "Monitoring")，在其 `pages` 数组里加上即可：
 
-{% highlight php %}
+```php
                 'pages' => array(
 			...
                         array(
@@ -151,7 +151,7 @@ header 和 footer 是很顾名思义的。不过 `page_header.php` 里，通过 
                         )
                 )
         ),
-{% endhighlight %}
+```
 
 ### CWidget 及其他组件
 

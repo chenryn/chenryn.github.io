@@ -18,7 +18,7 @@ tags:
     USE_MIN_ON_CREATE = 0    #绘图数据最小值为0，用来排除某些错误溢出导致的负值
 
 然后就可以进 `nagios/share/pnp/templates/` 下去创建自己需要的模板了。仿照cacti的样子写个loadavg的如下：
-{% highlight php %}
+```php
 <?php
 $opt[1] = "--vertical-label Load -l0  --title \"CPU Load for $hostname / $servicedesc\" ";
 $def[1] =  "DEF:var1=$rrdfile:$DS[1]:AVERAGE " ;
@@ -41,7 +41,7 @@ $def[1] .= "GPRINT:var3:AVERAGE:\"%6.2lf avg\" " ;
 $def[1] .= "GPRINT:var3:MAX:\"%6.2lf max\\n\" " ;
 $def[1] .= "LINE1:total#000000 " ;
 ?>
-{% endhighlight %}
+```
 
 采用DEF方式定义数据，CDEF方式计算总和，HRULE画水平线，AREA画涂层，LINE画连线(有1/2/3种粗细)，STACK累加数值绘图效果，GPRINT计算并显示数据。
 

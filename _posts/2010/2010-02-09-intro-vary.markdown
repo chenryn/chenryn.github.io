@@ -24,7 +24,7 @@ HTTP/1.1标准中，是建议所有的网页都加上vary头的。可见这个�
 
 注意到了么？IE的内容里多了一个空格！
 感谢windtear这些已经深入squid源代码的大神们，把src/http.c相关部分修改如下，编译完成即可：
-{% highlight c %}
+```c
 strListAdd(&vstr, name, ',');
 hdr = httpHeaderGetByName(&request->header, name);
 value = strBuf(hdr);
@@ -44,5 +44,5 @@ if (value) {
 stringClean(&hdr);
 }
 safe_free(request->vary_hdr);
-{% endhighlight %}
+```
 

@@ -12,18 +12,18 @@ tags:
 
 # 安装
 
-{% highlight bash %}
+```bash
     gem install puppetlabs_spec_helper rspec_puppet
-{% endhighlight %}
+```
 
 # 创建测试用例环境
 
 以测试 nginx 模块为例：
 
-{% highlight bash %}
+```bash
     cd /etc/puppet/modules/nginx
     rspec-puppet-init
-{% endhighlight %}
+```
 
 这个 init 脚本其实就是执行了一串 `mkdir -p` 和 `ln -s` 命令，最后生成一个总的 Rakefile 。详情见官网[Setup](http://rspec-puppet.com/setup/)。
 
@@ -39,7 +39,7 @@ tags:
 
 现在来写我们的第一个测试用例 `/etc/puppet/modules/nginx/spec/classes/common_spec.rb` 吧：
 
-{% highlight ruby %}
+```ruby
     # 这个文件被 init 自动生成在 /etc/puppet/modules/nginx/spec/ 下了
     # 其内容就是加入这个目录下所有的文件
     require 'spec_helper'
@@ -90,14 +90,14 @@ tags:
             end
         end
     end
-{% endhighlight %}
+```
 
 然后你就可以运行测试了：
 
-{% highlight bash %}
+```bash
     cd /etc/puppet/modules/nginx
     rake spec
-{% endhighlight %}
+```
 
 如果测试用例有失败，会在终端看到错误信息。
 

@@ -16,7 +16,7 @@ tags:
 
 只需要几行配置，就可以生成很漂亮滴直方图对比了。
 
-{% highlight bash %}
+```bash
 set key right top Left reverse width 0 box 3
 set xlabel "各大洲区域"
 set ylabel "请求总数"
@@ -30,7 +30,7 @@ set style data histograms
 set terminal png size 1024, 512
 set output "oversea.png"
 plot 'oversea.csv' using 2:xtic(1) ti col, '' u 3 ti col
-{% endhighlight %}
+```
 
 注意如果行比较多，默认大小的图上X轴的标记就会挤在一块了，所以在 set terminal 后面设置图片大小，这和 set size 是不一样的。后者设置的相对值是本次要 plot 的图形在总画布上的比例大小。
 

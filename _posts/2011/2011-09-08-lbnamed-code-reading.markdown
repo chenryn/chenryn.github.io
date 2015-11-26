@@ -89,13 +89,13 @@ category: perl
 
 这个计算方法主要包括了服务器的登录user数量和loadavg的大小。说实话我不清楚为啥要计算user数量……具体的数据格式，可以看LBCD.pm里注释的C语言typeof struct定义，也可以看slbcd脚本里的pack。如下：
 
-{% highlight perl %}
+```perl
 $reply = pack("nnnnNNNnnnnnCC",            # build the reply
               $version, $id, $op, $status,
               $btime, time(), $utime,
               $l1, $l5, $l15, $tot, $uniq,
               $console, $reserved);
-{% endhighlight %}
+```
 
 * 最后总结
 

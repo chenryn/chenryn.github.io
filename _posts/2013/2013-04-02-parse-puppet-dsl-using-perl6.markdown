@@ -11,7 +11,7 @@ tags:
 
 这里碰到一个问题，就是 puppet 中 `resource_type` 的 `title` 后面有个冒号，这事儿比较麻烦，不过这时候我突然想到了 Perl6 ，稍微翻了一下文档，发现这事用 Perl6 来实现很容易：
 
-{% highlight perl %}
+```perl
 use v6;
 
 sub infix:<:>($a, %b){
@@ -30,13 +30,13 @@ class nginx::install {
         source => "http" 
     }
 }
-{% endhighlight %}
+```
 
 运行结果如下：
 
-{% highlight perl %}
+```perl
 perl6 /data/perl6/script/puppet-style.pl
 "nginx" => {"conf" => "#", "source" => "http"}
-{% endhighlight %}
+```
 
 当然实际上 puppet 要复杂很多，这里其实更多是为了说明 Perl6 如何自定义操作符~

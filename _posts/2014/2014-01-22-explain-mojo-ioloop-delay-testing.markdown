@@ -6,7 +6,7 @@ category: perl
 
 昨天有人在群里问起[Mojolicious/t/mojo/delay.t](https://metacpan.org/source/SRI/Mojolicious-4.68/t/mojo/delay.t) 中一段代码的执行原理。代码如下：
 
-{% highlight perl %}
+```perl
 use Mojo::Base -strict;
  
 BEGIN {
@@ -45,7 +45,7 @@ is_deeply [$delay->wait], [2, 3, 2, 1, 4], 'right return values';
 is $finished, 1, 'finish event has been emitted once';
 is_deeply $result, [2, 3, 2, 1, 4], 'right results';
 done_testing();
-{% endhighlight %}
+```
 
 首先介绍一下这个 `Mojo::IOLoop::Delay` 模块，这是异步编程中很火很实用的一个概念，一般叫 `Promise` / `Deferred` 。你可以按照顺序编程的思路组合那些异步函数，比如在这个例子里主要就体现了 `steps` 方法和 `finish` 事件。
 

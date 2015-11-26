@@ -24,7 +24,7 @@ category: perl
 
 一般来说，linux设备上肯定都已经有了ruby，不过版本比较低，所以升级ruby再使用：
 
-{% highlight bash %}
+```bash
 
     [root@localhost ~]# wget https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer
     [root@localhost ~]# bash rvm-installer
@@ -32,19 +32,19 @@ category: perl
     [root@localhost ~]# rvm --default 1.9.3
     [root@localhost ~]# gem install jekyll
 
-{% endhighlight %}
+```
 
 这样就可以在本地运行jekyll查看博客效果了。
 
-{% highlight bash %}
+```bash
     [root@localhost youusername.github.com]# jekyll --server
-{% endhighlight %}
+```
 
 ## 第五步，创建本地博客目录
 
 这步，可以直接fork已有的github博客代码来用，比如：
 
-{% highlight bash %}
+```bash
 
     [root@localhost ~]# git clone https://github.com/plusjade/jekyll-bootstrap.git yourusername.github.com
     [root@localhost ~]# cd yourusername.github.com
@@ -53,7 +53,7 @@ category: perl
     [root@localhost yourusername.github.com]# git commit -m 'first commit'
     [root@localhost yourusername.github.com]# git push origin master
 
-{% endhighlight %}
+```
 
 ## 第六步，修改必要信息
 
@@ -69,7 +69,7 @@ category: perl
 
 2012-04-29 补充：
 今天收到友言的提示邮件，上去看了一下，其实友言是支持[xml导入评论](http://uyan.cc/setting/backup)的。那么我们就可以把wp里的评论也一块导出来玩了：
-{% highlight perl %}
+```perl
 
     #!/usr/bin/perl
     use warnings;
@@ -99,23 +99,23 @@ category: perl
     };
     print $fh '</uyan>';
 
-{% endhighlight %}
+```
 
 ## 第八步，导出wordpress博客文章
 
 jekyll提供了ruby脚本/usr/local/rvm/gems/ruby-1.9.3-p0/gems/jekyll-0.11.2/lib/jekyll/migrators/wordpress.rb来专门做这件事情，只需要运行如下命令即可：
 
-{% highlight bash %}
+```bash
 
     [root@localhost yourusername.github.com]# gem install sequel
     [root@localhost yourusername.github.com]# gem install mysql -- --with-mysql-config=/usr/bin/mysql_config
     [root@localhost yourusername.github.com]# ruby -rubygems -e 'require "jekyll/migrators/wordpress"; Jekyll::WordPress.process("database", "user", "pass")'
 
-{% endhighlight %}
+```
 
 不过我这里运行有点问题，ruby又不太懂，再看完上面这个脚本的意思后，干脆放弃排错，直接用perl完成了如下这个脚本：
 
-{% highlight perl %}
+```perl
 
     #!env perl
     use warnings;
@@ -143,7 +143,7 @@ jekyll提供了ruby脚本/usr/local/rvm/gems/ruby-1.9.3-p0/gems/jekyll-0.11.2/li
     $sth->finish();
     $dbh->disconnect();
 
-{% endhighlight %}
+```
 
 注意到中文url的不可读性，需要提前把wordpress的博客静态化url改成英文的。好在我一年前已经这么做了。
 比较郁闷的一点是：wordpress的tag和category存放的表结构太恶心了，犹豫很久，最后放弃了导出博文对应category和tags的想法...

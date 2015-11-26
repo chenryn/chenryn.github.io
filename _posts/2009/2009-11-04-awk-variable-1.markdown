@@ -24,7 +24,7 @@ awk默认的RS，就是"\n"（默认FS是" "和"\t"即tab），每碰见一个RS
 如果在BEGIN{}里另外定义RS的话，要注意的是，这个时候"\n"还不会成为字符出现，而是自动转为默认的FS。
 
 对test的实验过程如下：
-{% highlight bash %}
+```bash
 [root@raocl ~]# cat test
 123 456
 abc def
@@ -52,11 +52,11 @@ DEF
 abc def
 DEF
 654 321
-{% endhighlight %}
+```
 我是似乎明白了，不知道路过我博客的同仁们明白了么？
 
 然后说RT，还是用实验来证明吧：
-{% highlight bash %}
+```bash
 [root@raocl ~]# awk 'BEGIN{RS="ABC";FS="\t"}{print $1,RT}' ts
 123 456
 abc def
@@ -70,19 +70,19 @@ ABC
 DEF
 654 321
 ABC
-{% endhighlight %}
+```
 对了，还记得上回取上一行用的办法么？我再试试：
-{% highlight bash %}
+```bash
 [root@raocl ~]# awk 'BEGIN{RS="ABC";FS="\t"}{print $1,x}{x=RT}' ts
 123 456
 abc def
 DEF
 654 321
 ABC
-{% endhighlight %}
+```
 也是打印出来上一行的RT了。
 这个都是同一的字符做RS，下面转载一个复杂的正则匹配RS的例子：
-{% highlight bash %}
+```bash
 [root@mip blog]# cat TR_file
 Sun Jan 2 07:42:56 2000
 Database mounted in Exclusive Mode
@@ -101,5 +101,5 @@ RT_file
 Sun Jan 2 07:42:56
 abc Jan 2 12:42:56
 Sun Jan 2 23:00:00
-{% endhighlight %}
+```
 

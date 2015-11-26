@@ -18,7 +18,7 @@ oringin是类unix主机，区分大小写，返回一个正确的200，一个错
 如果要让同样的内容就缓存一份数据，我想就只能在squid/nginx内核在处理url之前，将url的大小写问题处理掉。
 
 squid可以url_rewrite_program，perl很简单的lc()即可，如下：
-{% highlight perl %}
+```perl
 #!/usr/bin/perl -w
 $|=1;
 while(<>){
@@ -26,6 +26,6 @@ while(<>){
     my $uri=lc($X[0]);
     print($uri);
 }
-{% endhighlight %}
+```
 
 nginx的http_perl_module，看起来像是做这个的，不过官网上声明说，里面的perl如果执行太多的查询类操作（比如DNS域名解析、数据库操作等），很可能就把nginx的worker-process跑挂了……；且启用这个模块的话，就不能reconfigure，否则可能内存溢出云云……

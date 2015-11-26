@@ -4,7 +4,7 @@ gems: [jekyll-paginate]
 permalink: /:year/:month/:day/:title 
 
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md", "chenryn.github.com"]
-highlighter: pygments
+#highlighter: pygments
 excerpt_separator: ""
 paginate: 25
 # Themes are encouraged to use these universal variables 
@@ -115,4 +115,6 @@ JB :
 markdown: kramdown
 kramdown:
   entity_output: symbolic
+  input: GFM
+  syntax_highlighter: rouge
 

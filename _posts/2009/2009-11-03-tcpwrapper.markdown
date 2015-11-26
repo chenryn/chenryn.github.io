@@ -24,14 +24,14 @@ tcpwrapper loglocal3.info /var/log/tcplog
 
 tcpwrapper监控的是inetd里的启动服务，用telnet举例如下
 
-{% highlight bash %}
+```bash
 telnet:ALL
 EXCEPT LOCAL, .M-gtuiw.com
 echo "request from %d@%h:" >> /var/log/telnet.log;
 if [ %h != "OS.M-gtuiw.com:" ] ; then
     finge -l @%h >> /var/log/telnet.log
 fi
-{% endhighlight %}
+```
 意即允许除了本机和M-gtuiw.com域下主机以外的所有telnet请求，并以“请求来自服务名@主机名”的方式记录进日志。（注意：EXCEPT也可以用在servicename后面）
 
 和iptables一样（好像说反了，其实应该是iptables和tcpd一样），这个allow和deny的规则也是讲究先来后到的，所以会有个ALL:ALL:deny收尾（如果单有deny文件，就在里头写ALL:ALL就可以了）。
@@ -49,11 +49,11 @@ telnet    stream    tcp    nowait    root    /usr/sbin/tcpd   
 
 6. 日志结果，直接摘抄一段如下：
 
-{% highlight bash %}
+```bash
 Jul 31 22:00:52 [url]www.test.org[/url] in.telnetd[4365]: connect from 10.68.32.1
 Jul 31 22:02:10 [url]www.test.org[/url] in.telnetd[4389]: connect from 10.68.32.5
 Jul 31 22:04:58 [url]www.test.org[/url] in.ftpd[4429]: connect from 10.68.32.3
-{% endhighlight %}
+```
 
 以上说了这么多，都是unix上的，最后来一句，在linux上，xinetd就是这个inetd+tcpwrapper了。何况还有强大的iptables……它可不像tcpwrapper只能管tcp协议的服务哦~~
 

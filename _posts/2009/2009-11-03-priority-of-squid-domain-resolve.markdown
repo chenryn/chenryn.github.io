@@ -15,10 +15,10 @@ category: squid
 
 这批服务器在升级squid前，曾经在一台机器上测试新版本配置，之后一直没有更改，其中有如下字段：
 
-{% highlight squid %}
+```squid
 cache_peer 1.2.3.4 parent 80 0 no-query no-netdb-exchange originserver
 cache_peer_domain 1.2.3.4 www.test.com
-{% endhighlight %}
+```
 
 所以在系统上怎么修改，都没法成功了。
 由此可知，CDN加速对域名的解析，是squid配置文件最优先，然后才是系统的hosts文件，最后是DNS服务器。

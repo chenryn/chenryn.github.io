@@ -11,9 +11,9 @@ tags:
 
 计算全日志中最高带宽的命令行如下：
 
-{% highlight bash %}
+```bash
 cat $ACCESS_LOG|awk -F'[: ]' '{a[$5":"$6]+=$14}END{for(i in a){print i,a[i]}}'|sort|awk '{a+=$2;if(NR%5==0){if(a>b){b=a;c=$1};a=0}}END{print c,b*8/300/1024/1024}'
-{% endhighlight %}
+```
 （日志为标准apache日志格式）
 而把最后的awk改成'{a+=$2;if(NR%5==0){print $1,a*8/300/1024/1024;a=0}}'，就可以输出每5分钟时的流量值，然后用GD库画图~~（有时间看看perl的GD:Graph模块，应该不难）
 

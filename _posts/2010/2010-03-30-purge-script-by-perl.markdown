@@ -10,7 +10,7 @@ tags:
 
 squid的purge，一般有两种方式，squidclient -m purge url或者http request (method)purge url。如果任务不太多的情况下，直接使用squidclient -p 80 -h 1.2.3.4 -m purge url即可。如果任务比较繁重的情况下，telnet80后直接发送purge请求稍微好一些。作为初学perl的练手，写一个purge脚本。如下：
 
-{% highlight perl %}
+```perl
 #!/usr/bin/perl -w
 use IO::Socket;
 #检测脚本参数个数
@@ -46,5 +46,5 @@ while (defined($ip=<HOST>)){
 }
 #关闭ip列表文件
 close(HOST);
-{% endhighlight %}
+```
 

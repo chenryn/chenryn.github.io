@@ -16,30 +16,30 @@ dotcloud是日本的一个PAAS厂商。一年多前因为plack作者的加入推
 
 跟安装其他python模块一样：
 
-{% highlight python %}
+```python
 easy_install pip && pip install dotcloud
-{% endhighlight %}
+```
 
 ## 第三步，个人密钥认证
 
 在dotcloud的个人主页( "settings":http://www.dotcloud.com/account/settings )上就能看到个人密钥。然后在终端里输入密钥：
 
-{% highlight bash %}
+```bash
 [root@localhost ~]# dotcloud
 Enter your api key:
-{% endhighlight %}
+```
 
 这个密钥就存在了~/.dotcloud/dotcloud.conf里，以后就不用再认证了。
 
 ## 第四步，创建项目文件
 
-{% highlight bash %}
+```bash
 [root@localhost ~]# mkdir myapp-on-dotcloud && cd myapp-on-dotcloud
 [root@localhost myapp-on-dotcloud]# dotcloud create myapp-on-dotcloud
 [root@localhost myapp-on-dotcloud]# dancer -a helloworld
 [root@localhost myapp-on-dotcloud]# touch dotcloud.yml
 [root@localhost myapp-on-dotcloud]# echo "require 'bin/app.pl';" > helloworld/app.psgi
-{% endhighlight %}
+```
 
 用dotcloud命令创建项目myapp-on-dotcloud，并且在项目中运用dancer。唯一需要多加一个文件app.psgi，这个文件是云环境中psgi运行时需要读取的。
 
@@ -47,7 +47,7 @@ Enter your api key:
 
 * dotcloud.yml的配置，这相当于云环境的Basic File:
 
-{% highlight yaml %}
+```yaml
 www:
   type: perl
   approot: helloworld
@@ -56,12 +56,12 @@ www:
     - JSON
 db:
   type: mysql
-{% endhighlight %}
+```
 这个yaml文件，第一级是节点的名字，可以随意取名，主要的是type，必须是dotcloud支持的，比如静态文件的static，动态应用的perl，数据库的mysql等等。然后是approot，指定web应用的/路径。最后是requirements，不过这个也可以通过Makefile.PL文件来指明。
 
 * Makefile.PL的修改:
 
-{% highlight perl %}
+```perl
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
@@ -84,15 +84,15 @@ WriteMakefile(
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'helloworld-*' },
 );
-{% endhighlight %}
+```
 
 这个文件绝大多数是dancer命令自动创建的。唯一需要补充的一行是Plack。因为dotcloud不能自动根据dancer安装plack环境。
 
 ## 第六步，上传项目，等待环境部署
 
-{% highlight bash %}
+```bash
 [root@localhost myapp-on-dotcloud]# dotcloud push myapp-on-dotcloud
-{% endhighlight %}
+```
 
 然后可以看到程序首先是启动rsync命令，根据UNIX时间戳比对文件变化。上传新文件后，会根据最新的Makefile的配置安装相应的模块。最后初始化项目，创建相应的请求路由。
 
@@ -100,7 +100,7 @@ WriteMakefile(
 
 运行dotcloud info myapp-on-dotcloud命令，即可看到如下输出：
 
-{% highlight yaml %}
+```yaml
 db:
     config:
         mysql_masterslave: true
@@ -116,11 +116,11 @@ www:
     instances: 1
     type: perl
     url: http://myapp-on-dotcloud-user.dotcloud.com/
-{% endhighlight %}
+```
 
 于是我们就可以看到数据库的密码了。然后我们可以这样运用dotcloud的数据库：
 
-{% highlight bash %}
+```bash
 [root@localhost helloworld]# dotcloud run myapp-on-dotcloud.db -- mysql -uroot -pA1BAAaAaaaA5Aa1aAAAa
 # mysql -uroot -pA1BAAaAaaaA5Aa1aAAAa
 Welcome to the MySQL monitor.  Commands end with ; or \g.
@@ -139,12 +139,12 @@ mysql> show databases;
 2 rows in set (0.00 sec)
  
 mysql> Bye
-{% endhighlight %}
+```
 
 可以看到，创建出来的mysql节点，是带有replica功能的，而且默认没有创建项目同名的库，需要自己创建。
 类似的，也可以通过ssh管理项目节点。详细的查看命令是dotcloud info raocl.www（看起来很面向对象化吧）：
 
-{% highlight yaml %}
+```yaml
 aliases:
 - myapp-on-dotcloud-user.dotcloud.com
 build_revision: rsync-1329106583210
@@ -163,11 +163,11 @@ ports:
     url: http://myapp-on-dotcloud-user.dotcloud.com/
 state: running
 type: perl
-{% endhighlight %}
+```
 
 这里可以清楚的看到节点是运行在amazon的EC2上的，开起来7478端口的ssh可用。当然没必要自己用ssh去链接，因为可以这样直接运行：
 
-{% highlight bash %}
+```bash
 [root@localhost helloworld]# dotcloud ssh myapp-on-dotcloud.www
 # $SHELL
 dotcloud@myapp-on-dotcloud-default-www-0:~$ id
@@ -186,7 +186,7 @@ dotcloud   165  0.0  0.0  73500 19728 ?        S    04:17   0:00      \_ /usr/lo
 dotcloud   166  0.0  0.0  73500 19728 ?        S    04:17   0:00      \_ /usr/local/bin/uwsgi --pidfile /var/dotcloud/uwsgi.pid -s /var/dotcloud/uwsgi.sock --chmod-socket=660 --master --processes 4 --psgi app.psgi --disable-logging
 dotcloud   167  0.0  0.0  73500 19728 ?        S    04:17   0:00      \_ /usr/local/bin/uwsgi --pidfile /var/dotcloud/uwsgi.pid -s /var/dotcloud/uwsgi.sock --chmod-socket=660 --master --processes 4 --psgi app.psgi --disable-logging
 dotcloud   168  0.0  0.0  73500 19728 ?        S    04:17   0:00      \_ /usr/local/bin/uwsgi --pidfile /var/dotcloud/uwsgi.pid -s /var/dotcloud/uwsgi.sock --chmod-socket=660 --master --processes 4 --psgi app.psgi --disable-logging
-{% endhighlight %}
+```
 
 这下看到了，其实就是用uwsgi运行psgi程序。题外话：发现用的是supervisord做进程管理。
 这个时候就可以通过http://myapp-on-dotcloud.dotcloud.com/访问到dancer的index页面了~熟悉的dancing。。。。可以看到，整个dotcloud环境是比较接近server环境的，除了上传的几个特殊文件以外，基本跟普通的dancer开发web一样。

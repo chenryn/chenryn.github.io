@@ -7,10 +7,10 @@ category: squid
 
 今天在 squid 服务器上，无意看到一个让我无比惊讶的访问日志，随后一统计，同样的日志居然还不在少数，……
 
-{% highlight bash %}
+```bash
     [root@tinysquid2 ~]# tail -f /cache/logs/access.log |grep HIT
     1268824378.683     64 125.39.107.46 TCP_MEM_HIT/200 851 GET http://www.114.com.cn/style/css/jquery.autocomplete.css - DIRECT/117.25.130.146 text/css "http://www.114.com.cn/gindex.html" "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; QQPinyin 686; SV1; 360SE)"
-{% endhighlight %}
+```
 
 居然存在 `TCP_MEM_HIT/200` 的情况下还 `DIRECT` 回源的情况！！
 
@@ -18,7 +18,7 @@ category: squid
 
 不过从 squidclient 的 mgr:info 来看，不支持他的这种说法。
 
-{% highlight bash %}
+```bash
     Cache information for squid:
         Request Hit Ratios:    5min: 45.4%, 60min: 55.7%
         Byte Hit Ratios:    5min: 59.2%, 60min: 62.3%
@@ -28,19 +28,19 @@ category: squid
         Storage Mem size:    32196 KB
         Mean Object Size:    15.91 KB
         Requests given to unlinkd:    498
-{% endhighlight %}
+```
 
 可以看到内存使用的很少，才 32M，而 free 是 3G，cache\_mem 是 1G。
 
 还有，之后对全部日志进行分析时发现，cache\_status 不单单是 `TCP_MEM_HIT` 会出现这种情况，全部日志的情况如下：
 
-{% highlight bash %}
+```bash
     [root@tinysquid2 ~]# cat /cache/logs/access.log|grep HIT|grep DIRECT|grep -v REFRESH|awk '{print $4}'|sort|uniq -c
        1086 TCP_HIT/200
       18386 TCP_IMS_HIT/304
       45964 TCP_MEM_HIT/200
           2 TCP_MEM_HIT/206
-{% endhighlight %}
+```
 
 即使是 DISK 上的 `TCP_HIT` 也有回源的。太奇怪了！！
 

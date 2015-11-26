@@ -9,7 +9,7 @@ tags:
 
 准备两个表，一个存储原始数据，另一个存储每5分钟归总一次的数据。之后根据时间段绘制省份运营商性能图的时候，就直接从汇总表里获取数据；原始表留给详细查询。
 数据库准备脚本如下：
-{% highlight mysql %}USE myops;
+```mysqlUSE myops;
 CREATE TABLE IF NOT EXISTS cdn_ori_record (
 	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	ip INT(10) NOT NULL DEFAULT '0000000000',
@@ -45,4 +45,4 @@ DELIMITER ;
 SET GLOBAL event_scheduler = 1;
 CREATE EVENT IF NOT EXISTS event_cdn ON SCHEDULE EVERY 300 SECOND ON COMPLETION PRESERVE DO CALL cdn_cron();
 ALTER EVENT event_cdn ON COMPLETION PRESERVE ENABLE;
-{% endhighlight %}
+```

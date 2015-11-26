@@ -11,11 +11,11 @@ tags:
 squid监控之前有一篇关于snmp的内容，不过这次是真要用上了，所以细细挑出来几个做监控。碰巧凯哥更新了一把modern perl的东西，我亦步亦趋，也试试dancer。不过花了两天时间，DBIx::Class::Schema还是没搞出来，最终还是简单的用DBI跳过了……
 用的database就是之前nmap试验时生成的数据，有application/channel/intranet等column。
 首先安装：
-{% highlight perl %}cpanm Dancer DBI DBD:mysql Template Dancer::Session::YAML
+```perlcpanm Dancer DBI DBD:mysql Template Dancer::Session::YAML
 dancer -a cachemoni
-{% endhighlight %}
+```
 然后修改cachemoni/lib/cachemoni.pm如下：
-{% highlight perl %}
+```perl
 package cachemoni;
 use Dancer ':syntax';
 use Dancer::Plugin::Database;
@@ -152,9 +152,9 @@ sub _snmp_walk {
     };
 };
 
-true;{% endhighlight %}
+true;```
 修改cachemoni/config.yml如下：
-{% highlight yaml %}
+```yaml
 appname: "cachemoni"
 layout: "main"
 charset: "UTF-8"
@@ -181,9 +181,9 @@ plugins:
       RaiseError: 1
       AutoCommit: 1
     on_connect_do: ["SET NAMES 'utf8'", "SET CHARACTER SET 'utf8'" ]
-    log_queries: 1{% endhighlight %}
+    log_queries: 1```
 创建cachemoni/views/monitor.tt如下：
-{% highlight html %}[% IF session.logged_in %]
+```html[% IF session.logged_in %]
 [% FOREACH stat IN status %]
   <hr> channel: [% stat.channel %]
   <table width="100%" cellspacing="0" cellpadding="0" border="1">
@@ -206,9 +206,9 @@ plugins:
 [% END %]
 [% ELSE %]
   内部信息，请登陆后查看
-[% END %]{% endhighlight %}
+[% END %]```
 创建cachemoni/views/login.tt如下：
-{% highlight html %}
+```html
 <center>
 <h2>登陆页面</h2>
 [% IF err %]<p class=error><strong>Error:</strong> [% err %][% END %]
@@ -221,9 +221,9 @@ plugins:
     <dd><input type=submit value=login>
   </dl>
 </form>
-</center>{% endhighlight %}注册页面类似，不贴了。
+</center>```注册页面类似，不贴了。
 然后是layout层的共用部分，之前定义了是views/layouts/main.tt，如下：
-{% highlight html %}……
+```html……
 <body>
 <div class=metanav>
   <a href="/">首页</a> | 
@@ -239,12 +239,12 @@ plugins:
 Powered by <a href="http://perldancer.org/">Dancer</a> [% dancer_version %]
 
 </body>
-</html>{% endhighlight %}
+</html>```
 这里修改了<%%>为[%%]，其他的tt模版也要改。
 然后运行perl cachemoni/bin/app.pl，启动3000端口的监听，访问一下如下：
 <img src="/images/uploads/squid-monitor-demo.jpg" alt="" title="123" width="571" height="401" class="alignnone size-full wp-image-2505" /></a>
 这就算完成一个小的网页了，然后开始配置进apache：
-{% highlight bash %}cpanm Plack::Handler::Apache2
+```bashcpanm Plack::Handler::Apache2
 wget http://search.cpan.org/CPAN/authors/id/P/PH/PHRED/mod_perl-2.0.5.tar.gz
 tar zxvf mod_perl-2.0.5.tar.gz
 cd mod_perl-2.0.5
@@ -269,6 +269,6 @@ cat >> /usr/local/apache2/conf/httpd.conf <<EOF
 </VirtualHost>
 EOF
 /usr/local/apache2/bin/apachectl restart
-{% endhighlight %}
+```
 访问一下，OK~
 各种和webserver搭配的方法（其实就是两种：mod_perl和各种cgi）详见：<a href="http://search.cpan.org/~sukria/Dancer-1.3060/lib/Dancer/Deployment.pod">CPAN文档</a>

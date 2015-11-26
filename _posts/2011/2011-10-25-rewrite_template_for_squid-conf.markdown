@@ -7,7 +7,7 @@ category: perl
 
 本文纯属练习Template模块使用，是否可以运用到生产，是否有必要运用到生产，都是未知数……
 包括如下文件：
-{% highlight bash %}[raocl@localhost tt2-test]$ tree
+```bash[raocl@localhost tt2-test]$ tree
 .
 |-- config-cdcgame.net.yml
 |-- config-china.com.yml
@@ -16,9 +16,9 @@ category: perl
 |-- squid.layout.tt
 `-- tt4squid.pl
 
-0 directories, 6 files{% endhighlight %}
+0 directories, 6 files```
 其中tt4squid.pl如下：
-{% highlight perl %}#!/usr/bin/perl
+```perl#!/usr/bin/perl
 use warnings;
 use strict;
 use Template;
@@ -38,9 +38,9 @@ sub loadconfigs {
         push @ref_array, $hash_ref;
     };
     return \@ref_array;
-};{% endhighlight %}
+};```
 config.tt模板如下：
-{% highlight perl %}[%# 用%后面紧跟的#表示注释。用%紧跟的-表示消除外面的一个\s。 %]
+```perl[%# 用%后面紧跟的#表示注释。用%紧跟的-表示消除外面的一个\s。 %]
 [%# 用WRAPPER表示加入layout模板，这个跟INCLUDE/PROCESS有点不同，之前Dancer的时候用过 %]
 [% WRAPPER squid.layout.tt -%]
 [% FOREACH config IN configs %]
@@ -87,9 +87,9 @@ refresh_pattern -i [% pattern.url_regex %] [% pattern.min %] [% pattern.per %]% 
 [% END -%]
 [% END -%]
 [% END %]
-[% END %]{% endhighlight %}
+[% END %]```
 通过WRAPPER加载的squid.layout.tt模板如下：
-{% highlight squid %}#################ACL1############################
+```squid#################ACL1############################
 acl all src 0.0.0.0/0.0.0.0
 #############################################
 http_port [% http_port %] accel vhost vport http11 allow-direct
@@ -160,9 +160,9 @@ http_access deny all
 acl snmppublic snmp_community cacti_china
 snmp_access allow snmppublic ControlCenter
 snmp_access deny all
-always_direct allow all{% endhighlight %}
+always_direct allow all```
 最后域名配置config-china.com.yml如下：
-{% highlight yaml %}---
+```yaml---
 #yaml格式，用"  "区分层次，用": "区分hash，用"- "区分array
 cache_deny_list: 
   - "^http://www.china.com/"
@@ -202,17 +202,17 @@ refresh_patterns:
       - ignore-reload
       - reload-into-ims
     per: 20
-    url_regex: '^http://.*china.com/.+\.(jsp|do)'{% endhighlight %}
+    url_regex: '^http://.*china.com/.+\.(jsp|do)'```
 另一个配置config-cdcgame.net.yml如下：
-{% highlight yaml %}
+```yaml
 custom: cdcgame
 rewrite:
   concurrency: 5
   program: /usr/local/squid/bin/rewrite.pl
-  url_regex: '^http://www.cdcgame.net/[0-9]+\.js\?'{% endhighlight %}
+  url_regex: '^http://www.cdcgame.net/[0-9]+\.js\?'```
 主要解决的就是acl和http_access的配合问题，最后想是通过优先级数组的方式，同一优先级的acl写完后就先写对应的http_access；这样yml书写起来有些啰嗦，最好还是能有web页面~~
 最后运行命令"perl tt4squid.pl config.tt"，结果如下：
-{% highlight squid %}#################ACL1############################
+```squid#################ACL1############################
 acl all src 0.0.0.0/0.0.0.0
 #############################################
 http_port 80 accel vhost vport http11 allow-direct
@@ -284,4 +284,4 @@ http_access deny acl_china_deny_7 china_allow_referer
 refresh_pattern -i ^http://.*china.com/.+\.(jsp|do) 180 20% 1440 ignore-reload reload-into-ims
 
 http_reply_access allow all
-...(略){% endhighlight %}
+...(略)```

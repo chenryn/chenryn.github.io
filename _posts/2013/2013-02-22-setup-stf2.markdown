@@ -7,7 +7,7 @@ STF 更新到 2.0 版本，支持使用 redis 队列做任务分发，比原先�
 
 部署步骤如下：
 
-{% highlight bash %}
+```bash
     # 因为 stf 要求在 Perl5.12 以上运行，CentOS6 还是 5.10 的老版本，所以直接用 Debian 测试了
     apt-get install -y memcached redis-server libmysqlclient-dev libdbd-mysql-perl
     # 设置 mysql-server 包安装时需要的问答
@@ -58,7 +58,7 @@ STF 更新到 2.0 版本，支持使用 redis 队列做任务分发，比原先�
     export STF_STORAGE_ROOT=/data3
     plackup -a etc/storage.psgi -p 8890 &
 
-{% endhighlight %}
+```
 
 然后上 9000 端口的 web 添加 cluster 和 storage，如下截图：
 
@@ -68,7 +68,7 @@ STF 更新到 2.0 版本，支持使用 redis 队列做任务分发，比原先�
 
 最后测试一下上传下载，如果上面 psgi 是 DEBUG 运行的，就可以看到详细的过程了。
 
-{% highlight bash %}
+```bash
     lwp-request -m PUT http://192.168.0.101/bucket
     ^D
     lwp-request -m PUT http://192.168.0.101:5000/bucket/test.txt
@@ -77,7 +77,7 @@ STF 更新到 2.0 版本，支持使用 redis 队列做任务分发，比原先�
     lwp-request http://192.168.0.101:5000/bucket/test.txt
     ls /data1/p/e/g/k/pegkuclninhsyqxftuzpwcuhgughpa.txt
     ls /data2/p/e/g/k/pegkuclninhsyqxftuzpwcuhgughpa.txt
-{% endhighlight %}
+```
 
 __2013 年 03 月 20 日更新__
 
@@ -85,7 +85,7 @@ __2013 年 03 月 20 日更新__
 
 源代码包中，apache-sample.conf 比 nginx-sample.conf 要全面的多。不过其实还是 nginx 配置起来容易，比如给 dispatcher.psgi 加上 nginx 代理，只需要这样就可以了：
 
-{% highlight nginx %}
+```nginx
 server {
     listen 80;
     server_name stf;
@@ -98,7 +98,7 @@ server {
         proxy_pass $reproxy;
     }
 }
-{% endhighlight %}
+```
 
 然后我们就可以直接通过 `http://192.168.0.101/bucket/test.txt` 来访问了。
 

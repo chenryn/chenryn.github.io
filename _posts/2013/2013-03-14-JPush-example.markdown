@@ -44,7 +44,7 @@ adt eclipse 直接从 android 官网下载 adt-bundle-linux-x86-20130219.tar.gz 
 
 比如通过简易通知推送接口发送如下：
 
-{% highlight bash %}
+```bash
     #!/bin/sh
     #下面两个是你新建应用后就分配的
     APP_KEY=$1
@@ -56,12 +56,12 @@ adt eclipse 直接从 android 官网下载 adt-bundle-linux-x86-20130219.tar.gz 
     verification_code=`echo -ne "$sendno$receiver_type$API_MasterSecret" | md5sum | awk '{print $1}'`
     #platform包括android,ios等等，可以用逗号分开写多个
     curl http://api.jpush.cn:8800/sendmsg/v2/notification -d "sendno=${sendno}&app_key=${APP_KEY}&receiver_type=${receiver_type}&platform=android&txt=123&verification_code=${verification_code}"
-{% endhighlight %}
+```
 
 然后收到如下响应：
 
-{% highlight bash %}
+```bash
     {"sendno" :"2", "errcode":0,  "errmsg":"Succeed"}
-{% endhighlight %}
+```
 
 手机也同时响起~成功。

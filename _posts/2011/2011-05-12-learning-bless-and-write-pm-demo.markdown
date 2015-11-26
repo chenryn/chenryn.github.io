@@ -6,7 +6,7 @@ category: perl
 ---
 
 考虑到公司环境必须先rsa_auth再su的问题，一般的pssh啊mussh啊sshbatch啊，都不能直接用，决定把上篇脚本里的相关部分抽出来成为一个模块，借机学习一下package和bless的简单概念：
-{% highlight perl %}
+```perl
 #包名，如果做pm的话，必须和(.*).pm的名字一样
 package raocl;
 use Parallel::ForkManager;
@@ -110,9 +110,9 @@ $exp->soft_close();
 return $read;
 }
 #package结尾，必须return一个1，原因未知……
-1;{% endhighlight %}
+1;```
 使用如下：
-{% highlight perl %}#!/usr/bin/perl -w
+```perl#!/usr/bin/perl -w
 #可以在/usr/lib/perl5下，也可以在pl脚本的同目录下
 use raocl;
 #从文件中读取host列表为数组
@@ -127,4 +127,4 @@ $raocl=new raocl(hosts=>\@hosts,
 %result = $raocl->cluster("$shell");
 foreach my $host (keys %result) {
     print $host."\t".$result{$key},"##############\n";
-};{% endhighlight %}
+};```

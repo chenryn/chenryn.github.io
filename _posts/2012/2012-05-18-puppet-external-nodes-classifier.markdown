@@ -39,22 +39,22 @@ __2013年4月10日更新：感谢[@liu.cy](http://weibo.com/liucy1983)指出这�
 
 然后是我这里的想法是尽量不更改pp的语法，只是提供一个把group里的ip到fqdn的转化然后查找cluster配置组合成yaml。    
 也就是说有一个group的配置目录，其配置文件为"groupname.pp"，内容如下：
-{% highlight ruby %}
+```ruby
 group "groupname" {
     $string = "test"
     $arrays = [123, abc]
     include module1, module2
 }
-{% endhighlight %}
+```
 还有一个iplist的配置目录，其配置文件为“groupname.iplist”，内容如下：
-{% highlight squid %}
+```squid
 1.2.3.4
 2.3.4.5
-{% endhighlight %}
+```
 那么以后服务器组有啥变更，只需要修改一下iplist就好了，不用重启puppet进程。    
 
 所以有两个脚本，一个是 `external_node` 脚本：
-{% highlight perl %}
+```perl
 #!/bin/env perl
 use warnings;
 use strict;
@@ -109,9 +109,9 @@ sub sqlite_select {
     $dbh->disconnect();
     return $ret;
 };
-{% endhighlight %}
+```
 一个是维护sqlite的脚本：
-{% highlight perl %}
+```perl
 #!/bin/env perl
 use warnings;
 use strict;
@@ -155,10 +155,10 @@ sub sqlite_rebuild {
     $dbh->commit();
     $dbh->disconnect();
 };
-{% endhighlight %}
+```
 以上是ENC的配置。继续分析puppet dashboard，除了ENC外，另一个功能就是reports，相比ENC来说，reports功能还算稍微靠谱一点，用http方式替换puppet自身的store方式，并存数据在mysql里。目前使用dashboard的人主要也就是在用这个功能。    
 但是我个人认为，一般情况下运维不可能专门开一个页面看着puppet，也不太会有必要按照时间段查看状态报表汇总图这个东东，真正要紧的，是及时接到运行错误的报警以便上机处理。所以这里最后是一个监控reports的脚本，目前还没看到http方式的reports数据格式，所以暂时继续使用store的方式，然后采用Linux文件系统的inotify方式报警。
-{% highlight perl %}
+```perl
 #!env perl
 use strict;
 use warnings;
@@ -199,5 +199,5 @@ sub process {
     };
 };
 
-{% endhighlight %}
+```
 

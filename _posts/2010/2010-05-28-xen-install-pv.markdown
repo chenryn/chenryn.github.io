@@ -22,19 +22,19 @@ tags:
 赶紧重新下载……
 之后一路顺利。
 A机(10.10.10.10)上：
-{% highlight bash %}
+```bash
 wget http://mirrors.sohu.com/centos/5.4/isos/x86_64/CentOS-5.4-x86_64-bin-DVD.iso -c
 mount -o loop -t iso9660 /cache/CentOS-5.4-x86_64-bin-DVD.iso /mnt
 echo '/mnt 10.10.10.0/24(ro,async)'>>/etc/exports
 /etc/init.d/portmap start
 /etc/init.d/nfs start
-{% endhighlight %}
+```
 B机(10.10.10.11)上：
-{% highlight bash %}
+```bash
 mkdir /img
 dd if=/dev/zero of=/img/test.img bs=1024k count=8k
 virt-install --paravirt --file=/img/test.img --name=test --ram=1024 --vcpus=1 --bridge=xenbr0 --bridge=xenbr1 --nographics --location=nfs:10.10.10.10:/mnt
-{% endhighlight %}
+```
 （半虚拟化、虚拟机安装位置、虚拟机名、内存、CPU、桥接网卡*2、文本模式、安装源）
 然后就是很普通的linux安装过程了，填ip，分区云云……选择最小化安装，reboot。
 又见报错：

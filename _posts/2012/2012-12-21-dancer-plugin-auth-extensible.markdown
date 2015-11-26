@@ -9,17 +9,17 @@ category: dancer
 
 这个原始版本的使用方法大概是这样的：
 
-{% highlight perl %}
+```perl
     get '/secret' => sub :RequireRole(God) { DestroyWorld(); };
     get '/users' => sub :RequireLogin {
         my $user = logged_in_user;
         return "Hi there, $user->{username}";
     };
-{% endhighlight %}
+```
 
 哇，我是第一次见到在 `sub` 后面还可以写这样的东西（好吧，暴露了本人的菜鸟本质）！赶紧打开模块的源代码，然后找到了相关的几行：
 
-{% highlight perl %}
+```perl
     use attributes;
     use Scalar::Util;
     use Exporter 'import';
@@ -60,7 +60,7 @@ category: dancer
             } @desired_attribs
         ];
     }
-{% endhighlight %}
+```
 
 代码中的 `$route_handler->code` 就是应用中写的 `sub {}`。__整个代码中，最关键的部分是这句 `attributes::get($coderef)` ！__
 
@@ -72,17 +72,17 @@ category: dancer
 
 新版本的使用方法如下：
 
-{% highlight perl %}
+```perl
     get '/secret' => require_any_role [qw(God Admin)] => sub { DestroyWorld(); };
     get '/users' => require_login => sub {
         my $user = logged_in_user;
         return "Hi there, $user->{username}";
     };
-{% endhighlight %}
+```
 
 这种添加新关键词的写法更加的 dancer。所以能从实现中学到更有普适性的 `Dancer::Plugin` 开发方法。摘要代码如下：
 
-{% highlight perl %}
+```perl
     use Dancer::Plugin;
     use Dancer qw(:syntax);
     sub require_any_role {
@@ -127,7 +127,7 @@ category: dancer
         };
     }
     register_hook qw(login_required permission_denied);
-{% endhighlight %}
+```
 
 主要摘要了几个部分：
 
@@ -153,7 +153,7 @@ __12 月 30 日附：__
 
 在 github 上提交了一个短短的 patch ，给 DPAE 加上了 正则匹配 role 的功能，感谢 Perl5.10的强大，代码其实就修改一行足以实现：
 
-{% highlight perl %}
+```perl
     lib/Dancer/Plugin/Auth/Extensible.pm @ 891cd02
     @@ -266,7 +266,9 @@ sub _build_wrapper {
              my $role_match;
@@ -190,4 +190,4 @@ __12 月 30 日附：__
      get '/anyrole' => require_any_role ['Foo','BeerDrinker'] => sub {
          "Matching one of multiple roles works";
      };
-{% endhighlight %}
+```

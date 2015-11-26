@@ -8,7 +8,7 @@ tags:
 ---
 
 话接上篇，ip整理出来，然后就是接一个ip地址，快速定位查找到它属于哪个ip段，然后返回具体的省份和运营商。因为之前的ip已经转换成数字，而且是顺序排列的，所以可以采用折半算法(二分法)。perl脚本如下：
-{% highlight perl %}#!/usr/bin/perl -w
+```perl#!/usr/bin/perl -w
 #my $ip = inet_aton("$ARGV[0]");
 my $ip = inet_aton(get_test_ip());
 my $file = $ARGV[1] || 'iplist.txt';
@@ -66,5 +66,5 @@ sub get_area_code {
 #生成一个随机的合法ip地址
 sub get_test_ip {
     return join '.', map int rand 256, 1..4;
-}{% endhighlight %}
+}```
 

@@ -13,7 +13,7 @@ tags:
 # puppet安装
 
 由于关注热度比较高，所以各种简便安装办法都出来了。大家可以各自选择，走yum、apt或者src都行。我这里演示一下用rubygems的办法。优点是不用像yum那样找epel源，而且版本够新，缺点是没有yum自动出来的配置目录和管理脚本。
-{% highlight bash %}
+```bash
 #!/usr/bin/env bash
 # Set Curlrc for https
 echo 'insecure' >> ~/.curlrc
@@ -34,7 +34,7 @@ useradd -g puppet -s /bin/false -M puppet
 # Get default puppet config
 mkdir /etc/puppet
 puppet --genconfig > /etc/puppet/puppet.conf
-{% endhighlight %}
+```
 需要说明一点，puppet对集群的识别高度依赖fdqn，所以必须保证主机名和IP的一一对应。我的环境里因为本身kerberos认证也是fdqn依赖的，所以反而省事不少，其他环境中，估计折腾dns或者hosts也是个大步骤。    
 
 # facter简介
@@ -48,23 +48,23 @@ puppet --genconfig > /etc/puppet/puppet.conf
 安装完成后需要建立认证关系。puppet没有像其他通用系统一样借用sshkey的认证，而是自己维护了一套，所以有这么个单独的章节：    
 
 首先是客户端上的申请，没有单独的命令，就跟一次正常请求一样即可：    
-{% highlight bash %}
+```bash
     puppetd --test --server master.pp.domain.com    
-{% endhighlight %}
+```
 
 注意：因为puppet2.7和ruby1.9.2以上版本在ssl上的冲突，所以新版本ruby的client需要多几步处理：    
-{% highlight bash %}
+```bash
 scp master.puppet.domain.com:/etc/puppet/ssl/certs/ca.pem /etc/puppet/ssl/certs/
 hash=`openssl x509 -hash -noout -in /etc/puppet/ssl/certs/ca.pem`
 ln -s /etc/puppet/ssl/certs/ca.pem /etc/pki/tls/certs/${hash}.0
-{% endhighlight %}
+```
 
 这样才能正常申请cert。    
 
 然后在主控端上审批。首先可以puppetca --list查看有多少请求过来的client是未认证的。然后运行如下命令通过：    
-{% highlight bash %}
+```bash
     puppetca -s -a    
-{% endhighlight %}
+```
 (吐槽一下，内网上已经有这么多认证了，还搞一套pp的，还搞出问题来了，有够无聊的，强烈希望pp提供一个开关)
 
 # site.pp简介
@@ -84,13 +84,13 @@ node配置主要三个部分：
 3. node的特定类；    
 
 比如下面这个例子：
-{% highlight ruby %}
+```ruby
 node "cache[0-9]\.domain\.com" {
   $var = "strings"
   $array = ["one", "two"]
   include facter squid
 }
-{% endhighlight %}
+```
 
 # modules简介
 
@@ -120,7 +120,7 @@ puppet用的erb模板引擎，也是RoR中用的模板引擎。看起来和Perl5
 最后举例今天完成的一个简单的squid的配置。
 
 首先是/etc/puppet/manifests/site.pp：    
-{% highlight ruby %}
+```ruby
 import "squid"
 node "cache[0-9]\.domain\.com" {
 
@@ -133,11 +133,11 @@ node "cache[0-9]\.domain\.com" {
 
   include facter squid
 }
-{% endhighlight %}
+```
 
 然后是/etc/puppet/modules/facter/manifests/init.pp:
 
-{% highlight ruby %}
+```ruby
 class facter {
     file { "df.rb":
         path   => "/usr/lib/ruby/gems/1.8/gems/facter-1.6.8/lib/facter/df.rb",
@@ -146,7 +146,7 @@ class facter {
         source => "puppet:///modules/facter/df.rb",
     }
 }
-{% endhighlight %}
+```
 
 关于给facter写插件，网站的资料说的path都是直接在#{rubysitedir}/facter目录下。但我这里实际情况却不是(好吧，暴露了我的实验机并没有按照上面说的用rvm安装ruby而是yum的)。    
 __2013年1月31日更正：__
@@ -155,7 +155,7 @@ __更正以上__
 
 然后是对应的/etc/puppet/modules/facter/files/df.rb:
 
-{% highlight ruby %}
+```ruby
 data_dir_list = {}
 df = Facter::Util::Resolution.exec("/bin/df -m 2>/dev/null")
 df.each_line do |l|
@@ -178,13 +178,13 @@ data_dir_list.each do |k,v|
     end
   end
 end
-{% endhighlight %}
+```
 
 实现很简单，实质就是执行df -m，获取挂载点为/data、/data1...的目录数以及各目录的总大小，然后把结果添加到facter里。之所以要加这么个插件，是因为之后squid的缓存目录，需要根据目录数量和大小自动计算，而标准的facter里没有这方面的信息，无法传递相关变量。    
 
 下面正式进入squid模块部分。看/etc/puppet/modules/squid/manifests/init.pp:
 
-{% highlight ruby %}
+```ruby
 class squid {
     service { "squid":
         ensure    => running,
@@ -197,11 +197,11 @@ class squid {
         ensure  => present,
     }
 }
-{% endhighlight %}
+```
 这里只写了service和file两个，实际上还应该有package保证client上确实有squid软件，有file保证/etc/init.d/squid脚本存在等等。注意其中file里的notify和service里的subscribe正好是对应的意思。    
 
 最后是/etc/puppet/squid/template/squid.conf.erb:
-{% highlight squid %}
+```squid
 <% if (fs_type == 'aufs') -%>
 cache_dir aufs /data/fcache <%= Integer(dirsize_data.to_i*0.8) %> 16 256
 <% if (datadircount.to_i > 1) -%>
@@ -220,6 +220,6 @@ http_port <%= http_port %> vhost
 <% cache_peers.each do |peer| -%>
 cache_peer <%= peer %> parent 80 0 no-query originserver round-robin
 <% end %>
-{% endhighlight %}
+```
 这里只贴跟模板变量相关的部分。初学ruby，被to_i方法搞得很是郁闷，还好像eval方法之类的很像很眼熟~~    
 模板里cache_peers等，是在node配置里定义的；memorysize等，是facter获取的。

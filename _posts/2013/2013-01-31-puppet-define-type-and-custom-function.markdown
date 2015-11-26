@@ -13,7 +13,7 @@ Define Type
 
 比如我们要维护一个上千域名组成的 ProxyServer 集群，其域名配置是相近的。那么我们就可以提炼出 template 里会变化的部分作为参数。由此定义出一个 type 如下：
 
-{% highlight ruby %}
+```ruby
     define nginx::vhost4proxy(
         $iplist = [],
         $domainlist = [],
@@ -31,11 +31,11 @@ Define Type
             notify  => Service['nginx'],
         }
     }
-{% endhighlight %}
+```
 
 然后在 template 里使用参数来生成结果：
 
-{% highlight ruby %}
+```ruby
     upstream <%= nginx_proxy_name %> {
             consistent_hash $request_uri;
     <% nginx_proxy_servers.each do |ip| -%>
@@ -54,17 +54,17 @@ Define Type
         <%= scope.lookupvar("extconf") %>
     <% end %>
     }
-{% endhighlight %}
+```
 
 这样我们只需要在 puppet 中这样调用，就可以直接生成对应的配置了：
 
-{% highlight ruby %}
+```ruby
     nginx::vhost4proxy('server1':
         ['1.1.1.1 weight=2', '2.2.2.2 weight=3'],
         ['server1.domain', 'server1.alias.domain'],
         'access_log /path/to/other_log format'
     )
-{% endhighlight %}
+```
 
 Custom Function
 ===============
@@ -73,7 +73,7 @@ Custom Function
 
 这时候可以更进一步，把 vhost4proxy 的调用过程隐藏成一个 function，如下：
 
-{% highlight ruby %}
+```ruby
     require 'yaml'
     module Puppet::Parser::Functions
       newfunction(:gen_proxy_confd, :type => :statement) do |args|
@@ -88,11 +88,11 @@ Custom Function
         end
       end
     end
-{% endhighlight %}
+```
 
 然后只要把原先传递给 vhost4proxy 的参数写成 yaml 文件放好就行了。
 
-{% highlight yaml %}
+```yaml
     --- 
     server1: 
       iplist: 
@@ -108,15 +108,15 @@ Custom Function
             chunkin_resume;
         }
         access_log /path/to/other_log format;
-{% endhighlight %}
+```
 
 大家看起来是不是有点眼熟？没错，这个 yaml 的思路完全是借鉴了 hiera 的写法。但是 hiera 的设计是垂直继承的，不适合这里假设的平面式的情况 —— 当然，如果你觉得把这几千个 yaml 都写在一个大 yaml 文件里也不费劲的话。就不用上我这么折腾了~~
 
 最后在 puppet 配置中只用一行就搞定全部：
 
-{% highlight ruby %}
+```ruby
     gen_proxy_confd('nginx::vhost4proxy',"${modulepath}/nginx/yaml")
-{% endhighlight %}
+```
 
 要点
 ====

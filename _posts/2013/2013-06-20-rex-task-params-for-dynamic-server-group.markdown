@@ -14,7 +14,7 @@ Rex 默认的服务器组定义方式有三种，直接写在 `Rexfile` 文件�
 
 我们可以利用 `task` 可以接受命令行参数这个特点，完成这个功能：
 
-{% highlight perl %}
+```perl
 use Rex::Commands::DB {
     dsn      => "dbi:SQLite:dbname=/etc/puppet/webui/node.db",
     user     => "",
@@ -36,10 +36,10 @@ task "sqlite", sub {
 task 'hello', sub {
     say run "w";
 };
-{% endhighlight %}
+```
 
 然后这样运行命令即可：
 
-{% highlight bash %}
+```bash
 rex sqlite --role=cdn --class=nginx --todo=hello
-{% endhighlight %}
+```

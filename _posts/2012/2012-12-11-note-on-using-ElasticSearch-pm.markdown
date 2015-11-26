@@ -14,21 +14,21 @@ tags:
 
 这个 webserver 是之前已经创建过的。而且作用类似，也就是说，之前已经存在一个 `DancerApp/lib/DancerApp/First.pm` 里使用了 ElasticSearch 模块。相关代码如下：
 
-{% highlight perl %}
+```perl
     use Dancer ':syntax';
     use ElasticSearch;
     my $elsearch = ElasticSearch->new( config->{ElasticSearch} );
-{% endhighlight %}
+```
 
 然后给新项目创建 `DancerApp/lib/DancerApp/Second.pm` 同样使用 ElasticSearch 模块，代码原样复制。然后在 `DancerApp/lib/DancerApp.pm` 里先后加载：
 
-{% highlight perl %}
+```perl
     use Dancer ':syntax';
     use FindBin qw($Bin);
     use lib "$Bin/../lib";
     use DancerApp::First;
     use DancerApp::Second;
-{% endhighlight %}
+```
 
 启动应用后访问页面。怪事出现了： _First 应用正常，Second 应用报错说 ElasticSearch 连接不上_。
 
@@ -38,10 +38,10 @@ tags:
 
 试图使用下面的代码检查 `config` ，发现 config 里其他的设置都没问题，唯独和 ElasticSearch 相关的设定发生了变化：
 
-{% highlight perl %}
+```perl
     use Data::Dumper;
     get '/config' => sub { return Dumper config };
-{% endhighlight %}
+```
 
 结果中 `config->{ElasticSearch}` 只剩下 `trace_calls: 0` 一条设定， `servers`、`transport`、`no_refresh` 和 `max_requests` 都消失了！
 
@@ -51,10 +51,10 @@ ElasticSearch 模块在初始化的时候，会把参数传递给 `ElasticSearch
 
 _参数一直是以引用身份传递的，任何修改都会修改原始数据_
 
-{% highlight perl %}
+```perl
     my $servers = delete $params->{servers}
         || '127.0.0.1:' . $transport_class->default_port;
-{% endhighlight %}
+```
 
 随着 `delete` 操作，悲剧就此发生了。Dancer 里的全局变量 `config->{ElasticSearch}` 中的 servers 元素就此消失……
 
@@ -62,9 +62,9 @@ _参数一直是以引用身份传递的，任何修改都会修改原始数据_
 
 解决办法很容易，在每个模块里初始化 ElasticSearch 实例的适合，传递一个全局 `config->{ElasticSearch}` 的_副本的引用_过去。
 
-{% highlight perl %}
+```perl
     my $elsearch = ElasticSearch->new( { %{ config->{ElasticSearch} } } );
-{% endhighlight %}
+```
 
 亲爱的 David Precious 童鞋已经把这个问题上报给 ElasticSearch.pm 开发者了。或许之后会由模块内部做副本操作。目前只能自己来了。
 

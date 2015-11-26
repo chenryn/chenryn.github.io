@@ -9,13 +9,13 @@ tags:
 ---
 
 客户的要求，还剩下最后一步，就是referer限定。对于apache，有Mod_rewrite现成的可用：
-{% highlight apache %}
+```apache
 RewriteEngine on
 RewriteCond %{HTTP_REFERER} !^http://(www.)?test.com/.*$ [NC]
 RewriteRule .mp3$ http://www.test.com/ [R=301,L]
-{% endhighlight %}
+```
 不过既然之前已经用了perl，这里就一口气把perl写完吧：
-{% highlight perl %}
+```perl
 sub handler {
     my $r = shift;
     my $s = Apache2::ServerUtil->server;
@@ -38,7 +38,7 @@ sub handler {
    }
 +}
 }
-{% endhighlight %}
+```
 简单两句话，就ok了。测试如下：
     [27/May/2010:22:45:00 +0800] &quot;GET /201005272218/ceaf967f6bcf9a185a3287b2e3ff5a02/smg/123.mp3 HTTP/1.0&quot; 200 - <a href="http://music.test.com/">http://music.test.com</a> &quot;Wget/1.10.2 (Red Hat modified)&quot;
     [27/May/2010:22:45:05 +0800] &quot;GET /201005272218/ceaf967f6bcf9a185a3287b2e3ff5a02/smg/123.mp3 HTTP/1.0&quot; 404 - <a href="http://www.baidu.com/">http://www.baidu.com</a> &quot;Wget/1.10.2 (Red Hat modified)&quot;

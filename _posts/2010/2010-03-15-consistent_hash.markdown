@@ -16,21 +16,21 @@ tags:
 
 用perl表示，大概如下吧：
 
-{% highlight perl %}
+```perl
 #!/usr/bin/perl -w
 use String::CRC32;
 my ($url, $sum) = @ARGV;
 my $crc = crc32("$url");
 my $num = $crc % $sum;
 printf "%s cached at the %s peer by the key %s\n", $url, $num, $crc;
-{% endhighlight %}
+```
 
 测试如下：
 
-{% highlight bash %}
+```bash
 [root@sdl4 /home/rao 21:41:47]# ./crc.pl http://www.baidu.com 10
 http://www.baidu.com cached at the 4 peer by the key 3500265894
-{% endhighlight %}
+```
 
 ## 二、consistent_hash的原理
 
@@ -54,9 +54,9 @@ nginx模块应用指南网上到处有，这里只贴CU论坛上关于upstream�
 1. 在计算crc32的时候，不单单是使用uri和server_name:port的字符串，而且还增补上了字符串length;
 2. 和url_hash禁止给server加其他任何配置不同，src中也有weight的相关定义（0-255）处理（计算虚拟节点时），以完成weight->hash_cyc的映射；具体算法如下，MMC_CONSISTENT_POINTS，最开始定义了它等于160.应该就是全默认状态下的虚拟节点，naddrs或许是当前server的排序序号？（未知）
 
-{% highlight c %}
+```c
 points += server[i].weight * server[i].naddrs * MMC_CONSISTENT_POINTS;
-{% endhighlight %}
+```
 
 3. ngx_http_upstream_consistent_hash_find(ngx_http_upstream_consistent_hash_continuum *continuum, ngx_uint_t point)函数test middle point，用来计算url的crc32离哪个point最近。
 4. 使用了ngx_crc32_long来计算hash，这部分在nginx/src/core/ngx_crc32.c中。看到里头提供了256的初始化数据，和perl的String::CRC32里的是一样的……

@@ -14,7 +14,7 @@ tags:
 Rex的示例中，都突出了自己可以方便的对group做集合运算的特点。嗯，这个在早先使用SSH::Batch的时候就很钦佩。但是面对可能某个应用每个节点就一两台设备又有很多应用的情况，在Rexfile里写就很麻烦了。而且难免有其他操作的时候需要用单独的列表。
 
 其实Rex有Rex::Group::Lookup::File模块专门解决这个问题：
-{% highlight perl %}
+```perl
 use Rex::Group::Lookup::File;
 my $group_path = "/etc/puppet/iplist";
 grep {
@@ -22,26 +22,26 @@ grep {
     my $group_name = $1 if $group_file =~ m#$group_path/(.+)\.list#;
     group "$group_name" => lookup_file("$group_file");
 } glob("$group_path/*");
-{% endhighlight %}
+```
 比如上面的例子，原先是在puppet上做集群管理的，已经有了现成的一个目录iplist专门存放各个应用的设备ip列表文件。那么在Rexfile开头加上这么两三行代码，就自动把整个应用设备归类到group里了。然后运行rex -Tv就看到Server Groups栏下一串串列表了。
 
 * 错误输出
 
 Rex的command示例中，都是如下形式：
-{% highlight perl %}
+```perl
     say run 'uptime';
-{% endhighlight %}
+```
 但是大家会发现一个很常见的事情，就是命令行上敲错某个字母了，rex是没有错误提示输出的——当然rex本来的主要目的是做任务管理，理论上你得先保证task写正确。
 当然，其实rex也可以返回错误提示的。Rex::Interface::Exec::SSH中对返回结果是有判断的。
-{% highlight perl %}
+```perl
 use Rex::Helper::SSH2;
 ...;
 my ($out, $err) = net_ssh2_exec($ssh, "LC_ALL=C $path " . $cmd);
 if(wantarray) { return ($out, $err); }
 return $out;
-{% endhighlight %}
+```
 对应到run命令的Rex::Commands::Run::run()里则是：
-{% highlight perl %}
+```perl
 sub run {
    my ($cmd, $code) = @_;
    my $path = join(":", Rex::Config->get_path());
@@ -57,18 +57,18 @@ sub run {
    }
    return $out;
 }
-{% endhighlight %}
+```
 ok，看到了吧。run命令除了接收cmd外，还可以接收code的。而且也只有code方式可以处理错误输出。这里和exec不同，exec在列表上下文中返回标准输出和错误输出，但run在列表上下文中是把标准输出以行分割成列表元素。
 
 所以要在run下看错误输出的话，应该这么写：
-{% highlight perl %}
+```perl
 task "test", group => 'nginx', sub {
     run "pa aux|grep ngin[x]", sub {
         my ($out, $err) = @_;
         print $err ? $err : $out;
     };
 };
-{% endhighlight %}
+```
 
 * Kerberos支持
 

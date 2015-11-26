@@ -20,19 +20,19 @@ tags:
 指定这部分option（即Ls）为LS 2，就可以了！
 
 而/etc/init.d/snmpd中，这部分定义如下：
-{% highlight bash %}
+```bash
 if [ -e /etc/snmp/snmpd.options ]; then
     . /etc/snmp/snmpd.options
 else
     OPTIONS="-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a"
 fi
-{% endhighlight %}
+```
 可见/etc/snmp/snmpd.options优先级比OPTIONS高，而且修改单独文件也比修改系统启动脚本放心些。
-{% highlight bash %}
+```bash
 cat > /etc/snmp/snmpd.options <<EOF
 OPTIONS="-LS 2 d -Lf /dev/null -p /var/run/snmpd.pid -a"
 EOF
-{% endhighlight %}
+```
 /etc/init.d/snmpd restart，等等再看，messages里果然没有snmp的刷屏了~~
 （注：不同版本的OS启动脚本不同，请自行参考。至少我手头的服务器上就还有在/etc/sysconfig/snmpd.options里的，且须写成Ls而不是LS）
 

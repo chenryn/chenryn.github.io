@@ -21,12 +21,12 @@ gearman出现的本意，是由jobserver来派发client的jobs到workers完成�
 
 下载gearman的c语言版，毕竟单纯就为了记录下带宽值的话，没必要下perl版的来折腾——注意，和memcached一样，gearman也采用了libevent，所以必须先安好libevent：
 
-{% highlight bash %}
+```bash
 wget http://launchpad.net/gearmand/trunk/0.14/+download/gearmand-0.14.tar.gz
 tar zxvf gearmand-0.14
 cd !$
 ./configure && make && make install
-{% endhighlight %}
+```
 
 默认会采用sqlite存储持久化队列。如果觉得memcached什么的更有爱，也可以--with。
 

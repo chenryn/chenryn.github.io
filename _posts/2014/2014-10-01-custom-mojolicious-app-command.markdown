@@ -10,17 +10,17 @@ Mojolicious 框架开发应用的时候，可以跟 RoR 一样通过一系列子
 
 其实我们还可以自己扩展这个子命令方式，实现自己的子命令。如果打算继续使用 `mojo subcommand` 的方式，那就把自己的子命令模块叫做 `Mojolicious::Command::yourcommand`，而如果打算在自己的名字空间下使用，比如叫 `MyApp::Command::mycommand`，那么需要在 `MyApp.pm` 里加一行代码，设置一下名字空间：
 
-{% highlight perl %}
+```perl
     sub startup {
         my $self = shift;
         push @{$self->commands->namespaces}, 'MyApp::Command';
         ...
     };
-{% endhighlight %}
+```
 
 然后就可以写自己的 `MyApp::Command::mycommand` 了：
 
-{% highlight perl %}
+```perl
 package MyApp::Command::mycommand;
 use strict;
 use warnings;
@@ -39,7 +39,7 @@ sub run {
 }
 
 1;
-{% endhighlight %}
+```
 
 大致就是这样：
 

@@ -8,7 +8,7 @@ tags:
 
 在一次包更新后，发现 Nginx 服务器的每晚日志切割不再进行了。找遍了各种地方，最后在一次偶然的`ls -l`中发现：
 
-{% highlight bash %}
+```bash
 # ll /etc/logrotate.d/
 total 64
 -rw-r--r-- 1 root root  326 2012-08-04 06:08 apache2
@@ -26,13 +26,13 @@ total 64
 -rw-r--r-- 1 root root  126 2012-06-09 00:22 redis-server
 -rw-r--r-- 1 root root  515 2012-09-27 02:40 rsyslog
 -rw-r--r-- 1 root root  285 2008-11-18 21:20 stunnel4
-{% endhighlight %}
+```
 
 这里的nginx多了可执行权限。于是我尝试性的执行了`chmod -x nginx`；结果居然真的恢复了。
 
 这事儿说起来蛮奇怪了。于是去 <https://fedorahosted.org/logrotate> 找来 logrotate 的源码看，结果在`logrotate-3.8.3/config.c` 里发现这么一段：
 
-{% highlight c %}
+```c
  661                 if ((sb.st_mode & 07533) != 0400) {
  662                         message(MESS_DEBUG,
  663                                 "Ignoring %s because of bad file mode.\n",
@@ -40,17 +40,17 @@ total 64
  665                         close(fd);
  666                         return 0;
  667                 }
-{% endhighlight %}
+```
 
 只有文件权限是 0644 的时候，配置文件才会被读取！0755 的与结果是 0511，不等于 0400。相关 `st_mode` 的内容可以通过 `man 2 stat` 查看。
 
 可以写一小段 perl 代码来验证：
 
-{% highlight perl %}
+```perl
 #!/usr/bin/perl
 my $mode = (stat($ARGV[0]))[2];
 printf "Permissions are %04o\n", $mode & 07533;
-{% endhighlight %}
+```
 
 在 [ChangeLog](https://fedorahosted.org/logrotate/browser/tags/r3-8-3/CHANGES) 里，看到如下一段话：
 

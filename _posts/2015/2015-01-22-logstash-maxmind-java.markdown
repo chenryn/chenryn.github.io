@@ -32,7 +32,7 @@ GeoIP2 在字段上比 GeoIP 更丰富。而且还提供了 [MaxMind::DB::Writer
 
 准备就绪，然后就是如何测试的问题了。为了贴近 logstash 运行环境，我扒拉了一下 logstash 最核心的 `pipeline.rb` 文件，简化出来了一个测试程序。相当于是 `logstash -w 20 -e 'input {generator {}} filter {geoip{}} output {null{}}` 的效果：
 
-{% highlight ruby %}
+```ruby
 #!/usr/bin/env jruby
 require "geoip"
 require "maxminddb"
@@ -122,7 +122,7 @@ end
 @start_time = Time.now.to_f * 1000
 input.join
 arr.each{|t| t.join}
-{% endhighlight %}
+```
 
 ## 测试结果
 

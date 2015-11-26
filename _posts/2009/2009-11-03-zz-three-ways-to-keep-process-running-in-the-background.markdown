@@ -26,14 +26,14 @@ nohup 无疑是我们首先想到的办法。顾名思义，nohup 的用途就�
 
 ** nohup 示例
 
-{% highlight bash %}
+```bash
 [root@pvcent107 ~]# nohup ping www.ibm.com &
 [1] 3059 nohup: appending output to `nohup.out'
 [root@pvcent107 ~]# ps -ef |grep 3059
 root 3059 984  0 21:06 pts/3 00:00:00 ping www.ibm.com
 root 3067 984  0 21:06 pts/3 00:00:00 grep 3059
 [root@pvcent107 ~]#
-{% endhighlight %}
+```
 
 ** hangup 名称的来由
 
@@ -56,14 +56,14 @@ nohup 无疑能通过忽略 HUP 信号来使我们的进程避免中途被中断
 
 ** setsid 示例
 
-{% highlight bash %}
+```bash
 [root@pvcent107 ~]# nohup ping www.ibm.com &
 [root@pvcent107 ~]# setsid ping www.ibm.com
 [root@pvcent107 ~]# ps -ef |grep www.ibm.com
 root 31094 1  0 07:28 ? 00:00:00 ping www.ibm.com
 root 31102 29217  0 07:29 pts/4 00:00:00 grep www.ibm.com
 [root@pvcent107 ~]#
-{% endhighlight %}
+```
 
 值得注意的是，上例中我们的进程 ID(PID)为31094，而它的父 ID（PPID）为1（即为 init 进程ID），并不是当前终端的进程 ID。请将此例与nohup 例中的父 ID 做比较。
 
@@ -74,14 +74,14 @@ root 31102 29217  0 07:29 pts/4 00:00:00 grep www.ibm.com
 
 ** subshell示例
 
-{% highlight bash %}
+```bash
 [root@pvcent107 ~]# nohup ping www.ibm.com &
 [root@pvcent107 ~]# (ping www.ibm.com &)
 [root@pvcent107 ~]# ps -ef |grep www.ibm.com
 root 16270 1  0 14:13 pts/4 00:00:00 ping www.ibm.com
 root 16278 15362  0 14:13 pts/4 00:00:00 grep www.ibm.com
 [root@pvcent107 ~]#
-{% endhighlight %}
+```
 从上例中可以看出，新提交的进程的父 ID（PPID）为1（init 进程的 PID），并不是当前终端的进程ID。因此并不属于当前终端的子进程，从而也就不会受到当前终端的 HUP 信号的影响了。
 
 * disown
@@ -122,7 +122,7 @@ CTRL-z 的用途就是将当前进程挂起（Suspend），然后我们就可以
 ** disown示例1
 
 （如果提交命令时已经用“&amp;amp;”将命令放入后台运行，则可以直接使用“disown”）
-{% highlight bash %}
+```bash
 [root@pvcent107 build]# cp -r testLargeFile largeFile &
 [1] 4825
 [root@pvcent107 build]# jobs
@@ -133,12 +133,12 @@ Running cp -i -r testLargeFile largeFile &
 root 4825 968  1 09:46 pts/4 00:00:00 cp -i -r testLargeFile largeFile
 root 4853 968  0 09:46 pts/4 00:00:00 grep largeFile
 [root@pvcent107 build]#
-{% endhighlight %}
+```
 
 ** disown 示例2
 
 （如果提交命令时未使用“&amp;amp;”将命令放入后台运行，可使用 CTRL-z和“bg”将其放入后台，再使用“disown”）
-{% highlight bash %}
+```bash
 [root@pvcent107 build]# cp -r testLargeFile largeFile2
 [1]+ Stopped
 cp -i -r testLargeFile largeFile2
@@ -152,7 +152,7 @@ cp -i -r testLargeFile largeFile2 &
 root 5790  5577  1 10:04 pts/3 00:00:00 cp -i -r testLargeFile largeFile2
 root 5824  5577  0 10:05 pts/3 00:00:00 grep largeFile2
 [root@pvcent107 build]#
-{% endhighlight %}
+```
 
 灵活运用 CTRL-z
 
@@ -191,17 +191,17 @@ root 5824  5577  0 10:05 pts/3 00:00:00 grep largeFile2
 ** 用快捷键CTRL-a d 来暂时断开当前会话。
 
 ** screen 示例
-{% highlight bash %}
+```bash
 [root@pvcent107 ~]# screen -dmS Urumchi
 [root@pvcent107 ~]# screen -list
 There is a screen on: 12842.Urumchi (Detached)
 1 Socket in /tmp/screens/S-root.
 [root@pvcent107 ~]# screen -r
 Urumchi
-{% endhighlight %}
+```
 当我们用“-r”连接到 screen 会话后，我们就可以在这个伪终端里面为所欲为，再也不用担心 HUP 信号会对我们的进程造成影响，也不用给每个命令前都加上“nohup”或者“setsid”了。这是为什么呢？让我来看一下下面两个例子吧。
 *** 未使用 screen 时新进程的进程树
-{% highlight bash %}
+```bash
 [root@pvcent107 ~]# ping www.google.com &amp;amp;
 [1] 9499
 [root@pvcent107 ~]# pstree -H 9499
@@ -212,10 +212,10 @@ init─┬─Xvnc
 ├─sshd─┬─sshd───bash───pstree
 │
 └─sshd───bash───ping
-{% endhighlight %}
+```
 我们可以看出，未使用 screen 时我们所处的 bash 是 sshd 的子进程，当 ssh 断开连接时，HUP信号自然会影响到它下面的所有子进程（包括我们新建立的 ping 进程）。
 *** 使用了 screen 后新进程的进程树
-{% highlight bash %}
+```bash
 [root@pvcent107 ~]# screen -r Urumchi
 [root@pvcent107 ~]# ping www.ibm.com &amp;amp;
 [1] 9488
@@ -225,7 +225,7 @@ init─┬─Xvnc
 ├─atd
 ├─screen───bash───ping
 ├─2*[sendmail]
-{% endhighlight %}
+```
 而使用了 screen 后就不同了，此时 bash 是 screen 的子进程，而 screen 是init（PID为1）的子进程。那么当 ssh 断开连接时，HUP 信号自然不会影响到 screen 下面的子进程了。
 
 * 总结

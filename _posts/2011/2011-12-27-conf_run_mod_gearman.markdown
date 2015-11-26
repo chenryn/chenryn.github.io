@@ -20,28 +20,28 @@ tags:
 注意，omd分发中只带了mod_gearman.so和client/worker/init脚本，你必须自己yum install gearmand安装jobserver才行。
 在配置完成重启动的时候，OMD就会自动的修改nagios.cfg里的broker_module配置为：
 
-{% highlight bash %}
+```bash
  broker_module=.../mod_gearman.o server=localhost:4730 eventhandler=yes services=yes hosts=yes
-{% endhighlight %}
+```
 
 同时启动1个
 
-{% highlight bash %}
+```bash
  /omd/sites/monitor/version/sbin/gearmand --port=4730 --pid-file=/omd/sites/monitor/tmp/run/gearmand.pid --daemon --job-retries=0 --threads=10 --log-file=/omd/sites/monitor/var/log/gearman/gearmand.log --verbose=2 --listen=localhost
-{% endhighlight %}
+```
 
 老文章里写的gearmand默认端口都是7003，因为跟AFS冲突，所以现在的版本默认都是4730了；
 同时启动3个
 
-{% highlight bash %}
+```bash
 /omd/sites/monitor/bin/mod_gearman_worker -d --config=/omd/sites/monitor/etc/mod-gearman/worker.cfg --pidfile=/omd/sites/monitor/tmp/run/gearman_worker.pid
-{% endhighlight %}
+```
 
 OK，现在这5个worker，会由gearmand平均分配hosts/services/eventhandlers任务。一个基础的load balance就完成了。
 <hr>
 下一步就是前面命令里用到了的~/etc/mod-gearman/worker.cfg配置文件了。
 
-{% highlight bash %}
+```bash
     debug=0
     config=/omd/sites/monitor/etc/mod-gearman/port.conf
     eventhandler=yes
@@ -60,12 +60,12 @@ OK，现在这5个worker，会由gearmand平均分配hosts/services/eventhandler
     fork_on_exec=no
     show_error_output=yes
     workaround_rc_25=off
-{% endhighlight %}
+```
 
 以上是默认生成的配置文件。主要是定义最小的worker数量，最大的worker数量，最多运行的任务数量，等待超时时间，有等待任务时派生新worker的速度，是否为每个插件采用fork方式执行（这里注释写的是默认yes，但是OMD生成配置默认却是no，不知为何）；另一部分配置就是关于lb和dist的了：hosts/services/eventhandlers的yes/no控制是否lb，hostgroups/servicegroups控制dist哪些group到具体的worker上。
 假设我们现在有3个servicegroup，分别叫name1/name2/name3，那么开启选项后运行omd reload命令。查看gearmand的状态如下：
 
-{% highlight bash %}
+```bash
     OMD[monitor]:~$ telnet 127.0.0.1 4730
     Trying 127.0.0.1...
     Connected to localhost (127.0.0.1).
@@ -81,7 +81,7 @@ OK，现在这5个worker，会由gearmand平均分配hosts/services/eventhandler
     eventhandler	0	0	3
     dummy	0	0	5
     .
-{% endhighlight %}
+```
 
 表示有3个worker注册在gearman的这几个任务下了。
 （如果不用OMD，那么上面这些修改配置，分别启动worker指定不同配置等等动作，都要自己完成，参见github里的Installation章节From Source部份）

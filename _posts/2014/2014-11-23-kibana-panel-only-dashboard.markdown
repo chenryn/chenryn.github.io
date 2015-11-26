@@ -11,7 +11,7 @@ tags:
 
 读过[仪表板纲要](http://kibana.logstash.es/content/dashboard-schema.html)一文，或者自己看过源代码中 `src/app/dashboards/logstash.json` 文件的人，应该都知道 kibana 中有些在页面配置界面里看不到的隐藏配置选项。其中很符合我们这次需求的，就有 `editable`, `collapsable` 等。所以，首先第一步，我们可以在自己的 `panel.js`(直接从 logstash.js 复制过来) 中，把这些关掉：
 
-{% highlight javascript %}
+```javascript
 dashboard.rows = [
   {
     editable: false,         //不显示每行的编辑按钮
@@ -30,19 +30,19 @@ dashboard.rows = [
 ];
 dashboard.editable = false;     //不显示仪表板的编辑按钮
 dashboard.panel_hints = false;  //不显示面板的添加按钮
-{% endhighlight %}
+```
 
 然后要解决面板上方的 query 框和 filtering 框。这个同样在纲要介绍里说了，这两个特殊的面板是放在垂幕(pulldows)里的。所以，直接关掉垂幕就好了：
 
-{% highlight javascript %}
+```javascript
 dashboard.pulldowns = [];
-{% endhighlight %}
+```
 
 然后再往上是顶部栏。顶部栏里有时间选择器，这个跟垂幕一样是可以关掉的：
 
-{% highlight javascript %}
+```javascript
 dashboard.nav = [];
-{% endhighlight %}
+```
 
 好了，javascript 里可以关掉的，都已经关了。
 
@@ -50,9 +50,9 @@ dashboard.nav = [];
 
 所以这里就得去修改一下 `index.html` 了。不过为了保持兼容性，我这里没有直接删除顶部栏的代码，而是用了 angularjs 中很常用的 `ng-show` 指令：
 
-{% highlight html %}
+```html
 <div ng-cloak class="navbar navbar-static-top" ng-show="dashboard.current.nav.length">
-{% endhighlight %}
+```
 
 因为之前关闭时间选择器的时候，已经把这个 nav 数组定义为空了，所以只要判断一下数组长度即可。
 

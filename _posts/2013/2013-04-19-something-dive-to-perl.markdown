@@ -16,13 +16,13 @@ category: perl
 
 在 SPEC 设计中，所有导出指令都采用回调的方式。在 Perl 中实现起来其实特别简单。像下面这样就好了：
 
-{% highlight perl %}
+```perl
 sub keyword {
     my ( $str, $cb ) = shift;
     my $res = do_some_func($str);
     $cb->($res);
 }
-{% endhighlight %}
+```
 
 ### selector_to_xpath
 
@@ -34,9 +34,9 @@ sub keyword {
 
 stat 是 perl 默认的函数，不过返回的数组在 mode 和 time 方面可读性都不好，所以封装一下，提供更加可读的 0644 这样的 mode 格式，直接用 `sprintf` 就可以做到：
 
-{% highlight perl %}
+```perl
     sprintf( "%04o", $ret->get(2) & 07777 );
-{% endhighlight %}
+```
 
 ### DateTime
 
@@ -46,7 +46,7 @@ Perl 的 [DateTime](https://metacpan.org/module/DateTime) 模块太重，CPAN �
 
 `import` 和 `export_to_level` 都是 `Exporter` 模块的方法，所有继承自 `Exporter` 的模块可以用。比如下面示例，启用该模块，就相当于启用了 `strict`，`warnings`，`utf8` 和 Perl5.10 版的新特性，同时导出了 keywords 关键字。
 
-{% highlight perl %}
+```perl
     use base 'Exporter';
     our @EXPORT = qw/keywords/;
     sub keywords { ... }
@@ -59,7 +59,7 @@ Perl 的 [DateTime](https://metacpan.org/module/DateTime) 模块太重，CPAN �
         Try::Tiny->import;
         $class->export_to_level(1, $class, @EXPORT);
     }
-{% endhighlight %}
+```
 
 ### zip
 
@@ -71,16 +71,16 @@ CPAN 上 Rubyish、Perl6::*、Perl5i::* 等模块都利用了 [autobox](https://
 
 比如想要实现一个 `"Hello World"->lc->words` 的语法，显然就是要针对 Perl 中的 STRING 数据类型实现 lc 和 words 两个方法。那么先实现一个自己的 string 对象：
 
-{% highlight perl %}
+```perl
     package your::string;
     sub lc    { CORE::lc           $_[0] }
     sub words { CORE::split /\s+/, $_[0] }
     1;
-{% endhighlight %}
+```
 
 然后开始关联：
 
-{% highlight perl %}
+```perl
     package your::autobox;
     use base qw(autobox);
     use your::string;
@@ -91,13 +91,13 @@ CPAN 上 Rubyish、Perl6::*、Perl5i::* 等模块都利用了 [autobox](https://
         );
     }
     1;
-{% endhighlight %}
+```
 
 最后在前面提到过的 `Exporter` 的 `import` 函数里加上一行：
 
-{% highlight perl %}
+```perl
     your::autobox->import;
-{% endhighlight %}
+```
 
 autobox 可以关联的数据类型还有很多，绝对是值得一看的模块。
 
@@ -106,7 +106,7 @@ autobox 可以关联的数据类型还有很多，绝对是值得一看的模块
 
 实现 `def_class` 关键词的过程中学习颇多，首先是符号表。实现中完成模块代码几乎全靠符号表来绑定一个个函数和变量。像这样：
 
-{% highlight perl %}
+```perl
     *t = eval('*'.$class.'::ISA');
     *t = [$parent];
 
@@ -120,7 +120,7 @@ autobox 可以关联的数据类型还有很多，绝对是值得一看的模块
         }
         $o;
     }
-{% endhighlight %}
+```
 
 不过这个实现有个问题，就是对象只能是基于哈希的引用，不能是数组的了。
 
@@ -139,7 +139,7 @@ __原来他们都是把属性和方法也实现为类。然后再有 `*::Meta` �
 
 不过这里用到了 Perl5.10 的一个新东西，函数属性，这里绑定的不是普通变量而是函数，但是函数只会读写一个变量值，具体的说就是使用 `sub :lvalue {}` 定义。使用方法如下所示：
 
-{% highlight perl %}
+```perl
     my $val;
     sub canmod :lvalue {
         # return $val; this doesn't work, don't say "return"
@@ -150,6 +150,6 @@ __原来他们都是把属性和方法也实现为类。然后再有 `*::Meta` �
     }
     canmod() = 5;   # assigns to $val
     nomod()  = 5;   # ERROR
-{% endhighlight %}
+```
 
 lvalue 的说明见 `perldoc perlsub` 文档。在这里还是个比较有趣的用法的，这个用法来自 `Newbie::Gift` 项目另一位参与者 [fmpdceudy](https://github.com/fmpdceudy)。

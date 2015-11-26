@@ -32,7 +32,7 @@ tags:
 
 点击保存后，就会在服务器上的 `$document_root/editor/data/diagrams` 目录下生成对应的 `.dia` 和 `.png` 文件。这个所谓的 `.dia` 文件，其实内容就是 JSON数据。下面我们只要抽取 JSON 里有关的数据就可以了：
 
-{% highlight perl %}
+```perl
 use File::Slurp;
 use JSON;
 use YAML;
@@ -76,11 +76,11 @@ for my $conn ( @{ $hash->{m}->{connectors} } ) {
 }
 
 say Dump { map { my ($k) = keys $_; $k => $_->{$y} } values $hostinfo};
-{% endhighlight %}
+```
 
 生成的 `fig.yml` 如下：
 
-{% highlight yaml %}
+```yaml
 ---
 Haproxy:
   link:
@@ -95,6 +95,6 @@ Nginx2:
 MySQL:
   link:
    - Serf
-{% endhighlight %}
+```
 
 只是根据关系图生成了 link，其他配置都在图里的 Text 里照样写 yaml 格式，会自动带入。当然，示例另一个意思是：大家尽量都只 link 像 serf/etcd 这样的服务自动发现服务器。在 docker 层面就简洁明了。

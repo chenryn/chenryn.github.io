@@ -12,7 +12,7 @@ tags:
 ---
 
 在折腾squid的rewrite.pl时，参考的是公司原有的一个防盗链脚本。如下：
-{% highlight perl %}
+```perl
 #! /usr/bin/env perl
 use strict;
 use Digest::MD5 qw(md5_hex);
@@ -31,9 +31,9 @@ while () {
     print "$errUrl\n" and next if $md5 ne md5_hex($secret . $year . $mon . $mday . $hour . $min . $path);
     print $domain . $path, "\n";
 }
-{% endhighlight %}
+```
 今天在网上看到lighttpd相似的配置。lighttpd自带mod_secdownload模块实现这种防盗链方法。具体配置及php代码如下例（详见http://trac.lighttpd.net/trac/wiki/Docs%3AModSecDownload）：
-{% highlight php %}
+```php
 <?
 $secret = "verysecret";  //加密字符串，必须跟lighttpd.conf里边保持一致
 $uri_prefix = "/dl/";    //虚拟的路径，必须跟lighttpd.conf里边保持一致
@@ -46,7 +46,7 @@ $m = md5($secret.$f.$t_hex);
 # generate link
 printf('%s', $uri_prefix, $m, $t_hex, $f, $f);
 ?>
-{% endhighlight %}
+```
 lighttpd配置文件:    
 server.modules = ( ..., "mod_secdownload", ... )
 secdownload.secret          = "verysecret"
@@ -62,7 +62,7 @@ patch -p1 < ../nginx-secure-link-ttl.patch
 ./configure --with-http_secure_link_module
 ……
 具体配置及php例子如下（详见http://wiki.nginx.org/NginxHttpSecureLinkModule）：
-{% highlight nginx %}
+```nginx
 location /down/ {
     secure_link_secret "sbear.cn";  //密钥
     secure_link_ttl on;
@@ -72,8 +72,8 @@ location /down/ {
 }
     rewrite ^ /$secure_link break;
 }
-{% endhighlight %}
-{% highlight php %}
+```
+```php
 <?php
 define(URL_TIMEOUT, 3600); //这里设置过期时间单位是秒
 $prefix = "<a href="http://www.sbear.cn/down&quot;;">http://www.sbear.cn/down";</a>
@@ -86,19 +86,19 @@ $url = $prefix . "/" . $hashmac . $timeout . "/" . $protected_resource;
 echo "down";
 echo time();
 ?>
-{% endhighlight %}
+```
 
 那不打补丁，有什么防盗链的办法么？当然有。nginx和lighttpd都支持最简单的referer判断。
 
 nginx有ngx_http_referer_module模块，和apache、squid一样可以rewrite，配置如下：
-{% highlight nginx %}
+```nginx
 location ~* .(gif|jpg|png)$ {
 valid_referers none blocked www.test.com baidu.com;
     if ($invalid_referer) {
         rewrite ^/ http://www.test.com/error.html;
     }
 }
-{% endhighlight %}
+```
 
 lighttpd配置如下：
 

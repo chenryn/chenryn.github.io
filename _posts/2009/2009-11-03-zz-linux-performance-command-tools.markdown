@@ -73,13 +73,13 @@ CPU利用率分四个部分：
 
 块的大小
 块可能为不同的容量。块的大小一般为1024、2048、4048byte。可通过tune2fs或dumpe2fs获得：
-{% highlight bash %}
+```bash
 [root@rfgz ~]# tune2fs -l /dev/hda1|grep 'Block size'
 Block size: 4096
 [root@rfgz ~]# dumpe2fs -h /dev/hda1|grep 'Block size'
 dumpe2fs 1.35 (28-Feb-2004)
 Block size: 4096
-{% endhighlight %}
+```
 
 * Vmstat
 Vmstat命令提供了对进程、内存、页面I/O块和CPU等信息的监控，vmstat可以显示检测结果的平均值或者取样值，取样模式可以提供一个取样时间段内不同频率的监测结果。
@@ -135,13 +135,13 @@ ps 和pstree命令是系统分析最常用的基本命令，ps命令提供了一
 
 sar程序也是sysstat安装包的一部分。sar命令用于收集、报告和保存系统的信息。Sar命令由三个应用组成：sar，用与显示数据；sa1和sa2，用于收集和存储数据。默认情况下，系统会在crontab中加入自动收集和分析的操作：
 
-{% highlight bash %}
+```bash
 [root@rfgz ~]# cat /etc/cron.d/sysstat
 # run system activity accounting tool every 10 minutes
 */10 * * * * root /usr/lib/sa/sa1 1 1
 # generate a daily summary of process accounting at 23:53
 53 23 * * * root /usr/lib/sa/sa2 -A
-{% endhighlight %}
+```
 
 sar命令所生成的数据保存在/var/log/sa/目录下，数据按照时间保存，可以根据时间来查询相应的性能数据。
 你也可以使用sar在命令行下得到一个实时的执行结果，收集的数据可以包括CPU利用率、内存页面、网络I/O等等。下面的命令表示用sar执行5次，间隔时间为3秒：

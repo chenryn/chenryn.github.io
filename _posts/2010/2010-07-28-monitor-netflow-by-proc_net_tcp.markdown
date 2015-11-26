@@ -35,7 +35,7 @@ nagios自带的check_antp太过简约，除了状态统计输出外，什么参�
 然后介绍nrpe的check脚本。脚本不管怎么写都行，对于nagios服务器端来说，它除了接受脚本的输出结果外，只认脚本运行的退出值（测试时可以运行后用echo $?看），包括OK的exit 0、WARNING的exit 1、CRITICAL的exit 2、未知的exit 3。
 
 最后一个简单的检查http端口连接数的脚本如下：
-{% highlight bash %}
+```bash
 #!/bin/bash
 #Written by Gemmy.Rao
 #Email to: <a href="mailto:chenlin.rao@bj.china.com">chenlin.rao@bj.china.com</a>
@@ -94,6 +94,6 @@ else
     echo "Port $PORT connection warning for $PORT_CONN! | Port ${PORT}=${PORT_CONN};${WARNING};${CRITICAL};0;0"
     exit 1
 fi
-{% endhighlight %}
+```
 
 之后有必要的话，可以再取$4去统计st。

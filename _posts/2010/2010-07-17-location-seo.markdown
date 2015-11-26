@@ -15,7 +15,7 @@ category: web
 
 照此修改nginx配置
 
-{% highlight nginx %}
+```nginx
 server {
     server_name old.domain.com;
     #rewrite ^/(.*)$ http://new.domain.com/$1 last;
@@ -27,7 +27,7 @@ server {
     root /www/old.domain.com;
     index index.html;
 }
-{% endhighlight %}
+```
 
 配置生效后，收录逐渐恢复。
 

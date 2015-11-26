@@ -12,10 +12,10 @@ category: squid
 原理是这样的：squid每接到一个请求，首先判断后缀名是不是图片类型，如果是，下载到web服务器目录，然后调用程序颠倒图片，拷贝去另一个发布路径下。最后把新的路径返回给squid，交给浏览器去看。
 
 假设下载目录是/revimg，发布目录是/revimg/out，那么apache里配置如下vhost：
-{% highlight apache %}
+```apache
 ServerName revimg.soulogic.com
 DocumentRoot /revimg/out
-{% endhighlight %}
+```
 好了，其他准备完成。进入squid部分：
 
 squid官方并没有转向的设定，不过他允许甚至推荐了一些转向外挂（好吧，说好听些，第三方插件）。只需要很简单的在squid.conf里启用url_rewrite_program（也叫redirect_program）就可以了：
@@ -24,7 +24,7 @@ url_rewrite_program /etc/squid/redirect.php（常见的是pl、py，当然也可
 
 根据需要，还有相关的children、access、host配置。
 下面是原作者提供的php代码。很赞，可惜还没看懂，慢慢品味：
-{% highlight php %}
+```php
 #!/usr/bin/php
 <?PHP
 chdir("/revimg");
@@ -75,6 +75,6 @@ while ($sContent = fgets(STDIN) ) {
     fwrite(STDOUT, $sURL."n");
 }
 ?>
-{% endhighlight %}
+```
 原作者说：squid在重定向处理是采用的标准输入输出方式，所以测试的时候只需要cat test.txt|/etc/squid/redirector.php就可以了。
 这个东东还能进一步优化。因为图片在浏览器本地也有缓存的，如果之前同事们已经上过，怎么办？还得改写Expires。

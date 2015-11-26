@@ -8,7 +8,7 @@ tags:
 ---
 
 准备使用funsioncharts绘图，其采用xml数据，在绘制line图的时候，就要从mysql里读取数据，并输出成xml格式，相关配置如下：
-{% highlight perl %}
+```perl
 package cachemoni;
 use Dancer ':syntax';
 use Dancer::Plugin::Database;
@@ -100,9 +100,9 @@ sub convert_group {
 sub date_format {
     my $time = shift;
     return strftime("%F %H:%M",localtime($time)) if $time =~ m/\d+/;
-};{% endhighlight %}
+};```
 用curl请求一下，如下：
-{% highlight bash %}[root@naigos ~]# curl 'http://cache.monitor.china.com/xml?begin=1311739200&end=1311840000&type=time'
+```bash[root@naigos ~]# curl 'http://cache.monitor.china.com/xml?begin=1311739200&end=1311840000&type=time'
 <graph caption='Daily Visits' subcaption='from 2011-07-27 12:00 to 2011-07-28 16:00' hovercapbg='FFECAA' hovercapborder='F47E00' formatNumberScale='0' decimalPrecision='0' showvalues='0' numdivlines='3' numVdivlines='0' yaxisminvalue='1000' yaxismaxvalue='1800'  rotateNames='1'><categories ><category name='2011-07-27 17:27:12' />
 <category name='2011-07-27 17:32:12' />
 <category name='2011-07-27 17:37:01' />
@@ -113,9 +113,9 @@ sub date_format {
 <set value='432.0000' />
 </dataset><dataset seriesName='fastweb' color='2AD62A'><set value='471.0000' />
 <set value='431.5000' />
-</dataset></graph>{% endhighlight %}
+</dataset></graph>```
 换个area参数试试：
-{% highlight bash %}[root@naigos lib]# curl 'http://cache.monitor.china.com/xml?begin=1311739200&end=1312169668&type=area'
+```bash[root@naigos lib]# curl 'http://cache.monitor.china.com/xml?begin=1311739200&end=1312169668&type=area'
 <graph caption='Response Time' subcaption='from 2011-07-27 12:00 to 2011-08-01 11:34' hovercapbg='FFECAA' hovercapborder='F47E00' formatNumberScale='0' decimalPrecision='0' showvalues='0' numdivlines='3' numVdivlines='0' yaxisminvalue='1000' yaxismaxvalue='1800'  rotateNames='1'>
 <categories >
 <category name='四川' />
@@ -127,5 +127,5 @@ sub date_format {
 <set value='482.5000' />
 </dataset><dataset seriesName='fastweb' color='2AD62A'>
 <set value='431.3333' />
-</dataset></graph>{% endhighlight %}
+</dataset></graph>```
 呃，上面用的数据只是我自己insert的，所以出现了比较囧的条数不一致……

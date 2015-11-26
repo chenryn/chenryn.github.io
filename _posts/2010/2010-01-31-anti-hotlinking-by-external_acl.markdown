@@ -17,7 +17,7 @@ options包括：ttl、negtive_ttl、children、concurrency、cache和grace；
 FORMAT包括：%LOGIN,%EXT_USER,%IDENT,%SRC,%SRCPORT,%DST,%PROTO,%PORT,%METHOD,%MYADDR,%MYPORT,%PATH,%USER_CERT,%USER_CERTCHAIN,%USER_CERT_xx,%USER_CA_xx,%{Header},%{Hdr:member},%{Hdr:;member},%ACL,%DATA。
 外部程序输出结果必须是OK或者ERR，不过可以再带上一些keyword，比如user/passwd，ERR的messages，access.log里记录的%ea等等。
 cookie防盗链举例squid/libexec/check_cookie.pl如下：
-{% highlight perl %}
+```perl
 #!/usr/bin/perl -w
 # 这个脚本仅仅是验证了Cache这个cookie的存在，没有严格的校验其值。
 # disable output buffering
@@ -31,13 +31,13 @@ while () {
         print "ERR\n";
     }
 }
-{% endhighlight %}
+```
 squid.conf配置如下：
-{% highlight squid %}
+```squid
 external_acl_type download children=15 %{Cookie} squid/libexec/check_cookie.pl
 acl dl external download
 acl filetype url_regex -i .wmv .wma .asf .asx .avi .mp3 .smi .rm .ram .rmvb .swf .mpg .mpeg .mov .zip .mid
 http_access deny filetype !dl
-{% endhighlight %}
+```
 回过头来，想到之前的squid_session一文中，也是用的这个外部ACL~~
 

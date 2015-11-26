@@ -15,21 +15,21 @@ website 少不了 session 的运用。在 template 里使用 `[% session.usernam
 
 XSlate 提供了 `dump` 语法糖，让我们可以直接使用 `<: $session | dump :>` 检查问题。这时候发现显示如下：
 
-{% highlight perl %}
+```perl
     $VAR1 = { blessed( { id => '2131232131', username => 'user1' } ), Dancer::Session::YAML };
-{% endhighlight %}
+```
 
 尝试使用 `<: $session.id :>` ，发现可以正常输出 2131232131 。
 
 进去看 `Dancer::Session` 的代码，原来在 `Dancer::Session::Abstract` 里，有这么一行：
 
-{% highlight perl %}
+```perl
     __PACKAGE__->attributes('id');
-{% endhighlight %}
+```
 
 说实话不太理解这行的用法，不过不妨碍我们用简单办法解决问题…… 在我们的应用中给 `Dancer::Session::YAML` 定义一个叫 username 的 method 就可以骗过去了：
 
-{% highlight perl %}
+```perl
     package DancerApp;
     use Dancer ':syntax';
     use Dancer::Session::YAML;
@@ -43,13 +43,13 @@ XSlate 提供了 `dump` 语法糖，让我们可以直接使用 `<: $session | d
     ...;
     
     true;
-{% endhighlight %}
+```
 
 __2013 年 03 月 25 日更新__
 
 今天莫莫也换成 Xslate 模板，顺带告诉我这里一个更通用和优雅的修改方式：
 
-{% highlight perl %}
+```perl
     package DancerApp;
     use Dancer ':syntax';
     use Dancer::Session::Abstract;
@@ -61,7 +61,7 @@ __2013 年 03 月 25 日更新__
     ...;
     
     true;
-{% endhighlight %}
+```
 
 这样可以在各种 Session 引擎下通用了。
 
@@ -73,7 +73,7 @@ __更新完毕__
 
 首先在模块里加载 flash 变量：
 
-{% highlight perl %}
+```perl
     package DancerApp::First;
     use Dancer ':syntax';
     use Dancer::Plugin::FlashMessage;
@@ -85,33 +85,33 @@ __更新完毕__
     };
     
     true;
-{% endhighlight %}
+```
 
 然后在模版里判断显示：
 
-{% highlight html %}
+```html
     [% IF flash.message %]
       <div class="alert alert-success">
         [% flash.message %]
       </div>
     [% END %]
-{% endhighlight %}
+```
 
 同样，在修改成 XSlate 后，模版是这样：
 
-{% highlight html %}
+```html
     : if $flash.message {
       <div class="alert alert-success">
         <: flash.message :>
       </div>
     : }
-{% endhighlight %}
+```
 
 结果发现页面上的 div 一直保持，而且显示着 `CODE(0x39a5c30)` 这样的字样。同样使用 `dump` 语法糖，看到 `$flash` 其实是 `{ message => sub {"DUMMY"} }`。
 
 这个就有趣了，居然是个代码段~~于是翻源码来看：
 
-{% highlight perl %}
+```perl
     hook before_template => sub {
         shift->{$token_name} = {
             map { my $key = $_; my $value;
@@ -124,7 +124,7 @@ __更新完毕__
             } ( keys %{session($session_hash_key) || {} })
         };
     };
-{% endhighlight %}
+```
 
 `map` 里面，确实是一个 `$key => sub {}` 。
 
@@ -134,7 +134,7 @@ __更新完毕__
 
 不过我觉得，其实改动最小的办法，就是别用 `map` 这么高档的语法。拆成两段处理，确保传递给 `template_render` 的是字符串即可：
 
-{% highlight perl %}
+```perl
     hook before_template => sub {
         my %hash;
         my $flash = session($session_hash_key) || {};
@@ -144,7 +144,7 @@ __更新完毕__
         session $session_hash_key, $flash;
         shift->{$token_name} = \%hash;
     };
-{% endhighlight %}
+```
 
 最后的最后，就在我测试完我的改动版本在两种模版下都可以运行的时候，dams 已经决定先同时保持 coderef 和 object 的写法并提供 setting 配置。然后慢慢搜集各种模版系统做覆盖测试。
 

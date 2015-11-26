@@ -9,7 +9,7 @@ tags:
 统计nginx的请求数据，一般有几个办法，一个是logrotate，通过access.log计算，这个很详细，但是实时性差一些；一个是Tengine提供的pipe，这个实时性更好，但是管道如果出现堵塞，麻烦就多了～这两种办法，归根结底都是把日志记录在本地(pipe方式如果要长期保留依然要记磁盘)然后由脚本完成计算。今天这里说另一种方法：在nginx内部，随着每次请求完成一些基础的数据统计，然后输出到存储里供长期调用。    
 代码如下：
 
-{% highlight nginx %}
+```nginx
 server {
     listen 80;
     server_name photo.domain.com;
@@ -68,7 +68,7 @@ server {
         include conf.d/proxy.conf;
 	}
 }
-{% endhighlight %}
+```
 
 ngx_lua里的指令有set/rewrite/header_filter/log/content/access_by_lua等，它们各自处于nginx处理流程中的某一步，所以有些日志变量可能不一定都能读取到。还有header_filter和log两个不能调用subrequest和output的API(也就是只能使用上例代码中的ngx.shared.DICT方式，但只支持简单的key-value),content不能和proxy_pass在一起等等……
 

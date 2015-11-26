@@ -72,7 +72,7 @@ tags:
 
 这个参数指定的位置在 *logstash-1.4.2/lib/logstash/agent.rb* 中，被加入了 `$LOAD_PATH` 中：
 
-{% highlight ruby %}
+```ruby
   def configure_plugin_path(paths)
     paths.each do |path|
       if !Dir.exists?(path)
@@ -88,7 +88,7 @@ tags:
       $LOAD_PATH.unshift(path)
     end
   end
-{% endhighlight %}
+```
 
 `$LOAD_PATH` 是 Ruby 的一个特殊变量，类似于 Perl 的 `@INC` 或者 Java 的 `class_path` 。在这个数组里的路径下的文件，都可以被 require 导入。
 

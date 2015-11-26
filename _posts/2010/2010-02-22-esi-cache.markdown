@@ -51,11 +51,11 @@ __“ESI（Edge Side Include）通过使用简单的标记语言来对那些可�
 
 squid.conf参数如下：
 
-{% highlight squid %}
+```squid
     httpd_accel_surrogate_id unset-id
     http_accel_surrogate_remote on
     esi_parser custom
-{% endhighlight %}
+```
 
 写到最后郁闷了一下，这个东东，为了cache而发明出来了，却是得写在web上的。那我这篇博文，该归哪个类别呢？——或者这也验证了工作中的一点郁闷吧，cache的问题，经常出在web上，我们做CDN的，能怎么办呢？
 
@@ -73,13 +73,13 @@ ESI指令集
 
 首先尝试 include 页面 `1.html`，如果不存在就显示 `2.html`，如果还不存在，就忽略这条 esi
 
-{% highlight html %}
+```html
 <esi:include src="http://example.com/1.html" alt="http://bak.example.com/2.html" onerror="continue"/>
-{% endhighlight %}
+```
 
 ### case when 标签
 
-{% highlight html %}
+```html
 <esi:choose> 
     <esi:when test="$(HTTP_COOKIE{group})=='Advanced'"> 
         <esi:include src="http://www.example.com/advanced.html"/> 
@@ -91,11 +91,11 @@ ESI指令集
         <esi:include src="http://www.example.com/new_user.html"/> 
     </esi:otherwise>
 </esi:choose>
-{% endhighlight %}
+```
 
 ### try catch 标签
 
-{% highlight html %}
+```html
 <esi:try> 
     <esi:attempt>
         <esi:comment text="Include an ad"/> 
@@ -106,37 +106,37 @@ ESI指令集
         <a href=www.akamai.com>www.example.com</a>
     </esi:except> 
 </esi:try>
-{% endhighlight %}
+```
 
 ### remove 标签
 
 如果服务器可执行 ESI，就只执行 include；如果不可，只好识别标准的HTML
 
-{% highlight html %}
+```html
 <esi:include src="http://www.example.com/ad.html"/> 
 <esi:remove> 
   <a href="http://www.example.com">www.example.com</a>
 </esi:remove>
-{% endhighlight %}
+```
 
 ### esi变量
 
-{% highlight html %}
+```html
 <esi:vars>
   <img src="http://www.example.com/$(HTTP_COOKIE{type})/hello.gif" />
 </esi:vars>
-{% endhighlight %}
+```
 
 变量都是从request-header中获得的，squid只支持标准的esi协议，即只识别下列header。
 
-{% highlight c %}
+```c
     addVariable ("HTTP_ACCEPT_LANGUAGE", 20, new ESIVariableLanguage); 
     addVariable ("HTTP_COOKIE", 11, new ESIVariableCookie); 
     addVariable ("HTTP_HOST", 9, new ESIVariableHost); 
     addVariable ("HTTP_REFERER", 12, new ESIVariableReferer); 
     addVariable ("HTTP_USER_AGENT", 15, new ESIVariableUserAgent(*this)); 
     addVariable ("QUERY_STRING", 12, new ESIVariableQuery(uri)); 
-{% endhighlight %}
+```
 
 ### 逻辑表达式
 

@@ -25,7 +25,7 @@ tags:
 这种情况，主要来说，还是客户网站本身的架构问题。简单点，只用一个origin；复杂点，在多台webserver与后台数据库之间建共享连接池。保证session调用正常。
 
 但在客户修改origin之前，cache本身能不能作出一定的改变呢？能。放弃使用dns查询，而采用squid本身的peer功能，就能搞定它，配置如下：
-{% highlight squid %}
+```squid
 #Parent
 acl ParentDomain dstdomain a.b.com
 cache_peer 1.2.3.4 parent 80 0 no-query no-netdb-exchange originserver sourcehash
@@ -34,7 +34,7 @@ cache_peer_access 1.2.3.4 allow ParentDomain
 cache_peer_access 1.2.3.5 allow ParentDomain
 always_direct allow !ParentDomain
 #Parent end
-{% endhighlight %}
+```
 用的sourcehash参数，相同的clientIP，使用相同的originIP，多好的loadbalance呀，更巧的是这个option，正好是squid2.6.STABLE21能用的，连2.7都没有，哈哈~~reconfigure后的正常日志如下：
 
     [rao@localhost ~]$ tail access.log|awk '{print $4,$6,$7,$9,$10}'

@@ -13,26 +13,26 @@ category: puppet
 
 ### nginx/manifests/init.pp
 
-{% highlight ruby %}
+```ruby
 class nginx {
     include "nginx::${::role}"
 }
-{% endhighlight %}
+```
 
 ### nginx/manifests/loadbalancer.pp
 
-{% highlight ruby %}
+```ruby
 class nginx::loadbalancer {
     $iplist = ['192.168.0.2:80']
     file { 'nginx.conf':
         content => template('nginx/nginx.conf.erb'),
     }
 }
-{% endhighlight %}
+```
 
 ### enc nginxhostname
 
-{% highlight yaml %}
+```yaml
 ---
 classes:
   - nginx
@@ -40,34 +40,34 @@ classes:
 environment: production
 parameters:
   role: loadbalancer
-{% endhighlight %}
+```
 
 修改后
 =================
 
 ### nginx/manifests/init.pp
 
-{% highlight ruby %}
+```ruby
 class nginx ($iplist = []) {
     class { "nginx::${::role}":
         iplist => $iplist
     }
 }
-{% endhighlight %}
+```
 
 ### nginx/manifests/loadbalancer.pp
 
-{% highlight ruby %}
+```ruby
 class nginx::loadbalancer ($iplist = []) {
     file { 'nginx.conf':
         content => template('nginx/nginx.conf.erb'),
     }
 }
-{% endhighlight %}
+```
 
 ### enc nginxhostname
 
-{% highlight yaml %}
+```yaml
 ---
 classes:
   nginx:
@@ -77,7 +77,7 @@ classes:
 environment: production
 parameters:
   role: loadbalancer
-{% endhighlight %}
+```
 
 要点
 ================

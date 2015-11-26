@@ -79,7 +79,7 @@ make
     ./purge -p 127.0.0.1:80 -P 1 -se '.mp3$'
 
 第五种，张宴的脚本clear_squid_cache.sh。（老小注：还是这个熟悉，呵呵）
-{% highlight bash %}
+```bash
 #!/bin/sh
 squidcache_path="/data1/squid/var/cache"
 squidclient_path="/usr/local/squid/bin/squidclient"
@@ -87,7 +87,7 @@ grep -a -r $1 $squidcache_path/* | strings | grep "http:" | awk -F'http:' '{prin
 for url in `cat cache_list.txt`; do
     $squidclient_path -m PURGE -p 80 $url
 done
-{% endhighlight %}
+```
 
 据说：经测试，在DELL 2950上清除26000个缓存文件用时2分钟左右。平均每秒可清除缓存文件177个。
 看到了吧，网上流传的这个脚本里，$url也没有用""引起来，所以用这个sh刷新的时候，也失败了……

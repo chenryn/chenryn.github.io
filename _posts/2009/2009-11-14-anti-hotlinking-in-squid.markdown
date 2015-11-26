@@ -10,14 +10,14 @@ category: squid
 
 公司自然有规范，直接ctrl+c、ctrl+v就搞定。但这些句子，还是值得细细研究一下的。
 相关语句如下：
-{% highlight squid %}
+```squid
 acl test_domain dstdomain .test.com
 acl null_referer referer_regex .
 acl right_referer referer_regex -i
 ^http://test.com ^http://.*.test.com
 http_access allow test_domain !null_referer
 http_access deny test_domain !right_referer
-{% endhighlight %}
+```
 第一关键点，是第一行的那个“.”，“.”匹配的是除了“n”以外的任何一个字符。那么!null_referer也就是“n”，也就是说第一条access定义的，是允许referer为空行；
 
 第二关键点，是access的“!”，“!”就是非，那么!right_referer定义的就是一切除了test.com以外的域名，也就是说第二条access定义的，是不允许所有其他网站。
@@ -38,7 +38,7 @@ wget http://www.test.com/test.gif --refer="http://www.test.com" -e "http_proxy=$
 
 我对nagios不熟，不知道里面具体是用什么去check的，大概也差不离吧？
 最后，像新浪百度这样的盗链显示图片怎么做的？也就是一句话的事，如下：
-{% highlight squid %}
+```squid
 deny_info http://www.test.com/你盗链啦.gif
 right_referer
-{% endhighlight %}
+```

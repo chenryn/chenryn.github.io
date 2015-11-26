@@ -15,15 +15,15 @@ tags:
 
 # 首先安装依赖
 
-{% highlight bash %}
+```bash
   apt-get install libxslt1-dev libxml2-dev
   gem install rubyzip htmlentities rmagick ydocx hpricot
   wget https://raw.github.com/cousine/downmark_it/master/downmark_it.rb
-{% endhighlight %}
+```
 
 # 编写转换脚本
 
-{% highlight ruby %}
+```ruby
   require 'rubygems'
   require 'ydocx'
   $: << File.dirname(__FILE__)
@@ -32,13 +32,13 @@ tags:
   ydocx = YDocx::Document.open(filename)
   html = ydocx.to_html.gsub(/\n/, '')
   puts DownmarkIt.to_markdown(html)
-{% endhighlight %}
+```
 
 这样就能看到输出了。目录里的每个章节都有引用格式凸现，美中不足是对word里的标题样式识别不太好，本来期望是可以自己生成`<h1>`、`<h2>`的，但是ydocx生成的html里只把第一个标题一变成`<h1>`，其他的都是普通的`<p>`。
 
 另一个问题是上面脚本里直接调用to_html的方法，不会保存住unzip出来的images文件夹。自己再另写一段unzip的代码:
 
-{% highlight ruby %}
+```ruby
   require 'fileutils'  
   require 'zip/zip'  
   require 'zip/zipfilesystem'  
@@ -56,6 +56,6 @@ tags:
   unzip(filename, "/tmp/#{dirname}")
   FileUtils.mv("/tmp/#{dirname}/media/", "/images/")
   FileUtils.rm_rf("/tmp/#{dirname}")
-{% endhighlight %}
+```
 
 比较普通的办法，是直接使用ydocx自带的脚本`docx2html --format none file.docx`，会在docx文档的同级目录下生成同名html和_files目录。然后再写一个单行脚本转成markdown的。

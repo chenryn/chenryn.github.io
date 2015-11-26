@@ -12,7 +12,7 @@ tags:
 
 一个比较简单的 `Dockerfile` 示例是这样的：
 
-{% highlight ruby %}
+```ruby
 FROM centos:6.4
 RUN yum install make gcc wget perl perl-devel perl-Time-HiRes perl-CGI perl-libwww-perl perl-Module-Build perl-Test-Simple perl-Test-Deep perl-YAML
 RUN wget http://cpanmin.us
@@ -20,7 +20,7 @@ RUN perl cpanm Dancer
 ADD /var/www/dancerapp app
 EXPOSE 3000
 CMD perl app/bin/app.pl
-{% endhighlight %}
+```
 
 然后运行如下命令构建镜像：
 

@@ -39,7 +39,7 @@ shinken 是完全重写过的披着 nagios 皮的监控系统，在 [shinken 的
 
 既然说到用 gearman，又说到监控，再回头看看去年提到的 cloudforecast。在 `ConfigLoader.pm` 中，可以看到一个 `watchdog` 方法。具体代码如下：
 
-{% highlight perl %}
+```perl
     my $watcher = Filesys::Notify::Simple->new(\@path);
     while (1) {
         $watcher->wait( sub {
@@ -51,7 +51,7 @@ shinken 是完全重写过的披着 nagios 皮的监控系统，在 [shinken 的
             exit;
         } );
     }
-{% endhighlight %}
+```
 
 可以看到，其实现方法是通过另起进程，通过 inotify 监听文件修改的方式，"实时"的重启主进程。实质上与 nagios 并无区别，都是要重新加载内存中保存的整个监控项配置列表。虽然没有大压力运用，但是可以猜测在预设环境中，重启耗时也会是瓶颈。    
 

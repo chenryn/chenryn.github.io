@@ -5,7 +5,7 @@ date: 2012-04-21
 category: perl
 ---
 
-{% highlight perl %}
+```perl
 #!/bin/env perl
 use warnings;
 use strict;
@@ -33,7 +33,7 @@ sub upload {
     my $res = XMLRPC::Lite->proxy($proxyurl)->call('metaWeblog.newPost', $blogid, $username, $password, { title => "$title", description => "$text", categories => ['【创作类型:原创】','IT管理', ]}, 1)->result;
     say "newPost id -- " . $res if $res;
 };
-{% endhighlight %}
+```
 
 目前还有几个问题：
 

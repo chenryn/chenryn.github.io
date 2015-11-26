@@ -11,7 +11,7 @@ Spork是一个在Sporx基础上构成的工具，可以直接cpan安装，不过
 比方我用的这个就是Spork作者用的：[Spork-pm](https://github.com/ingydotnet/spork-pm)
 
 新建一个slide的工程相当简单：
-{% highlight bash %}
+```bash
 git clone https://github.com/ingydotnet/spork-pm.git
 cd spork-pm
 perl Makefile.PL
@@ -22,7 +22,7 @@ cd /tmp/slides
 Spork -new
 Spork -make
 Spork -start
-{% endhighlight %}
+```
 
 在slide里每张都加载,css和js都是重复的。make的过程就是使用template展开的问题。start就是打开浏览器的命令行的alias。这里其实可以优化一下改成外链css/js(默认是因为有些控制bgcolor啊之类的spork语法可以在单页里用，所以就没外链)~    
 注意template里的模板html里charset都是写的UTF-8编码，而在win上，编辑器默认是GB2312的，需要更改过来。

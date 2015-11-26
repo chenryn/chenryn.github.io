@@ -13,7 +13,7 @@ tags:
 再次：系统分用户，不同用户可选节点指定分发，只查看当前用户的报表。
 以上。
 今天先完成最基础的部分。还是用dancer -a websync创建应用。然后创建views/websync.tt如下：
-{% highlight html %}
+```html
 </head><body>
 <form name='urllist' action='/websync' method='post'>
 <table border='1' align='center'>
@@ -24,10 +24,10 @@ tags:
 </td></tr>
 </table>
 </form>
-</body></html>{% endhighlight %}
+</body></html>```
 一如既往的难看……考虑是不是学下用dreamweaver画个稍微好看点的页面出来做layout啊……
 然后是lib/websync.pm，如下：
-{% highlight perl %}package websync;
+```perlpackage websync;
 use Dancer ':syntax';
 use Gearman::Client;
 
@@ -62,10 +62,10 @@ sub peer_query {
     $client->dispatch_background('websync', $url);
 };
 
-true;{% endhighlight %}
+true;```
 嗯，这里试着用了gearman而不是fork，一个是考虑到可能web系统跟中心存储不在一起；另一个是考虑之后需要用mysql存储分发状态，可以把gearman::client改成mysql的trigger形式。
 然后是worker.pl，运行在中心存储上，接受job，完成下载，然后通知其他节点继续：
-{% highlight perl %}#!/usr/bin/perl -w
+```perl#!/usr/bin/perl -w
 use Gearman::Worker;
 use LWP::Simple;
 use Net::SSH::Perl;
@@ -105,19 +105,19 @@ sub dist {
         $ssh->cmd("rsync 192.168.0.2:$file $file");
       };
     };
-};{% endhighlight %}
+};```
 不过想到，其实可以在remote上设定每15分钟一次rsync。这样节省掉中心的dist功能，改成remote上的rsync后，主动通过mysql汇报更新的list和md5。
 明天开始改这种方式。
 <hr>
 晚饭回来，增加dancer在nginx上的部署方式。之前写过apache上用mod_perl的方式，这回因为正好电脑上有nginx，就改用nginx反代了：
 首先安装一个perl的server，命令如下：
-{% highlight bash %}# cpanm Plack Starman{% endhighlight %}
+```bash# cpanm Plack Starman```
 Starman是一个提供prefork方式运行的HTTP服务器。另外还有基于AnyEvent的Twiggy和基于Coro的Corona，不够因为我是在本机的colinux上做实验，装的是UBUNTU9.04系统，已经没有apt源装openssl了，所以Net::SSLeay模块无法安装，AnyEvent类型的也就不能用了。
 启动命令如下：
-{% highlight bash %}sudo -u www-data plackup -E production -s Starman --workers=2 -l /tmp/plack.sock -a /var/www/websync/bin/app.pl &{% endhighlight %}
+```bashsudo -u www-data plackup -E production -s Starman --workers=2 -l /tmp/plack.sock -a /var/www/websync/bin/app.pl &```
 该命令指定了运行用户，运行server核心，读取的配置文件，启动的worker进程，提供的socket接口。
 然后就可以利用nginx的upstream功能，pass到这个socket接口上了。nginx.conf相关部分如下：
-{% highlight nginx %}    upstream backendurl {
+```nginx    upstream backendurl {
         server unix:/tmp/plack.sock;
     }
 
@@ -140,4 +140,4 @@ Starman是一个提供prefork方式运行的HTTP服务器。另外还有基于An
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_pass       http://backendurl;
       }
-    }{% endhighlight %}
+    }```

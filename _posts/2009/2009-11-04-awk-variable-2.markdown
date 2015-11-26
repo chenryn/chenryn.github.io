@@ -10,7 +10,7 @@ tags:
 在squid自动配置脚本里，用到了sed的/r把一个文件的内容插入另一个文件。今天看到awk对两个文件的处理方法，要通过不少运算，不怎么方便。不过作为加深对NR和FNR的不同的理解，还是有些作用。
 先说下NR和FNR的不同。
 在一次awk中，NR是从头计算到尾的，而FNR是每打开一个文件，就重新计算：
-{% highlight bash %}
+```bash
 [root@raocl ~]# awk '{print NR,FNR,$0}' ts st
 1 1 123 456
 2 2 abc def
@@ -20,9 +20,9 @@ tags:
 6 2 abc def
 7 3 ABC DEF
 8 4 654 321
-{% endhighlight %}
+```
 下面转载一个例子：
-{% highlight bash %}
+```bash
 [root@raocl ~]# cat a
 1000 北京市 地级 北京市 北京市
 1100 天津市 地级 天津市 天津市
@@ -43,7 +43,7 @@ $1,$2,a[$2]}' a b
 130000,河北省,
 130131,平山县,
 130132,元氏县,
-{% endhighlight %}
+```
 
 解释：
 NRFNR也就是到文件b的时候，打印文件b的第1、2列和之前创建的数组a[北京市]等。

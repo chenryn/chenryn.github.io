@@ -29,11 +29,11 @@ tags:
 居然一个tcp都没显示出来。我汗~~
 所以采用一个自建脚本模板的方法来完成吧~~
 首先在host上新建/etc/snmp/tcpconn.sh，内容如下：
-{% highlight bash %}
+```bash
 #!/bin/sh
 conn=`netstat -s -t | grep connections established |awk '{print $1}'`
 echo $conn
-{% endhighlight %}
+```
 
 对这个脚本我个人持保留意见。因为在netstat -anpl|grep :80|wc -l、netstat -s -t和/proc/net/tcp中来看，netstat -s -t最省时间，但数字也最不准~
 

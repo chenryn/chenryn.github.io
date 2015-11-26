@@ -8,10 +8,10 @@ category: perl
 
 于是我去仔细看了一下这个模块的代码。最关键的就是下面这几行：
 
-{% highlight c %}
+```c
         SvUPGRADE(target, SVt_PVMG);
         sv_magicext(target, handler_cv, PERL_MAGIC_ext, &modified_vtbl, NULL, 0);
-{% endhighlight %}
+```
 
 这里其实用的是 perlapi 里的 Magic：
 

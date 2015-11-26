@@ -18,22 +18,22 @@ tags:
 
 ### 首先打开一个终端运行初始镜像：
 
-{% highlight bash %}
+```bash
 # docker run -i -t ubuntu /bin/sh
 # apt-get install -y wget gcc make
 # useradd tour
 # echo 'tour hard nproc 8' >> /etc/security/limits.conf
 # wget http://cpanmin.us -O bin/cpanm
 # cpanm List::AllUtils Moo Path::Tiny DBD::SQLite AnyEvent::HTTP DateTime
-{% endhighlight %}
+```
 
 ### 然后打开另一个终端保存前一个终端的变更：
 
-{% highlight bash %}
+```bash
 # docker ps
 CONTAINER ID ...
 # docker commit <ID> perl-tour
-{% endhighlight %}
+```
 
 注意一定要在之前 `cpanm` 已经成功执行完毕后保存，但是前面登录进 docker 的会话千万不要退出，否则后面的 `docker ps` 就查看不到 id 了。退出时这些临时变更都毁掉了。
 
@@ -53,7 +53,7 @@ __END__
 
 网站里添加下面一段：
 
-{% highlight perl %}
+```perl
 use Dancer::Plugin::Ajax;
 use File::Temp qw(tempfile);
 use IPC::Run qw(start harness timeout);
@@ -81,11 +81,11 @@ ajax '/run' => sub {
         Events => [ split(/\n/, $out) ],
     });
 };
-{% endhighlight %}
+```
 
 页面上通过 Ajax 请求交互：
 
-{% highlight javascript %}
+```javascript
   $.ajax("/run?code=" + encodeURIComponent(codeStr), {
     type: "GET",
     dataType: "json",
@@ -104,7 +104,7 @@ ajax '/run' => sub {
         "Error communicating with remote server.");
     }
   });
-{% endhighlight %}
+```
 
 静态页面部分严重参考了 Scala 的 Tour 页。趁机学习了 impress.js 制作幻灯片效果、codemirror 实现代码高亮效果。
 

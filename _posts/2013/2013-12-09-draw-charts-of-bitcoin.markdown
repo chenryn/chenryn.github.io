@@ -11,7 +11,7 @@ tags:
 
 首先是获取数据，比特币中国的 API 是个很鬼怪的东西，实时交易数据的接口，返回的数据中最高最低和成交量都是基于过去24小时的，要知道比特币交易是没有休市的啊。所以获取数据过程中需要自己计算这些。这里考虑到股市一般一天实际交易4小时，所以整个设计也是默认4小时的图形展示。
 
-{% highlight python %}
+```python
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # query price data from BTCChina.
@@ -107,11 +107,11 @@ while True:
 
         write_ohlc(data)
         time.sleep(1)
-{% endhighlight %}
+```
 
 这里主要把实时数据存入ticker表，分钟统计数据存入ohlc表。然后是各指标算法。首先是 MACD ：
 
-{% highlight python %}
+```python
 #/*******************************************************************************
 # * Author: Chenlin Rao | Renren inc.
 # * Email: rao.chenlin@gmail.com
@@ -196,11 +196,11 @@ class MACD():
         bar.reverse()
 
         return zip(t[33:], diff[8:]), zip(t[33:], dea), zip(t[33:], bar)
-{% endhighlight %}
+```
 
 然后是 BOLL ：
 
-{% highlight python %}
+```python
 #/*******************************************************************************
 # * Author: Chenlin Rao | Renren inc.
 # * Email: rao.chenlin@gmail.com
@@ -282,11 +282,11 @@ class BOLL():
             x += 1
 
         return matrix[days:], up, mb, dn
-{% endhighlight %}
+```
 
 最后是 KDJ ：
 
-{% highlight python %}
+```python
 #/*******************************************************************************
 # * Author: Chenlin Rao | Renren inc.
 # * Email: rao.chenlin@gmail.com
@@ -353,11 +353,11 @@ class KDJ():
         d = self._getMA(k,3)
         j = map(lambda x: 3*x[0]-2*x[1], zip(k[3:], d))
         return zip(t[2:], k), zip(t[5:], d), zip(t[5:], j)
-{% endhighlight %}
+```
 
 最后通过一个简单的python web框架完成界面展示，这个叫 bottle.py 的框架是个单文件，相当方便。
 
-{% highlight python %}
+```python
 #!/usr/bin/python
 import json
 import yaml
@@ -408,11 +408,11 @@ def kdj(day):
     return json.dumps({'k':k, 'd':d, 'j':j})
 
 run(host='127.0.0.1', port=8000, debug=True)
-{% endhighlight %}
+```
 
 唯一的一个 html 就是具体用 highcharts 画图的地方，如下：
 
-{% highlight html %}
+```html
 <html>
 <head>
    <meta http-equiv="refresh" content="60">
@@ -586,7 +586,7 @@ run(host='127.0.0.1', port=8000, debug=True)
    <div id="container" style="min-width:800px;height:1000px;"></div>
 </body>
 </html>
-{% endhighlight %}
+```
 
 highcharts 有个问题，就是不能跟 amcharts 或者 echarts 那样提供一个画笔工具，让用户自己在生成的图形上再涂抹线条，这个功能其实在蜡烛图上判断压力位支撑位的时候很有用。不过蜡烛图 btc123 也提供了，我也就懒得再用 amcharts 重写一遍。
 

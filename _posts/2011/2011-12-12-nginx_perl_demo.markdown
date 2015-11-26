@@ -17,7 +17,7 @@ tags:
 
 最后举例一个自己写的简单的例子：
 
-{% highlight perl %}
+```perl
 package HelloWorld;
 use Nginx;
 use strict;
@@ -77,7 +77,7 @@ sub handler {
 #各个非阻塞调用完成后的返回，NGX_DONE只能用在http的handler里，不能在ngx_*r里用，里面请用NGX_CLOSE。
     return NGX_DONE;
 };
-1;{% endhighlight %}
+1;```
 
 另：源码中带有一个真正的反向http的例子Nginx::Util和一个Redis的例子。并且与nodejs读取redis的性能做了对比。可以参见~~
 

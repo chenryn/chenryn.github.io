@@ -6,7 +6,7 @@ category: perl
 ---
 
 上回分析lbnamed的时候，开玩笑说自己也可以试试在模块基础上加点啥功能。国庆节前最后一天，没啥事情做，就写个小demo续貂。代码如下：
-{% highlight perl %}
+```perl
 #!/usr/bin/perl
 use warnings;
 use strict;
@@ -106,17 +106,17 @@ sub area2resolv {
 sub ip_conv {
     my $ip = shift;
     return ($1<<24)|($2<<16)|($3<<8)|$4 if $ip =~ m/(\d+)\.(\d+)\.(\d+)\.(\d+)/;
-}{% endhighlight %}
+}```
 其中调用的ip.list是bind9用的acl格式，即：
-{% highlight bash %}
+```bash
 acl cnc_beijing {
 202.106.0.0/24;
 ...
 }
-...{% endhighlight %}
+...```
 这种格式。
 调用的config-www.domain.com.yml是YAML格式定义的地区指向ip，即：
-{% highlight yaml %}
+```yaml
 ctc_hebei:
     ip:
       - 10.168.168.1
@@ -126,7 +126,7 @@ ctc_hebei:
       - 50
       - 30
       - 20
-{% endhighlight %}
+```
 超级简单(其实是我没想到好的weight实现方式)的算法，就是找到这个ctc_hebei的时候，依次序返回ip，同时每返回一次对应的per就减1，减到0就换下一个ip，都0了就复原从头开始。
 
 严重缺失的地方：<del datetime="2011-10-13T05:40:51+00:00">读取不同域名配置；</del>对server的监控；<del datetime="2011-10-13T05:40:51+00:00">对config.yml的reload</del>。

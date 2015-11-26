@@ -47,7 +47,7 @@ tags:
 
 处理效果跟之前示例依然保持一致，就不重复贴冗余的函数了，只贴最开始的处理部分：
 
-{% highlight java %}
+```java
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
@@ -82,7 +82,7 @@ object LogStash {
     ssc.awaitTermination()
   }
 }
-{% endhighlight %}
+```
 
 这里面有一些跟网上常见资料不一样的地方。
 
@@ -115,7 +115,7 @@ sbt-assembly 使用起来特别简单，尤其是当你使用的 sbt 版本比�
 
 现在可以去修改我们项目的 `build.sbt` 了：
 
-{% highlight scala %}
+```scala
 name := "LogStash"
 
 version := "1.0"
@@ -130,7 +130,7 @@ libraryDependencies ++= Seq(
   "org.json4s" %% "json4s-native" % "3.2.10",
   "org.json4s" %% "json4s-jackson" % "3.2.10"
 )
-{% endhighlight %}
+```
 
 是的。新版本的 sbt-assembly 完全不需要单独修改 `build.sbt` 了。
 

@@ -21,11 +21,11 @@ tags:
 
 提供了 bin 和 src 两个版本，直接下 bin 来用：
 
-{% highlight bash %}
+```bash
 wget http://sersync.googlecode.com/files/sersync2.5_64bit_binary_stable_final.tar.gz
 tar zxvf sersync2.5_64bit_binary_stable_final.tar.gz
 cd GNU-Linux-x86/
-{% endhighlight %}
+```
 
 很简单，只有两个文件，一个是程序，一个是 xml 配置文件。配置包括 debug 模式、xfs 支持、过滤器配置（默认已过滤`^.`和`~$`）、inotify 监听（推荐是创建目录、完成输入和移动）、本地监听路径和 rsync 远程主机（ip，rsync 模块名、用户名密码）、失败重试及日志、多次失败后的定时任务、插件（通过socket 向远程主机传输 inotify 日志、通过 http 向 cdn 的 api 发送 purge 请求、调用外部命令处理文件）。
 
@@ -33,16 +33,16 @@ cd GNU-Linux-x86/
 
 先最简单的实验，写个write.sh如下：
 
-{% highlight bash %}
+```bash
 #!/bin/sh
 echo $1 >> $0.log
-{% endhighlight %}
+```
 
 然后修改xml如下句：
 
-{% highlight xml %}
+```xml
     <param prefix="GNU-Linux-x86/write.sh" suffix="" ignoreError="true"/>
-{% endhighlight %}
+```
 
 运行 `GNU-Linux-x86/sersync2 -d -m command` 即可后台运行 command 插件且不启用 rsync。
 
@@ -52,9 +52,9 @@ echo $1 >> $0.log
 
 另，`sersync -h` 可以看到其固定修改 sysctl 如下：
 
-{% highlight bash %}
+```bash
 echo 50000000 > /proc/sys/fs/inotify/max_user_watches
 echo 327679 > /proc/sys/fs/inotify/max_queued_events
-{% endhighlight %}
+```
 
 据周洋的说法是 inotify 最多只能监听到五千万个文件夹~~在我的环境下，1300 万 inode，add watch 就花了1个多小时……

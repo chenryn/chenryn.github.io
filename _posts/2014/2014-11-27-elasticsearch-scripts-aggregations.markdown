@@ -25,9 +25,9 @@ tags:
 
 创建 `config/scripts/split.groovy` 文件，内容如下：
 
-{% highlight java %}
+```java
 doc[fieldname].value.split('.')[0..-2].join('.')
-{% endhighlight %}
+```
 
 稍等一下，看到 ES 的日志显示探测到并且编译成功后。就可以发送请求了：
 
@@ -48,7 +48,7 @@ doc[fieldname].value.split('.')[0..-2].join('.')
 
 结果如下：
 
-{% highlight json %}
+```json
 {
   "took" : 30,
   "timed_out" : false,
@@ -73,7 +73,7 @@ doc[fieldname].value.split('.')[0..-2].join('.')
     }
   }
 }
-{% endhighlight %}
+```
 
 2. 通过正则捕获
 
@@ -81,12 +81,12 @@ doc[fieldname].value.split('.')[0..-2].join('.')
 
 创建 `config/scripts/regex.groovy` 文件，内容如下：
 
-{% highlight java %}
+```java
 matcher = ( doc[fieldname].value =~ /${pattern}/ )
 if (matcher.matches()) {
     matcher[0][1]
 }
-{% endhighlight %}
+```
 
 同样等识别编译，然后发送这样的请求：
 

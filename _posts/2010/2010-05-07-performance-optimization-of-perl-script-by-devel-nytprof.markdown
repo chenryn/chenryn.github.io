@@ -15,11 +15,11 @@ category: perl
 
 比如读取文件不要用 `@line=FILE` 用 `while(<FILE>)` ；正则`^` 句首，带上 `/oi` ；注意哈希表与内存交换区等等；最后推荐给我 `Devel::NYTProf` ，进行测试。
 
-{% highlight perl %}
+```perl
 perl -MCPAN -e shell
 >install JSON::Any（不安这个东东，在nyt生成html的时候会报warning，不过不安也可以）
 >install Devel::NYTProf
-{% endhighlight %}
+```
 然后采用 `perl -d:NYTProf /home/purge/url_parser.pl` 运行脚本，会在当前路径下生成nytprof.out。
 
 再用 `nytprofhtml nytprof.out` 生成web页面。
@@ -47,9 +47,9 @@ perl -MCPAN -e shell
 (143677-143579=98，即3306条日志中有98条是新增url)
 
 注意到第二张图中，对access.log分析时，match那步，__每行花了30us__！而在对urllist和tmplog分析时，每行只花3-4us的样子。看来是这一步的正则写的不好了，如下:
-{% highlight perl %}
+```perl
     my $log_pattern   = qr '^.*?d+s+w+s+(http://.+?)s+.+';
-{% endhighlight %}
+```
 
 根据日志的格式和需求，改成这样 `my $log_pattern   = qr 's(http://.+?)s';` 其他不变，再次测试，该部分的测试结果如下：
 

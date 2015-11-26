@@ -12,7 +12,7 @@ category: squid
 经过整整一个下午的刷新观察，所有的服务器都陆续出现过这种情况，然后不定什么时间age又突然回复正常计数一段时间…等了很久，捕捉到一个现象，就是金华节点的测试age在896的时候，我一刷新，变成102164686了。也就可以认为，这个服务器的age计数在到达15分钟去源站比对文件的时候，突然变成102164686了。
 
 因为之前脚本过滤了其他信息，只显示HTTP1/0|Age|Cache三行。于是改手动wget看全部信息。结果无意的刷新几遍后，赫然发现有一次header里的Date居然是2006年！难道是这台机器有问题？确认本机date无误后，我又登陆其他节点几台机器一一试验，都出现这个情况……于是在crontab里执行每5分钟从源站wget一次测试文件，过两天来看看结果，如下所示：
-{% highlight bash %}
+```bash
 [root@squid1 ~]# cat /root/wget.log|awk '/Last/{print $0}' |sort -n |uniq -c
 803   Last-Modified: Thu, 12 Nov 2009 05:58:12 GMT
 1   Last-Modified: Thu, 24 Aug 2006 00:09:51 GMT
@@ -23,7 +23,7 @@ category: squid
 [root@squid1 ~]# cat /root/wget.log|awk '/Last/{print $5}' |sort -n |uniq -c
 381 2006
 803 2009
-{% endhighlight %}
+```
 源站文件的Last-Modified时间居然在变化！而且除了正确的2009年时间不变外，2006年的时间居然是随着时间走的（crontab是5分钟，wget日志里每次Last-Modified的时间也是隔5分钟）……
 
 由此基本确定是客户源站的问题，我的理解是：当cache服务器到时去源站比对时间时，如果碰上源站这会儿时间是2009年，就更新文件并重计age；如果碰上源站这会儿时间是2006年了，那cache比源站还新，自然没法变动了……

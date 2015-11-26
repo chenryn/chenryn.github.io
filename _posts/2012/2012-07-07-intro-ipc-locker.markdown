@@ -38,7 +38,7 @@ category: perl
 后一个Schedule::Load则可以根据集群设备的loadavg，top等，决定在哪台设备上运行job。还没测试。之后再记录。
 
 补充：贴一个脚本，仿照lockersh改写的squid集群重启及报警控制：
-{% highlight perl %}
+```perl
 #!/usr/bin/perl -w
 use FindBin;
 use lib "$FindBin::Bin/../lib";
@@ -176,4 +176,4 @@ sub notify {
 }
 
 __END__
-{% endhighlight %}
+```

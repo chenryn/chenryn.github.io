@@ -14,7 +14,7 @@ tags:
 
 于是我开测试库模拟了一下：
 
-{% highlight bash %}
+```bash
 # 插入两条数据
 curl http://localhost:9200/test/log/1 -d '{"url":"http://locahost/index.html"}'
 curl http://localhost:9200/test/log/2 -d '{"url":"http://locahost/index.php?key=value"}'
@@ -24,11 +24,11 @@ curl http://localhost:9200/test/log/_search?pretty=1 -d '{"query":{"regexp":{"ur
 curl http://localhost:9200/test/log/_search?pretty=1 -d '{"query":{"regexp":{"url":{"value":"\?.*"}}}}'
 # 搜索返回空数据
 curl http://localhost:9200/test/log/_search?pretty=1 -d '{"query":{"regexp":{"url":{"value":".*\\?.*"}}}}'
-{% endhighlight %}
+```
 
 后来发现问题出在分词上面。
 
-{% highlight bash %}
+```bash
 # 删除之前的测试数据和索引
 curl -XDELETE http://localhost:9200/test/log
 # 预定义索引类型的映射，url字段在索引的时候不分词
@@ -38,7 +38,7 @@ curl http://localhost:9200/test/log/1 -d '{"url":"http://locahost/index.html"}'
 curl http://localhost:9200/test/log/2 -d '{"url":"http://locahost/index.php?key=value"}'
 # 同样的搜索请求，返回了一条结果(index.php?这条)
 curl http://localhost:9200/test/log/_search?pretty=1 -d '{"query":{"regexp":{"url":{"value":".*\\?.*"}}}}'
-{% endhighlight %}
+```
 
 上面这个搜索还可以简写成 Query DSL 的样式：
 

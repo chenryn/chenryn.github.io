@@ -11,7 +11,7 @@ cacti运行在lamp环境下，采用net-snmp获得监控数据，由rrdtool绘�
 
 1. mysql安装：
 
-{% highlight bash %}
+```bash
 wget http://mysql.cs.pu.edu.tw/Downloads/MySQL-5.1/mysql-5.1.44.tar.gz
 tar zxvf mysql-5.1.44.tar.gz
 cd mysql-5.1.44
@@ -37,11 +37,11 @@ sed -i /^myisam/aset-variable=wait_timeout=200 /etc/my.cnf
 sed -i /^myisam/aset-variable=max_user_connections=500 /etc/my.cnf
 sed -i /^myisam/aset-variable=max_connections=1000 /etc/my.cnf
 /etc/init.d/mysqld restart
-{% endhighlight %}
+```
 
 2. php安装
 
-{% highlight bash %}
+```bash
 wget http://cn.php.net/distributions/php-5.2.12.tar.gz
 tar zxvf php-5.2.12.tar.gz
 cd php-5.2.12
@@ -51,11 +51,11 @@ make
 make install
 cp php.ini-dist /home/php/lib/php.ini
 ln -s /home/php/bin/* /usr/local/bin/
-{% endhighlight %}
+```
 
 3、apache检测
 
-{% highlight bash %}
+```bash
 # grep php /home/apache2/conf/httpd.conf
 DirectoryIndex index.php index.html index.htm
 AddType application/x-httpd-php .php
@@ -69,7 +69,7 @@ phpinfo();
 EOF
 # curl http://localhost | grep module_mysql
 <h2><a name="module_mysql">mysql</a></h2>
-{% endhighlight %}
+```
 
 4、rrdtool安装
 麻烦东西来了，网上很多cacti部署教程，都在rrdtool上大费周章，因为这个东东依赖的库文件很多，而且自己本身的版本不同，库文件的种类和版本要求也不一样。首先，尽可能的把这些东西都安装吧：
@@ -95,7 +95,7 @@ EOF
 如果以上齐全，可以去http://oss.oetiker.ch/rrdtool/pub/libs下载rrdtool的源码编译，然后按照make的warning信息慢慢调整库文件的相应版本号去了……
 
 如果不要求自己成为编译达人，只求搞定的，那么按照如下办法，轻松搞定吧：
-{% highlight bash %}
+```bash
 # cat > /etc/yum.repos.d/ct5_64.repo <<EOF
 [base]
 name=CentOS-5.4 - Base
@@ -115,12 +115,12 @@ enabled=1
 EOF
 # rpm --import <a href="http://dag.wieers.com/rpm/packages/RPM-GPG-KEY.dag.txt">http://dag.wieers.com/rpm/packages/RPM-GPG-KEY.dag.txt</a>
 # yum install rrdtool
-{% endhighlight %}
+```
 （还嫌不够简单？那还有更简单的：
 wget http://dag.wieers.com/rpm/packages/rpmforge-release/rpmforge-release-0.3.6-1.el5.rf.x86_64.rpm;rpm -Uvh rpmforge-release-0.3.6-1.el5.rf.x86_64.rpm;yum install rrdtool rrdtool-php即可）
 
 5、cacti安装
-{% highlight bash %}
+```bash
 # wget http://www.cacti.net/downloads/cacti-0.8.7e.tar.gz
 # tar zxvf cacti-0.8.7e.tar.gz –C /cache/data/
 # mv /cache/data/cacti-0.8.7e /cache/data/cacti
@@ -136,18 +136,18 @@ mysql> flush privileges;
 # sed –i 's/username = "cactiuser/username = "cacti/' include/config.php
 # sed –i 's/password = "cactiuser/password = "123456/' include/config.php
 # echo '*/5 * * * * /home/php/bin/php /cache/data/cacti/poller.php &amp;> /dev/null' >>/var/spool/cron/root
-{% endhighlight %}
+```
 
 6、web页面发布
 在httpd.conf中发布
-{% highlight apache %}
+```apache
 <Directory /cache/data>
     Options Indexes FollowSymLinks
     AllowOverride None
     Order Allow,Deny
     Allow from all
 </Directory>
-{% endhighlight %}
+```
 
 大功告成，接下来都是鼠标的事了，在browser中登陆http://yourdomian/cacti，按实际情况修改php/mysql/net-snmp的which和version信息，一路next即可，最后，cacti的初始用户名密码都是admin。
 

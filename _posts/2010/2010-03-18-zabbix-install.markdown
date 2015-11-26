@@ -6,7 +6,7 @@ category: monitor
 ---
 
 在CU上看到有帖子比较各开源monitor软件，其中对zabbix颇多赞誉。决定试用一下。
-{% highlight bash %}
+```bash
 #为快速安装方便，LAMP环境都采用yum获取。
 yum install httpd mysql* php* gcc net-snmp* curl*
 #然后编译安装zabbix，步骤如下：
@@ -39,7 +39,7 @@ sed -i 's/^DBUser=root/DBUser=zabbix/g' /etc/zabbix/zabbix_server.conf
 sed -i 's/^# DBPassword=/DBPassword=zabbix/g' /etc/zabbix/zabbix_server.conf
 mv frontends/php /var/www/html/zabbix
 chown -R zabbix.zabbix /var/www/html/zabbix
-{% endhighlight %}
+```
 根据zabbix需求修改LAMP，vi /etc/php.ini修改相关参数如下：
 
     max_execution_time = 300
@@ -54,20 +54,20 @@ vi /etc/httpd/conf/httpd.conf修改servername，然后启动apache。
 
 浏览器打开http://mydomain.com/zabbix，出现setup.php，按说明next即可。到最后要求下载zabbix.conf.php。其实可以直接修改服务器文件。
 
-{% highlight bash %}
+```bash
 sed -i 's/0";/3306";/g' /var/www/html/zabbix/conf/zabbix.conf.php.example
 sed -i 's/_password//g' /var/www/html/zabbix/conf/zabbix.conf.php.example
 mv /var/www/html/zabbix/conf/zabbix.conf.php.example /var/www/html/zabbix/conf/zabbix.conf.php
-{% endhighlight %}
+```
 
 然后test即可OK，进行登陆界面。初始用户名密码为admin/zabbix。
 进去以后，第一件事改密码。
 选择administrator下的user，点击admin，change password即可；还可以添上email等信息；另外，可以选择chinese，save之后relogin，可以看到稍微友好一点点的中文界面，不过翻译水平就请将就一下吧~~（最无语的是把select翻译成搜索==!）
 <a href="http://www.hiadmin.com" target="_blank">架构研究室</a>刚刚发布了一个汉化全面一些的<a href="http://www.hiadmin.com/wp-content/uploads/2010/03/cn_zh.inc.php_.tar.gz" target="_blank">语言包</a>，可以解压覆盖/var/www/html/zabbix/include/locales/cn_zh.inc.php。
 开始在页面上点点看看吧，不过这时候才想起来，web虽然开了，zabbix服务本身却一直没有启动呢~返回服务器操作：
-{% highlight bash %}
+```bash
 cp misc/init.d/redhat/zabbix_* /etc/init.d/
-{% endhighlight %}
+```
 vi /etc/init.d/zabbix_server_ctl，把BASEDIR改成/home/zabbix，PIDFILE=/var/tmp修改成PIDFILE=/tmp/，$BASEDIR/bin/改成$BASEDIR/sbin/。zabbix_agentd_ctl同理。
 
 然后，启动服务，/etc/init.d/zabbix_server_ctl start;/etc/init.d/zabbix_agentd_ctl start
@@ -76,7 +76,7 @@ vi /etc/init.d/zabbix_server_ctl，把BASEDIR改成/home/zabbix，PIDFILE=/var/t
 
 zabbix和nagios等监控一样，需要在被监控host上安装agent来完成数据采集和其他操作。当然，如果就是不肯安装的话，也可以使用snmp来完成一些基本的东西。
 host上的agent部署特别简单：
-{% highlight bash %}
+```bash
 wget http://www.zabbix.com/downloads/1.8/zabbix_agents_1.8.linux2_6.x64.tar.gz
 tar zxvf zabbix_agents_1.8.linux2_6.x64.tar.gz -C /home/
 cat >> /home/zabbix/conf/zabbix_agentd.conf << eof
@@ -84,7 +84,7 @@ LogFile=/tmp/zabbix_agentd.log
 Server=zabbix服务器的ip
 Hostname=被监控host的名字
 eof
-{% endhighlight %}
+```
 然后启动即可。/home/zabbix/sbin/zabbix_agentd -c /home/zabbix/conf/zabbix_agentd.conf &
 
 据称这里如果不写全路径，可能出错。

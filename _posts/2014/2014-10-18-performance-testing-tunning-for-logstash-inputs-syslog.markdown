@@ -93,7 +93,7 @@ LogStash::Inputs::Syslog 中，TCPServer 对每个 client 单独开一个 Thread
 * 在 inputs/file 的前提下，outputs/stdout{dots} 比 outputs/elasticsearch{http} 处理速度快一倍，即有 15k。
 * 下载了 heka 的二进制包，通过下面配置测试其接受 syslog 输入，并以 logstash 的 schema 输出到文件的性能。结果是每秒 30k，跟之前优化后的 logstash 基本一致。
 
-{% highlight ini %}
+```ini
 [hekad]
 maxprocs = 48
 
@@ -128,6 +128,6 @@ type = "FileOutput"
 path = "/tmp/debug.log"
 message_matcher = "TRUE"
 encoder = "ESLogstashV0Encoder"
-{% endhighlight %}
+```
 
 heka 文档称 maxprocs 设置为 cpu 数的两倍。不过实际测试中，不配置跟配置总共也就差一倍的性能。

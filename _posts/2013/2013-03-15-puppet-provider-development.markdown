@@ -13,7 +13,7 @@ Puppet 默认提供了相当多的资源类型，不过我们还可以更进一�
 
 下面是 `/etc/puppet/modules/production/myclass/lib/puppet/provider/package/cpan.rb` 的内容，他会被 puppet 以 `pluginsync` 的方式下发。
 
-{% highlight ruby %}
+```ruby
 # 加载父类，这里是扩展 package 功能
 require 'puppet/provider/package'
 
@@ -115,7 +115,7 @@ Puppet::Type.type(:package).provide :cpan, :parent => Puppet::Provider::Package 
     self.install(false)
   end
 end
-{% endhighlight %}
+```
 
 在一台没有安装 cpanm 等命令的主机上运行 `puppet agent --debug`，可以看到这么一行输出：
 

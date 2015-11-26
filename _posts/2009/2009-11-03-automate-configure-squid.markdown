@@ -15,7 +15,7 @@ tags:
 
 主程序do.sh如下：
 
-{% highlight bash %}
+```bash
     #!/bin/bash
     if [ "$#" -ne 2 ];then
     echo "Usage: ./do.sh [command][customer]"
@@ -30,11 +30,11 @@ tags:
     ping -c 5 $ip
     expect ssh.exp $ip $1 $2
     done
-{% endhighlight %}
+```
 
 ssh.exp如下：
 
-{% highlight tcl %}
+```tcl
     #!/usr/bin/expect -f
     log_file exp.log
     set ipaddr [lindex $argv 0]
@@ -58,11 +58,11 @@ ssh.exp如下：
         "assword:" {send "123456r"}
       }
     }
-{% endhighlight %}
+```
 
 conf.sh如下：
 
-{% highlight bash %}
+```bash
     #!/bin/bash
     NR=$(cat $2|wc -l)
     CONF=/etc/squid.conf
@@ -80,16 +80,16 @@ conf.sh如下：
     killall -9 squid
     ulimit -HSn 655360
     /sbin/squid -s
-{% endhighlight %}
+```
 
 然后我们模拟一个叫做abc的客户来测试CDN了。那么我只要在/squid.config/下创建一个叫做abc的文本，内容是针对性的配置部分字段，假设如下：
 
-{% highlight squid %}
+```squid
     #abc
     refresh_pattern -i http://www.abc.com/.*.(jpg|gif|js|css|swf|xml)$ 1440 50% 4320 ignore-reload
     acl abc url_regex -i ^http://www.abc.com/.*.(html|do|jsp|asp|aspx|axd|asmx)
     cache deny abc
-{% endhighlight %}
+```
 
 然后运行./do.sh add abc，就可以自动在ip.lst里所有的服务器的squid.conf中的“#config”字段下面，添上abc的配置文件了。
 
@@ -97,14 +97,14 @@ conf.sh如下：
 
 之前的思路，局限在一句句往配置文件里插句子。于是用下面这个办法
 
-{% highlight bash %}
+```bash
     sed -i s/"config"/{
     a"……"/
     a"……"/
     a"……"/
     }
     squid.conf
-{% endhighlight %}
+```
 
 而这样配置句段的顺序就反过来了，还得用 `sed -n "1!G;h;$!d"` 命令倒序读取——最开始用cat命令，结果cat在读取abc这个文件的时候会自动把空格前后的内容分段读出，于是改用sed。至于倒序之后，再怎么插入，就没有研究了。因为当时我发现了可以直接将文件a插入文件b的方法～～
 

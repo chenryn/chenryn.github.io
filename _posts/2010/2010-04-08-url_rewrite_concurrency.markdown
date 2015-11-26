@@ -12,7 +12,7 @@ squid的重定向，我看网上一般都采用 `redirect_children` (即 `url_re
 简单的说，就是开启 `url_rewrite_concurrency` 后，squid传递给rewriter的流由四个域增加为五个——最前头多了一个ID。然后rewriter返回的，也就有两个域，ID和uri。
 
 简单修改一下原来的脚本如下即可：
-{% highlight perl %}
+```perl
 #!/usr/bin/perl -wl
 use strict;
 $|=1;
@@ -26,12 +26,12 @@ while () {
         print "$id\n";
     }
 }
-{% endhighlight %}
+```
 然后squid.conf里修改如下：
-{% highlight squid %}
+```squid
 acl rewriteurl url_regex -i ^http://drag.g1d.net/.*.mp40drag?
 url_rewrite_access deny !rewriteurl
 url_rewrite_program /home/squid/etc/redirect.pl
 #url_rewrite_children 10
 url_rewrite_concurrency 10
-{% endhighlight %}
+```

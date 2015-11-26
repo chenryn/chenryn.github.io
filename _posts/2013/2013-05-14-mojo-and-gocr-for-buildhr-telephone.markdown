@@ -7,7 +7,7 @@ category: perl
 
 尝试了一下 tesseract-ocr 和 gocr ，还是 gocr 靠谱一点点。所以 `apt-get install gocr` 安装然后运行下面这个 Perl 脚本：
 
-{% highlight perl %}
+```perl
 use ojo;
 use 5.010;
 g("http://search.buildhr.com/job/581968.html")->dom->charset("UTF-8")->find("div .postjob .padding")->[-1]->find("p")->each(sub{
@@ -21,7 +21,7 @@ g("http://search.buildhr.com/job/581968.html")->dom->charset("UTF-8")->find("div
         say join($seem_str, split(/ /, $line->text));
     }
 });
-{% endhighlight %}
+```
 
 不过老是把 `7` 识别成 `_`。
 

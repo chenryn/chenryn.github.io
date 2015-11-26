@@ -21,7 +21,7 @@ tags:
 第四步，把所属包打包发送到其他设备测试。
 
 现在保留的Gemfile如下：
-{% highlight ruby %}
+```ruby
 source :rubygems
 
 gem "cabin", "0.4.4" # for logging. apache 2 license
@@ -41,14 +41,14 @@ group :test do
   gem "mocha"
   gem "shoulda"
 end
-{% endhighlight %}
+```
 然后客户端的运行，这里有点小问题，默认要求必须大于Ruby1.9.2的版本才行。但是通读一遍，发现其实只是用到了Ruby1.9.2里一个全局变量RUBY_ENGINE来判断自己是不是JRuby，这个对等判断很容易修改成为RUBY_DESCRIPTION变量的正则匹配判断。之后就OK了。
 
 具体替换代码如下：
-{% highlight ruby %}
+```ruby
 # if RUBY_ENGINE == 'JRuby' 
   if RUBY_DESCRIPTION =~ m/^Ruby/
-{% endhighlight %}
+```
 
 最后把挑好的lib/*.rb和bin/logstash、etc/logstash打包发送到其他设备。运行也没问题。写上不同的server和agent.conf启动起来一看，果然就传输过去了。
 目前就到这步，随后随时更新

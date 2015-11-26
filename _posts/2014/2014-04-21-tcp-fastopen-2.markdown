@@ -35,17 +35,17 @@ tags:
 
 认真阅读了一下调用这个函数的 `tcp_fastopen_check` 函数(net/ipv4/tcp_ipv4.c里)，原来前面首先有一步检查 sysctl 的逻辑：
 
-{% highlight c %}
+```c
     if ((sysctl_tcp_fastopen & TFO_SERVER_ENABLE) == 0 ||
         fastopenq == NULL || fastopenq->max_qlen == 0)
         return false;
-{% endhighlight %}
+```
 
 这个 `TFO_SERVER_ENABLE` 常量是 2。而我电脑默认的 `net.ipv4.tcp_fastopen` 值是 1。1 只开启客户端支持 TFO，所以这里要改成 2(或者 3，如果你不打算把客户端搬到别的主机上测试的话)。
 
 重新开始 httping 测试，RTT 依然没有缩短。这时候的 stap 命令发现 `tcp_fastopen_cookie_gen` 函数虽然触发了，但是函数里真正干活的这段逻辑依然没有触发(即 `crypto_cipher_encrypt_one`)：
 
-{% highlight c %}
+```c
 void tcp_fastopen_cookie_gen(__be32 addr, struct tcp_fastopen_cookie *foc)
 {
     __be32 peer_addr[4] = { addr, 0, 0, 0 };
@@ -61,7 +61,7 @@ void tcp_fastopen_cookie_gen(__be32 addr, struct tcp_fastopen_cookie *foc)
     }
     rcu_read_unlock();
 }
-{% endhighlight %}
+```
 
 我试图通过 `stap 'probe kernel.function("tcp_fastopen_cookie_gen"){printf("%s\n", $$locals$$)}'` 来查看这个 `ctx` 是什么内容。输出显示 ctx 结构里的元素值都是问号。
 

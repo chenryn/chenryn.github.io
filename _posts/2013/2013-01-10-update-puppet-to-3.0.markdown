@@ -39,9 +39,9 @@ tags:
 
 当然比 puppet-tidy 稍微好一些的 puppet-lint 也不是很精准，比如他会对所有用双引号定义的变量报 "WARNING: double quoted string containing no variables"；而 puppet-tidy 更奇怪的给我 ip 地址的最后一段再加上了一个单引号变成了下面这个样子：
 
-{% highlight perl %}
+```perl
     $iplist = ["192.168.1.'2'","192.168.1.'3'"]
-{% endhighlight %}
+```
 
 只能说规范化任重道远。
 
@@ -51,9 +51,9 @@ tags:
 
 这是一个 agent 执行的调试器，不过至今为止功能也还很简单：就是执行一次 
 
-{% highlight bash %}
+```bash
     puppet agent --test --evaltrace --nocolor
-{% endhighlight %}
+```
 
 排序各个 Resource 的执行耗时，并打印前十名。
 

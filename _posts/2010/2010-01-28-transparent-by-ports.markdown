@@ -9,7 +9,7 @@ tags:
 ---
 
 常见的linux端口转发，是iptables方式，方法如下：
-{% highlight bash %}
+```bash
 #modprobe iptable_nat
 #modprobe ip_conntrack
 #service iptables stop
@@ -18,9 +18,9 @@ tags:
 #iptables -t nat -I POSTROUTING -p tcp --dport 8081 -j MASQUERADE
 #service iptables save
 #service iptables start
-{% endhighlight %}
+```
 其次网上有不少推荐rinetd，方法如下：
-{% highlight bash %}
+```bash
 #wget http://www.boutell.com/rinetd/http/rinetd.tar.gz
 #tar zxvf rinetd.tar.gz
 #cd rinted
@@ -28,7 +28,7 @@ tags:
 # cat /etc/rinetd.conf
 0.0.0.0 443 www.test.com 443 allow *.*.*.*
 logfile /var/log/rinetd.log
-{% endhighlight %}
+```
 看起来比iptables有个优势，可以采用域名解析，可惜做不到根据域名的不同，把相同端口的请求转向不同IP，其实也就跟直接写IP没多少区别了。
 第三还有ssh的端口转发，其实是把原TCP端口的数据转由ssh通道传输。方法如下：
 本地转发：ssh -g -L <local
@@ -40,7 +40,7 @@ host>:
 不过客户未必（或许说基本不可能）给外人开放ssh吧~~
 第四，socket网络编程实现。我在网上发现了相关的perl脚本。
 例一代码如下：
-{% highlight perl %}
+```perl
 #!C:Perlbinperl.exe
 #端口重定向(fork、IO::Select）
 #By shanleiguang@gmail.com, 2005/10
@@ -166,9 +166,9 @@ $filename [-h,-l:]
 By shanleiguang@gmail.com, 2005/10
 HELP
 }
-{% endhighlight %}
+```
 例二代码如下：
-{% highlight perl %}
+```perl
 #!C:Perlbinperl.exe
 #端口重定向（POE）
 #By shanleiguang@gmail.com, 2005/10
@@ -353,7 +353,7 @@ A simple TCP forwarder server, 2005/10
 By shanleiguang@gmail.com
 HELP
 }
-{% endhighlight %}
+```
 使用方法：
 # perl tcpForwarder.pl -l 8080 -t
 xxx.xxx.xxx.xxx -p 80

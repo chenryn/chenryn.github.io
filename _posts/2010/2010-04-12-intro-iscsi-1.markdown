@@ -6,12 +6,12 @@ category: linux
 ---
 
 聊天时听同事提及iscsi。回来后借助百度和谷歌大概了解了一下是网络存储，就赶紧下了软件包作测试。
-{% highlight bash %}
+```bash
 wget http://downloads.sourceforge.net/project/iscsitarget/iscsitarget/1.4.19/iscsitarget-1.4.19.tar.gz
 tar zxvf iscsitarget-1.4.19.tar.gz
 cd iscsitarget-1.4.19
 make && make install
-{% endhighlight %}
+```
 就完成了服务器端的安装，然后修改配置文件/etc/iet/ietd.conf，方便起见，就写最基本的三行：
 
     Target iqn.2010-04.com.test:storage.xvdb1

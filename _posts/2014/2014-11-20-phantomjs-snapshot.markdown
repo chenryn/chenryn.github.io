@@ -14,7 +14,7 @@ FireFox 有插件用来截全网页图。不过如果作为定期的工作，这
 
 想要给 kibana 页面截图，几行代码就够了：
 
-{% highlight javascript %}
+```javascript
 var page = require('webpage').create();
 var address = 'http://kibana.dip.sina.com.cn/#/dashboard/elasticsearch/h5_view';
 var output = 'kibana.png';
@@ -30,7 +30,7 @@ page.open(address, function (status) {
         }, 20000);
     }
 });
-{% endhighlight %}
+```
 
 这里两个要点：
 

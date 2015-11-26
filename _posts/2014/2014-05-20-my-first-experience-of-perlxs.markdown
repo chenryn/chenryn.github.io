@@ -19,7 +19,7 @@ tags:
 
 编辑 XSFun.xs 内容如下：
 
-{% highlight c %}
+```c
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
@@ -39,7 +39,7 @@ runcb()
         SV* val = newSVpv(str, len);
         RETVAL = val;
     OUTPUT: RETVAL
-{% endhighlight %}
+```
 
 这个其实就相当于 `sub runcb { return "testsub" }` 。
 
@@ -48,7 +48,7 @@ runcb()
 
 因为起因是 gmond 里的代码，所以这里就开始主要研究如何解析 descriptor 哈希的键值对了。下面是 `runcb()` 的代码片段：
 
-{% highlight c %}
+```c
 SV *
 runcb(SV *sref)
     CODE:
@@ -58,7 +58,7 @@ runcb(SV *sref)
         SV* val = *hv_fetch(plhash, key, strlen(key), 0);
         RETVAL = val;
     OUTPUT: RETVAL
-{% endhighlight %}
+```
 
 这里两个要点，一个是传递进来的哈希引用如何解引用(perl程序里任何时候都不应该直接传递哈希或者数组，而应该传递引用，所以这里直接就研究这步了)；一个是 `hv_fetch` 的返回值是 `SV**` 而不是 `SV*`。
 
@@ -69,7 +69,7 @@ runcb(SV *sref)
 
 刚才说到了 descriptor 里的 "call_back" 键的值其实是函数名，所以这一步就试图运行这个 Perl 函数。
 
-{% highlight c %}
+```c
 SV *
 runcb(SV *sref)
     CODE:
@@ -79,7 +79,7 @@ runcb(SV *sref)
         int count = call_sv(cb, G_SCALAR);
         RETVAL = POPs;
     OUTPUT: RETVAL
-{% endhighlight %}
+```
 
 这里的要点：
 
@@ -94,7 +94,7 @@ runcb(SV *sref)
 
 在上面我们可以看到 `call_sv` 函数也没有传递参数的地方。那么怎么传递参数给被调用的 Perl 函数呢？
 
-{% highlight c %}
+```c
 SV *
 runcb(SV *sref, SV *argv)
     CODE:
@@ -115,7 +115,7 @@ runcb(SV *sref, SV *argv)
         RETVAL = s;
         PUTBACK;
     OUTPUT: RETVAL
-{% endhighlight %}
+```
 
 比较复杂啦~~
 
@@ -132,7 +132,7 @@ runcb(SV *sref, SV *argv)
 
 前面都是单个变量操作，最后我们来试试哈希遍历，然后返回数组变量。
 
-{% highlight c %}
+```c
 AV *
 runcb(SV *href)
     CODE:
@@ -147,7 +147,7 @@ runcb(SV *href)
             av_push(RETVAL, sv_value);
         }
     OUTPUT: RETVAL
-{% endhighlight %}
+```
 
 这里几个要点：
 

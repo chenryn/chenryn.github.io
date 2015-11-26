@@ -10,7 +10,7 @@ tags:
 
 Kibana 4 发布了，出人意料的是提供的居然是一个 jar 包的运行方式。好在有源码可看，根据源码可以分析得知，v4 版其实是一个 angularjs 写的 kibana 配上一个 sinatra 写的 proxyserver。这么一来，我们也就知道怎么来从源代码运行 Kibana 4，而不是用 Java 启动了。
 
-{% highlight bash %}
+```bash
 # 安装 nodejs 和 npm 命令，仅用于下载依赖包，实际运行不需要
 port install nodejs npm
 # 下载 kibana 4 源码
@@ -40,7 +40,7 @@ done
 cd ../../../../server/
 # 启动 sinatra 服务器
 ./bin/initialize
-{% endhighlight %}
+```
 
 这样就可以通过 "localhost:5601" 访问了。
 

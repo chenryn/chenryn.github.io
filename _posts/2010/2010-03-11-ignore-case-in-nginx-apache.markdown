@@ -36,7 +36,7 @@ tags:
 
 nginx本身关于该模块的例子不多。除了官网<a href="http://www.freebsdsystem.org/doc/nginx_zh/OptionalHTTPmodules/EmbeddedPerl.html" target="_blank">三个用法举例</a>外，我只在一个博客上看到另<a href="http://hi.baidu.com/ywdblog/blog/item/172010d1c8de0dd5572c8487.html" target="_blank">一个用perl记录log的例子</a>。好在apache的perl例子很多，大约可以参见一下：
 在<a href="http://perl.apache.org/docs/1.0/guide/snippets.html" target="_blank">mod_perl:Code Snippets</a>中关于mod_rewrite的两个举例：
-{% highlight perl %}
+```perl
 package Apache::MyRedirect;
 use Apache::Constants qw(OK REDIRECT);
 use constant DEFAULT_URI => 'http://www.example.org';
@@ -63,7 +63,7 @@ sub handler {
 }
 1;
 _END_
-{% endhighlight %}
+```
 而在<a href="http://book.opensourceproject.org.cn/lamp/perl/perlcook2/index.html?page=opensource/0596003137_perlckbk2-chp-21-sect-4.html" target="_blank">perl cookbook</a>中的21.4节redirecting the browser中，则说明了perl模块的两种转向方法及其流程的不同：    
 $r->header_out(Location => "http://www.example.com/somewhere");    
 return REDIRECT;    

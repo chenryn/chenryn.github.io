@@ -14,7 +14,7 @@ category: linux
 
 而RS上参数如下：
 
-{% highlight bash %}
+```bash
 net.ipv4.tcp_keepalive_time = 600
 net.ipv4.route.gc_timeout = 100
 net.ipv4.tcp_fin_timeout = 30
@@ -29,6 +29,6 @@ net.ipv4.netfilter.ip_conntrack_tcp_timeout_syn_recv = 60
 net.ipv4.netfilter.ip_conntrack_tcp_timeout_syn_sent = 120
 net.ipv4.netfilter.ip_conntrack_udp_timeout_stream = 180
 net.ipv4.netfilter.ip_conntrack_udp_timeout = 30
-{% endhighlight %}
+```
 
 可见 RS 的超时时间（仅指 `ESTABLISHED` ）比 LVS 小了 3 倍。再加上 `WAIT` 和 `SYN_RECV` 等状态，差不多就是 220000/65000 的比例了。而 squid 的 RPS 是按秒计算的，`180*300=~55000` ，在数量级上和 netstat 的结果也就差不多了~ 

@@ -19,7 +19,7 @@ spark 是用 scala 写的，scala 的打包工具叫 sbt。首先通过 `sudo po
 
 sbt 打包的配置文件则放在 `./logstash/logstash.sbt` 位置。内容如下(注意之间的空行是必须的)：
 
-{% highlight java %}
+```java
 name := "LogStash Project"
 
 version := "1.0"
@@ -31,7 +31,7 @@ libraryDependencies += "org.apache.spark" %% "spark-core" % "1.2.0"
 libraryDependencies += "org.apache.spark" %% "spark-streaming" % "1.2.0"
 
 libraryDependencies += "org.apache.spark" %% "spark-sql" % "1.2.0"
-{% endhighlight %}
+```
 
 然后是程序主文件 `./logstash/src/main/scala/LogStash.scala`，先来一个最简单的，从 logstash/output/tcp 收数据并解析出来。注意，因为 spark 只能用 pull 方式获取数据，所以 logstash/output/tcp 必须以 `mode => 'server'` 方式运行。 
 
@@ -47,7 +47,7 @@ libraryDependencies += "org.apache.spark" %% "spark-sql" % "1.2.0"
 
 编辑主文件如下：
 
-{% highlight java %}
+```java
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
@@ -77,7 +77,7 @@ object LogStash {
   }
 
 }
-{% endhighlight %}
+```
 
 非常一目了然，每 10 秒挪动一次 window，window 宽度是 30 秒，把 JSON 数据解析出来以后，做过滤和循环输出。这里需要提示一下的是 `.foreachRDD` 方法。这是一个 output 方法。spark streaming 里对 input 收到的 DStream 一定要有 output 处理，那么最常见的就是用 foreachRDD 把 DStream 里的 RDDs 循环一遍，做 save 啊，print 啊等等后续。
 
@@ -89,7 +89,7 @@ object LogStash {
 
 下面看如何在 spark streaming 上使用 spark SQL。前面通过解析 JSON，得到的是 Map 类型的数据，这个无法直接被 SQL 使用。通常的做法是，通过预定的 scala 里的 `cast class`，来转换成 spark SQL 支持的表类型。主文件改成这样：
 
-{% highlight java %}
+```java
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
@@ -129,7 +129,7 @@ object LogStash {
   }
 
 }
-{% endhighlight %}
+```
 
 通过加载 SQLContext，就可以把 RDD 转换成 table，然后通过 SQL 方式写请求了。这里有一个地方需要注意的是，因为最开始转换 JSON 的时候，键值对的 value 类型是 Any(因为要兼容复杂结构)，所以后面赋值的时候需要具体转换成合适的类型。于是悲催的就有了 `.toString.toInt` 这样的写法。。。
 
@@ -137,13 +137,13 @@ object LogStash {
 
 不用 spark SQL 当然也能做到，而且如果需要复杂处理的时候，还少不了自己写。如果把上例中那段 foreachRDD 替换成下面这样，效果是完全一样的：
 
-{% highlight java %}
+```java
     val r = logs.filter(l => l.path.equals("/var/log/system.log")).filter(l => l.lineno > 70)
     val host_c = r.map(l => l.message -> 1).reduceByKey(_+_).groupByKey()
     r.map(l => l.message -> l.lineno).reduceByKey(_+_).groupByKey().join(host_c).foreachRDD( rdd => {
         rdd.map(t => AlertMsg(t._1, t._2._2.head, t._2._1.head)).collect().foreach(println)
     })
-{% endhighlight %}
+```
 
 这里面用到的 `.groupByKey` 和 `.reduceByKey` 方法，都是专门针对 PairsDStream 对象的，所以前面必须通过 `.map` 方法把普通 DStream 转换一下。
 
@@ -153,7 +153,7 @@ object LogStash {
 
 在简单需求的时候，可能还是觉得能用 SQL 就用 SQL 比较好。但是提前定义 cast class 真的比较麻烦。其实对于 JSON 数据，spark SQL 是有提供更简洁的处理接口的。可以直接写成这样：
 
-{% highlight java %}
+```java
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
@@ -190,7 +190,7 @@ object LogStash {
     ssc.awaitTermination()
   }
 }
-{% endhighlight %}
+```
 
 这样，不用自己解析 JSON，直接加载到 SQLContext 里。可以通过 `.printSchema` 方法查看到 JSON 被转换成了什么样的表结构。
 

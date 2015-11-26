@@ -17,7 +17,7 @@ https://github.com/kazeburo/cloudforecast
 第一篇主要记录一下监控数据在服务器上流程，cloudforecast是怎么去抓取数据，怎么传递给rrd的。
 不过，先看看Class::*的用法：
 在CloudForecast::Data中，有如下一段代码：
-{% highlight perl %}
+```perl
 use base qw/Class::Data::Inheritable Class::Accessor::Fast/;
 __PACKAGE__->mk_accessors(qw/hostname address details args
                              component_config _component_instance
@@ -27,10 +27,10 @@ __PACKAGE__->mk_classdata('fetcher_func');
 __PACKAGE__->mk_classdata('graph_key_list');
 __PACKAGE__->mk_classdata('graph_defs');
 __PACKAGE__->mk_classdata('title_func');
-__PACKAGE__->mk_classdata('sysinfo_func');{% endhighlight %}
+__PACKAGE__->mk_classdata('sysinfo_func');```
 这里，先用use base()加载两个父类继承关系。然后用Class::Accessor::Fast的mk_accessors方法创建了一堆可读写的变量，这里有另一种写法，看起来更舒服一些：
-{% highlight perl %}use Class::Accessor "moose-like";
-has hostname => ( is => 'rw', isa => 'Str' );{% endhighlight %}
+```perluse Class::Accessor "moose-like";
+has hostname => ( is => 'rw', isa => 'Str' );```
 然后是Class::Data::Inheritable的mk_classdata方法创建了一堆可继承的方法。
 在CPAN上看到另外有一个模块叫Class::Data::Accessor的，是上面这两个模块的合集，不过作者声明说已经废弃，推荐大家使用Moose了……
 
@@ -48,11 +48,11 @@ has hostname => ( is => 'rw', isa => 'Str' );{% endhighlight %}
 选一个CloudForecast::Data::Basic看，其中分别调用了Data.pm里的rrds/graph/title/fetcher函数。
 
 返回Data.pm看fetcher()函数如下：
-{% highlight perl %}sub fetcher(&) {
+```perlsub fetcher(&) {
     my $class = caller;
     Carp::croak("already seted fetcher_func") if $class->fetcher_func;
     $class->fetcher_func(shift);
-}{% endhighlight %}
+}```
 学习一下，这里新出现的一个caller函数，这是perl自带的函数，可以使用perldoc -f caller查看详细说明。默认返回三个值，分别是调用的package/file/linenumber。显然这里就是获取package，也就是$class = 'CloudFarecast::Data::Basic'了。然后返回的"$class->fetcher_func(shift);"，这个shift也就是(&)里的内容，即Basic.pm里的{my $c = shift;my @map = ...;my $ret = $c->component('SNMP')->get(@map);return $ret;}这个匿名函数。
 这样前面Worker里的$resource就有了自己的fetcher_func函数了，就此执行并且返回$ret。完成！
 

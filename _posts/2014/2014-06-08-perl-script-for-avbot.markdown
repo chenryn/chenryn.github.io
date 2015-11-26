@@ -9,7 +9,7 @@ tags:
 
 前两天[博客里介绍了 avbot](http://chenlinux.com/2014/06/04/record-webqq-logs-by-avbot)，其中提到 avbot 提供了 HTTP 接口可以收发信息。那么，我们就可以自己写脚本来实现比原先的 `.qqbot help` 更详细的自动应答啦。今晚有空就写了几行 Perl ，实现了一个简单的扩展：
 
-{% highlight perl %}
+```perl
 use utf8;
 use strict;
 use warnings;
@@ -56,6 +56,6 @@ my $ua;$ua = sub {
 $ua->();
 
 $cv->recv;
-{% endhighlight %}
+```
 
 原先是打算在回调里 `undef $ua` 然后通过 `AnyEvent->timer` 里检测 $ua 是否还在，否则再起来的方式。后来一想 `timer` 还有间隔，直接函数内部通过 `$cv->end` 控制计数，不断的重新运行 `$ua->()` 来保持持续获取，间隔更短，就改成现在这样了。

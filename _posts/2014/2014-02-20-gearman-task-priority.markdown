@@ -13,7 +13,7 @@ tags:
 worker
 ========
 
-{% highlight perl %}
+```perl
 use Gearman::XS::Worker;
 my $worker = new Gearman::XS::Worker;
 my ($host, $port) = ('10.4.1.21', 4730); 
@@ -34,12 +34,12 @@ sub reverse {
   sleep(5);
   return $result;
 }
-{% endhighlight %}
+```
 
 client
 ========
 
-{% highlight perl %}
+```perl
 use Gearman::XS::Client;
 use Time::HiRes qw/time/;
 my $client = new Gearman::XS::Client;
@@ -48,12 +48,12 @@ my $ret = $client->add_server($host, $port);
 while (1) {
     my ($ret, $job_handle) = $client->do_background("reverse", 'low'.time() );
 } 
-{% endhighlight %}
+```
 
 high-client
 =============
 
-{% highlight perl %}
+```perl
 use Gearman::XS::Client;
 use Time::HiRes qw/time/;
 my $client = new Gearman::XS::Client;
@@ -62,7 +62,7 @@ my $ret = $client->add_server($host, $port);
 while (1) {
     my ($ret, $job_handle) = $client->do_high_background("reverse", 'high'.time() );
 } 
-{% endhighlight %}
+```
 
 
 同时运行三个脚本，可以看到 worker 的输出，一直都是这样：

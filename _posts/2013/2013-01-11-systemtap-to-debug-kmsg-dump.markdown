@@ -12,29 +12,29 @@ google 之前推出了一个 netoops 的 patch，可以让 linux kernel 在崩�
 
 稍微 grep 一下代码，发现是在 `kernel/printk.c` 里定义 `void kmsg_dump()` 的。好了，使用 systemtap 来检查这里： 
 
-{% highlight c %}
+```c
     stap -ve 'probe kernel.function("kmsg_dump"){printf("%s\n",$$vars$$)}'
-{% endhighlight %}
+```
 
 结果发现在 soft dump 的时候有输出，也就是说调用了 `kmsg_dump()`。
 
 比较 2.6.32.220 和 2.6.32.279 的代码，发现在 `kmsg_dump()` 里，新内核多了一点判断，如果reason 低于 `KERNEL_OOPS` 而且没有设置 `always_kmsg_dump` 变量，那么直接返回不再 `dumper->dump()` 了。
 
-{% highlight c %}
+```c
 1546    if ((reason > KMSG_DUMP_OOPS) && !always_kmsg_dump)
 1547            return; 
-{% endhighlight %}
+```
 
 我们验证一下是不是这个原因：
 
-{% highlight c %}
+```c
     stap -gve 'probe kernel.statement("*@kernel/printk.c:1548")  { printf("%s\n",$$parms$$) }'
-{% endhighlight %}
+```
 
 显然测试的时候 reason 是 `KERNEL_SOFT`，这个是不好调的，那么我们可以调整这个变量，找了一下没发现这个可以在 sysctl 什么的里面，所以继续用 systemtap 搞定：
 
-{% highlight c %}
+```c
     stap -gve 'probe kernel.statement("*@kernel/printk.c:1545")  { $always_kmsg_dump=1; printf("%d",$always_kmsg_dump); printf("%s\n",$$parms$$) }'
-{% endhighlight %}
+```
 
 果然搞定。

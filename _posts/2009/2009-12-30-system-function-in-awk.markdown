@@ -18,7 +18,7 @@ tags:
 在明确这个格式以后（主要是草草收尾的想法影响下），我便觉得其实完全不用perl或者php来搞，简单的awk就足够了——当然，shell不行，因为shell不能从事这种流状的行处理。
 
 以下是本着我想法写的awk脚本：
-{% highlight bash %}
+```bash
 #!/bin/awk -f
 {
   if(system("curl -o /dev/null -s -w %{http_code}" $1)~/^[2|3]/){
@@ -27,7 +27,7 @@ tags:
     print ":http://www.baidu.com/"
   }
 }
-{% endhighlight %}
+```
 
 但是再度让我郁闷的事情接连发生。
 
@@ -37,12 +37,12 @@ tags:
 
 试验过程如下：
 
-{% highlight bash %}
+```bash
 [rao@localhost ~]$ echo "http://www.google.com"|awk '{if(200~/^[2|3]/){ print ":"$1 } else{ print ":http://www.baidu.com/"}}'
 :http://www.google.com
 [rao@localhost ~]$ echo "http://www.google.com"|awk '{if(system("curl -o /dev/null -s -w %{http_code} "$1)~/^[2|3]/){print ":"$1 } else{ print ":http://www.baidu.com/"}}'
 200:http://www.baidu.com/
-{% endhighlight %}
+```
 
 思前想后，在百度大婶的帮助下，终于搞明白一个问题：system()的结果是直接返回给shell显示了，然后再由awk继续执行后面的程序，这种情况下，if()里留下的其实是system()的执行状态【即0或1】"0"~/^[2|3]/，当然就一直执行else了。
 

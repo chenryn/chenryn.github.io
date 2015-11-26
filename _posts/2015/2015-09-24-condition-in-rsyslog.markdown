@@ -11,7 +11,7 @@ Rsyslog 从 v6 以后，实现了全新的 rainerscript 语法，数据处理灵
 
 事情是这样的：一段 JSON 日志，在 rsyslog 中经过下面一段逻辑：
 
-{% highlight perl %}
+```perl
     set $!datetime = exec_template("get_now_time");
     if ( $!msg!date ) then {
         reset $!datetime = replace($!msg!date, " ", "T") & "+0800";
@@ -31,15 +31,15 @@ Rsyslog 从 v6 以后，实现了全新的 rainerscript 语法，数据处理灵
             unset $!msg!video_duration_timesum;
         }
     }
-{% endhighlight %}
+```
 
 数据中，`date` 是一个 String ，而 `video_time_duration` 是一个 Array。但是实际运行起来，发现输出的数据里，根据 `date` 处理得到了 `datetime` 新字段，却完全没有 `video_first_duration`, `video_duration_num` 和 `video_duration_timesum` 等新字段的踪影。
 
 看来 rsyslog 里的条件判断是不能针对 Array 做判断了，于是我又改成下面这样：
 
-{% highlight perl %}
+```perl
     if ( $!msg!video_time_duration[0]!duration ) then {
-{% endhighlight %}
+```
 
 这样获取的就是一个实际的 String 内容了。但是实际运行起来，输出数据里，不但没有应该被处理出来的新字段，反而还多了一段：`, "video_time_duration[0]!duration" : { }, `！
 
@@ -47,8 +47,8 @@ Rsyslog 从 v6 以后，实现了全新的 rainerscript 语法，数据处理灵
 
 最后，这里只能上最原始的办法了：
 
-{% highlight perl %}
+```perl
     if ( $msg contains "video_time_duration" ) then {
-{% endhighlight %}
+```
 
 以上。

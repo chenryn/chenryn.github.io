@@ -7,7 +7,7 @@ category: bash
 
 在CU上看到的老帖子，创建并发程序的shell。个人觉得非常经典，贴回来好好学习使用。用（）包围的是我写的学习笔记，#的是原帖注释：
 
-{% highlight bash %}
+```bash
 #!/usr/bin/ksh（自然我得把这里改成bash）
 # SCRIPT: ptest.sh
 # AUTHOR: Ray001（呃，这些也是要学习滴，版权意识嘛~）
@@ -90,5 +90,5 @@ then
 else
     exit 0
 fi
-{% endhighlight %}
+```
 

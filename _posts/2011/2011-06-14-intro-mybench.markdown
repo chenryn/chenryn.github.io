@@ -11,15 +11,15 @@ tags:
 小型的mysql测试工具，主要有自带的mysqlslap、super-smack和mybench。嗯，我这里的小型的意思是指工具安装过程简单。
 mysqlslap的使用方法遍地都是，就不先详细写了。根据个人偏好写写mybench吧，毕竟是perl的。
 安装很简单，如下：
-{% highlight bash %}cpanm DBI DBD::mysql Time::HiRes
+```bashcpanm DBI DBD::mysql Time::HiRes
 wget http://jeremy.zawodny.com/mysql/mybench/mybench-1.0.tar.gz
 tar zxvf mybench-1.0.tar.gz
 cd mybench-1.0
-perl MakeFile.PL && make && make install{% endhighlight %}
+perl MakeFile.PL && make && make install```
 但是使用就不是太简单了——mysqlslap会自己生成（-a选项）sql，super-smack则带了一个gen-data程序生成数据然后自动导入，但是mybench没有，所以只能自己搞定数据。
 不过mybench还是自己生成了一个测试模版的脚本在/usr/bin/bench_example，很简单的就知道怎么做了。
 example如下：
-{% highlight perl %}#!/usr/bin/perl -w
+```perl#!/usr/bin/perl -w
 
 eval 'exec /usr/bin/perl -w -S $0 ${1+"$@"}'
     if 0; # not running under some shell
@@ -85,9 +85,9 @@ MyBench::compute_results('test', @results);
 
 exit;
 
-__END__{% endhighlight %}
+__END__```
 然后看看/usr/lib/perl5/site_perl/5.8.8/MyBench.pm，主要内容就是fork和compute：
-{% highlight perl %}package MyBench;
+```perlpackage MyBench;
 use strict;
 
 $main::VERSION = '1.0';
@@ -254,13 +254,13 @@ sub tot
     return $tot;
 }
 
-1;{% endhighlight %}
+1;```
 好了，开始准备数据，比较懒，直接用super-smack的gen-data先出了一些./gen-data  -n 100000 -f %n,%80-12s%12n,%512-512s,%d > /root/data，然后进mysql里执行：
-{% highlight mysql %}
+```mysql
 USE test;
 CREATE TABLE mytable (id INT(11) NOT NULL AUTO_INCREMENT, col1 CHAR(100), col2 CHAR(100), col3 INT(11), PRIMARY KEY (id) )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 LOAD DATA LOCAL INFILE 'data' REPLACE INTO TABLE 'mytable' FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';
-INSERT INTO mytable (col1,col2,col3) SELECT col1,col2,col3 FROM mytable;{% endhighlight %}
+INSERT INTO mytable (col1,col2,col3) SELECT col1,col2,col3 FROM mytable;```
 最后执行./select_bench -h 10.168.170.92 -n 10 -r 1000就能看到结果了：
 forking: ++++++++++
 sleeping for 2 seconds while kids get ready

@@ -9,7 +9,7 @@ category: nginx
 
 nginx记录的client的IP分两种，一种是$remote_addr，一种是$http_x_forwarded_for。其中X-Forwarded-For里存放的是proxy加入的client端IP，通过http header传递的。而$remote_addr是TCP上的结果。但是具体如何不知道。今天回来翻nginx的src，先从定义nginx变量的ngx_http_variable.c看到$remote_addr是这样来的:
 
-{% highlight c %}
+```c
 ngx_http_variable_remote_addr(ngx_http_request_t *r,
     ngx_http_variable_value_t *v, uintptr_t data)
 {
@@ -21,11 +21,11 @@ ngx_http_variable_remote_addr(ngx_http_request_t *r,
 
     return NGX_OK;
 }
-{% endhighlight %}
+```
 
 然后可以在ngx_http.h和ngx_http_request.h里看到
 
-{% highlight c %}
+```c
 typedef struct ngx_http_request_s     ngx_http_request_t;
 ...
 struct ngx_http_request_s {
@@ -37,11 +37,11 @@ struct ngx_http_request_s {
     ngx_http_request_body_t          *request_body;
 ...
 }
-{% endhighlight %}
+```
 
 然后在ngx_connection.c里看到
 
-{% highlight c %}
+```c
 #include <ngx_core.h>
 ...
 ngx_listening_t *
@@ -61,19 +61,19 @@ ngx_create_listening(ngx_conf_t *cf, void *sockaddr, socklen_t socklen)
     ngx_memcpy(ls->addr_text.data, text, len);
 ...
 };
-{% endhighlight %}
+```
 
 在ngx_core.h中，加载了
 
-{% highlight c %}
+```c
 #include <ngx_socket.h>
-{% endhighlight %}
+```
 
 所以结果就是说，nginx日志里记载的$remote_addr变量，就是由connection的socket里获得的。在socket.h里可以看到accept函数的定义：
 
-{% highlight c %}
+```c
 int accept(int sockfd, void *addr, int *addrlen);
-{% endhighlight %}
+```
 
 另外，nginx上除了$remote_addr变量外，还有一个$binary_remote_addr变量。而且在ngx_http_variables.c里，根据是否是IPv6协议，做了区分，最终地址是通过r->connection结构体里的sockaddr->sin_addr获得。
 
@@ -89,7 +89,7 @@ int accept(int sockfd, void *addr, int *addrlen);
 
 在nginx上没有标准模块完成这个事情，不过可以用[map功能](http://wiki.nginx.org/HttpMapModule)进行简单的模拟，如下：
 
-{% highlight nginx %}
+```nginx
     map $COOKIE_route $group {  
          700003508     admin;  
          ~*3$     admin;  
@@ -112,20 +112,20 @@ int accept(int sockfd, void *addr, int *addrlen);
              proxy_pass            http://backend_$group;  
          }  
      }  
-{% endhighlight %}
+```
 
 不过nginx社区有第三方模块叫做"nginx-sticky-module"的，用来完成这个功能。项目托管在googlecode上，具体地址是<http://code.google.com/p/nginx-sticky-module>。具体实现的效果是首先根据轮训RR随机到某台后端，然后在响应的Set-Cookie上加上route=md5(upstream)字段，第二次请求再处理的时候，发现有route字段，直接导向原来的那台服务器。
 
 编译后启用配置如下：
 
-{% highlight nginx %}
+```nginx
 upstream {
   sticky [name=route] [domain=.domain.com] [path=/] [expires=1h] [hash=index|md5|sha1] [no_fallback];
   server 127.0.0.1:9000;
   server 127.0.0.1:9001;
   server 127.0.0.1:9002;
 }
-{% endhighlight %}
+```
 
 ## 3、nginx是多worker的，但是80端口只能有一个占用，这一段的工作原理是怎样的？
 
@@ -146,14 +146,14 @@ upstream {
 
 在CPAN上，其实有[Set::ConsistentHash](http://search.cpan.org/~bradfitz/Set-ConsistentHash-0.92/lib/Set/ConsistentHash.pm)模块可以看。如果是简单运用的话，[Hash::ConsistentHash](http://search.cpan.org/~karavelov/Hash-ConsistentHash-0.05/lib/Hash/ConsistentHash.pm)模块是基于Set::ConsistentHash模块封装的易用版本。示例如下：
 
-{% highlight perl %}
+```perl
 use Hash::ConsistentHash;
 use String::CRC32;
 my $chash = Hash::ConsistentHash->new( buckets => {A=>1, B=>2, C=>1},
                                        hash_func=>\&crc32,
                                      );
 my $server = $chash->get_bucket('foo');
-{% endhighlight %}
+```
 
 ## 5、inotify丢事件。
 
@@ -163,12 +163,12 @@ my $server = $chash->get_bucket('foo');
 
 sysctl里关于inotify的参数有三个，如下：
 
-{% highlight bash %}
+```bash
 [root@localhost ~]$ sudo /sbin/sysctl -a|grep inotify
 fs.inotify.max_queued_events = 16384
 fs.inotify.max_user_watches = 8192
 fs.inotify.max_user_instances = 128
-{% endhighlight %}
+```
 
 上示是默认值，明显偏小。比方sersync2方案中，启动前就要求修改这些值到50000000。如果启动的时候在sysctl范围内，启动时没问题的，但是迅速的添加到了范围外，那么应该就会出这个问题了。
 
@@ -186,7 +186,7 @@ nginx有一个配置，就是启动多个worker的时候，可以使用cpu_affin
 
 这种写法，是由操作系统决定的。在nginx的ngx_process_cycle.c中，相关内容如下：
 
-{% highlight c %}
+```c
 #include <ngx_config.h>
 
 static void
@@ -199,28 +199,28 @@ ngx_worker_process_init(ngx_cycle_t *cycle, ngx_uint_t priority)
         }
     }
 }
-{% endhighlight %}
+```
 
 在ngx_config.h中:
 
-{% highlight c %}
+```c
 #elif (NGX_LINUX)
 #include <ngx_linux_config.h>
-{% endhighlight %}
+```
 
 在ngx_linux_config.h中:
 
-{% highlight c %}
+```c
 #include <sched.h>
-{% endhighlight %}
+```
 
 其实可以直接通过man sched_setaffinity看说明：
 
-{% highlight c %}
+```c
        #include <sched.h>
        int sched_setaffinity(pid_t pid, unsigned int cpusetsize,
                              cpu_set_t *mask);
-{% endhighlight %}
+```
 
 关于这个*mask，man文档之后描述如下：
 

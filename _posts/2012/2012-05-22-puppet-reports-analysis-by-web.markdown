@@ -13,7 +13,7 @@ tags:
 
 目前还是使用puppet默认的store方式，也就是报告都存在/var/lib/puppet/reports/$host/$dates.yaml里。所以分析只要针对这个目录下的文件即可，主要使用File::Stat和File::Find两个模块搞定。注意这两个模块在Perl5.16里是默认内核模块了~~
 
-{% highlight perl %}
+```perl
 #!/usr/bin/perl
 use strict;
 use warnings;
@@ -66,11 +66,11 @@ sub watchdir {
     return $dirs;
 };
 
-{% endhighlight %}
+```
 上面这个脚本，通过libev的timer和io分别完成对diretory的mtime的遍历和对file的inotify的监听。process作为公共处理函数，可以随意改造成sms/email/msn等等方式。    
 定时器没有用AnyEvent的封装，因为没看到AE有periodic，只有timer。而在io运行的时候，timer是中断的。如果不停有文件inotify发生，timer就没法进行了……periodic的方式与timer不同，是绝对定时而不是相对定时——虽然我个人的浅薄理解觉得应该也被io阻塞，但试验结果是OK的。
 
-{% highlight perl %}
+```perl
 #!/usr/bin/perl
 use strict;
 use warnings;
@@ -175,7 +175,7 @@ Error messages of running nodes: <br />
 [% END %]
 </ul>
 </div>
-{% endhighlight %}
+```
 这个脚本实现的功能其实和上面那个类似。不过报警改成web页面，event触发改成web请求触发。    
 这里两个新难点：
 

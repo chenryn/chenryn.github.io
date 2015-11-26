@@ -8,7 +8,7 @@ tags:
 
 上一篇说到在 JRuby 上利用 netty 库实现事件驱动。事实上，为了让 Ruby 程序员更习惯，foxbat 模块是把 netty 库封装成 eventmachine 的接口来提供给用户使用的。所以，我们可以把程序写得更通用一些：
 
-{% highlight ruby %}
+```ruby
   if defined?(JRUBY_VERSION)
     require 'foxbat'
   end
@@ -63,13 +63,13 @@ tags:
       }
     end
   end
-{% endhighlight %}
+```
 
 初次用 EventMachine，发现写法还蛮奇怪的。`start_server` 传递参数必须是 module 或者 class，然后变量只能随后通过额外的哈希传递进去。
 
 木有看 CPP 的 EM 实现，看这里 foxbat 的实现，发现在 JRuby 里使用 Java 还真是简单啊：
 
-{% highlight ruby %}
+```ruby
 #!/usr/bin/env ruby
 require "java"
 require File.join(File.dirname(__FILE__), "netty-3.2.4.Final.jar")
@@ -132,6 +132,6 @@ if __FILE__ == $0
   port = ARGV[1].to_i
   RubySyslogServer.new(host, port).start
 end
-{% endhighlight %}
+```
 
 直接加载 jar 包，导入各种类。然后就能照样用了。

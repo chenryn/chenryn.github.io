@@ -18,7 +18,7 @@ tags:
 
 脚本本身修改起来难度不大，结果如下：
 
-{% highlight perl %}
+```perl
 #!/usr/bin/env perl6
 use v6;
 use DBIish;
@@ -78,7 +78,7 @@ sub MAIN($node) {
 # Perl6 的模块要导出函数不再需要 Exporter 那样，直接用 our sub dump($obj) {} 就可以了
     say dump($res);
 };
-{% endhighlight %}
+```
 
 但是麻烦的是 YAML 模块本身，这个模块是 ingydotnet 在好几年前草就，后来就没管了，实际现在压根跑不起来。花了半天时间，一边学习一边修改，总算修改正常了。主要涉及了 `Attribute` 对象，`Nil` 对象，`twigls` 前缀符，`:exists` 定义几个概念，以及 YAML 格式本身的处理逻辑。
 

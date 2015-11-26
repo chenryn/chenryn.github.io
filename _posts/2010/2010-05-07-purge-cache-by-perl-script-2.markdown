@@ -9,7 +9,7 @@ tags:
 ---
 
 之前的purge脚本usage是./purge.pl "url1" "url2"。如果url变成成百上千个那么多的时候，这样就不行了。也需要在脚本中处理成文件句柄。修改如下：
-{% highlight perl %}
+```perl
 #!/usr/bin/perl -w
 use IO::Socket;
 unless (@ARGV == 2) { die "usage: $0 ip.list url.list" }
@@ -33,7 +33,7 @@ while (defined($ip=<HOST>)){
 }
 close(URL);
 close(HOST);
-{% endhighlight %}
+```
 在改编时碰到的问题，或者说学习到的东西就是这个while双重嵌套里句柄的问题。
 一开始，我写成了 `open;open;while(a){while(b){}};close;close;` 这样子。结果输出结果只能执行完b循环就正常退出了。
 然后修改成 `open;open;while(a){while(b){}close;};close;` 这样，结果在执行完一遍b循环后，继续的a循环提示打开的句柄已关闭——这证明a循环是执行了的，只是没结果……

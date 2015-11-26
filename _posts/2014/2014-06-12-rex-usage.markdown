@@ -30,16 +30,16 @@ rex 命令参数很多，不过因为我们的环境是 krb 认证的，所以�
 
 参数设置部分：
 
-{% highlight perl %}
+```perl
     set connection => "OpenSSH";
     user "root";
     krb5_auth;
     parallelism 10;
-{% endhighlight %}
+```
 
 这四行指定采用 kerberos 认证，并发 10 个进程执行 ssh 命令。
 
-{% highlight perl %}
+```perl
     desc "install puppet agent";
     task "puppet_install", sub {
     }
@@ -47,7 +47,7 @@ rex 命令参数很多，不过因为我们的环境是 krb 认证的，所以�
     }
     after "puppet_install", sub {
     }
-{% endhighlight %}
+```
 
 这几行就是 Rexfile 的任务定义主体格式。task 指令定义任务，任务会在具体的 -H 或者 -G 服务器上执行。其他都是可选项，desc内容会在 -Tv 的时候显示；before 和 after 定义的任务会在执行对应 task 之前或之后，在'''rex命令执行处，即10.4.1.21本地'''执行。
 
@@ -59,10 +59,10 @@ rex 命令参数很多，不过因为我们的环境是 krb 认证的，所以�
 
 比如：
 
-{% highlight perl %}
+```perl
     say run "uptime";
     run "nginx -v", sub { my ($out, $err) = @_; say $err };
-{% endhighlight %}
+```
 
 * file
 
@@ -70,7 +70,7 @@ rex 命令参数很多，不过因为我们的环境是 krb 认证的，所以�
 
 比如：
 
-{% highlight perl %}
+```perl
     file "/etc/yum.repos.d/xiaonei-private.repo",
       source => "repos/xiaonei-private.repo";
     file "/etc/nginx/nginx.conf",
@@ -82,7 +82,7 @@ rex 命令参数很多，不过因为我们的环境是 krb 认证的，所以�
       on_change => sub { service nginx => "restart"; };
     file "/etc/nginx/conf.d",
       ensure => "directory", 
-{% endhighlight %}
+```
 
 * pkg
 
@@ -92,14 +92,14 @@ rex 命令参数很多，不过因为我们的环境是 krb 认证的，所以�
 
 比如：
 
-{% highlight perl %}
+```perl
    update_package_db();
    my $packages = case operating_system,
       Debian => ["apache2", "libphp5-apache2"],
       CentOS => ["httpd", "php5"],
    pkg $packages,
      ensure => "present";
-{% endhighlight %}
+```
 
 ensure 也支持 present、absent、latest 等几种含义。同 Puppet。
 
@@ -109,7 +109,7 @@ ensure 也支持 present、absent、latest 等几种含义。同 Puppet。
 
 比如：
 
-{% highlight perl %}
+```perl
   create_group 'puppet';
   account "puppet",
     ensure   => "present",
@@ -122,19 +122,19 @@ ensure 也支持 present、absent、latest 等几种含义。同 Puppet。
     system   => 1,
     no_create_home => TRUE,
     ssh_key        => "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQChUw...";
-{% endhighlight %}
+```
 
 * tail
 
 用来同时观测多台主机的日志的最新追加情况。应该是比较有用的一个小功能。代码如下：
 
-{% highlight perl %}
+```perl
    tail "/var/log/syslog", sub {
      my ($data) = @_;
      my $server = Rex->get_current_connection()->{'server'};
      print "$server>> $data\n";
    };
-{% endhighlight %}
+```
 
 ##  远程主机详情相关变量 
 
@@ -144,12 +144,12 @@ Puppet 有专门的 Facts 变量来判定远程主机的详情。Rex 因为走 S
 
 这个用来判断操作系统是否是 RedHat 系列。之前因为有一批 Debian 的机器，所以 Rexfile 里一直有这么个操作逻辑：
 
-{% highlight perl %}
+```perl
     if ( is_debian ) {
     } elsif ( is_redhat ) {
     } else {
     }
-{% endhighlight %}
+```
 
 * operating_system_version
 
@@ -157,16 +157,16 @@ Puppet 有专门的 Facts 变量来判定远程主机的详情。Rex 因为走 S
 
 比如 Rexfile 里的 1w10 任务：
 
-{% highlight perl %}
+```perl
     if ( is_redhat and operating_system_version >= 64 )
     }
-{% endhighlight %}
+```
 
 * route
 
 rex 可以收集的信息比 puppet 要多很多，比如网络相关、sysctl 相关等等。Rexfile 里的 1w10 任务用到了 route 信息来获取默认网关和网卡接口。
 
-{% highlight perl %}
+```perl
     my ($default_route) = grep {
       $_->{"flags"} =~ m/UG/ && (
         $_->{"destination"} eq "0.0.0.0" ||
@@ -177,43 +177,43 @@ rex 可以收集的信息比 puppet 要多很多，比如网络相关、sysctl �
         my $default_if = $default_route->{"iface"};
         run "ip route change default via ${default_gw} dev ${default_if} initcwnd 10 initrwnd 10";
     };
-{% endhighlight %}
+```
 
 * connection
 
 在多台主机执行任务的时候，大多希望在输出的时候看到某条结果是哪个主机返回的。前面 tail 任务就用到了，不过写起来非常复杂的样子。其实 rex 提供给更简洁一点的写法。就是 connection->server。
 
-{% highlight perl %}
+```perl
   task 'tellmewhoyouare', sub {
     say connection->server;
   }
-{% endhighlight %}
+```
 
 当前连接的服务器的整个信息，也可以通过 `get_system_information` 指令来获取，这两个指令其实是等同的。不过根据字面意思一般用来不同语境下。
 
 这些信息如果要完整查看，可以通过 `dump_system_information` 指令来查看。这个命令跟 `print Dumper get_system_information()` 不一样的是，会把每个键作为单独变量。而这些变量就是可以直接用于 rex 的 template 里的内嵌变量。比如：
 
-{% highlight perl %}
+```perl
   listen <%= $eth0_ip %>:80;
   visible_hostname <%= $hostname %>
-{% endhighlight %}
+```
 
 不在 `dump_system_information` 清单里的变量，也想在 template 里使用的，就必须显式传递。这点和 Puppet 不一致，puppet 在 template 里可以通过 `scope.lookupvar()` 指令获取任意pp类里设定的变量，这一点完全无视词法作用域的存在==！
 
 比如：
 
-{% highlight perl %}
+```perl
    file '/etc/elasticsearch/elasticsearch.yml',
      content => template('files/es.yml.tmpl', conf => {
        clustername => 'logstash'
      });
-{% endhighlight %}
+```
 
 对应的 es.yml.tmpl 里写作：
 
-{% highlight perl %}
+```perl
   clustername: <%= $conf->{'clustername'} %>
-{% endhighlight %}
+```
 
 这样才行。
 

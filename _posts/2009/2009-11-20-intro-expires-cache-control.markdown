@@ -12,10 +12,10 @@ tags:
 惯常的要求，大多有.*/$的缓存或者不缓存，这个文件夹不带/的结尾，可就没见过了。
 
 思前想后，我觉得大概文件夹和文件的区别就是没有后缀名了吧。于是回忆了好一番正则表达式，最后写成下面那么一句：
-{% highlight squid %}
+```squid
 acl test url_regex -i ^<a href="http://www.test.com/.*/[^.]*">http://www.test.com/.*/[^.]*</a>$
 cache deny test
-{% endhighlight %}
+```
 测试访问结果都是MISS/200——可惜还没高兴起来呢，赫然发现其header里写着：
 
     Expires: Thu, 19 Nov 1981 08:52:00 GMT

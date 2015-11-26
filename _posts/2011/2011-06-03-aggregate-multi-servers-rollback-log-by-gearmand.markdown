@@ -14,19 +14,19 @@ gearman其实不是重点，因为我就是抄了一遍perldoc的样例而已。
 
 * jobserver
 
-{% highlight bash %}
+```bash
 cpan -i Gearman::Server
 gearmand -d -L 10.168.170.25 -p 7003
-{% endhighlight %}
+```
 
 * worker
 
-{% highlight bash %}
+```bash
 cpan -i Gearman::Worker
-{% endhighlight %}
+```
 
 然后看日志的脚本，其实也就是样例：
-{% highlight perl %}
+```perl
 #!/usr/bin/perl -w
 use Gearman::Worker;
 
@@ -39,16 +39,16 @@ sub watchlog {
     my $job = shift;
     print $job->arg,"\n";
 }
-{% endhighlight %}
+```
 
 * client（也就是多台resin服务器上）
 
-{% highlight bash %}
+```bash
 cpan -i Gearman::Client
-{% endhighlight %}
+```
 
 然后是脚本：
-{% highlight perl %}
+```perl
 #!/usr/bin/perl -w
 use Gearman::Client;
 use POSIX qw(strftime);
@@ -86,4 +86,4 @@ if ($pid == 0) {
     close FD;
     }
 }
-{% endhighlight %}
+```

@@ -41,15 +41,15 @@ vacuum full命令的操作原理简述：
 
 ### pl/pgsql示例：
 
-{% highlight sql %}
+```sql
 CREATE FUNCTION func_name ( option type ) RETURNS
     type AS $$
     ...
-{% endhighlight %}
+```
 
 ### 触发器示例：
 
-{% highlight sql %}
+```sql
 CREATE FUNCTION trigger_name ( option type ) RETURNS
     tirgger AS $$
 DECLARE ...
@@ -57,7 +57,7 @@ BEGIN
     ....
     RETURN NEW/NULL /*NULL就回滚上面的操作*/
 END
-{% endhighlight %}
+```
 
 ### 调试
 
@@ -78,9 +78,9 @@ END
 
 3. psql命令
 
-{% highlight sql %}
+```sql
 select * from pg_stat_activetity;
-{% endhighlight %}
+```
 配置：log_min_duration_statement，设置慢查询日志的时限，单位为毫秒。
 
 ## 集群

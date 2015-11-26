@@ -17,7 +17,7 @@ tags:
 
 示例统一举例的是 timer 事件。而我更看好的是 [Future::Utils](https://metacpan.org/pod/Future::Utils) 提供的一些关于循环的函数，比如 `fmap` 可以很简单的控制住异步的并发数。稍微试验，得到脚本如下：
 
-{% highlight perl %}
+```perl
 package Future::AnyEvent;
 use base qw( Future );
 use AnyEvent;
@@ -50,7 +50,7 @@ my $f = fmap {
 } foreach => \@urls, concurrent => 5;
 my @res = $f->get;
 print @res;
-{% endhighlight %}
+```
 
 看起来稍显复杂。这里其实最关键的就是几个接口函数：
 

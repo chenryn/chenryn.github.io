@@ -1,6 +1,6 @@
 ---
 layout: post
-title: apache防盗链（mod_perl试用）
+title: apache防盗链(modperl试用)
 date: 2010-04-15
 category: web
 tags:
@@ -24,10 +24,11 @@ tags:
 
 要求失效时间为8小时。
 
-这个需求和之前一次相当类似，不过上回是squid，这次是apache。同样采用perl脚本进行防盗链设置，apache需要使用mod_perl模块。
+这个需求和之前一次相当类似，不过上回是squid，这次是apache。同样采用perl脚本进行防盗链设置，apache需要使用modperl模块。
 
 首先安装perl模块：
-{% highlight bash %}
+
+```bash
 wget http://perl.apache.org/dist/mod_perl-2.0-current.tar.gz
 tar zxvf mod_perl-2.0-current.tar.gz
 cd mod_perl-2.0-current.tar.gz
@@ -45,24 +46,24 @@ make && make install
 exit
 #因为64位系统的libexpat.so有问题，编译libapreq2会出问题，只好如此强制安装
 echo "LoadModule apreq_module modules/mod_apreq2.so" >> /home/apache2/conf/httpd.conf
-{% endhighlight %}
+```
 
-因为libapreq2.so安装在/home/apache2/lib/下了，所以需要echo "/home/apache2/lib" >/etc/lo.so.conf.d/apache.conf，然后ldconfig。
+因为libapreq2.so安装在/home/apache2/lib/下了，所以需要`echo "/home/apache2/lib" >/etc/lo.so.conf.d/apache.conf`，然后ldconfig。
 
 修改httpd.conf，加入如下设置：
 
-{% highlight apache %}
+```
 PerlPostConfigRequire /home/apache2/perl/start.pl
 <Location /smg>
 SetHandler modperl
 PerlAccessHandler DLAuth
 PerlSetVar ShareKey abcde.
 </Location>
-{% endhighlight %}
+```
 
 然后mkdir /home/apache2/perl/，在其中创建start.pl和DLAuth.pm两个文件。start.pl文件内容如下：
 
-{% highlight perl %}
+```perl
 use strict; 
 use lib qw(/home/apache2/perl);
 use Apache2::RequestIO ();
@@ -73,9 +74,11 @@ use Apache2::ServerUtil ();
 use Apache2::Log ();
 use Apache2::Request ();
 1; 
-{% endhighlight %}
+```
+
 DLAuth.pm文件内容如下：
-{% highlight perl %}
+
+```perl
 package DLAuth;
 use strict;
 use warnings;
@@ -115,11 +118,13 @@ sub handler {
     return Apache2::Const::FORBIDDEN;
 }
 1;
-{% endhighlight %}
+```
+
 就可以了。
 
 apachectl restart。测试一下，先用perl自己生成一个测试链接：
-{% highlight perl %}
+
+```perl
 #!/usr/bin/perl -w
 use Digest::MD5 qw(md5_hex);
 my $key = "bestv.";
@@ -128,7 +133,7 @@ my $date = sprintf("%x",time);
 $result = md5_hex($key . $path . $date);
 my $uri = "http://127.0.0.1$path?key=$result&t=$date";
 print $uri;
-{% endhighlight %}
+```
 
 运行 `./url.pl /smg/abc.rmvb` 生成 `http://127.0.0.1/smg/abc.rmvb?key=4fb6b4e6a0ec484aea98fa727fc7149d&t=4bc7dd5a`，然后 `wget -S -O /dev/null "http://127.0.0.1/smg/abc.rmvb?key=4fb6b4e6a0ec484aea98fa727fc7149d&t=4bc7dd5a"`，返回 200 OK;任意修改 t 为 12345678，再 wget，返回 403 Forbidden。`error_log` 显示如下：
 

@@ -7,12 +7,12 @@ category: linux
 
 做运维几年没用过patch，说来也怪了~~趁着上一篇自己的小改动，熟悉一下这个命令的简单用法。
 首先是patch的制作，用diff命令。
-{% highlight bash %}tar zxvf squid-2.7.STABLE9.tar.gz
+```bashtar zxvf squid-2.7.STABLE9.tar.gz
 cp squid-2.7.STABLE9 squid-2.7.STABLE9-old && mv squid-2.7.STABLE9 squid-2.7.STABLE9-new
 #然后按照上篇的内容修改squid-2.7.STABLE9-new/里的文件
-diff -uNr squid-2.7.STABLE9-old squid-2.7.STABLE9-new > squid-snmp.patch{% endhighlight %}
+diff -uNr squid-2.7.STABLE9-old squid-2.7.STABLE9-new > squid-snmp.patch```
 这就完成了，好简单啊~来看看patch文件的内容吧：
-{% highlight c %}diff -uNr squid-2.7.STABLE9-old/include/cache_snmp.h squid-2.7.STABLE9-new/include/cache_snmp.h
+```cdiff -uNr squid-2.7.STABLE9-old/include/cache_snmp.h squid-2.7.STABLE9-new/include/cache_snmp.h
 --- squid-2.7.STABLE9-old/include/cache_snmp.h	2006-09-22 10:49:24.000000000 +0800
 +++ squid-2.7.STABLE9-new/include/cache_snmp.h	2011-06-23 13:25:04.000000000 +0800
 @@ -125,6 +125,7 @@
@@ -58,13 +58,13 @@ diff -uNr squid-2.7.STABLE9-old/src/snmp_core.c squid-2.7.STABLE9-new/src/snmp_c
 +                                                snmpAddNode(snmpCreateOid(LEN_SQ_MESH + 3, SQ_MESH, 1, 2, 16),
  						    LEN_SQ_MESH + 3, snmp_meshPtblFn, peer_InstIndex, 0))),
  					snmpAddNode(snmpCreateOid(LEN_SQ_MESH + 1, SQ_MESH, 2),
- 					    LEN_SQ_MESH + 1, NULL, NULL, 1,{% endhighlight %}
+ 					    LEN_SQ_MESH + 1, NULL, NULL, 1,```
 制作练完了，再练一次使用：
-{% highlight bash %}cd squid-2.7.STABLE9-old
+```bashcd squid-2.7.STABLE9-old
 mv ../squid-snmp.patch .
-patch -p1 < squid-snmp.patch{% endhighlight %}
+patch -p1 < squid-snmp.patch```
 -p指定从那层目录开始，因为之前diff的时候顶层目录分别叫old和new，如果在其他地方时候的话，别人的目录肯定不会这么命名的，所以就往里进一层，然后用-p1来patch。
 然后more一下那三个文件，确认都修改了~
 最后回退patch：
-{% highlight bash %}patch -R -p1 < squid-snmp.patch{% endhighlight %}
+```bashpatch -R -p1 < squid-snmp.patch```
 完成~

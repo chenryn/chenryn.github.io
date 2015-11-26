@@ -19,7 +19,7 @@ rabbitmq-server起来之后，可以用rabbitmyctl来具体的创建user啊，vh
 * 然后安装elasticsearch的过程
 
 这一步在logstash的docs里讲的很清楚了，就是下载tar.gz，解压然后java运行起来即可：    
-{% highlight bash %}
+```bash
 ES_PACKAGE=elasticsearch-0.18.7.zip
 ES_DIR=${ES_PACKAGE%%.zip}
 SITE=https://github.com/downloads/elasticsearch/elasticsearch
@@ -27,12 +27,12 @@ if [ ! -d "$ES_DIR" ] ; then
   wget --no-check-certificate $SITE/$ES_PACKAGE
   unzip $ES_PACKAGE
 fi
-{% endhighlight %}
+```
 
 * 部署一个logstash的采集节点
 
 和上篇所述一样，传输一个删减版的Gemfile到采集节点。然后使用bundle安装这些模块：    
-{% highlight bash %}
+```bash
 mkdir -p /usr/local/logstash/etc /usr/local/logstash/bin /usr/local/logstash/lib
 scp ${logstashmaster}:/usr/local/logstash/Gemfile /usr/local/logstash/
 scp -rf ${logstashmaster}:/usr/local/logstash/lib/* /usr/local/logstash/lib/
@@ -40,9 +40,9 @@ scp ${logstashmaster}:/usr/local/logstash/bin/logstash /usr/local/logstash/bin/
 gem install bundler
 cd /usr/local/logstash/
 bundle install
-{% endhighlight %}
+```
 然后编写一个使用rabbitmq的配置文件：
-{% highlight ruby %}
+```ruby
 input {
   file {
     type => "syslog"
@@ -57,14 +57,14 @@ output {
     name => "rawlogs"
   }
 }
-{% endhighlight %}
+```
 OK，用ruby /usr/local/logstash/bin/logstash agent -f /usr/local/logstash/etc/agent.conf启动即可。
 
 * 部署一个logstash的汇聚节点
 
 这一步因为用到的模块大多是JRuby的，所以可以直接使用jar包的方式简单搞定。
 编写一个使用rabbitmq和elasticsearch的配置文件：
-{% highlight ruby %}
+```ruby
 input {
   amqp {
     type => "syslog"
@@ -84,7 +84,7 @@ output {
   elasticsearch { }
 
 }
-{% endhighlight %}
+```
 这里比较讨厌的还是rabbitmq的部分。假如前面的步骤rabbitmq-server压根启动失败了，这里amqp不会返回报错说连接失败或者连接node超时什么的，而是说你试图连接一个私有的被锁定的队列……
 
 * 部署一个logstash的展示节点

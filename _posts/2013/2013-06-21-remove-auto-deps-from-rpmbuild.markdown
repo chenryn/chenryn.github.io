@@ -19,7 +19,7 @@ tags:
 
 但是还可以文明一点，像下面这段，添加在 SPEC 文件中：
 
-{% highlight bash %}
+```bash
     %setup
     
     %prep
@@ -30,11 +30,11 @@ tags:
     EOF
     %define __perl_requires %{_builddir}/%{name}-%{version}/%{name}-req
     chmod 755 %{__perl_requires}
-{% endhighlight %}
+```
 
 这里重定义了一个脚本，原先的定义在 `/usr/lib/rpm/macros` 中，是：
 
-{% highlight bash %}
+```bash
     #%__find_provides       /usr/lib/rpm/rpmdeps --provides
     #%__find_requires       /usr/lib/rpm/rpmdeps --requires
     %__find_provides        /usr/lib/rpm/find-provides
@@ -47,7 +47,7 @@ tags:
     %__python_requires      /usr/lib/rpm/pythondeps.sh --requires
     %__mono_provides        /usr/lib/rpm/mono-find-provides %{_builddir}/%{?buildsubdir} %{buildroot} %{_libdir}
     %__mono_requires        /usr/lib/rpm/mono-find-requires %{_builddir}/%{?buildsubdir} %{buildroot} %{_libdir}
-{% endhighlight %}
+```
 
 然后将加入了 `sed` 命令的新脚本定位为新的 MACROS 变量给 `rpmbuild` 后续使用。
 

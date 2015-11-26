@@ -14,23 +14,23 @@ Perl 社区并不是所有的东西都发布在 CPAN 上。甚至专门有一个
 
 首先还是让我们创建一个示例模块：
 
-{% highlight bash %}
+```bash
     cpanm Module::Starter Module::Build
     module-starter --module Alien::FPing --author="Jeff Rao" --email="myname@gmail.com" --mb
-{% endhighlight %}
+```
 
 然后就会在本目录下创建一个 Alien-FPing 目录，自带好了 `Build.PL` 等模块文件。这里使用了 `Alien::` 的名字空间，是一个潜规则，有些项目依赖 C 源码的库和头文件，就用 perl 包一层来安装，都放在这个空间下，比如 `Alien::V8`, `Alien::Gearmand`, `Alien::IE7` 等等。
 
 现在让我们下载 fping 的源码放到模块里：
 
-{% highlight bash %}
+```bash
     mkdir Alien-FPing/src
     wget http://www.fping.org/dist/fping-3.4.tar.gz -O Alien-FPing/src/fping-3.4.tar.gz
-{% endhighlight %}
+```
 
 接下来应该就是编写 `Build.PL` 了。不过为了尽量让 `Build.PL` 看起来简洁而且一眼看出目的。我们最好把编译操作单独定义一个模块来使用：
 
-{% highlight perl %}
+```perl
     package Alien::FPing::Build;
     use base qw(Module::Build);
     use File::Spec;
@@ -55,13 +55,13 @@ Perl 社区并不是所有的东西都发布在 CPAN 上。甚至专门有一个
         $self->SUPER::ACTION_build();
     };
     1;
-{% endhighlight %}
+```
 
 几乎就是调用 shell 而已，唯一需要讲一下的就是这个 `ACTION_build`。这是 `Module::Build` 定义好的提供给 `subclass` 用的方法，事实上 `./Build help` 看得到的所有 action 都有类似的方法可以用。
 
 然后稍微修改一下 Build.PL 如下：
 
-{% highlight perl %}
+```perl
     use 5.006;
     use strict;
     use warnings FATAL => 'all';
@@ -87,22 +87,22 @@ Perl 社区并不是所有的东西都发布在 CPAN 上。甚至专门有一个
         create_makefile_pl => 'traditional',
     );
     $builder->create_build_script();
-{% endhighlight %}
+```
 
 把 `Module::Build` 替换成 `Alien::FPing::Build` 而已，其他都不用动。
 
 然后试一下吧：
-{% highlight bash %}
+```bash
     cd Alien-FPing
     perl Build.PL
     ./Build
-{% endhighlight %}
+```
 
 看到编译输出，并且成功安装有 `/usr/sbin/fping` 了吧。现在可以打包了。注意默认生成的 ignore.txt 里，是排除掉了 inc 目录的，需要去除掉，然后修改 `MANIFEST` 文件加入 inc 和 src 里的文件，然后再打包出来的 perl 模块就可以直接用了。
 
-{% highlight bash %}
+```bash
     sed -i '/inc/d' ignore.txt
     echo 'inc/Alien/FPing/Build.pm' >> MANIFEST
     echo 'src/fping-3.4.tar.gz' >> MANIFEST
     ./Build dist
-{% endhighlight %}
+```

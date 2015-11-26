@@ -10,7 +10,7 @@ tags:
 接下来进入我不擅长的页面部分了。规划页面分为side和main，side中提供时间选择框/类型下拉选择框和提交按钮；main中展示最后形成的chart。
 时间选择框是用js和css完成的，这个网上有很多，不过要同时支持多浏览器和分钟级别的选项的，目前就发现一个好用的。下载地址如下：<http://chenlinux.com/images/uploads/Calendar.zip>
 然后创建cachemoni/public/cdn.html如下：
-{% highlight html %}
+```html
 <HTML>
 <HEAD>
 <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
@@ -20,9 +20,9 @@ tags:
 <FRAME SRC="side.html" NAME="side" TARGET="main">
 <FRAME SRC="main.html" NAME="main">
 </FRAMESET>
-</HTML>{% endhighlight %}
+</HTML>```
 cachemoni/public/side.html如下：
-{% highlight html %}
+```html
 <link type="text/css" rel="stylesheet" href="css/calendar.css" />
 <script language="javascript" src="javascripts/calendar.js"></script>
 select_time<HR>
@@ -37,9 +37,9 @@ select_time<HR>
 <option value="time" selected>time</option>
 </select>
 <input type="submit" value="submit" id="submit">
-</form>{% endhighlight %}
+</form>```
 cachemoni/views/charts.tt如下：
-{% highlight html %}
+```html
 <html>
 <head>
 <title>FusionCharts Free Documentation</title>
@@ -60,9 +60,9 @@ cachemoni/views/charts.tt如下：
   </tr>
 </table>
 </body>
-</html>{% endhighlight %}
+</html>```
 cachemoni/lib/cachemoni.pm中相关函数如下：
-{% highlight perl %}
+```perl
 use Time::Local;
 get '/cdncharts' => sub {
     my $type = params->{chartstype};
@@ -78,7 +78,7 @@ sub unix_time_format {
     if ( $time =~ m/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/ ) {
         return timelocal('00',$5,$4,$3,$2-1,$1-1900);
     };
-};{% endhighlight %}
+};```
 这里比较怪的是，如果setDataURL里传的arg是直接2011-08-01 11:00的格式，fusionchart.js不会发起请求，只有1311111111才行，所以只能在用Time::Local模块转换时间了。
 最终访问结果如下：
 <img src="/images/uploads/calendar.png" alt="" title="QQ截图20110802191306" width="697" height="370" class="alignnone size-full wp-image-2555" />

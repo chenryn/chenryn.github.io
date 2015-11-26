@@ -43,12 +43,12 @@ oracle自带有nid用以修改dbname。查看其命令语法如下表所示：
 nid target=sys/123456 dbname=aaa
 
 网上关于修改dbname的博客文章和论坛问答，基本都是在windows平台上的操作。其提示要点，在于运行nid系统命令之前，必须将数据库置于mount状态下。以此类推，在linux下的操作步骤，应该如下：
-{% highlight sql %}
+```sql
 sql > shutdown
 immediate;
 sql > startup mount;
 sql > host nid target=sys/123456 dbname=aaa
-{% endhighlight %}
+```
 但我按此步骤进行之后，却提示如下字段：
     NID-00135: There are 1 active threads
     Change of database name failed during validation - database is

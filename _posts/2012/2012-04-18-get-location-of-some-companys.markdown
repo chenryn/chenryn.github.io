@@ -6,7 +6,7 @@ category: perl
 
 很久没更新，没用技术，今天稍微geek一下下。给老婆搜索她行业百强公司的具体地点，看看如果换单位的话是否方便出行~代码如下：
 
-{% highlight perl %}
+```perl
 #!/usr/bin/perl
 use Data::Dumper;
 use LWP::UserAgent;
@@ -56,7 +56,7 @@ foreach(@$company){
     my $json = get_map_json($_);
     print decode_map_json($json),"\n";
 };
-{% endhighlight %}
+```
 
 输出结果如下：    
 

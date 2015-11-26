@@ -32,7 +32,7 @@ linux内核从2.6.13开始，加入了inotify特性。对目录、文件的各�
 从squid上scp /usr/local/squid/bin/squidclient 到web服务器上；
 要是没有curl的话，yum install一个。
 最后创建inotify-purge.sh脚本如下：
-{% highlight bash %}
+```bash
 #!/bin/bash
 WEB_DIR=/path/to/example
 IPLIST="1.2.3.4
@@ -50,5 +50,5 @@ do
     done
     curl -s -d "username=test&amp;password=123456&amp;type=1&amp;url=$PURGE_URL" http://pushwt.dnion.com/cdnUrlPush.do
 done
-{% endhighlight %}
+```
 

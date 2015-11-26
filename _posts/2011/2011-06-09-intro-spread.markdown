@@ -9,7 +9,7 @@ spread还是半年前的时候偶然看到的，一直没有试过。前段时�
 
 * spread安装配置：
 
-{% highlight bash %}wget http://www.spread.org/download/spread-src-4.1.0.tar.gz
+```bashwget http://www.spread.org/download/spread-src-4.1.0.tar.gz
 tar zxvf spread-src-4.1.0.tar.gz
 cd spread-src-4.1.0
 ./configure --prefix=/usr/local/spread && make && make install
@@ -33,12 +33,12 @@ chown spread:spread /var/run/spread
 echo '/usr/local/spread/lib' > /etc/ld.conf.d/spread.conf && ldconfig
 #必须用-n指定配置文件中定义好了的servername；
 #奇怪的是网上别的文章都指出这些配置要同时写入hosts，但我没写也一样用了
-/usr/local/spread/sbin/spread -c /usr/local/spread/etc/spread.conf -n ct-156 &{% endhighlight %}
+/usr/local/spread/sbin/spread -c /usr/local/spread/etc/spread.conf -n ct-156 &```
 
 * perl的spread使用
 
 CPAN上有很多关于spread的模块，试了几个后，选中了Spread::Messaging::Content。使用如下：
-{% highlight perl %}#!/usr/bin/perl -w
+```perl#!/usr/bin/perl -w
 use Spread::Messaging::Content;
 use Event;
 
@@ -60,8 +60,8 @@ sub put_output {
     printf("Message     : %s\n", ref($spread->message) eq "ARRAY" ? 
                                      join(',', @{$spread->message}) :
                                      $spread->message);
-}{% endhighlight %}
-{% highlight perl %}#!/usr/bin/perl -w
+}```
+```perl#!/usr/bin/perl -w
 use Spread::Messaging::Content;
 $spread = Spread::Messaging::Content->new(
      -port => "4804",
@@ -72,10 +72,10 @@ $spread = Spread::Messaging::Content->new(
  $spread->group("test2");
  $spread->type("0");
  $spread->message("cooking with fire");
- $spread->send();{% endhighlight %}
+ $spread->send();```
 
 * spread自带的spuser使用
 
-{% highlight bash %}/usr/local/spread/bin/spuser -s 4804
+```bash/usr/local/spread/bin/spuser -s 4804
 j test
-m test{% endhighlight %}
+m test```

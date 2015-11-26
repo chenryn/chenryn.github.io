@@ -27,18 +27,18 @@ ccc
 ddd
 ……
 方法如下：
-{% highlight bash %}
-echo -en 'aaa\nbbb\naaa\naaa\ndddd'|awk 'BEGIN{tag=1}{if(/aaa/){print tag;tag+=2}else{print}}'{% endhighlight %}
+```bash
+echo -en 'aaa\nbbb\naaa\naaa\ndddd'|awk 'BEGIN{tag=1}{if(/aaa/){print tag;tag+=2}else{print}}'```
 或者更短一点：
-{% highlight bash %}
-echo -en 'aaa\nbbb\naaa\naaa\ndddd'|awk 'BEGIN{tag=1}{if(/aaa/){$0=tag;tag+=2};print}'{% endhighlight %}
+```bash
+echo -en 'aaa\nbbb\naaa\naaa\ndddd'|awk 'BEGIN{tag=1}{if(/aaa/){$0=tag;tag+=2};print}'```
 B需求：
 aaa不是文件一行的全部内容，而只是一部分。
 方法如下：
-{% highlight bash %}
-echo -en 'aaa\nbbb\naaa\nfdaaafdaaa\ndddd'|awk 'BEGIN{tag=1}{gsub(/aaa/,tag) && tag+=2;print}'{% endhighlight %}
+```bash
+echo -en 'aaa\nbbb\naaa\nfdaaafdaaa\ndddd'|awk 'BEGIN{tag=1}{gsub(/aaa/,tag) && tag+=2;print}'```
 以上三种，凯的perl版本分别如下：
-{% highlight perl %}
+```perl
 perl -nale 'BEGIN{$tag = 1}if(/aaa/){print $tag;$tag+=2}else{print}'
 perl -nalpe 'BEGIN{$tag = 1};$_=$tag and $tag+=2 if /aaa/'
-perl -nalpe 'BEGIN{$tag = 1};$tag+=2 if s/aaa/$tag/'{% endhighlight %}
+perl -nalpe 'BEGIN{$tag = 1};$tag+=2 if s/aaa/$tag/'```

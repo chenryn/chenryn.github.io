@@ -23,7 +23,7 @@ __2013 年 2 月 21 日更新：利用 bullet 大小来表示 hasErr 的程度__
 
 查询的 ES 库情况如下：
 
-{% highlight bash %}
+```bash
     $ curl "http://10.4.16.68:9200/demo-photo/log/_mapping?pretty=1"
     {
       "log" : {
@@ -78,11 +78,11 @@ __2013 年 2 月 21 日更新：利用 bullet 大小来表示 hasErr 的程度__
         } ]
       }
     }
-{% endhighlight %}
+```
 
 然后后台是我惯用的 Dancer 框架：
 
-{% highlight perl %}
+```perl
     package AnalysisDemo;
     use Dancer ':syntax';
     use Dancer::Plugin::Ajax;
@@ -311,13 +311,13 @@ __2013 年 2 月 21 日更新：利用 bullet 大小来表示 hasErr 的程度__
         );
         return $data->{facets}->{pct}->{entries};
     }
-{% endhighlight %}
+```
 
 其实把里面请求的hash拆开来一个个定义，然后根据情况组合，但是不方便察看作为 demo 的整体情况。
 
 然后看template里怎么写。这里虽然有两个效果图，但是只有一个template哟：
 
-{% highlight html %}
+```html
 <link rel="stylesheet" href="[% $request.uri_base %]/amcharts/style.css" type="text/css">
 <script src="[% $request.uri_base %]/amcharts/amcharts.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -472,5 +472,5 @@ __2013 年 2 月 21 日更新：利用 bullet 大小来表示 hasErr 的程度__
       </div><!--/well-->
       <div id="chartdiv" style="width: 100%; height: 400px;">
       </div>
-{% endhighlight %}
+```
 

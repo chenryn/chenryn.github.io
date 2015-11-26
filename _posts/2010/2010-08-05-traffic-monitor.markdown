@@ -18,7 +18,7 @@ tags:
 最终想法是，在机器上后台长期运行监控脚本，碰到流量突发，发送到监控服务器，监控服务器上开启sniffer或者wireshark抓包，同时发邮件报警。
 目前初步完成监控客户端脚本如下：
 
-{% highlight perl %}
+```perl
 #!/usr/bin/perl
 use strict;
 use warnings;
@@ -136,11 +136,11 @@ sub usage {
     print "tt-h Print this usage.n";
     exit 0;
 }
-{% endhighlight %}
+```
 
 nrpe的check_if_flow.sh就比较简单了，如下：
 
-{% highlight bash %}
+```bash
 #!/bin/bash
 while getopts "w:c:h" OPT;do
     case $OPT in
@@ -186,4 +186,4 @@ else
     echo "WARNING!The flow are $eth0_in,$eth0_out,$eth1_in,$eth1_out Kb|eth0_in=${eth0_in}Kbps;${eth0_in_warn};${eth0_in_critical};0;0 eth0_out=${eth0_out}Kbps;${eth0_out_warn};${eth0_out_critical};0;0 eth1_in=${eth1_in}Kbps;${eth1_in_warn};${eth1_in_critical};0;0 eth1_out=${eth1_out}Kbps;${eth1_out_warn};${eth1_out_critical};0;0"
     exit 1
 fi
-{% endhighlight %}
+```

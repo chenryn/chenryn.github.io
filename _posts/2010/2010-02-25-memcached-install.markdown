@@ -4,7 +4,7 @@ title: memcached部署
 date: 2010-02-25
 category: web
 ---
-{% highlight bash %}
+```bash
 wget http://www.monkey.org/~provos/libevent-1.4.13-stable.tar.gz
 wget http://memcached.googlecode.com/files/memcached-1.4.4.tar.gz
 wget http://pecl.php.net/get/memcache-2.2.5.tgz
@@ -22,7 +22,7 @@ cd memcached-1.4.4
 make
 make install
 /home/memcached/bin/memcached -d -m 1024 -p 11211 -u root
-{% endhighlight %}
+```
 
 参数说明：
     -d 启动为守护进程
@@ -33,7 +33,7 @@ make install
     -c <num> 设置最大并发连接数，默认为1024
     -P <file> 设置保存Memcached的pid文件，与-d选择同时使用
 
-{% highlight bash %}
+```bash
 cd memcache-2.2.5
 /home/php/bin/phpize
 ./configure --prefix=/home/phpmemcache --with-php-config=/home/php/bin/php-config
@@ -61,9 +61,9 @@ echo "Data from the cache:<br/>n";
 var_dump($get_result);
 ?>
 EOF
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 curl <a href="http://localhost/test.php">http://localhost/test.ph</a>
 Server's version: 1.4.4<br/>
 Store data in the cache (data will expire in 10 seconds)<br/>
@@ -76,7 +76,7 @@ int(123)
 }
 
 # telnet localhost 11211
-{% endhighlight %}
+```
     Trying 127.0.0.1...
     Connected to localhost.localdomain (127.0.0.1).
     Escape character is '^]'.

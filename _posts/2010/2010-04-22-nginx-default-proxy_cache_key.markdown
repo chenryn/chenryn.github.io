@@ -14,7 +14,7 @@ category: CDN
 然后是nginx的url刷新，某小图片加速客户原先是增量缓存，于是nginx中只是很简单的配置了一下文件类型和缓存时间。不料今天客户突然传过来一个24M大小的url列表，将近30万条url要求全网刷新！而这批nginx连后台刷新接口都没有……哭
 临时更换nginx版本为--add-ngx_cache_purge的。在设置proxy_cache_purge时却又碰到了难题。因为之前的cache配置里压根没配置proxy_cache_key！！有心格盘，但一算，300000*5k=1.5G，而cache已存文件是100G，格盘动作太大了……
 进到nginx的cache目录下，strings其中的文件，看到如下信息：
-{% highlight bash %}
+```bash
 [root@ct5 ~]# strings /cache/0/00/c7de957045a9987b18f94d3cc1f99000 |head
 KEY: http://images6.anjukestatic.com/property/20090904/22/65/91/69/22659169/600x600.jpg
 HTTP/1.0 200 OK
@@ -26,9 +26,9 @@ Expires: Thu, 31 Dec 2037 23:55:55 GMT
 Cache-Control: max-age=315360000
 X-Cache: HIT from CDN01-001
 Age: 1465699
-{% endhighlight %}
+```
 对照其他带purge的nginx_cache格式，可以发现nginx默认的proxy_cache_key应该是$scheme://$host$uri$is_args$args，那么proxy_cache_purge就设成$scheme://$host$1$is_args$args，重读配置，然后curl -x 127.0.0.1:80 http://images6.anjukestatic.com/purge/property/20090904/22/65/91/69/22659169/600x600.jpg，看到
-{% highlight html %}
+```html
 <html>
 <head><title>Successful purge</title></head>
 <body bgcolor="white">
@@ -39,7 +39,7 @@ Age: 1465699
 <hr><center>nginx/0.7.65</center>
 </body>
 </html>
-{% endhighlight %}
+```
 （写到这里，想到google首页源代码省略了</body></html>，据说是因为就少这几个字符，在全球就能节省几个G的带宽。相比来说这个purgemodule可真浪费的）
 再ls /cache/0/00/c7de957045a9987b18f94d3cc1f99000，提示No such file or directory，成功了。接下来就是for循环刷新了……
 

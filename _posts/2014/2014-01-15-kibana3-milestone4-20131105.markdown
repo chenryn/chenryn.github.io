@@ -55,7 +55,7 @@ Kibana 面板改造成了一个标签更突出，按键和链接更易用，风�
 
 Kibana 3: Milestone 4现在可以通过URL参数获取输入！这个备受期待的特性体现为两个方式：模板化的仪表盘和脚本化的仪表盘。Kibana 3: Milestone 4附带两个可以和Logstash完美配合的示例，在此基础上你可以构建自己的仪表盘。模板化仪表盘的创建非常简单，导出当前仪表盘结构成文件，编辑文件然后保存添加进你的 app/dashboards 目录既可以了。比如，从 [logstash.json](https://github.com/elasticsearch/kibana/blob/v3.0.0milestone4/src/app/dashboards/logstash.json) 里摘录下面一段：
 
-{% highlight json %}
+```json
   "0": {
     "query": "{<span>{</span>ARGS.query || '*'}}",
     "alias": "",
@@ -63,7 +63,7 @@ Kibana 3: Milestone 4现在可以通过URL参数获取输入！这个备受期�
     "id": 0,
     "pin": false
   }
-{% endhighlight %}
+```
 
 模板化仪表盘用"handlebar 语法"添加动态区段到基于JSON的仪表盘结构里。比如这里我们就用一个表达式替换掉了查询键的内容：_使用URL里的请求参数，如果不存在，使用'*'。_ 现在我们可以用下面这条URL访问这个仪表盘了：
 

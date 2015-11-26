@@ -9,7 +9,7 @@ tags:
 ---
 和三年前的博客一样，还是时间加密钥加路径的加密方式。不过这次改用nginx，这样不用重新缓存后面的squid文件了。
 先用ngx_lua做：
-{% highlight nginx %}
+```nginx
     set $expire "600";
     set $salt "mysalt";
     location ~* \.mp3$ {
@@ -41,10 +41,10 @@ tags:
         proxy_pass         http://backend;
         proxy_set_header   Host     $host;
     }
-{% endhighlight %}
+```
 
 然后用nginx_perl做：
-{% highlight nginx %}
+```nginx
     perl_require POSIX.pm;
     perl_require Digest/MD5.pm;
     perl_set $realurl '
@@ -74,7 +74,7 @@ tags:
                 proxy_set_header   Host             $host;
     }
   }
-{% endhighlight %}
+```
 
 然后用http_load测试单url响应情况，基本效率一样。在压力比较大(lo上跑大概200MB/s，再大就可能出错了)的情况下，第一字节响应时间大概比直接请求squid多一个数量级（从0.4ms到4ms）    
 这个情况下，squid的cpu%在130％，nginx_perl的worker是25％，nginx_lua的是19％。

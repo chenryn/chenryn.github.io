@@ -13,7 +13,7 @@ category: squid
 "Generated %T by %h (%s)\n"
 
 删除，让squid错误页面不产生服务器信息。
-{% highlight bash %}
+```bash
 mkdir -p /usr/local/squid
 ./configure
 configure options:  '--prefix=/usr/local/squid'
@@ -38,9 +38,9 @@ chmod 777 /usr/local/squid/var/logs
 grep -v '^#' /etc/squid/squid.conf | sed -e '/^$/d' > /etc/squid/squid.conf.orig
 mv /etc/squid.conf /etc/squid.conf.system
 mv /etc/squid/squid.conf.orig /etc/squid/squid.conf
-{% endhighlight %}
+```
 然后是squid.conf的修改：
-{% highlight squid %}
+```squid
 external_acl_type session ttl=300 negative_ttl=0 children=1
 concurrency=200 %SRC /usr/local/squid/helper/squid_session -t 900
 //客户端第一个网页转向
@@ -134,9 +134,9 @@ cache_mgr rainren_openbsd@yahoo.cn
 visible_hostname rain
 httpd_suppress_version_string on
 // 隐藏服务器信息
-{% endhighlight %}
+```
 最后创建ERR页，即squid.conf中的/usr/local/squid/share/errors/Simplify_Chinese/firstpage，如下：
-{% highlight html %}
+```html
 <meta http-equiv="refresh" content="10;url="http://www.google.com/">
 <meta http-equiv="Content-Type" content="text/html;charset=gb2312" />
 rainren
@@ -149,7 +149,7 @@ p {
 font-size:16px;
 color:#FF0000;
 }
-{% endhighlight %}
+```
 热诚欢迎您
 怎么样？
 好了，以上都是转载，还没试验过，不过有一个我知道的，就是不用修改ERR页，在deny_info里，可以直接写http://www.google.com。

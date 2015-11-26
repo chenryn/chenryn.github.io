@@ -18,16 +18,16 @@ kibana3 已经带有 [filesaver.js](https://github.com/eligrey/FileSaver.js)，�
 
 我之前说过，kibana3 代码划分的很细致，每个 panel 都固定只需要提供 editor.html，module.html，module.js 三个文件即可。panel 本身的框架，是不用关心的。因为这部分代码，在 `app/directives/kibanaPanel.js` 中。这次我们想修改 panel 外围的样式，就需要来看这个的代码了。最关键的部分在这里：
 
-{% highlight javascript %}
+```javascript
             '<span ng-repeat="task in panelMeta.modals" class="row-button extra" ng-show="task.show">' +
               '<span bs-modal="task.partial" class="pointer"><i ' +
                 'bs-tooltip="task.description" ng-class="task.icon" class="pointer"></i></span>'+
             '</span>' +
-{% endhighlight %}
+```
 
 也就是说，它会读取你在 module.js 里定义的 `$scope.panelMeta.modals` 数组，然后依次显示。那么就好办了，在我们 table/module.js 里定义下就好了：
 
-{% highlight javascript %}
+```javascript
      $scope.panelMeta = {
        modals : [
          {
@@ -36,7 +36,7 @@ kibana3 已经带有 [filesaver.js](https://github.com/eligrey/FileSaver.js)，�
           partial: "app/panels/table/export.html",
           show: $scope.panel.exportable
         },
-{% endhighlight %}
+```
 
 为了跟其他的比如 inspector, editor 图标行为一致，这里又新增了一个 `$scope.panel.exportable` 变量。而这也带来一个问题：之前已经存在的 dashboard，他们的 schema 里是没有这个变量的，所以即便使用带有这个特性的 kibana 打开老 dashboard，依然看不到导出按钮。这时候，可以手动修改一下 schema 的 JSON 内容，添加上一行 [`"exportable": true`](https://github.com/chenryn/kibana-authorization/blob/master/src/app/dashboards/logstash.json#L138)，也可以点击 panel 上的 dup 复制按钮，复制出来的 panel 会读取默认变量设置，就会出现导出按钮了。然后删掉原 panel ，保存 dashboard 即可。
 
@@ -56,20 +56,20 @@ kibana3 整个界面结构跟 kibana4 不一样，没有单独的字段管理页
 
 terms panel 中对类似情况就有示例在。这里本是有个 `tmode` 参数，用来选择是用 termsFacet 还是 termstatsFacet API。照葫芦画瓢，我新加了一个 `fmode` 参数，用来选择是普通字段("normal")还是脚本字段("script")：
 
-{% highlight html %}
+```html
       <div class="editor-option" ng-show="panel.fmode == 'script'">
         <label class="small">ScriptField</label>
         <input type="text" class="input-large" ng-model="panel.script" ng-change="set_refresh(true)">
       </div>
-{% endhighlight %}
+```
 
 然后在生成 request 的时候，做一下判断：
 
-{% highlight javascript %}
+```javascript
         if($scope.panel.fmode === 'script') {
           terms_facet.scriptField($scope.panel.script)
         }
-{% endhighlight %}
+```
 
 这就 OK 了~
 
@@ -77,34 +77,34 @@ terms panel 中对类似情况就有示例在。这里本是有个 `tmode` 参�
 
 显然 filtering 里没有 script 的支持。filtering 的功能都出自 `app/services/filterSrv.js` 服务。其中 `toEjsObj` 方法调用不同的 Elastic.js 的 Filter 方法。在这里面可以看到原本 terms 的是怎么生成的：
 
-{% highlight javascript %}
+```javascript
       case 'terms':
         return ejs.TermsFilter(filter.field,filter.value);
-{% endhighlight %}
+```
 
 那么我就添加一个：
 
-{% highlight javascript %}
+```javascript
      case 'script':
         return ejs.ScriptFilter(filter.script);
-{% endhighlight %}
+```
 
 filterSrv 支持搞定。最后一步，就是返回 terms panel 的 module.js 里完成调用。过一遍 click 关键字很容易找到 `build_search` 方法。其中原先是这么生成过滤的：
 
-{% highlight javascript %}
+```javascript
       if(_.isUndefined(term.meta)) {
          filterSrv.set({type:'terms',field:$scope.field,value:term.label,
            mandate:(negate ? 'mustNot':'must')});
-{% endhighlight %}
+```
 
 那么在这个前面判断一下：
 
-{% highlight javascript %}
+```javascript
       if($scope.panel.fmode === 'script') {
         filterSrv.set({type:'script',script:$scope.panel.script + ' == \"' + term.label + '\"',
           mandate:(negate ? 'mustNot':'must')});
       } else if(_.isUndefined(term.meta)) {
-{% endhighlight %}
+```
 
 大功告成！
 

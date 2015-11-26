@@ -8,7 +8,7 @@ tags:
 ---
 
 新版本的amcharts用js和html5改写。不再简单的用settings.xml而是写成js的object了。好在例子依然详细。下面贴一段从数据库里取值并绘制成多栏图式的代码：
-{% highlight javascript %}
+```javascript
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -194,4 +194,4 @@ tags:
         <div id="chartdiv" style="width: 100%; height: 700px;"></div>
     </body>
 </html>
-{% endhighlight %}
+```

@@ -15,7 +15,7 @@ tags:
 
 用法非常简单：
 
-{% highlight bash %}
+```bash
 git clone git://github.com/tokuhirom/plenv.git ~/.plenv
 echo 'export PATH="$HOME/.plenv/bin:$PATH"' >> ~/.bash_profile
 echo 'eval "$(plenv init -)"' >> ~/.bash_profile
@@ -26,6 +26,6 @@ plenv rehash # 每次在 $HOME/.plenv/bin 下安装了新的命令后都要执�
 plenv install-cpanm
 plenv rehash
 plenv shell 5.18.0 # 还有 global 和 local 两者可设
-{% endhighlight %}
+```
 
 目前我已经用 plenv 管理自己电脑上的 Perl5 了，你们呢？

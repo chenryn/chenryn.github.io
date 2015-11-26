@@ -8,7 +8,7 @@ category: perl
 
 AE::HTTP 模块可以返回 sock 给用户进行具体操作，我们可以通过 sock 接口很简单的获得对端的 IP 地址：
 
-{% highlight perl %}
+```perl
 package Web::Checker::Util::HTTP;
 use Moo;
 use MooX::Types::MooseLike::Base qw/Str Num/;
@@ -48,6 +48,6 @@ sub get {
 }
 
 1;
-{% endhighlight %}
+```
 
 其实 AE::HTTP 还可以在 `tcp_connect` 的时候获取 sock，这时候就需要自己用 `AnyEvent::Handle` 写一遍 `AnyEvent::HTTP::tcp_connect` 已经写过的东西了(当然如果你本来就打算干点别的事情，那就是另外一回事情了)~~

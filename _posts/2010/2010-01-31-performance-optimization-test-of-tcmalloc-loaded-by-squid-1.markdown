@@ -12,25 +12,25 @@ TCMalloc（Thread-Caching Malloc）是google开发的开源工具──“<a hre
 TCMalloc的实现原理和测试报告请见一篇文章：《<a href="http://shiningray.cn/tcmalloc-thread-caching-malloc.html">TCMalloc：线程缓存的Malloc</a>》
 那么让我们赶紧给squid加载上tcmalloc，提高cache服务器在高并发情况下的性能，降低系统负载吧。
 因为服务器是64位OS，所以要先安装libunwind库。libunwind库为基于64位CPU和操作系统的程序提供了基本的堆栈辗转开解功能，其中包括用于输出堆栈跟踪的API、用于以编程方式辗转开解堆栈的API以及支持C++异常处理机制的API。（又cp一句话，^=^）
-{% highlight bash %}wget http://download.savannah.gnu.org/releases/libunwind/libunwind-0.99.tar.gz
+```bashwget http://download.savannah.gnu.org/releases/libunwind/libunwind-0.99.tar.gz
 tar zxvf libunwind-0.99.tar.gz
 cd libunwind-0.99/
 CFLAGS=-fPIC ./configure
 make CFLAGS=-fPIC
-make CFLAGS=-fPIC install{% endhighlight %}
+make CFLAGS=-fPIC install```
 普通的./configure&&make&&make install可不行哟~
 然后开始安装tcmalloc:
-{% highlight bash %}wget http://google-perftools.googlecode.com/files/google-perftools-1.8.1.tar.gz
+```bashwget http://google-perftools.googlecode.com/files/google-perftools-1.8.1.tar.gz
 tar zxvf google-perftools-1.8.1.tar.gz
 cd google-perftools-1.8.1/
 ./configure --disable-cpu-profiler --disable-heap-profiler --disable-heap-checker --enable-minimal --disable-dependency-tracking
-make && make install{% endhighlight %}
+make && make install```
 然后配置动态链接库，因为是之前是默认安装，这里自然就是/usr/local/lib了。
-{% highlight bash %}echo "/usr/local/lib" > /etc/ld.so.conf.d/usr_local_lib.conf
-/sbin/ldconfig{% endhighlight %}
+```bashecho "/usr/local/lib" > /etc/ld.so.conf.d/usr_local_lib.conf
+/sbin/ldconfig```
 然后给squid加载tcmalloc。官方推荐是重新编译：
 先./configure，然后vi src/Makefile，修改如下：
-{% highlight c %}
+```c
 ....
 squid_LDADD =
 -L../lib \
@@ -45,7 +45,7 @@ LDADD
 = -L../lib -lmiscutil -lpthread -lm -lbsd -lnsl -ltcmalloc_minimal
 EXTRA_DIST =
 ....
-{% endhighlight %}
+```
 保存，make&&make install，OK！
 如果不愿意重新编译，那么动态加载吧。在/home/squid/sbin/squid -s之前执行export
 LD_PRELOAD=/usr/local/lib/libtcmalloc_minimal.so就可以了。

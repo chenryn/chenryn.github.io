@@ -15,16 +15,16 @@ nginx是著名的非专职全七层负载均衡器，在用惯了四层LVS后，
 那么，就开始试试nginx的url_hash负载均衡吧：
 
 1. 安装部署：
-{% highlight bash %}
+```bash
 wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.01.tar.gz
 tar zxvf pcre-8.01.tar.gz
 wget http://wiki.nginx.org/images/7/78/Nginx_upstream_hash-0.3.tar.gz
 tar zxvf Nginx_upstream_hash-0.3.tar.gz
 wget http://sysoev.ru/nginx/nginx-0.7.65.tar.gz
 tar zxvf nginx-0.7.65.tar.gz
-{% endhighlight %}
+```
 vi nginx-0.7.65/src/http/ngx_http_upstream.h
-{% highlight c %}
+```c
 struct ngx_http_upstream_srv_conf_s {
 ngx_http_upstream_peer_t         peer;
 void                           **srv_conf;
@@ -42,53 +42,53 @@ ngx_uint_t                       line;
 in_port_t                        port;
 in_port_t                        default_port;
 };
-{% endhighlight %}
+```
 
 为了安全，可以修改一下nginx的version信息：vi nginx-0.7.65/src/core/nginx.h
 
-{% highlight c %}
+```c
 #define NGINX_VERSION      "2.6.STABLE21"
 #define NGINX_VER          "squid/" NGINX_VERSION
-{% endhighlight %}
+```
 
 vi nginx-0.7.65/src/http/ngx_http_header_filter_module.c
 
-{% highlight c %}
+```c
 static char ngx_http_server_string[] = "Server: squid/2.6.STABLE21" CRLF;
-{% endhighlight %}
+```
 
 vi nginx-0.7.65/src/http/ngx_http_special_response.c
 
-{% highlight c %}
+```c
 static u_char ngx_http_error_tail[] =
 "<hr><center>squid/2.6.STABLE21</center>" CRLF
 "</body>" CRLF
 "</html>" CRLF
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 cd pcre-8.01
 ./configure --prefix=/usr
 make && make install
 cd nginx-0.7.65
 ./configure --prefix=/home/nginx  --with-pcre --with-http_stub_status_module --with-http_ssl_module --without-http_rewrite_module --add-module=/tmp/nginx_upstream_hash-0.3
-{% endhighlight %}
+```
 vi auto/cc/gcc
 
-{% highlight c %}
+```c
 # debug
 #CFLAGS="$CFLAGS -g"
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 make && make install
-{% endhighlight %}
+```
 
 这样就安装完成了。
 
 2、配置文件
 
-{% highlight nginx %}
+```nginx
 upstream images6.static.com {
     server 11.11.11.11:80;
     server 11.11.21.12:80;
@@ -108,7 +108,7 @@ server {
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 }
-{% endhighlight %}
+```
 
 以上配置的问题：
 

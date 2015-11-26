@@ -11,7 +11,7 @@ tags:
 
 其实在 logstash 还在 1.1 的年代的时候，官方 wiki 上是有一批专门教大家怎么通过 irb 交互式测试 grok 表达式的。但不知道为什么后来 wiki 这页没了…… 好在代码本身不复杂，稍微写几行脚本，就可以达到目的了：
 
-{% highlight ruby %}
+```ruby
 #!/usr/bin/env ruby
 require 'rubygems'
 gem 'jls-grok', '=0.11.0'
@@ -50,7 +50,7 @@ options[:dirs].each do |dir|
 end
 grok.compile(options[:pattern], options[:named])
 ap grok.match(options[:message]).captures()
-{% endhighlight %}
+```
 
 测试一下：
 

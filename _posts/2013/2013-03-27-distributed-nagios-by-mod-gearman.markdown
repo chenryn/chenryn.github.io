@@ -18,13 +18,13 @@ tags:
 
 OMD 的安装一如既往的简单，尤其是作为中控端，不需要讲究太多通用性，可以选择使用 ubuntu 系统，直接通过 deb 安装：
 
-{% highlight bash %}
+```bash
 wget http://omdistro.org/attachments/download/197/omd-0.56_0.wheezy_i386.deb
 dpkg -i omd-0.56_0.wheezy_i386.deb
 omd create cdn-monitor
 su - cdn-monitor
 omd start
-{% endhighlight %}
+```
 
 这就已经启动了。
 
@@ -40,11 +40,11 @@ omd start
 
 <http://mod-gearman.org/download/v1.4.2/> 上提供了 mod\_gearman 的独立安装包，我们只需要根据服务器发行版选择下载就可以，这里以 CentOS6 为例，相信现在这个也应该是服务器的主流。
 
-{% highlight bash %}
+```bash
 wget http://mod-gearman.org/download/v1.4.2/rhel6/x86_64/gearmand-0.25-1.rhel6.x86_64.rpm
 wget http://mod-gearman.org/download/v1.4.2/rhel6/x86_64/mod_gearman-1.4.2-1.e.rhel6.x86_64.rpm
 rpm -ivh gearmand-0.25-1.rhel6.x86_64.rpm mod_gearman-1.4.2-1.e.rhel6.x86_64.rpm
-{% endhighlight %}
+```
 
 除了图中列出的几行关键配置以外，还有两个地方是需要修改的：
 
@@ -60,20 +60,20 @@ OMD 默认启用 encryption 并且会在 `/omd/sites/cdn/etc/mod-gearman/` 下�
 
 但是 `mod_gearman` 默认开启 encryption ，却不可能知道中控端的密码，所以默认是在配置文件中指定的 `key=should_be_changed`。这里我们需要修改一致：
 
-{% highlight bash %}
+```bash
 scp nagios:/omd/sites/cdn/etc/mod-gearman/secret.key /etc/mod_gearman/
 sed 's!#keyfile.*!keyfile=/etc/mod_gearman/secret.key!' /etc/mod_gearman/mod_gearman_worker.conf
 service mod_gearman_worker restart
-{% endhighlight %}
+```
 
 事情还没完。这时候你会在 webUI 上看到分配给这个 worker 的检测全部报错，退出码 127。具体内容是："/omd/sites/cdn-monitor/lib/nagios/plugins/check_http do not exists"之类的话。
 
 因为，在 OMD 上，commands.cfg 上，配置的 `$USER1$/check_http` 替换为具体路径后，直接 `add_task` 到 gearmand 里，所以 worker 上收到 command 并执行也就是这样的了。目前还没有发现可以在 worker 端替换 commands 字符串的简单办法。所以，我们还得自己创建一个软链接：
 
-{% highlight bash %}
+```bash
 mkdir -p /omd/sites/cdn-monitor/lib/nagios/
 yum install -y nagios-plugins-all --enablerepo=epel
 ln -s /usr/lib64/nagios/plugins /omd/sites/cdn-monitor/lib/nagios/plugins
-{% endhighlight %}
+```
 
 OK，现在这个机房(即nagios配置中的hostgroup)的监测任务，就都分发给本机房的 worker 来进行了。比如 `check_http` 任务，可以看到原先跨机房访问带来的几十毫秒的延时，都变成了一两毫秒。

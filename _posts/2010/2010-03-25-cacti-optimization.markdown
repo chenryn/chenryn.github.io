@@ -9,7 +9,7 @@ tags:
 
 首先，采用spine代替cmd.php来采集数据。
 下载与cacti相应版本的spine和补丁：
-{% highlight bash %}
+```bash
 wget http://www.cacti.net/downloads/spine/cacti-spine-0.8.7e.tar.gz
 tar zxvf cacti-spine-0.8.7e.tar.gz -C /tmp
 cd /tmp/cacti-spine-0.8.7e
@@ -31,13 +31,13 @@ wget http://ftp.gnu.org/gnu/autoconf/autoconf-2.65.tar.gz
 tar zxvf autoconf-2.65.tar.gz -C /tmp/
 cd /tmp/autoconf-2.65/
 ./configure --prefix=/usr && make && make install
-{% endhighlight %}
+```
 
 返回安装automake，即可成功；安装spine，也成功了。    
 修改/cache/data/cacti/etc/spine.conf里的db信息，和cacti的global.php里一致。    
 登陆web界面，settings中修改poller type为spine，修改Spine Specific Execution Parameters里的Maximum Threads per Process为cpu数的2倍。save~    
 第二、给cacti-tables建index。默认的cacti.sql里一个index索引都没有~    
-{% highlight sql %}
+```sql
 CREATE INDEX `data_template_data_id` ON `data_input_data` (`data_template_data_id`);
 CREATE INDEX `host_id_snmp_query_id_snmp_index` ON data_local (`host_id`,`snmp_query_id`,`snmp_index`);
 CREATE INDEX `local_data_id_data_source_name` ON data_template_rrd (`local_data_id`,`data_source_name`);
@@ -49,7 +49,7 @@ CREATE INDEX `host_id_rrd_next_step` ON poller_item (`host_id`,`rrd_next_step`);
 CREATE INDEX host_id_snmp_query_id ON host_snmp_cache (host_id,snmp_query_id);
 CREATE INDEX host_id_snmp_port ON poller_item (host_id,snmp_port);
 CREATE INDEX data_source_path ON data_template_data (data_source_path);
-{% endhighlight %}
+```
 
 第三、重构rra目录结构。按照device分结构。    
 /home/php/bin/php /cache/data/cacti/cli/structure_rra_paths.php --proceed即可。    

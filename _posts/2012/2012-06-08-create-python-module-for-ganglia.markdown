@@ -18,7 +18,7 @@ trafficserver提供了几种很不错的性能监控方式。首先是一个模�
 长期监控来说，用shell工具就不方便了，就要改用line工具，不过这里line读取的API，官方文档里是不全的，有一个简单的办法，就是进src/mgmt/cli/ShowCmd.cc里去把Cli_RecordGetInt里的字符串全grep出来，然后慢慢挑拣吧～～
 
 下面是一个python的脚本，用来在ganglia里监控几个我个人认为比较重要的trafficserver性能参数的。
-{% highlight python %}
+```python
 import os
 import re
 import sys
@@ -174,7 +174,7 @@ if __name__ == '__main__':
         time.sleep(2)
         print '-'*11
 
-{% endhighlight %}
+```
 个人之前从来没写过python，这个脚本完全照葫芦画瓢，万幸确实可以运行……
 
 不过不太明白的就是，如果把def metric_read定义在descriptors数组后面，运行会报错。很奇怪python为什么会这样？

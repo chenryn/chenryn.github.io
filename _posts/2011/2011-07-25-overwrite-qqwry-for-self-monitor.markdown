@@ -13,7 +13,7 @@ tags:
 <hr>
 前几步工作和之前整理ip库给dns用的时候一样，导出qqwry.txt，约42w条，24MB大小。
 然后从网上搜一下全国电话区号，以各省省会(首府)的区号为准，存成一个quhao.txt，为了之后处理方便，只保留前两个中文，好在中国的省份里也只有内蒙古和黑龙江是三个字，留两位不至于影响阅读，txt内容如下：
-{% highlight yaml %}北京 0010 
+```yaml北京 0010 
 上海 0021
 天津 0022
 重庆 0023
@@ -43,9 +43,9 @@ tags:
 西藏 0891
 新疆 0991
 云南 0871
-浙江 0571{% endhighlight %}
+浙江 0571```
 然后用如下perl脚本归并：
-{% highlight perl %}#!/usr/bin/perl
+```perl#!/usr/bin/perl
 use strict;
 use warnings;
 my($quhao, $qqwry) = @ARGV;
@@ -115,11 +115,11 @@ sub overwrite_iplist {
     };
     close $fh;
 };
-{% endhighlight %}
+```
 最后运行如下命令即可获得精简ip库：
-{% highlight bash %}perl overwrite.pl quhao.txt qqwry.txt > newip.txt{% endhighlight %}
+```bashperl overwrite.pl quhao.txt qqwry.txt > newip.txt```
 对比一下大小和行数：
-{% highlight bash %}[root@cdn2 ~]# ll
+```bash[root@cdn2 ~]# ll
 -rw-r--r-- 1 root root   539226 Jul 25 18:18 newer.txt
 -rw-r--r-- 1 root root  9058928 May 15 13:13 QQWry.dat
 -rw-r--r-- 1 root root 24753935 Jul 25 15:26 qqwry.txt
@@ -130,5 +130,5 @@ sub overwrite_iplist {
    34727 QQWry.dat
   428454 qqwry.txt
       30 quhao.txt
-      72 test.pl{% endhighlight %}
+      72 test.pl```
 好了，一天一天来，明天实现在这527KB的文件里快速定位ip……

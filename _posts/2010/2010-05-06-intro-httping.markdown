@@ -8,12 +8,12 @@ category: monitor
 今天偶然看到这个工具，感觉挺有用的，记录一下。
 安装过程很简单：
 
-{% highlight bash %}
+```bash
 wget http://www.vanheusden.com/httping/httping-1.4.1.tgz
 tar zxvf httping-1.4.1.tgz -C /tmp/
 cd /tmp/httping-1.4.1/
 make && make install
-{% endhighlight %}
+```
 
 默认就安装在/usr下了。如果不想，直接改Makefile去。
 然后使用：

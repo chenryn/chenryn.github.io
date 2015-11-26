@@ -22,7 +22,7 @@ tags:
 
 这是一个在 BSD 上诞生的项目，官网上说只在 i386 的 linux 验证过。不过我在 x86\_64 的 linux 替大家尝试了一把，没有问题~
 
-{% highlight bash %}
+```bash
     yum install libevent-devel
     wget http://monkey.org/~marius/trickle/trickle-1.06.tar.gz
     tar zvxf trickle-1.06.tar.gz
@@ -34,13 +34,13 @@ tags:
     sed -i 's!\(#define in_addr_t\)!//\1!' config.h
     make
     make install
-{% endhighlight %}
+```
 
 命令使用非常简单：
 
-{% highlight bash %}
+```bash
     trickle -s -d 100 wget http://domain/path/to/file.suffix -O /dev/null
-{% endhighlight %}
+```
 
 * -s 表示独立运行，因为 trickle 还有一个 trickled 管理端可以用；
 * -d 表示下载方向；
@@ -64,18 +64,18 @@ __不过总监大人及时提示我们： 由于该机制的限制，此工具�
 
 ## 启用 tc 
 
-{% highlight bash %}
+```bash
     tc qdisc del dev eth0 root
     tc qdisc add dev eth0 root handle 1: htb
     tc class add dev eth0 parent 1: classid 1: htb rate 1000mbit ceil 1000mbit
     tc class add dev eth0 parent 1: classid 1:3 htb rate 10mbit 
     tc class add dev eth0 parent 1: classid 1:4 htb rate 10kbit
     tc filter add dev eth0 protocol ip parent 1:0 prio 1 handle 1: cgroup
-{% endhighlight %}
+```
 
 ## 配置 cgroup
 
-{% highlight bash %}
+```bash
     # 命令行使用
     mount -t cgroup net_cls -o net_cls /cgroup/net_cls/
     cd !$
@@ -85,17 +85,17 @@ __不过总监大人及时提示我们： 由于该机制的限制，此工具�
     yum install -y libcgroup
     cgsnapshot -s > /etc/cgconfig.conf
     /etc/init.d/cgconfig restart
-{% endhighlight %}
+```
 
 ## 测试 cgroup 效果
 
-{% highlight bash %}
+```bash
     time scp bigfile root@192.168.0.26:/tmp/
     time cgexec -g net_cls:test scp bigfile root@192.168.0.26:/tmp/
     echo $$ > /cgroup/net_cls/test/tasks
     tc class change dev eth0 parent 1: classid 1:4 htb rate 1mbit
     time scp bigfile root@192.168.0.26:/tmp/
-{% endhighlight %}
+```
 
 可以看到后两次的速度比第一次慢很多。
 

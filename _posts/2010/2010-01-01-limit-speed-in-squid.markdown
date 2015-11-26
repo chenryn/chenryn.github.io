@@ -136,7 +136,7 @@ neighbor.
 但似乎我还没百度到谁用class为2或者3的。一般大家都只用1……
 举个例子：
 两个域名，分别限制网民下载速度为50kb/s和100kb/s。配置如下：
-{% highlight squid %}
+```squid
 #定义域名
 acl LIMIT_A dstdomain a.test.com
 acl LIMIT_B dstdomain b.test.com
@@ -158,5 +158,5 @@ delay_parameters 1 50000/50000
 delay_parameters 2 100000/100000
 #squid启动时初始化的池的带宽百分比
 delay_initial_bucket_level 100
-{% endhighlight %}
+```
 据网友的测试，当限速配置为20000/20000即20000/1024=19.53kb/s的时候，实际的下载速度大概在11-15kb/s之间。

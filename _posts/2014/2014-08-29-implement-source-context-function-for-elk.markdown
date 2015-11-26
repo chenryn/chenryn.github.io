@@ -26,7 +26,7 @@ tags:
 
 ## logstash.conf 示例
 
-{% highlight ruby %}
+```ruby
 input {
     file {
         path => ["/var/log/*.log"]
@@ -48,13 +48,13 @@ output {
     elasticsearch {
     }
 }
-{% endhighlight %}
+```
 
 ## 上下文查询 curl 示例
 
 使用上面的配置运行起来 logstash 之后，假设我们现在搜到一条 syslog 日志，其 `lineno` 是 20，那么查看它的前后 5 条记录的 curl 命令就是：
 
-{% highlight json %}
+```json
 curl -XPOST 'http://localhost:9200/logstash-2014.08.29/_search?pretty=1' -d '
 {
   "query":{
@@ -75,11 +75,11 @@ curl -XPOST 'http://localhost:9200/logstash-2014.08.29/_search?pretty=1' -d '
   "fields":["message"],
   "size":10
 }'
-{% endhighlight %}
+```
 
 得到的结果是：
 
-{% highlight json %}
+```json
 {
   "took" : 3,
   "timed_out" : false,
@@ -184,7 +184,7 @@ curl -XPOST 'http://localhost:9200/logstash-2014.08.29/_search?pretty=1' -d '
     } ]
   }
 }
-{% endhighlight %}
+```
 
 没错，这就是我们想要的结果了！
 

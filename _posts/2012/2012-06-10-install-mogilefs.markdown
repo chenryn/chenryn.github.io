@@ -9,7 +9,7 @@ category: perl
 
 * storage Node
 
-{% highlight bash %}
+```bash
 cpanm MogileFS::Utils MogileFS::Client
 # 因为MogileFS::Server的test里会测试mysql、sqlite、pgsql的支持，用不着，直接强制安装就好了
 cpanm --force MogileFS::Server
@@ -24,24 +24,24 @@ EOF
 mkdir /data/mogstore/dev170
 mkdir /data1/mogstore
 ln -s /data1/mogstore /data/mogstore/dev171
-{% endhighlight %}
+```
 
 * Tracker
 
-{% highlight bash %}
+```bash
 yum install -y mysql-server mysql-devel
 cpanm DBI DBD::mysql MogileFS::Utils MogileFS::Client
 cpanm --force MogileFS::Server
-{% endhighlight %}
+```
 
-{% highlight sql %}
+```sql
 CREATE DATABASE MogileFS DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
 grant all on MogileFS.* to 'mogile'@'%' identified by 'mogile';
 UPDATE mysql.user SET Password=PASSWORD('newpass') WHERE User='mogile';
 FLUSH PRIVILEGES;
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 # 初始化mysql数据库表
 mogdbsetup --dbhost=tracker.mogile.com --dbname=MogileFS --dbuser=mogile --dbpass=newpass
 mkdir /etc/mogilefs
@@ -71,7 +71,7 @@ mogadm class add fmn small --mindevcount=3
 mogstats --db_dsn="DBI:mysql:MogileFS:host=tracker.mogile.com" --db_user="mogile" --db_pass="mogile" --verbose --stats="all"
 # 插入一个文件做测试
 mogtool --debug --trackers=127.0.0.1:7001 --domain=fmn --class=large inject index.html "index.html"
-{% endhighlight %}
+```
 
 * Fuse
 
@@ -83,10 +83,10 @@ mogtool --debug --trackers=127.0.0.1:7001 --domain=fmn --class=large inject inde
 [Mogile-Fuse-0.03](https://github.com/frett/MogileFS-Fuse)    
 
 先解决依赖：
-{% highlight bash %}
+```bash
 yum install -y fuse fuse-devel fuse-libs
 cpanm FUSE::Client FUSE::Server Lchown Filesys::Statvfs Unix::Mknod
-{% endhighlight %}
+```
 然后perl Makefile.PL && make && make test && make install即可。
 挂载命令是：
 mount-mogilefs --daemon --tracker 10.0.0.16:7001 /mnt/mogilefs

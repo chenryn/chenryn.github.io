@@ -9,7 +9,7 @@ category: squid
 
 例一：这是最简单的url转向，把http://www.baidu.com/转到https://www.google.com:
 
-{% highlight perl %}
+```perl
 #!/usr/bin/perl -w
 $|=1;
 while () {
@@ -23,11 +23,11 @@ while () {
         print "$url\n";
     }
 }
-{% endhighlight %}
+```
 
 例二：这个的功效，是当第一次访问外网网站时，先跳转到公司主页一次，之后再访问就不再限制。
 
-{% highlight perl %}
+```perl
 #!/usr/bin/perl -w
 use strict;
 use DB_File;
@@ -74,4 +74,4 @@ sub save {
     $ip{$client}=1;
     untie %ip;
 }
-{% endhighlight %}
+```

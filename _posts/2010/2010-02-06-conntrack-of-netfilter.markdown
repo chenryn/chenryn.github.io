@@ -29,7 +29,7 @@ ip_conntrack buffer使用情况
 grep conn /proc/slabinfo
 
 文章提出的sysctl参数修改：
-{% highlight bash %}
+```bash
 #允许TCP/UDP打开的本地端口范围
 echo "1024 65000" > /proc/sys/net/ipv4/ip_local_port_range
 #内存脏数据回收参数，2.6内核中没有……
@@ -62,7 +62,7 @@ echo "52428800" > /proc/sys/net/ipv4/route/max_size
 echo "1" > /proc/sys/net/ipv4/conf/all/proxy_arp
 #TCP/IP会话的滑动窗口大小可变
 echo "1" > /proc/sys/net/ipv4/tcp_window_scaling
-{% endhighlight %}
+```
 最直接看到的两个调整，就是ip_conntrack_max和ip_conntrack_tcp_timeout_established了。
 而gc_*四个参数，是修改内核维护ARP表的参数，当arp -an|wc -l大于300的话，就需要修改这些参数，不然会出现“neighbour table overflow”或者“kernel: printk: 24 messages suppressed”这样的syslog，导致服务器ssh、ping无响应！
 

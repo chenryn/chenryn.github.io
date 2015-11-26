@@ -4,7 +4,7 @@ title: AnyEvent::HTTPD和AnyEvent::HTTP使用实例
 category: perl
 ---
 很简单的一个实例，就是开一个端口接受url请求，然后向squid提交这个url的刷新。
-{% highlight perl %}
+```perl
 use AnyEvent::HTTPD;
 use AnyEvent::HTTP;
 
@@ -24,7 +24,7 @@ $httpd->reg_cb (
 
 $httpd->run;
 
-{% endhighlight %}
+```
 
 注意安装AnyEvent::HTTPD的时候，test需要Test::POD，但是Makefile.PL上没写，所以要先行安装。
 

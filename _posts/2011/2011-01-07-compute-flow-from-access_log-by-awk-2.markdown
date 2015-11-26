@@ -10,7 +10,7 @@ tags:
 曾经用awk写过一个日志流量计算的单行命令。因为awk中没有sort函数，所以在中途采用了|sort|的方式，导致效率很低。在计算50GB+的日志时，运算时间慢的不可忍受。
 
 设想了很多方法来加快运算，比如舍弃awk改用perl来完成，如下：
-{% highlight perl %}#!/usr/bin/perl
+```perl#!/usr/bin/perl
 use warnings;
 use strict;
 my $access_log = $ARGV[0];
@@ -32,14 +32,14 @@ foreach my $key ( sort keys %flow ) {
     }
 }
 print $result * 8 / 300 / 1024 / 1024;
-{% endhighlight %}
+```
 好吧，这个正则太过垃圾，请无视，但至少在管道和系统sort上浪费的时间还是大大的节省了的。
 
 然后在CU上翻到一个老帖子，提供一个比较不错的awk思路，命令如下：
 
-{% highlight bash %}
+```bash
 awk '!b[substr($4,14,5)]++{print v,a[v]}{v=substr($4,14,5);a[v]+=$10}END{print v,a[v]}'
-{% endhighlight %}
+```
 
 这里用substr()跟指定FS相比那个效率高未知，不过采用!b++的方式来判断某时间刻度结束，输出该时刻总和，在顺序输入日志的前提下，运算速度极快（就剩下一个加法和赋值了）。
 
@@ -50,15 +50,15 @@ awk '!b[substr($4,14,5)]++{print v,a[v]}{v=substr($4,14,5);a[v]+=$10}END{print v
 另，刚知道gawk3.1以上提供了asort()和asorti()函数，可以研究一下~
 
 采用time命令测试一下
-{% highlight bash %}
+```bash
 gawk '{a[substr($4,14,5)]+=$10}END{n=asorti(a,b);for(i=1;i<=n;i++){print b[i],a[b[i]]*8/60/1024/1024}}' example.com_log | awk '{if($2>a){a=$2;b=$1}}END{print b,a}'
-{% endhighlight %}
+```
 
 一个35G的日志文件只用了6分钟。
 
 然后更简单的
-{% highlight bash %}
+```bash
 gawk '{a[substr($4,14,5)]+=$10}END{n=asort(a);print a[n]*8/60/1024/1024}' example.com_log
-{% endhighlight %}
+```
 
 不过简单的运行发现只比前一种快不到10秒钟。而前一种还能输出峰值的时间，可读性更好一些~

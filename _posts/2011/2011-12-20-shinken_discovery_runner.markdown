@@ -11,15 +11,15 @@ tags:
 上篇说到OMD的可以通过omd config选择core，有nagios和shinken两个选项。shinken是一个完全重写的监控系统，但是在外部接口上，又是nagios-like的，甚至可以单纯的只用shinken的WebUI给nagios使。所以OMD作为nagios周边的项目，也就把shinken加入到core选项里了。
 不过经过试验发现，虽然omd的rpm是针对centos5.5的，代码中调用的有些命令版本却比较高，比如nmap命令使用了--traceroute选项，查ChangeLog发现是4.76版才加上的，而centos5上面的还是4.11版，所以要重新安装：
 
-{% highlight bash %}
+```bash
 wget http://nmap.org/dist/nmap-5.51-1.x86_64.rpm
 yum remove nmap
 yum install --nogpgcheck nmap-5.51-1.x86_64.rpm
-{% endhighlight %}
+```
 
 又比如python，centos5默认安装的是2.4版，而nmap_parser中调用了2.5版才有的xml.tree.elementtree模块，所以也要升级。
 
-{% highlight bash %}
+```bash
 wget http://www.python.org/ftp/python/2.7.2/Python-2.7.2.tgz
 tar zxvf Python-2.7.2.tgz
 cd Python-2.7.2
@@ -34,12 +34,12 @@ alternatives --install /usr/bin/python python /usr/bin/python2.4 500
 wget http://peak.telecommunity.com/dist/ez_setup.py
 python ez_setup.py
 /usr/local/python2.7/bin/easy_install ElementTree
-{% endhighlight %}
+```
 
 然后就可以试试nmap_discovery_runner.py和vmware_discovery_runner.py了。
 命令行方式运行如下：
 
-{% highlight bash %}
+```bash
 /opt/omd/sites/dyxmonitor/lib/shinken/libexec/nmap_discovery_runner.py -t 127.0.0.1
 Got our target ['127.0.0.1']
 propose a tmppath /tmp/tmppTYexK
@@ -55,16 +55,16 @@ localhost::macvendor=
 localhost::openports=22,80,111,631,3306
 localhost::fqdn=localhost
 localhost::ip=127.0.0.1
-{% endhighlight %}
+```
 
 从输出中可以看到使用的nmap运行参数，主要是-O扫描操作系统，-T4指定快速，-oX指定输出成xml，然后用python去解析xml文件就是了。
 然后运行omd的命令：
 
-{% highlight bash %}
+```bash
 su - monitor
 mkdir -p etc/shinken/objects/discovery
 shinken-discovery -o /omd/sites/monitor/etc/shinken/objects/discovery -r nmap -c /omd/sites/monitor/etc/shinken/shinken-discovery.d/discovery.cfg
-{% endhighlight %}
+```
 
 然后发现新错误：在import shinken和multiprocessing的时候有问题。
 因为etc/environment中需要定义PYTHONPATH=/omd/sites/monitor/lib/python:/omd/sites/monitor/lib/shinken:/usr/local/py2.7/lib/python2.7
@@ -74,7 +74,7 @@ OMD的监控配置文件指定位置是~/etc/nagios/conf.d/，所以扫描之后
 <hr>
 最后，shinken里有bottle框架的一个webui，但是我一直没找到如何运行……shinken-specific.d/module_webui.cfg里倒是有module定义：
 
-{% highlight bash %}
+```bash
 define module{
     module_name      WebUI
     module_type      webui
@@ -88,7 +88,7 @@ define module{
     module_type      passwd_webui
     passwd           /omd/sites/dyxmonitor/etc/htpasswd
 }
-{% endhighlight %}
+```
 
 但是启动后没有看到7767端口，也没有看到任何报错——这是最让我郁闷的一点，折腾三天，全部排错都靠strace而木有log。。。
 所以最后还是用另一个nagios界面，trunk来启动web。trunk是一个基于perl的catalyst框架完成的页面。而omd自带了一个不小的perl5lib……这里又需要注意了：

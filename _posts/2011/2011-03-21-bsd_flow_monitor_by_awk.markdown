@@ -15,8 +15,8 @@ linux上另一种获取网卡总流量的方法是ifconfig命令，这个命令�
 但是这两个命令，都是持续输出，必须接到^C信号才会退出运行。在实时管理时很好用，在做监控脚本的时候，就弄巧成拙了……
 好在netstat参数多，调整一下，使用idbnf参数（family）即可输出网卡总流量值，然后按照linux上一样的思路进行计算了。
 最终脚本如下：
-{% highlight bash %}#!/bin/bash
+```bash#!/bin/bash
 /usr/local/bin/gawk 'BEGIN{flow="netstat -idbnf inet";while((flow) | getline){now_in[$1]=$7;now_out[$1]=$10};time=systime()}{if_in[$1]=(now_in[$1]-$2)*8/(time-$4);if_out[$1]=(now_out[$1]-$3)*8/(time-$4)}END{printf "OK. The flow is %.2f,%.2f,%.2f,%.2f Kbps | bce0_in=%d;0;0;0;0 bce0_out=%d;0;0;0;0 bce1_in=%d;0;0;0;0 bce1_out=%d;0;0;0;0",if_in["bce0"]/1024,if_out["bce0"]/1024,if_in["bce1"]/1024,if_out["bce1"]/1024,if_in["bce0"],if_out["bce0"],if_in["bce1"],if_out["bce1"];for(i in now_in){print i,now_in[i],now_out[i],time > "/tmp/if_flow.txt"}}' /tmp/if_flow.txt
-{% endhighlight %}
+```
 脚本就一行，不过就有一个缺点比不上分开写很多行的shell脚本，第一次运行前必须手动touch /tmp/if_flow.txt。因为如果这个文件不存在的话，awk会报错，执行不到END{}来，不会自动生成这个文件的……
 另：systime()函数是gawk特有的，而BSD上默认的是awk，所以需要安装gawk（在/usr/ports/lang/gawk目录下make&amp;&amp;make install）；或者在awk中采用shell变量，定义time='`date +%s`'来调用了。

@@ -10,7 +10,7 @@ tags:
 话接上回If-Modified-Since，当squid开启reload_into_ims on之后，no-cache头会在在浏览器上被转化成If-Modified-Since标识返回给web服务器。从整体架构考虑，因为squid上已经破坏了http协议的规定，那么web端就必须主动承担对网页过期的识别管理工作。嗯，要是所有的网站都能从一规划开始就这么搞，俺们干CDN的可就轻松了~~~
 
 下面是一段php代码，简单的实现对If-Modified-Since标签的过期管理：
-{% highlight php %}
+```php
 <?php
 $headers = apache_request_headers();
 //读取整个header信息
@@ -34,7 +34,7 @@ true, 200);
 //否则给header加上时间为服务器系统时间的Last-Modified标签，告知浏览器网页过期，重新下载
 }
 ?>
-{% endhighlight %}
+```
 这做一个范例，如果用其他的标签定义来控制过期，照葫芦画瓢就行了。比如用Expires控制，就写
 
     header('Expires: ' . gmdate ("D, d M Y H:i:s", gmmktime() + 60*5). " GMT");

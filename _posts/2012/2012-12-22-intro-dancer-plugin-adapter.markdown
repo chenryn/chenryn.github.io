@@ -11,7 +11,7 @@ Dancer 活跃的社区和强大又方便的插件开发导致出现了太多好�
 
 用法示例：
 
-{% highlight perl %}
+```perl
     # in config.yml
     plugins:
       Adapter:
@@ -45,6 +45,6 @@ Dancer 活跃的社区和强大又方便的插件开发导致出现了太多好�
         template 'error' => { response => $res };
       }
     };
-{% endhighlight %}
+```
 
 话说我还是喜欢上代码，不喜欢完整的翻译 POD 啊…………

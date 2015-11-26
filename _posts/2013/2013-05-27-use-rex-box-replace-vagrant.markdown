@@ -18,18 +18,18 @@ Vagrant 是近来 devops 界内非常流行和火爆的工具，它和 puppet/ch
 环境准备
 ================
 
-{% highlight bash %}
+```bash
 rexify $project-name --template box
 cd $project-name
 rex init --name=$vm-name --url=$url-to-prebuild-vm-image
-{% endhighlight %}
+```
 
 虚拟机定义
 ================
 
 这里有两种方式，一种是类似 Vagrantfile 定义的 Rexfile 写法：
 
-{% highlight perl %}
+```perl
 set box => "VBox";
 task mytask => sub {
    box {
@@ -49,11 +49,11 @@ task mytask => sub {
       $box->setup(qw/setup_frontend/);
    };
 };
-{% endhighlight %}
+```
 
 另一种是采用 YAML 配置：
 
-{% highlight yaml %}
+```yaml
 type: VBox
 vms:
    fe01:
@@ -70,14 +70,14 @@ vms:
             type: bridged
             bridge: eth0
       setup: setup_db
-{% endhighlight %}
+```
 
 虚拟机初始化
 ================
 
 在 Vagrant 中有一个概念叫 provision，也就是在虚拟机第一次运行时，通过 shell/puppet/chef 等进行初始化操作。Rex::Box 自然是通过 Rex 本身来进行这个任务。也就是上例中的 `setup` 定义的 task 名称。
 
-{% highlight perl %}
+```perl
 task 'setup_frontend', sub {
     install nginx;
     file '/etc/nginx.conf',
@@ -86,7 +86,7 @@ task 'setup_frontend', sub {
         group     => "root",
         on_change => sub { service nginx => "restart"; };
 };
-{% endhighlight %}
+```
 
 因为 rex 本身是通过 ssh 管理，所以在 setup 之前，必须定义好如何 auth，自己做的镜像不说了，通过 rexify.org 下载的默认镜像，就是默认的 root/box 了。
 
@@ -94,11 +94,11 @@ task 'setup_frontend', sub {
 
 当然，也可以在 task 写 shell，通过 `run` 的方式，其实 run 应该也是 Rex 最常用的 task 了。
 
-{% highlight perl %}
+```perl
 task 'setup_frontend', sub {
     run "echo Hello, world";
 };
-{% endhighlight %}
+```
 
 虚拟机使用
 ================
@@ -107,28 +107,28 @@ task 'setup_frontend', sub {
 
 比如在使用 YAML 配置的时候，配置环境的 Rexfile 最后是这样的：
 
-{% highlight perl %}
+```perl
 use Rex::Commands::Box init_file => "box.yml";
 group myboxes => map { get_box($_->{name})->{ip} } list_boxes;
 task "box", sub {
    boxes "init";
 };
-{% endhighlight %}
+```
 
 像要做成命令行管理也比较简单，比如启动和停止虚拟机的 task 这样写：
 
-{% highlight perl %}
+```perl
 task "stop", sub {
     my $param = shift;
     boxes stop => $param->{name};
 };
-{% endhighlight %}
+```
 
 就可以在命令行直接这样启动某个虚拟机了：
 
-{% highlight bash %}
+```bash
 rex stop --name=myvbox
-{% endhighlight %}
+```
 
 事实上，本文最开头的默认 box 模板生成的命令，就是通过前一步生成的 Rexfile 里定义的 `task "init", sub {...};` 实现的。
 

@@ -72,13 +72,13 @@ $) perl脚本的运行有效用户组
 $0 当前程序名
 
 $@/$!/$^E/$? 分别是perl解释器、C库、操作系统、外部程序检测到的错误
-{% highlight perl %}
+```perl
 eval q{
     open my $pipe, "/cdrom/install |" or die $!;
     my @res = <$pipe>;
     close $pipe or die "bad pipe: $?, $!";
 };
-{% endhighlight %}
+```
 在需要 "eval" 的字符串没有通过编译(若 "open" 或 "close"导入的原型错误则可能发生)或者 Perl 代码在执行过程中 die() 掉，则 $@变量会被设置。这些情况下 $@ 的值是编译错误信息或 "die" 的参数(其中会内插 $! 和 $?)。(另见 Fatal)    
 上面的 eval() 表达式执行后，open()、"<PIPE>" 和 "close" 被翻译成对 C运行库的调用，继而 进入操作系统内核。若其中某个调用失败，则 $! 会设置为C 库的 "errno" 值。
 

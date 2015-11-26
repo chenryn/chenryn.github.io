@@ -6,7 +6,7 @@ category: perl
 
 之所以写这么个内容，是今天突然发现之前有个脚本的效果完全不对。这个脚本是用 Furl 模块发 HTTP 请求。看 POD 的说明，以为这样写是生效的：
 
-{% highlight perl %}
+```perl
     use HTTP::Request;
     use Furl;
     my $r = HTTP::Request->new( GET => "http://192.168.0.2/path/to/file" );
@@ -14,7 +14,7 @@ category: perl
     my $furl = Furl->new();
     my $res = $furl->request($r);
     say $res->code();
-{% endhighlight %}
+```
 
 但是随后在 192.168.0.2 上发现日志记录中，Host 并没有修改成 www.example.com 。
 
@@ -28,7 +28,7 @@ POD 上是说直接在 new 的时候传递 %args 或者 \%args 就行。但是�
 
 最后只能放弃使用 Furl 模块，改回古老的 LWP 模块。LWP 与 Coro 配合如下：
 
-{% highlight perl %}
+```perl
     use Coro;
     use LWP::Protocol::Coro::http;
     use LWP::UserAgent;
@@ -48,4 +48,4 @@ POD 上是说直接在 new 的时候传递 %args 或者 \%args 就行。但是�
         return $msg;
     }
     print co_http_get("www.example.com", "/path/to/file", [qw(192.168.0.1 192.168.0.2)]);
-{% endhighlight %}
+```

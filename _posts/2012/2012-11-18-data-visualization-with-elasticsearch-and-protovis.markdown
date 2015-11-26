@@ -38,7 +38,7 @@ Facet搜索为数不多的几个可以把强大的请求能力开放给最终用
 
 首先我们先插入一些数据。
 
-{% highlight bash %}
+```bash
 curl -X DELETE "http://localhost:9200/dashboard"
 curl -X POST "http://localhost:9200/dashboard/article" -d '
              { "title" : "One",
@@ -57,13 +57,13 @@ curl -X POST "http://localhost:9200/dashboard/article" -d '
                "tags"  : ["search"] }
 '
 curl -X POST "http://localhost:9200/dashboard/_refresh"
-{% endhighlight %}
+```
 
 你们都看到了，我们存储了一些文章的标签，每个文章可以多个标签，数据以JSON格式发送，这也是ES的文档格式。
 
 现在，要知道文档的十大标签，我们只需要简单的请求：
 
-{% highlight bash %}
+```bash
 curl -X POST "http://localhost:9200/dashboard/_search?pretty=true" -d '
 {
     "query" : { "match_all" : {} },
@@ -73,11 +73,11 @@ curl -X POST "http://localhost:9200/dashboard/_search?pretty=true" -d '
     }
 }
 '
-{% endhighlight %}
+```
 
 你看到了，我接受所有文档，然后定义一个terms facet叫做“tags”。这个请求会返回如下样子的数据：
 
-{% highlight javascript %}
+```javascript
 {
     "took" : 2,
     // ... snip ...
@@ -98,7 +98,7 @@ curl -X POST "http://localhost:9200/dashboard/_search?pretty=true" -d '
         }
     }
 }
-{% endhighlight %}
+```
 
 JSON中`facets`部分是我们关心的，特别是`facets.tags.terms`数组。它告诉我们有四篇文章打了search标签，两篇java标签，等等…….(当然，我们或许应该给请求添加一个`size`参数跳过前面的结果)
 
@@ -112,7 +112,7 @@ JSON中`facets`部分是我们关心的，特别是`facets.tags.terms`数组。�
 
 首先需要一个HTML文件来容纳图标然后从ES里加载数据：
 
-{% highlight html %}
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -166,13 +166,13 @@ JSON中`facets`部分是我们关心的，特别是`facets.tags.terms`数组。�
 
 </body>
 </html>
-{% endhighlight %}
+```
 
 文档加载后，我们通过Ajax收到和之前`curl`测试中一样的facet。在jQuery的Ajaxcallback里我们通过封装的`display_chart()`把返回的JSON传给`Donut()`函数.
 
 `Donut()`函数及注释如下： 
 
-{% highlight javascript %}
+```javascript
 // =====================================================================================================
 // A donut chart with Protovis - See http://vis.stanford.edu/protovis/ex/pie.html
 // =====================================================================================================
@@ -285,7 +285,7 @@ var Donut = function(dom_id) {
     };
 
 };
-{% endhighlight %}
+```
 现在你们看到了，一个简单的JSON数据转换，我们就可以创建出丰富的有吸引力的关于我们文章标签分布的可视化图标。完整的例子在[这里](http://www.elasticsearch.cn/blog/assets/dashboards/donut.html)。
 
 当你使用完全不同的请求，比如显示某个特定作者的文章，或者特定日期内发表的文章，整个可视化都照样正常工作，代码是可以重用的。
@@ -300,7 +300,7 @@ Protovis让创建另一种常见的可视化类型也非常容易：[时间线](
 
 好了，让我们往索引里存一些带有发表日期的文章吧：
 
-{% highlight bash %}
+```bash
 curl -X DELETE "http://localhost:9200/dashboard"
 curl -X POST "http://localhost:9200/dashboard/article" -d '{ "t" : "1",  "published" : "2011-01-01" }'
 curl -X POST "http://localhost:9200/dashboard/article" -d '{ "t" : "2",  "published" : "2011-01-02" }'
@@ -323,11 +323,11 @@ curl -X POST "http://localhost:9200/dashboard/article" -d '{ "t" : "18", "publis
 curl -X POST "http://localhost:9200/dashboard/article" -d '{ "t" : "19", "published" : "2011-01-23" }'
 curl -X POST "http://localhost:9200/dashboard/article" -d '{ "t" : "20", "published" : "2011-01-24" }'
 curl -X POST "http://localhost:9200/dashboard/_refresh"
-{% endhighlight %}
+```
 
 我们用ES的[date histogram facet](http://www.elasticsearch.org/guide/reference/api/search/facets/date-histogram-facet.html)来获取文章发表的频率。
 
-{% highlight bash %}
+```bash
 curl -X POST "http://localhost:9200/dashboard/_search?pretty=true" -d '
 {
     "query" : { "match_all" : {} },
@@ -342,13 +342,13 @@ curl -X POST "http://localhost:9200/dashboard/_search?pretty=true" -d '
     }
 }
 '
-{% endhighlight %}
+```
 
 注意我们是怎么设置间隔为天的。这个很容易就可以替换成周，月 ，或者年。
 
 请求会返回像下面这样的JSON：
 
-{% highlight javascript %}
+```javascript
 {
     "took" : 2,
     // ... snip ...
@@ -367,14 +367,14 @@ curl -X POST "http://localhost:9200/dashboard/_search?pretty=true" -d '
         }
     }
 }
-{% endhighlight %}
+```
 
 我们要注意的是`facets.published.entries`数组，和上面的例子一样。同样需要一个HTML页来容纳图标和加载数据。机制既然一样，代码就直接看[这里](https://gist.github.com/900542/#file_chart.html)吧。
 
 既然已经有了JSON数据，用protovis创建时间线就很简单了，用一个自定义的[area chart](http://vis.stanford.edu/protovis/ex/area.html)即可。
 
 完整带注释的`Timeline()`函数如下：
-{% highlight javascript %}
+```javascript
 // =====================================================================================================
 // A timeline chart with Protovis - See http://vis.stanford.edu/protovis/ex/area.html
 // =====================================================================================================
@@ -515,15 +515,15 @@ var Timeline = function(dom_id) {
     };
 
 };
-{% endhighlight %}
+```
 
 完整示例代码在[这里](http://www.elasticsearch.cn/blog/assets/dashboards/timeline.html)。不过先去下载protovis提供的关于[area](http://vis.stanford.edu/protovis/docs/area.html)的原始文档，然后观察当你修改`interpolate('cardinal')`成`interpolate('step-after')`后发生了什么。对于多个facet，画叠加的区域图，添加交互性，然后完全定制可视化应该都不是什么问题了。
 
 重要的是注意，这个图表完全是根据你传递给ES的请求做出的响应，使得你有可能做到简单立刻的完成某项指标的可视化需求。比如“显示这个作者在这个主题上最近三个月的出版频率”。只需要提交这样的请求就够了：
 
-{% highlight bash %}
+```bash
  author:John AND topic:Search AND published:[2011-03-01 TO 2011-05-31]
-{% endhighlight %}
+```
 
 # 总结
 

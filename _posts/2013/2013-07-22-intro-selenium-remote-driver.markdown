@@ -47,7 +47,7 @@ IDE 截图如下：
 
 生成脚本如下所示：
 
-{% highlight perl %}
+```perl
     use strict;
     use warnings;
     use Selenium::Server;
@@ -69,7 +69,7 @@ IDE 截图如下：
     done_testing();
     
     $server->stop;
-{% endhighlight %}
+```
 
 脚本中这个 `click` 操作显然是直接根据动作录制的，那么 `find_element()->get_text` 是怎么来的呢？其实 Selenium IDE 已经修改了浏览器内鼠标右键菜单的选项。在选中的任意网页元素上单击鼠标右键，菜单中就有 `Show All Available Commands` 子菜单，只需要选择就可以了。方便吧！
 
@@ -85,7 +85,7 @@ __2013 年 07 月 25 日补__
 
 `Selenium` 的另一个功能是自己插入 `javascript` 到页面里执行。比如我们可以利用 HTML5 的 `WebTiming` 特性测试页面的下载时间：
 
-{% highlight perl %}
+```perl
     my $webtiming = q{
         var performance = window.performance
                        || window.webkitPerformance
@@ -100,7 +100,7 @@ __2013 年 07 月 25 日补__
     for ( sort keys %$res ) {
         printf "%s %s\n", $_, $res->{$_}/1000;
     };
-{% endhighlight %}
+```
 
 `WebTiming` 详细列出了每个阶段的时间。如果 js 写的好，可以写具体某个点触发，就更好了。
 

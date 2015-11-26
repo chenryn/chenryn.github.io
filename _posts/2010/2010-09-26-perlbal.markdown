@@ -10,7 +10,7 @@ category: perl
 我就会凑点perl，下perlbal来体验一把吧~~
 
 发挥一下perl的优势，直接采用CPAN安装。（从扶凯那学来cpanm方式，确实方便）
-{% highlight bash %}
+```bash
 wget http://xrl.us/cpanm -O /sbin/cpanm
 chmod +x !$
 !$ Perlbal
@@ -21,16 +21,16 @@ Usage: perlbal [OPTS]
 --config=[file]  Specify Perlbal config file
 (default: /etc/perlbal/perlbal.conf)
 --daemon         Daemonize
-{% endhighlight %}
+```
 多简单呀~~
 不过问题来了，这个配置文件到哪找去呀~~不管是cpan.org还是danga.com/perlbal都简单到极致，压根没提及配置文件，仿佛大家都能把源码看一遍似的……
 好在随后在mogileFS的<a href="http://www.livejournal.com/doc/server/index.html" target="_blank">教程</a>里看到了perlbal的一些配置步骤。然后发现这个cpanm太偷懒了也不好……还是svn下来全部文件比较合适~~
 
-{% highlight bash %}
+```bash
 svn checkout http://code.sixapart.com/svn/perlbal/trunk/
 ls trunk/conf/
 echoservice.conf  load-balancer.conf  nodelist.dat  not-modified-plugin.conf  perlbal.conf  ssl.conf  virtual-hosts.conf  webserver.conf
-{% endhighlight %}
+```
 各种配置文件都列出来了~
 不过再去trunk/lib/Perlbal/下看看pm，就发现还有很多功能没有conf出来呢，比如Stats.pm、Cache.pm、ReproxyManager.pm等等~~
 

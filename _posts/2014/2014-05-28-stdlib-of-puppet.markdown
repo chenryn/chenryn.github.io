@@ -19,7 +19,7 @@ tags:
 
 下面就是我的 elsticsearch 类配置：
 
-{% highlight ruby %}
+```ruby
 class elasticsearch {
 
     $esdatadir = suffix( prefix( range(1, $::datadircount-1), '/data'), '/elasticsearch')
@@ -43,18 +43,18 @@ class elasticsearch {
         enable  => true,
     }
 }
-{% endhighlight %}
+```
 
 其中 `$::datadircount` 是我自定义的 Facts 变量，插件代码见两年前的博客[《puppet安装／Facter插件和puppet模板编写》](http://chenlinux.com/2012/05/10/quick-start-for-puppet-facter-erb)。
 
 然后 `elasticsearch.yml.erb` 里的数据目录配置定义如下：
 
-{% highlight ruby %}
+```ruby
 path.data:
 <% scope.lookupvar("elasticsearch::esdatadir").each do |dir| -%>
   - <%= dir %>
 <% end %>
-{% endhighlight %}
+```
 
 `puppetlibs-stdlib` 实现了很多对基础类型的扩展函数，比如本例中用到了 `range`、`prefix` 和 `suffix` 三个。依次生成了 1 到 N 的数组，给数组每个元素加上 `/data` 前缀字符串，再给每个元素加上 `/elasticsearch` 后缀字符串，最后变成了 `/dataN/elasticsearch` 这种格式的元素构成的数组。
 

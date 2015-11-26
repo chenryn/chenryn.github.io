@@ -12,7 +12,7 @@ Tatsumaki是Plack作者的一个小框架，亮点是很好的利用了psgi.stre
 (代码本来是作为一个ElasticSearch数据分析的平台，不过后来发现社区有人开始做纯js的内嵌进ElasticSearch的plugin了，所以撤了repo，这里贴下代码)
 
 * 所有的psgi/plack应用都一样有自己的app.psgi文件：
-{% highlight perl %}
+```perl
 our $VERSION = 0.01;
 ### app.psgi
 use Tatsumaki::Error;
@@ -220,9 +220,9 @@ $app->static_path(dirname(__FILE__) . '/static');
 #psgi app组建完成
 return $app->psgi_app;
 true;
-{% endhighlight %}
+```
 static里都是bootstrap的东西就不贴了。然后说说template。目前Tatsumaki只支持Text::MicroTemplate::File一种template，当然自己在handler里调用其他的template然后返回字符串也行。不过其实Text::MicroTemplate也蛮强大的。下面上例子：
-{% highlight html %}
+```html
 %# 这就是Text::MicroTemplate强大的地方了，行首加个百分号就可以直接使用perl而不像TT那样尽量搞自己的语法
 %# 配合render传来的handler(前面说了是类$self)，整个环境全可以任意调用。
 % my $mapping = $_[0]->{'mapping'};
@@ -433,7 +433,7 @@ static里都是bootstrap的东西就不贴了。然后说说template。目前Tat
 </script>
 </body>
 </html>
-{% endhighlight %}
+```
 
 效果如下：
 

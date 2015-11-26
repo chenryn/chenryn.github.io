@@ -42,11 +42,11 @@ Kibana 作为一个纯 JS 项目，一直都没有提供完整的权限控制方
 
 方案采用了 Mojolicious 框架开发，代码少不说，最关键的是 Mojolicious 无额外的 CPAN 模块依赖，这对于不了解 Perl 但是又有 Kibana 权限控制需求的人来说，大大减少了部署方面的麻烦。
 
-{% highlight bash %}
+```bash
 curl -Lk http://cpanmin.us -o /usr/local/bin/cpanm
 chmod +x /usr/local/bin/cpanm
 cpanm Mojolicious Authen::Simple::Passwd
-{% endhighlight %}
+```
 
 三行命令，就可以完成整个项目的安装需求了。然后运行目录下的:
 
@@ -58,21 +58,21 @@ __2015 年 1 月 6 日更新：__
 
 目前已经提供了 bundle 方式。有编译环境的可以直接用
 
-{% highlight bash %}
+```bash
 ./vendor/bin/carton install --cached
 ./vendor/bin/carton exec local/bin/hypnotoad script/kbnauth
-{% endhighlight %}
+```
 
 ## 权限赋值
 
 因为 `kibana-auth` 结构很简单，kibana 一般又都是内部使用，所以暂时还没做权限控制的管理页面。直接通过命令行方式即可赋权：
 
-{% highlight bash %}
+```bash
 curl  -XPOST http://127.0.0.1:9200/kibana-auth/indices/sri -d '{
   "prefix":["logstash-sri","logstash-ops"],
   "server":"192.168.0.2:9200"
 }'
-{% endhighlight %}
+```
 
 这样，sri 用户，就只能访问 192.168.0.2 集群上的 logstash-sri 或 logstash-ops 开头的日期型索引(即后面可以-YYYY, -YYYY.MM, -YYYY.MM.dd 三种格式)了。
 

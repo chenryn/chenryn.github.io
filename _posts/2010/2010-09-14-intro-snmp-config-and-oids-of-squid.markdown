@@ -9,12 +9,12 @@ tags:
 ---
 
 首先配置squid.conf如下：
-{% highlight squid %}
+```squid
 acl MonitorCenter src 127.0.0.1
 acl snmppublic snmp_community public
 snmp_access allow snmppublic MonitorCenter
 snmp_access deny all
-{% endhighlight %}
+```
 
 然后配置snmpd.conf如下：
 

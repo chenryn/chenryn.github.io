@@ -29,7 +29,7 @@ PDL::Graphics::Simple 是 《PDL Book》开篇第一个示例就使用的模块�
 
 好了，现在就可以运行程序了：
 
-{% highlight perl %}
+```perl
 #!/usr/bin/env perl
 use strict;
 use warnings;
@@ -81,13 +81,13 @@ for my $item (@$items) {
     my $up  = 2 * $uline - $lline;
     say $pdl->where($pdl>$up | $pdl<$low);
 }
-{% endhighlight %}
+```
 
 这里使用了 [Zabbix2::API](https://metacpan.org/pod/Zabbix2::API) 模块，相对比 [zabbix 官方博客示例](http://blog.zabbix.com/getting-started-with-zabbix-api/1381/)直接使用 [JSON::RPC](https://metacpan.org/pod/JSON::RPC) 模块，以及 python 的 pyzabbix 模块来说，Zabbix2::API 模块封装的非常好，history 是作为 item 对象的属性出现，而不是单独再请求一次 `history.get`；item 的 name 等属性也非常友好和有用。
 
 另外，不知道为什么，使用 pyzabbix 模块就一直无法正常使用，而自己写 requests 和 json 却没问题。上面的 perl 脚本用 python 改写就是下面这样：
 
-{% highlight python %}
+```python
 #!/usr/bin/env python
 """
 Read item history from zabbix, and plot as histogram
@@ -157,4 +157,4 @@ for item in items:
   plt.boxplot(v, sym='+', notch=True)
   plt.title('item: ' + item['itemid'])
   plt.show()
-{% endhighlight %}
+```

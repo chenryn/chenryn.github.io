@@ -8,7 +8,7 @@ tags:
   - perl
 ---
 
-{% highlight perl %}#!/usr/bin/perl -w
+```perl#!/usr/bin/perl -w
 use XML::Simple;
 use Net::MySQL;
 system("nmap -n -p 5666 10.1.1.0/23 10.1.3.0/24 -oX output.xml");
@@ -32,5 +32,5 @@ my $mysql = Net::MySQL->new( hostname => '10.1.1.25',
 $mysql->query(
 "insert into myhost (intranet, mac, monitorstatus) values ('$ip', '$mac', '$nrpe')"
 );
-}{% endhighlight %}
+}```
 小脚本一个，扫描内网网段内存活的机器，获取其MAC地址，以及nrpe端口情况。后期再配合myhost里的system，如果是linux（其实用nmap -O也可以获取system，但是结果不准，耗时还特别长，200台机器花10分钟），但monitorstatus还是closed的，就expect上去安装nrpe，嗯~~

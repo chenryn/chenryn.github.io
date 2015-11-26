@@ -14,7 +14,7 @@ tags:
 
 因为论坛页面上，用SSI方式include了一些广告、点击排名等挂件。所以nginx上设定了ssi on，导致response-header中，没有了last-modified——按照常规，一般是在长期不变的html里include经常改变的shtml，而每次在解析SSI时去读取所有shtml的MTIME然后计算最后一个MTIME来设定成总页面的last-modified，是个比较繁琐且耗资源的做法（网上有lighttpd的patch，就是这么做的），所以包括nginx在内的多数webserver采取了比较简便的方法，即取消掉last-modified输出。参见nginx/src/http/module/ngx_http_ssi_filter_module.c第361行：
 
-{% highlight c %}
+```c
 static ngx_int_t
 ngx_http_ssi_header_filter(ngx_http_request_t *r)
 {
@@ -26,7 +26,7 @@ ngx_http_ssi_header_filter(ngx_http_request_t *r)
     }
     return ngx_http_next_header_filter(r);
 }
-{% endhighlight %}
+```
 
 而我这系统的情况，可能广告1天一变，排行15分钟一变，都远远慢于页面本身的更新速度，完全可以将html的MTIME认定为总页面的last-modified。
 注释掉相应源码，重新编译nginx后进行试验，在使用F5刷新的时候，果然发送了IMS，这一步成功了；可是回复帖子后，因为是跳转方式，浏览器直接采用本地cache，而不会发送IMS，所以还是看到旧页面。。。

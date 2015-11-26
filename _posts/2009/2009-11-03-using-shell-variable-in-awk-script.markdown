@@ -16,14 +16,14 @@ tags:
 网上说明很多，大都是BEGIN或者-v的办法。一一试过后，发现其结果也都是分行显示的。
 
 最后大海淘沙般找出了适用的写法。结果全在'"`的区分上——而且我至今不知道为啥非得按如下写法才行：
-{% highlight bash %}
+```bash
 ls=`ping -c 5 1.2.3.4 | grep loss | awk -F, '{print $3}'`;ping -c 5 1.2.3.4 | grep rtt | awk -F/ '{print "'"$ls"' avg " $5 "ms"}'
-{% endhighlight %}
+```
 执行显示结果如下：
 0% packet loss avg 17.486ms
 ——————————————————————————————
 时隔近月，在熟悉了awk的变量以后，我发现其实没有这么复杂，只要下面这样一句就简单搞定了：
-{% highlight bash %}
+```bash
 ping -c 5 1.2.3.4|awk 'BEGIN{RS="##";FS=",|/"}{print $3,$5,$8“ms”}'
-{% endhighlight %}
+```
 执行结果同上。
