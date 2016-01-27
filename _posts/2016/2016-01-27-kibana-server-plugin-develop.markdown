@@ -164,6 +164,15 @@ module.exports = function (kibana) {
 };
 ```
 
+其中用到了两个 npm 模块，later 模块用来实现定时器和 crontab 文本解析，mustache 模块用来渲染邮件内容模板，这也是 watcher 本身采用的渲染模块。
+
+需要安装一下：
+
+```
+npm install later
+npm install mustache
+```
+
 然后运行 `./bin/kibana`，就可以看到终端上除了原有的内容以外，还会定期输出 alert 的 email 内容了。
 
 ## 要点解释
