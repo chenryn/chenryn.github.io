@@ -5,6 +5,8 @@ group: navigation
 ---
 <div class="row">
 之前经常看到一些稀奇古怪又很好玩的东西，转头就忘了，从今天开始，在这里记录一些工作用得上用不上能用得上不用用得上的名词，免得以后再忘了~~不定期更新。<br />
+2016-05-13<br />
+dnsdist: powerdns 推出的针对 DoS 攻击的动态 DNS 负载均衡器。<a href="http://dnsdist.org/">官网</a><br />
 2014-05-23<br />
 Consul: 基于 Serf 做的系统，可以通过 HTTP、DNS 和命令三种方式来管理跨机房的集群和服务状态。<a href="http://www.consul.io">官网</a><br />
 2014-05-19<br />

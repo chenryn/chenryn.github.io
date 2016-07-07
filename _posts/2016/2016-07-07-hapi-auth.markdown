@@ -1,0 +1,243 @@
+---
+layout: post
+title: hapi.js 框架的认证授权插件示例
+category: logstash
+tags:
+    - javascript
+    - kibana
+---
+
+Kibana 4.x 在服务器端采用了 hapi.js 框架开发。虽然目前依然没有认证和授权的插件出来（官方 Kibana 的 shield 插件应该只是做了一个认证，授权部分是由 ES 本身的 shield 插件完成的）。不过既然叫框架嘛，自然就是有不少扩展可用。本文简要介绍一下 hapi.js 框架的认证授权插件的用法。有兴趣的读者可以自己稍微改造一下，就能让 Kibana 也有认证授权功能了。
+
+首先准备一下环境：
+
+```
+mkdir hapi-auth-simple
+cd hapi-auth-simple
+npm init
+npm install --save bcrypt
+npm install --save hapi
+npm install --save hapi-rbac
+npm install --save hapi-auth-cookie
+```
+
+你就会发现目录底下多出来一个 `node_modules/` 目录和 `package.json` 配置定义文件。定义如下：
+
+```json
+{
+  "name": "hapi-auth-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^0.8.7",
+    "hapi": "^13.5.0",
+    "hapi-auth-cookie": "^6.1.1",
+    "hapi-rbac": "^2.2.0"
+  }
+}
+```
+
+然后开始写实际的 demo 代码啦。`index.js` 内容如下：
+
+```js
+'use strict';
+
+const Bcrypt = require('bcrypt');
+const Hapi = require('hapi');
+const Rbac = require('hapi-rbac');
+const Cookie = require('hapi-auth-cookie');
+
+const server = new Hapi.Server();
+server.connection({ port: 3000  });
+
+let uuid = 1;
+const users = {
+    john: {
+        username: 'john',
+        password: '$2a$10$iqJSHD.BGr0E2IxQwYgJmeP3NvhPrXAeLSaGCj6IR/XU5QtjVu5Tm',   // 'secret'
+        name: 'John Doe',
+        group: ['user']
+    }
+};
+
+const login = function (request, reply) {
+    if (request.auth.isAuthenticated) {
+        return reply.redirect('/');
+    }
+
+    let message = '';
+    let account = null;
+
+    if (request.method === 'post') {
+        if (!request.payload.username ||
+            !request.payload.password) {
+                message = 'Missing username or password';
+        }
+        else {
+            account = users[request.payload.username];
+            if (!account ||
+                !Bcrypt.compareSync(request.payload.password, account.password)) {
+                    message = 'Invalid username or password';
+            }
+        }
+    }
+
+    if (request.method === 'get' || message) {
+        return reply('<html><head><title>Login page</title></head><body>' +
+            (message ? '<h3>' + message + '</h3><br/>' : '') +
+            '<form method="post" action="/login">' +
+            'Username: <input type="text" name="username"><br>' +
+            'Password: <input type="password" name="password"><br/>' +
+            '<input type="submit" value="Login"></form></body></html>');
+    }
+
+    const sid = String(++uuid);
+    request.server.app.cache.set(sid, { account: account  }, 0, (err) => {
+        if (err) {
+            reply(err);
+        }
+        request.cookieAuth.set({ sid: sid  });
+        return reply.redirect('/');
+    });
+};
+
+server.register([Cookie, Rbac], (err) => {
+    if (err) {
+        throw err;
+    }
+    const cache = server.cache({
+        segment: 'sessions',
+        expiresIn: 3 * 24 * 60 * 60 * 1000
+    });
+    server.app.cache = cache;
+
+    server.auth.strategy('session', 'cookie', 'required', {
+        password: 'password-should-be-32-characters',
+        cookie: 'sid-example',
+        redirectTo: '/login',
+        isSecure: false,
+        validateFunc: (request, session, callback) => {
+            cache.get(session.sid, (err, cached) => {
+                if (err) {
+                    return callback(err, false);
+                }
+                if (!cached) {
+                    return callback(null, false);
+                }
+                return callback(null, true, cached.account);
+            });
+        }
+    });
+    server.route([
+        {
+            method: ['GET', 'POST'],
+            path: '/login',
+            config: {
+                handler: login,
+                auth: { mode: 'try'  },
+                plugins: {
+                    'hapi-auth-cookie': {
+                        redirectTo: false
+                    }
+                }
+            }
+        },
+        {
+            method: 'GET',
+            path: '/logout',
+            config: {
+                handler: (request, reply) => {
+                    request.cookieAuth.clear();
+                    return reply.redirect('/');
+                }
+            }
+        },
+        {
+            method: 'GET',
+            path: '/',
+            config: {
+                handler: (request, reply) => {
+                    reply('<html><head></head><body>Welcome: ' +
+                      request.auth.credentials.name + 
+                      '<form method="get" action="/logout">' +
+                      '<input type="submit" value="Logout">' +
+                      '</form></body></html>');
+                },
+                plugins: {
+                    rbac: {
+                        target: [
+                            {
+                                'credentials:group': 'user'
+                            },
+                            {
+                                'credentials:group': 'admin'
+                            }
+                        ],
+                        apply: 'permit-overrides',
+                        policies: [
+                            {
+                                target: {
+                                    'credentials:group': 'admin'
+                                },
+                                effect: 'permit'
+                            },
+                            {
+                                target: {
+                                    'credentials:group': 'user'
+                                },
+                                apply: 'permit-overrides',
+                                rules: [
+                                    {
+                                        target: {
+                                            'credentials:username': 'john',
+                                        },
+                                        effect: 'permit'
+                                    },
+                                    {
+                                        effect: 'deny'
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ]);
+    server.start((err) => {
+        if (err) {
+            throw err;
+        }
+        console.log('server running at: ' + server.info.uri);
+    });
+});
+```
+
+就这样，一个简单的认证授权页就完成了。运行 `node index.js` 命令，打开浏览器，输入 `127.0.0.1:3000` 即可验证效果。
+
+login 页面校验 bcrypt 加密的密码，添加 cookie 和 logout 页面删除 cookie 的过程很简单，就不说啥了。要点在于这个授权部分。这是 RBAC(基于角色的访问控制)系统，所以我这里特意演示了一个相对复杂的定义：
+
+1. john 用户定义了自己的 group 为 user。
+2. 定义首页的授权目标(`target`)为：group 为 user **或者** admin 的用户。注意这里的写法是 `[{xxx},{yyy}]`。如果写法是 `[{xxx, yyy}]`，那含义就不是**或者**而是**并且**了。
+3. `target` 里可以用以下对象：`credentials`, `connection`, `query`, `param`, `request`。注意这里引用 key 的写法是冒号(比如从 HTTP header 中获取主机名的写法为 `connection:host`)。
+4. 定义该目标的授权方式为 `apply`，即还需要后续判断。如果直接就授权，那应该写作 `effect`。
+5. `apply` 方式定义为 `permit-overrides`。意即：后续条件只要满足一个就允许，否则拒绝。`deny-overrides` 反之亦然。
+6. 开始定义具体的 `policies` 集合。同样格式也是或的关系。这里如果没有复杂需求也可以直接开始 `rules` 定义。
+7. 每个小 policy 里也是一个完整的授权定义，也有自己的 `target` 等。
+8. 开始 `rules` 定义。`rules` 里的条件相当于是 if-else 关系。
+
+最终本文示例的意思就是：
+
+**首页只允许 admin 组全体用户加上 user 组里的 john 用户访问。**
+
+-------------------
+
+简单的 hello world 示意如此。再往深了走，可以把 user 定义、policy 定义都搬到数据库里。再再往深里走。可以把 Kibana 里所有的 route 都用这块做一个接管。就大功告成了。
+
+不过在 hapi.js 上动手，只是对后端接口做了授权控制，前端页面看起来还是都一样的。如果为了美观，就可以配合加上 [angular-rbac](https://github.com/plandem/angular-rbac)，对前端页面也稍作修改，针对不同 user 展示不同内容。
