@@ -4,6 +4,7 @@ title: 山寨一个 Splunk 的 source 上下文查看功能
 category: logstash
 tags:
   - elasticsearch
+  - splunk
 ---
 
 跟很多朋友在聊 elk stack 的时候，都会不知不觉的开始跟 Splunk 做对比。最常见的两个抱怨就是：Splunk 的搜索构建语法 比 Kibana 方便，以及 Splunk 搜索出来的消息可以通过点击 `Source` 按钮查看其原始日志中的前后几条日志。
