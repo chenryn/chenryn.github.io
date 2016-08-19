@@ -1,0 +1,108 @@
+---
+layout: post
+title: Elastic 官方压测工具 rally 试用
+category: testing
+tags:
+    - elasticsearch
+---
+
+rally 工具是 Elastic 官方开源的针对性性能压测工具。目前 Elasticsearch 的 nightly performance report 就是由 rally 产生的。对自己在做 ES 源码修改，或者ES 应用调优的人来说，通过 rally 验证自己的修改效果，是一件很需要且容易的事情。
+
+rally 依赖 python3.4+，所以为了试用直接在自己电脑上安装比较快。直接 `pip3 install esrally` 即可。
+
+电脑上没有 gradle 的无法从最新 master 代码编译(Macbook 上即使通过 dmg 安装的 gradle 也识别不到)。只能下 binary 包。所以运行方式为：
+
+```
+/opt/local/Library/Frameworks/Python.framework/Versions/3.5/bin/esrally --pipeline=from-distribution --distribution-version=1.7.3
+```
+
+默认情况下压测采用的数据集叫 geonames，是一个 2.8GB 大的 JSON 数据。ES 也提供了一系列其他类型的压测数据集。如果要切换数据集采用 `--track` 参数：
+
+```
+/opt/local/Library/Frameworks/Python.framework/Versions/3.5/bin/esrally --pipeline=from-distribution --distribution-version=1.7.3 --track=geonames
+```
+
+重复运行的时候可以修改 ~/.rally/rally.ini 里的 `tracks[default.url]` 为第一次运行时下载的地址：**~/.rally/benchmarks/tracks/default** 。然后离线运行：
+
+```
+/opt/local/Library/Frameworks/Python.framework/Versions/3.5/bin/esrally --offline --pipeline=from-distribution --distribution-version=1.7.3 --track=geonames
+```
+
+静静等待程序运行完毕，就会给出一个漂亮的输出结果了。
+
+这个运行会是一个很漫长的时间，如果你其实只关心部分的性能，比如只关心写入，不关心搜索。其实可以自己去修改一下 track 的任务定义。
+
+track 的定义文件在 `~/.rally/benchmarks/tracks/default/geonames/track.json`。如果你改动较大，建议直接新建一个 track 目录，比如叫 `mytest/track.json` 。
+
+对照 geonames 里的定义，有各种 operations，然后在 challenges 里指明调用哪些 operation。最后运行命令的时候通过 `--challenge=` 参数来指定执行哪个。
+
+下面是一段我在本机采用默认压测数据集 geonames 的结果：
+
+version     |eps  |index size
+------------|-----|------------
+1.7.3       |12650|2.67GB
+2.3.2       |10344|3.31GB
+5.0.0-alpha2|11903|3.19GB
+
+差距好大啊？！然后我发现 1.7.3 用的 mapping 没加 doc\_values，修改 `~/.rally/benchmarks/tracks/default/geonames/mappings.json` ，都加上后重新测试结果：
+
+10448eps 3.25GB
+
+接着再关闭 `_all` 结果：
+
+12630eps 2.73GB
+
+接着再关闭`_field_names` 结果：
+
+14662eps 2.71GB
+
+以及打开`_field_names` 关闭 `_source` 结果：
+
+13121eps 2.04GB
+
+在关闭`_all`和`_field_names`的基础上，mapping中分词字符串字段加上
+
+```
+"index_options": "docs",
+"norms": {
+    "enabled": false
+}
+```
+
+定义的结果：
+
+16226eps 2.6GB
+
+写入速度大概提高了10%。
+
+如果要用自己的数据集呢，也一样是在自己的 track.json 里定义，比如：
+
+```JSON
+{
+    "meta": {
+        "data-url": "/Users/raochenlin/.rally/benchmarks/data/splunklog/1468766825_10.json.bz2"
+    },
+    "indices": [
+        {
+            "name": "geonames",
+            "types": [
+                {
+                     "name": "type",
+                     "mapping": "mappings.json",
+                     "documents": "1468766825_10.json.bz2",
+                     "document-count":  924645,
+                     "compressed-bytes": 19149532,
+                     "uncompressed-bytes": 938012996
+                }
+            ]
+        }
+    ],
+```
+
+这里就是用的一份 splunkd 的 internal 日志，JSON 导出。日志原长度为 166152239，导出 JSON 长度为 938012996。
+
+同样做一次写入压测，结果为：
+
+* 关闭`_field_names`：7193.5eps，索引大小358.173MB。
+* 关闭`_field_names`和norms：8216.5eps，345.536MB。
+* 关闭`_source`和norms：6615eps，192.817MB。
