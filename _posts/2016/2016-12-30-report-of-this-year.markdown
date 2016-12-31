@@ -11,7 +11,7 @@ title: 2016 年度个人总结
 
 这两篇思考，一篇是[日志分析中 6 个常见但没啥用的功能](http://chenlinux.com/2016/11/15/important-unuseful-feature-in-log-analysis/)，一篇是[机器战胜人类了，伺候机器的运维呢？](http://chenlinux.com/2016/03/19/machine-vs-ops/)。看起来我是个很喜欢唱反调的 PM 呢……
 
-所以年终总结上必须给我可能还剩下的博客读者们证明一下自己，请一定阅读下面这篇演讲稿：[海量数据驱动的智能运维](https://sway.com/xpkkQ2ifSS7D8CTa)。
+所以年终总结上必须给可能还剩下的博客读者们证明一下自己，请一定阅读下面这篇演讲稿：[海量数据驱动的智能运维](https://sway.com/xpkkQ2ifSS7D8CTa)。
 
 这篇演讲是为了 velocity 大会创作的。今年外出演讲依然不少，但是大多是企业内训或者行业会议，公开的技术大会最终只参加了这场，而且又接近年尾，可以说整篇演讲算是集个人全年思考之大成：
 
@@ -28,13 +28,19 @@ title: 2016 年度个人总结
 
 3 月份，借安快创业谷的场地办了一次小型的 ELK 用户 meetup，形式很随意，我自己给大家演示了一下 juttle 项目，请京东的 LiuYuBao 分享了一下他们踩的坑。最后要求在场所有人必须至少发言一次，说心得说感想说废话均可。这个要求直接导致 meetup 肯定是小型的，事实上到场的也就是 20 人的规模，效果还是不错的。本来还打算请滴滴的 taowen 分享一下他的 es-monitor 项目，这样就可以再发起一次 meetup，不过失败了，所以最终也就只办了这么一次。
 
-5 月份，把之前博客上的 kibana server plugin 整理了一下，发到了 GitHub 上，取了个名字叫 [KaaE](https://github.com/chenryn/kaae)。核心思想就是模仿 watcher 项目的配置语法实现 Kibana 里运行的告警监控，这样可以节省些自己文档的时间——直接让用户看 watcher 的官方文档就好了。到 7 月的时候，因为在 GitHub 上时不时吆喝，lmangani 童鞋也加入进来一起开发了。lmangani 是曾经另一个 kibana3 fork(qbana) 的作者，也是经验丰富而且脑洞不小，在我的 server plugin 基础上加上了 spy plugin，让用户可以直接在 Kibana 的 Visualize 界面上点击保存 watcher 条件！这真是一个天才的设计！随后我们一致认为官方的 report 做的逻辑太绕，又给 KaaE 加上了报表功能。可以自负的说，KaaE 比官方的 watcher 和 report 都好用的多。
+5 月份，把之前博客上的 kibana server plugin 整理了一下，发到了 GitHub 上，取了个名字叫 [KaaE](https://github.com/chenryn/kaae)。核心思想就是模仿 watcher 项目的配置语法实现 Kibana 里运行的告警监控，这样可以节省写自己文档的时间——直接让用户看 watcher 的官方文档就好了。到 7 月的时候，因为在 GitHub 上时不时吆喝，lmangani 童鞋也加入进来一起开发了。lmangani 是曾经另一个 kibana3 fork(qbana) 的作者，也是经验丰富而且脑洞不小，在我的 server plugin 基础上加上了 spy plugin，让用户可以直接在 Kibana 的 Visualize 界面上点击保存 watcher 条件！这真是一个天才的设计！随后我们一致认为官方的 report 做的逻辑太绕，又给 KaaE 加上了报表功能。可以自负的说，KaaE 比官方的 watcher 和 report 都好用的多。
 
 10 月份，lmangani 加入了 SIREn 公司，KaaE 改名叫做 sentinL，以后将作为 kibi 的一个插件继续开发。我再次拒绝了 SIREn 的邀请(第一次是我写 [kbn_sankey_vis](https://github.com/chenryn/kbn_sankey_vis) 插件的时候)，不过倒很乐意 KaaE 项目换一种形式继续焕发活力，lmangani 加油！
 
 接着是 Elastic 中国开发者大会，提交了一个话题想讲讲 KaaE 的开发。不过被拒了，大抵上还是小插件的开发不太受欢迎吧。于是很欢快的和朋友们在台下一边听演讲一边交(tu)流(cao)，场面非常热闹，ELK 大势所趋，当初 wood 叔预测的 ES admin 职位肯定不久就会诞生了~
 
 12 月份，针对 ELK 5.0 版本的文档基本修改完毕，交给出版社校对，修订稿有 185 页，相当于第一版页数的一半了。或许在春节后可以面世。
+
+## 翻译
+
+今年做了两件翻译事，不幸都 happy ending。一件是 ES 中文社区组织翻译《Elasticsearch 权威指南》，忝列 D 组组长，然而说实话，要组织十来个网友按时干活，难度比在公司里组织同时干活难多了。人就不理你 QQ 消息，你能如何？都想翻译不想 review，你也没办法……
+
+另一件是《Learning Puppet 4》，原计划 10 月就应该交稿。不过连着碰到意外情况，到现在还有三章没完成。希望春节前可以努把力……
 
 ## 工作
 
