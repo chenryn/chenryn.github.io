@@ -1,0 +1,41 @@
+---
+layout: post
+title: ChatGPT最差实践(1)：学不会的数字
+category: LLM
+tags:
+  - ChatGPT
+---
+
+ChatGPT 爆火以来，大家对它期望越来越高。和群友们聊天时，甚至有人说出“ChatGPT 相当于一个全学科大一新生水平”的论断。ChatGPT 真的这么厉害？就没有它不懂的东西么？
+
+考虑到 ChatGPT 是美国科技公司的产品，据说其训练数据中只有 2%的语料是中文，我本打算选一个中文领域最有趣的话题——作诗AI(比如曾经清华大学做的九歌 AI：<http://jiuge.thunlp.org/>)，进行测试。没想到最后结果超乎意料的有趣！
+
+时值元宵，朋友圈上遍地是辛弃疾的《青玉案·元夕》，如果能让 ChatGPT 替我填一首，岂不美哉。
+
+![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqF8KMl8dK3vRECDpbUmkIMRxqyPvCYeib5iapr2YSv1LcwJXb2icfXMuUPL56Db7MubX4Tu5ROudRsUw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+好吧，看起来 ChatGPT 不太懂啥叫《青玉案》。没关系，这个我懂啊。我来教，预备好辛弃疾的样本，预备好龙榆生《唐宋词格律》的平仄反例。逐一输入：
+
+![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqF8KMl8dK3vRECDpbUmkIMRH9cHgPK2HFRgdhkm3TiaiciaO2FG4ibkT0DTGWQp3XlqAQoQfFYicYR6lnw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+看起来 ChatGPT 并不理解啥叫平仄……所以我们退而求其次吧，只要能拼个字数看起来像回事的就行。但是，“这首诗共有 10 句”！！！什么情况？？？怎么数出来的 10？
+
+不信邪啊，十以内数自然数啊。再来一次：
+
+![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqF8KMl8dK3vRECDpbUmkIMRThsP7hjibYicia3Qibgm1uP2nRSx8JucFuibRzYuY3ETRGqD5r1ic6vhs7cg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+难道是声调问题？再降低要求重新来过：
+
+![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqF8KMl8dK3vRECDpbUmkIMRq8XHrmzaYb7MmfSQib67k187qcSYTDicwly1ibx6v8a69QkQrZWPnVagg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+**ChatGPT 已经陷入疯魔，除了 5 和 7，啥数字都不认了！**
+
+我只能怀疑：ChatGPT 的训练数据里，估计没啥正经唐诗宋词，只有互联网上一些网友打油诗（或者叫污染数据）——导致除了五言和七言，ChatGPT 不认为其他字数的算诗？
+
+由此推而广之，虽然目前网上很多人在强调说 “ChatGPT 不光是大力出奇迹，算法也如何如何重要”，良好的训练数据，依然是重中之重！没有规范的数据集，ChatGPT 也一样表现得很弱智。
+
+文章最后，以自己十五年前填的一首《青玉案》结束，希望 AI 早日达成诗云效果吧：
+
+> 飞云半掩早昏暮。不及降、清桐雨。楼底问、金宵怎度？霓虹摇摆，老歌重唱，联袂新人舞。
+> 沁风总送芳华去。临发开封添新句，也不得、消愁几许。一墙人影，直看窗外，灯下江南路。
+

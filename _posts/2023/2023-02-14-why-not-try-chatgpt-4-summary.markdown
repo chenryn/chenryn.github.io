@@ -1,0 +1,57 @@
+---
+layout: post
+title: ChatGPT实践总结:神话之下依然是人
+category: LLM
+tags:
+  - ChatGPT
+---
+
+随着 ChatGPT 用得越来越多，逐渐掌握它的最佳和最差实践。总结的看，既不能小瞧 ChatGPT 的跨越式进步，也不能过于神话 ChatGPT 的功效。用好 ChatGPT，还是有较高的用户门槛。我归纳几条使用 ChatGPT 之前一定要牢记的概念。
+
+## 第一：ChatGPT 是一个生成式模型
+
+翻译：ChatGPT 不对任何结果的正确性负责，包括他说自己能负责的部分！
+
+我今天拿到了微软 new bing 的体验。特意把之前直接在 ChatGPT 上问过的问题，在 bing 上再 chat 了一遍。甚至可以说：bing chat 的迷惑性，比原生的 ChatGPT 更上一层楼：
+
+![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqF8KMl8dK3vRECDpbUmkIMREjtUJ56d7GicR3uZf7mAN0KJYTJhnqyHGkdsS4dNTdPBNICH4P29uLQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+bing chat 在产品形态上，提供了脚注式的 source 来源链接。这从人机交互来说很棒！但当我明确告知他来源 1 里内容不符时，bing chat 甩锅说：**这是来源 2 里的“百度百科”说的，不信你去查**！
+
+这个可怕的自信，让我回忆起毕设时看综述找来找去最后确定对方是瞎编凑50 条文献数的感觉……和 ChatGPT 聊天，真是和科研一样，要“大胆提问，小心验证”。
+
+## 第二：ChatGPT 并不通晓整个互联网
+
+翻译：ChatGPT 只是在 40TB 数据集上做的训练，它替代不了谷歌、必应、百度。大家还是要掌握如何高效搜索。
+
+互联网被搜索引擎索引过的在线网页有58.5亿页(来自 <https://www.worldwidewebsize.com/>，bing chat 回复提供)，而网页平均大小是 1.2MB(来自 <https://www.seoptimer.com/blog/webpage-size/> ，依然来自 bing chat 回复提供)，那么估算一下，仅网页文本内容，应该就有 7000TB。我们就按二八原则粗暴划分，也有 1400TB 是相对有价值的内容。
+
+正如我在前序文章中展现的例子，这种回答的差异，就来自于数据的缺失：
+
+> 互联网上太老的资料没被 ChatGPT 爬到：splunk 在09 年上市之前，科普 SPL 时明确说过自己设计思路来源是 SQL，而且也给了 SQL to SPL 的示例。但 ChatGPT 强调说：kusto 是新产品，借鉴了 SQL。也只有 SQL to KQL 的结果才正确。
+
+## 第三：ChatGPT 是个增益放大器，你首先要学会提问
+
+翻译：chat 听起来，是个人都会，但身为“佞臣”的 ChatGPT到底能做到什么，全看“主公”自身如何。
+
+你只想吃喝玩乐，ChatGPT 并不能帮你。你得具体的设定好自己有多少预算，想吃什么口味，有什么忌口，手头有什么食材，有什么炊具，ChatGPT 才有可能给你一份菜谱，让你成功败家~（大雾）
+
+嗯，我要承认一点：**上面这段话，我重新编辑了三次**，每次都会发现上次还遗漏了一个条件，还不够细致。
+
+提问，或者说 prompt engineering，在ChatGPT(更广义的说，AIGC)时代，变成更加重要的能力。在习得适配的 prompt 能力之前，ChatGPT 的生产力，并没有想象中那么高。而跟熟悉搜索框里的 site:researchgate.net type:pdf 语法相比，**学习 prompt 炼丹，可能还变得更难、更魔幻了**。
+
+更不巧的是，提问所需的抽象和扩散思维，从来都是稀缺品。
+
+## 第四：ChatGPT 是个商业产品
+
+翻译：ChatGPT 必须遵守美国法律，并将面临资源能耗拷问。
+
+这一条属于一个 IT 从业者的扩展思考。ChatGPT 完美了么？国内有这个空间么？
+
+首先，ChatGPT 到目前为止，没有开源计划。而不开源，就意味着管控无孔不入。在前序文章里，已经实验过 ChatGPT 对一些基础的政治观点采取了何种过滤倾向。这无疑有极高的风险。
+
+从商业角度，不论训练成本，ChatGPT 的推理消耗也高居不下。每一个输入和输出的字符都要消耗计费，再想想有多少无效(prompt调试中)问答在运行，在排队。ChatGPT 月活过亿的背后，是付费用户也得排队等待响应。
+
+要不算法迭代，降低成本；要不技术扩展，加中间层；要不产品创新，摆脱 chat 形式，否则，这过亿用户怎么过来围观，也会怎么离开。
+
+我即期待一个更合理的 ChatGPT 产品，也期待一个更中国的 ChatGPT 产品。
