@@ -42,6 +42,16 @@
         {{ content }}
       </div>
       <div class="span4">
+        {% if page.title %}  
+          <div class="well sidebar-nav">
+             <ul id="relate_blog" class="nav nav-list">
+               <li class="nav-header">最近文章</li>
+               {% for post in site.related_posts limit:9 %}
+                 <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+               {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
         <div class="well sidebar-nav">
           <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1035836154&verifier=a26926d5&dpc=1"></iframe>
         </div>
@@ -60,6 +70,14 @@
               <li><a href="{{ link.url }}" title="{{ link.title }}">{{ link.text }}</a></li>
             {% endfor %}
           </ul>
+        </div>
+        <div class="well sidebar-nav">
+          <ul id="booklists" class="nav nav-list">
+          <li class="nav-header">我写的技术书籍</li>
+          <li><a href='https://item.jd.com/10095123288425.html'><img src='http://img10.360buyimg.com/n1/jfs/t1/174820/40/33853/46089/642e6231F30b6b4f9/3730bf41e01c3541.jpg' border='0' alt='网站运维技术与实践'/></a></li>
+          <li><a href='https://www.epubit.com/bookDetails?id=N8491'><img src='https://cdn.ptpress.cn/pubcloud/bookImg/null/20240619466ED5A7.jpg' border='0' alt='Puppet 实战手册'/></a></li>
+          <li><a href='https://e.jd.com/30343269.html?ebook=1'><img src='http://img14.360buyimg.com//n0/jfs/t17233/278/1700201762/316981/b72e1e32/5ad5c152N135187a0.jpg' border='0' alt='ELK Stack权威指南'/></a></li>
+          <li><a href='https://item.jd.com/13793325.html'><img src='http://img10.360buyimg.com/n1/jfs/t1/124385/27/39984/62708/64ab5de8F0e37da82/f3a88f3939831e07.jpg' border='0' alt='ChatGPT速通手册'/></a></li>
         </div>
       </div>
     </div> <!-- row -->
