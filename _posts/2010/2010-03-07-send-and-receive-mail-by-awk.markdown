@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: awk收发邮件小脚本
 date: 2010-03-07
 category: bash

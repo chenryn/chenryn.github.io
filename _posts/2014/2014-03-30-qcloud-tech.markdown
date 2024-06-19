@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 腾讯云技术沙龙笔记
 category: cloud
 tags:

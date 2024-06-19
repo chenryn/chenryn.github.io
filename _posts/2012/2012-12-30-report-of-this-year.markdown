@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 2012 年个人总结
 ---
 2012 年还剩下最后 30 个小时。总结一下这一年。

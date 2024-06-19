@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 Mojo 命令行抓取数据完成自动更新 rpm 构建
 category: perl
 tags:

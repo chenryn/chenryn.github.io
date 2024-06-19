@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 在 MacBook 上使用 PDL 绘图
 category: perl
 tags:

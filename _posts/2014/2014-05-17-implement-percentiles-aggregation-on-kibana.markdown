@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 给 Kibana 实现百分比统计图表
 category: logstash
 tags:

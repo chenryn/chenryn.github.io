@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 学习 Dancer::Plugin::Auth::Extensible 模块
 category: dancer
 ---

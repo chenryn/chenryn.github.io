@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Perl5里的gather/take
 category: perl
 ---

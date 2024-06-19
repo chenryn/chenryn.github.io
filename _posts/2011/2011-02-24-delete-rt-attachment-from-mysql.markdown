@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: RT故障处理操作一例
 date: 2011-02-24
 category: database

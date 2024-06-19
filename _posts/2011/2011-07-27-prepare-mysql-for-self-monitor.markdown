@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cdn自主监控(三):数据库准备工作
 date: 2011-07-27
 category: monitor

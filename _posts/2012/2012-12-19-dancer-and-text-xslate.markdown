@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Dancer 框架使用 Text::XSlate 模版的注意事项
 category: dancer
 ---

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: selinux 对 webserver 文件发布的影响
 category: linux
 tags:

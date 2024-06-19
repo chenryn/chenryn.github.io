@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: OMD系列(二)基础配置和目录介绍
 date: 2011-12-20
 category: monitor

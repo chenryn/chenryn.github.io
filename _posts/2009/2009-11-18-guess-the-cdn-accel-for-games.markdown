@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 游戏CDN加速猜想
 date: 2009-11-18
 category: CDN

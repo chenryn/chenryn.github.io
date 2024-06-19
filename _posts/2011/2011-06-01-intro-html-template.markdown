@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: HTML::Template试用
 date: 2011-06-01
 category: perl

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Puppet 的类参数传递
 category: puppet
 ---

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 直接操作xen虚拟机镜像的办法
 date: 2011-01-26
 category: cloud

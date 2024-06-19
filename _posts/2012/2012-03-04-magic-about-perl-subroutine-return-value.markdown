@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: perl函数返回值引起的误会
 date: 2012-03-04
 category: perl

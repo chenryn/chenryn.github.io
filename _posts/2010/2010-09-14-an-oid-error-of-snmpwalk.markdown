@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: snmpwalk的报错一例
 date: 2010-09-14
 category: monitor

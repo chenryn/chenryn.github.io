@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: ProBIND体验笔记
 date: 2011-10-17
 category: DNS

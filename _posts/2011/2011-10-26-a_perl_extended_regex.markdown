@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 一个perl扩展正则表达式
 date: 2011-10-26
 category: perl

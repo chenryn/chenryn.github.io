@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Graphite 安装
 categroy: monitor
 tags:

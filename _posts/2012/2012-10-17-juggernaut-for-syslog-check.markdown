@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 date: 2012-10-17
 title: 用Juggernaut实时推送syslog分析结果
 category: web

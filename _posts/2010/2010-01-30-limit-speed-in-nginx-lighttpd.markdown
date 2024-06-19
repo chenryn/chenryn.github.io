@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 限速进阶
 date: 2010-01-30
 category: CDN

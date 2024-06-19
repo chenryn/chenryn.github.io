@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cache驻留时间（二、LM-factor算法）
 date: 2009-11-19
 category: CDN

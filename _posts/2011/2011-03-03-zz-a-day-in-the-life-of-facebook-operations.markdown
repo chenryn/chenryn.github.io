@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Facebook运维工程师的一天
 date: 2011-03-03
 ---

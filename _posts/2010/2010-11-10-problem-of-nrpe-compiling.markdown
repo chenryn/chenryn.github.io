@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nrpe编译小问题
 date: 2010-11-10
 category: monitor

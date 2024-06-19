@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: awk的效率
 date: 2011-01-20
 category: bash

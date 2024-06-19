@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 忽略大小写（nginx）
 date: 2010-03-13
 category: nginx

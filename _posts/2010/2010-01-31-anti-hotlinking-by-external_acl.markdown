@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 防盗链二进阶（squid外部ACL）
 date: 2010-01-31
 category: CDN

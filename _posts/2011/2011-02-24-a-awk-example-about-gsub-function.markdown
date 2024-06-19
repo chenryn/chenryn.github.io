@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: awk一例
 date: 2011-02-24
 category: bash

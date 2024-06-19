@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nginx的proxy_cache和cache_purge模块试用记录
 date: 2010-03-07
 category: nginx

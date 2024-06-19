@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Linux命令行系统性能检测工具(转)
 date: 2009-11-03
 category: linux

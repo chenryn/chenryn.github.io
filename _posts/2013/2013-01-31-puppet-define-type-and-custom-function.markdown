@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Puppet 自定义 type 和 function
 category: devops
 tags:

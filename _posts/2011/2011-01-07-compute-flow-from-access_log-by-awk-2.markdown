@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 日志计算(awk进阶)
 date: 2011-01-07
 category: bash

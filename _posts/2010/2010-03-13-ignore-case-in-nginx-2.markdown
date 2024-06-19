@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 忽略大小写（刚在nginx的maillist看到的）
 date: 2010-03-13
 category: nginx

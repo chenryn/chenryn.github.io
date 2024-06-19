@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: shell并发脚本学习
 date: 2010-04-25
 category: bash

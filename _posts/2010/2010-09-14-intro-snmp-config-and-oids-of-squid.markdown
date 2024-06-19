@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid的snmp配置和部分oid说明
 date: 2010-09-14
 category: monitor

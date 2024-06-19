@@ -2,7 +2,10 @@
 layout: page
 title: 三斗室
 tagline: 与poem斗 与stock斗 与tech斗 其乐无穷
+theme :
+  name : twitter
 ---
+
 {% include JB/setup %}
 {% for post in paginator.posts %}
   <div class="full" style='background-color: #FFF;'>
@@ -18,7 +21,7 @@ tagline: 与poem斗 与stock斗 与tech斗 其乐无穷
       </span>
       Posted in&nbsp;
       {% for category in post.categories %}
-      <a href="/categories.html#{{ category }}-ref" title="{{ category }}" rel="category tag">{{ category }}</a>
+      <a href="/categories/index.html#{{ category }}-ref" title="{{ category }}" rel="category tag">{{ category }}</a>
       {% endfor %}
     </p>
     <div class="entry-content full-content" style='background-color: #FFF; margin-left: 24px; padding: 10px;'>

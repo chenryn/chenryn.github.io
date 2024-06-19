@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid的一点小问题
 date: 2009-11-17
 category: squid

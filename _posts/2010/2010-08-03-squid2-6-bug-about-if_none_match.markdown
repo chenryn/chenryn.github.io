@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid2.6的bug（if-none-match）
 date: 2010-08-03
 category: CDN

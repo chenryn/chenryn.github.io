@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: url_rewrite配置的小区别
 date: 2010-05-20
 category: squid

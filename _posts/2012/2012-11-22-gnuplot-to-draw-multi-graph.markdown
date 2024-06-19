@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用gnuplot绘制多图
 category: monitor
 tags:

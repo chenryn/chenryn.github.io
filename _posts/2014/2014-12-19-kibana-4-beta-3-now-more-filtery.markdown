@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】Kibana 4 beta 3 发布，重新支持过滤器
 category: logstash
 tags:

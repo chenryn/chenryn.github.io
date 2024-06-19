@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 一个Dancer::Plugin的实例
 category: dancer
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 链路故障应急处理脚本
 date: 2011-05-12
 category: monitor

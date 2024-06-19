@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 服务器监控报警小脚本（shell+sendEmail）
 date: 2010-03-03
 category: monitor

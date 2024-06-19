@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 51CTO博客自动发布脚本
 date: 2012-04-21
 category: perl

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 perl6-bench 做 perl6 性能对比
 category: perl
 ---

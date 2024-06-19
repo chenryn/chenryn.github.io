@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: ChatGPT初尝试(二)：扮演 SPL 专家
 category: LLM
 tags:
@@ -33,17 +35,17 @@ tags:
 
 总体来说，Splunk 作为一个已经十多年的老公司，感觉有些老资料是没被 ChatGPT 爬到的：splunk 在09 年上市之前，科普 SPL 时明确说过自己设计思路来源是 SQL，而且也给了 SQL to SPL 的示例。但 ChatGPT 强调说：kusto 是新产品，借鉴了 SQL。也只有 SQL to KQL 的结果才正确。
 
-![](https://pic3.zhimg.com/v2-c2171159b7ae6858e4f8001f64a89e3e_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-2-nl-to-spl_image_1.png)
 
 相反，哪怕我几次反馈，ChatGPT 给的 SQL to SPL 结果依然不行：
 
-![](https://pic1.zhimg.com/v2-a9b3a5ec4a10b2b4cbbd5319dfe95ed4_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-2-nl-to-spl_image_2.png)
 
 感觉任务可能要失败啊！不过本着”来都来了“的心态，还是让这个面试没通过的 ChatGPT 继续表演下去吧。
 
 ## NL2SPL任务
 
-![](https://pic3.zhimg.com/v2-f6e8382ba6e2655393e19b799e587a92_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-2-nl-to-spl_image_3.png)
 
 看起来像那么回事。不过index 这块似乎没太懂，直接用 yotta 做关键字过滤了。
 
@@ -83,13 +85,13 @@ tags:
 
 不过我们肉眼还是可以看到，最后场景 E，ChatGPT 的输出有点过于死板，完全按语序生成，让我们试试看反馈他调整：
 
-![](https://pic4.zhimg.com/v2-22cb000c80f71dfa0b4bf41135b4c207_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-2-nl-to-spl_image_4.png)
 
 yes！调校没问题，现在给的就是我们手写出来的语句了。
 
 不过心里还是有点小问题，他能记得住这个变化么，让我们再试试换个数据，相同场景再问一次：
 
-![](https://pic1.zhimg.com/v2-a2dd2b3d131b491c759efe49295e7dc4_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-2-nl-to-spl_image_5.png)
 
 真的记住了。这次没有按原始语句生成那个冗余的 eval！
 
@@ -97,19 +99,19 @@ yes！调校没问题，现在给的就是我们手写出来的语句了。
 
 > No, the sparkline should compute inside the groupby chart command
 
-![](https://pic3.zhimg.com/v2-e5e0e95042c20da4a1a1d85883e5e3a2_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-2-nl-to-spl_image_6.png)
 
 不行，ChatGPT 只把 eval 语法换成 chart，再改：
 
 > No, I mean you can do the functions in the same `chart` command
 
-![](https://pic2.zhimg.com/80/v2-9c82f2c408e427d75cdcb2f1d895a09d_720w.webp)
+![](/images/uploads/2023-01-31-try-chatgpt-2-nl-to-spl_image_7.png)
 
 还是不行，并不知道这个 count 跟前面的 count() 是输入输出关系，看来真的是要明确说出来怎么写：
 
 > you can use `count` nested in `sparkline` functions in `chart` command.
 
-![](https://pic4.zhimg.com/v2-17e22dd8b7681395fa27d286f3d9402f_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-2-nl-to-spl_image_8.png)
 
 成功。
 

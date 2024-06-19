@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 Perl 读取通达信日线数据
 category: perl
 ---

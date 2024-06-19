@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: sersync2.5试用~
 date: 2010-11-19
 category: linux

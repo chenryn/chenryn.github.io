@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: at命令
 date: 2010-04-26
 category: bash

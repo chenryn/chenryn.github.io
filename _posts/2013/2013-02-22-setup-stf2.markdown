@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: STF 2.0 安装测试
 category: perl
 ---

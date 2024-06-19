@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 博客恢复了，截图纪念一下
 date: 2011-10-20
 ---

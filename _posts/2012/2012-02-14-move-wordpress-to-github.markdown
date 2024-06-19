@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 从wordpress博客迁移到github记录
 category: perl
 ---

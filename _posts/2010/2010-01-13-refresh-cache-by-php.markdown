@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 刷新squid缓存的php脚本
 date: 2010-01-13
 category: CDN

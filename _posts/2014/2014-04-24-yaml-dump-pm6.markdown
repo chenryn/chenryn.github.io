@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Perl6 的 YAML::Dumper 模块
 category: perl
 tags:

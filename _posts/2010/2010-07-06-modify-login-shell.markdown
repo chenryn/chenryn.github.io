@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: login-shell的更改
 date: 2010-07-06
 category: linux

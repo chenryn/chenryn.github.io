@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 系统消息队列（squid启动小故障）
 date: 2010-04-30
 category: linux

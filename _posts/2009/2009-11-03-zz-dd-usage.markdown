@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: dd命令使用详解（转）
 date: 2009-11-03
 category: bash

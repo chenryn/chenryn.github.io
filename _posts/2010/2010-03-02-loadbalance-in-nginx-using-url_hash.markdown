@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nginx负载均衡（url_hash）配置
 date: 2010-03-02
 category: nginx

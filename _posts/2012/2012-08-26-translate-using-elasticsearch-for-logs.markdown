@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】用ElasticSearch存储日志
 category: logstash
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Selenium 测试框架介绍
 categories:
   - perl

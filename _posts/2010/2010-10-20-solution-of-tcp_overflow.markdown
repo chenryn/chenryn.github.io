@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: tcp overflow报错
 date: 2010-10-20
 category: linux

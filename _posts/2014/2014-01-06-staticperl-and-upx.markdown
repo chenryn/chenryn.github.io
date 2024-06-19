@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 利用 staticperl 和 upx 生成 单个可执行 perl
 catagory: perl
 ---

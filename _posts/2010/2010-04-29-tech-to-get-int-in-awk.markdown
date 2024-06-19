@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: awk取数值小技巧
 date: 2010-04-29
 category: bash

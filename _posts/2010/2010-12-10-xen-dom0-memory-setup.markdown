@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: xen的dom0内存设置
 date: 2010-12-10
 category: cloud

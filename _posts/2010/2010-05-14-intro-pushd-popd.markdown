@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: （读书笔记）pushd/popd命令
 date: 2010-05-14
 category: linux

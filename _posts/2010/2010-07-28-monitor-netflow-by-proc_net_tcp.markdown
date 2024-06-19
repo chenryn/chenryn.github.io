@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 网络监控与/proc/net/tcp文件
 date: 2010-07-28
 category: monitor

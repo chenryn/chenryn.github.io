@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid的SSL配置
 date: 2009-11-16
 category: squid

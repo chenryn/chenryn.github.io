@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nginx两个小测试(perl_set/image_filter)
 date: 2011-05-30
 category: nginx

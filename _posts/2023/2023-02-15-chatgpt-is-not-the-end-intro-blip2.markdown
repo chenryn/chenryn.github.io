@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: ChatGPT 不是终点：BLIP2 多模态模型介绍
 category: LLM
 tags:
@@ -28,13 +30,13 @@ ChatGPT 火热的情况，感觉好像强 AI 近在眼前。但实际上，ChatG
 
 我先复现一下群友的场景，让他判断 PPT 里两个表格是否对齐，怎么对齐：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqE96CRPjreqRsh92oKL6HFALP50ZFd6HOnO1TrmRTFohwI51nmicV3PXuDtWUkThI4hgSjXIJ5RPXw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-02-15-chatgpt-is-not-the-end-intro-blip2_image_1.png)
 
 **判断无误，并建议我把左边第一个表格往下移**。
 
 然后再实验一个更难的场景。一张著名的视觉欺骗的静态图片，问问他上面到底有多少个圆点：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqE96CRPjreqRsh92oKL6HFACgJSSktOyCYcBh9QgmEiab2adlrh7sFVyd6k5jKVJvhoANYmJclrQiaQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-02-15-chatgpt-is-not-the-end-intro-blip2_image_2.png)
 
 两次都回答说：4 个。
 

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 使用 Foreman 来监控统计 puppet 的 reports 信息
 category: devops
 tags: 

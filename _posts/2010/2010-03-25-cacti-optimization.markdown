@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cacti优化
 date: 2010-03-25
 category: monitor

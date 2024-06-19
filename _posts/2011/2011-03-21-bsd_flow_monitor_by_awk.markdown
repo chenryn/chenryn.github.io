@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: BSD上的流量监控脚本
 date: 2011-03-21
 category: monitor

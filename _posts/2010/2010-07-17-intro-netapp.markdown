@@ -1,5 +1,7 @@
 ---    
 layout: post    
+theme:
+  name: twitter
 title: 初识NetApp存储    
 date: 2010-07-17    
 category: linux

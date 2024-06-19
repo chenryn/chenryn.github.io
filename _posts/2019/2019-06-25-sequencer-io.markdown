@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: sequencer.io项目介绍
 category: aiops
 tags:

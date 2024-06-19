@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 升级 Puppet 到 3.0 及其他附件简介
 category: devops
 tags:

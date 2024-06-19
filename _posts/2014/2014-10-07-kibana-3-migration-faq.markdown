@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】Kibana 3 升级到 4 的常见问答
 category: logstash
 tags:

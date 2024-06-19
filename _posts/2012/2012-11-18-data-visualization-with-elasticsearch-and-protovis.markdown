@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】用ElasticSearch和Protovis实现数据可视化
 category: logstash
 tags:

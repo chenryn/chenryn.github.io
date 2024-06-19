@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 关闭snmp和nrpe的syslog正常输出
 date: 2010-05-11
 category: linux

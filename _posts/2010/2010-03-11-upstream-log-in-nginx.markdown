@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nginx日志（upstream）
 date: 2010-03-11
 category: nginx

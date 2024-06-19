@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 基调发布《中国互联网网站性能行业参考数据》
 date: 2010-11-16
 category: CDN

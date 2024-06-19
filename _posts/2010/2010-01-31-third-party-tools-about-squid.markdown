@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid几个第三方工具
 date: 2010-01-31
 category: squid

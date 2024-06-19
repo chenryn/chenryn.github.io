@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 流量监控
 date: 2010-08-05
 category: monitor

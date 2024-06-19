@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 日志管理
 date: 2010-01-29
 category: linux

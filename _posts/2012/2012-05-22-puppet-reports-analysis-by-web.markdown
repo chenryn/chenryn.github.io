@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【puppet系列】网页展示puppet的客户端报告
 date: 2012-05-22
 category: devops

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: spread试验
 date: 2011-06-09
 category: perl

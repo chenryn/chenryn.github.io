@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 读《基于动态内容的缓存加速技术》笔记
 date: 2011-01-13
 category: CDN

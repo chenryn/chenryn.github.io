@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 价值3000元的大模型预训练经验，都在这里了
 category: LLM
 tags:
@@ -14,7 +16,7 @@ tags:
 
 首先，训练模型肯定要有数据集。甚至可以说数据集才是大模型训练过程中最重要的工作。
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFohtINyQzicQRwVrytFjiafb1qYHtUuFNkI0EOzAOaPKDh12icSvDVRmicLgiaNwX1yEbicwrexEhGLcIA/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2024-03-19-llm-pretrain_image_1.png)
 
 平台在创建数据集的时候，对不同的训练阶段，有不同的数据类型要求。
 
@@ -67,7 +69,7 @@ tags:
 
 所以重点就是怎么获取本领域足够的语料，尤其是高质量语料。依然以开源的 SecGPT 为例，数据很大一部分是论文、书籍、CVE 漏洞库。不过我和作者沟通，作者表示实际训练时按比例缩减了论文的部分：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFohtINyQzicQRwVrytFjiafbPDvG74ALa28FUPiaHneFCB1yt6pRRdLBExsUB2KiaibtD429kGt4Phkog/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2024-03-19-llm-pretrain_image_2.png)
 
 类似的，我们如果要训练一个运维领域大模型，论文、书籍，也会是一个重点来源。
 
@@ -83,7 +85,7 @@ tags:
 
 最终的数据集版本点击“发布”后，进入 post-pretrain 页面创建预训练任务：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFohtINyQzicQRwVrytFjiafbMxEiaWNt94aHUlmGrPrszoxX00DX6eUnTm6Lyx9NzMPK9rfMA3viclicQ/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2024-03-19-llm-pretrain_image_3.png)
 
 选择你发布的纯文本数据集，然后开启混合训练，按照推荐的选择 5:1。千万注意，这里又是百度云的一个坑。因为通常大家都说领域数据和通用数据混合比例1:5，但百度的页面上偏偏是反过来说通用数据和领域数据5:1——事实上他们连自己产研都坑了，页面上的提示文案之前也推荐用户选1:5，是我报 bug 后刚改的。
 
@@ -91,7 +93,7 @@ tags:
 
 总之，训练完成后，你可以看到预训练过程的困惑度和训练损失曲线：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFohtINyQzicQRwVrytFjiafb7NYpC17keNnvJnttw5sVficPGSKXzctGjxjMibfQE6r0FmhbHaft1XtA/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2024-03-19-llm-pretrain_image_4.png)
 
 可以看到，loss%一开始就挺低的，后续也没下降多少。某种程度上说明，我准备的运维领域语料，其实大多在 ernie 的原始语料中，已经覆盖到了——事实上在 openaiops 社区的[运维大模型评测](https://opseval.cstcloud.cn/content/leaderboard)中，我司贡献的日志运维题库，ERNIE-Bot 4.0 的得分就高达 79 分，遥遥领先。
 
@@ -105,7 +107,7 @@ tags:
 
 SFT 训练同样有 loss%曲线可看，还有 BLEU 等评估指标。评估指标应该是越高越好。显然下图显示效果非常烂，本次 SFT 的钱就是买个教训了：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFohtINyQzicQRwVrytFjiafbgHKtucHfbYicwhDgE8WRkcGoTBrBZ5EtiaPkMNxhCsqAP47bFdTiboZGw/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2024-03-19-llm-pretrain_image_5.png)
 
 和百度工程师的沟通，对方认为：我的微调数据集构成有较大问题。其中一些选择题，prompt 一大段文本，response 就一个字母。而这些评估都是基于 response 内容来计算。所以，要获取更好的结果，还是应该多构建一些工程化的 prompt 和 response。
 

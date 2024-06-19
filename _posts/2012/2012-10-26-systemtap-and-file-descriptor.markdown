@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用systemtap调试文件描述符限制
 category: linux
 tags:

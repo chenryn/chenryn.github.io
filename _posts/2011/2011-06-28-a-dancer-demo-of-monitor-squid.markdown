@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid监控+dancer小试验
 date: 2011-06-28
 category: dancer

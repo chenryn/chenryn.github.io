@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Python 批量写入 Elasticsearch 脚本
 category: logstash
 tags:

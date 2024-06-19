@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Elasticsearch 同一索引不同类型下同名字段的映射冲突实例
 category: logstash
 tags:

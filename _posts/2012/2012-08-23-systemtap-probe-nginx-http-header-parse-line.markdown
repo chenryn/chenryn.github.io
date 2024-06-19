@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用systemtap定位nginx1.2在header解析时的报错
 category: monitor
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用火焰图看 elasticsearch 的资源占用
 category: monitor
 tags:

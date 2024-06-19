@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Rex::Test::Spec 模块
 category: perl
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid请求处理流程（源站故障转向研究）
 date: 2009-12-31
 category: squid

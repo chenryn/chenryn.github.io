@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: bash_syslog_history
 date: 2011-07-08
 category: monitor

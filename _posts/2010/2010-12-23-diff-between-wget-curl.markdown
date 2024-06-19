@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: wget和curl测试时的小区别
 date: 2010-12-23
 category: linux

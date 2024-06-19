@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: keepalived故障一例
 date: 2010-12-03
 category: linux

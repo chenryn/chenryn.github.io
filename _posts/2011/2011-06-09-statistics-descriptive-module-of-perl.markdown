@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: perl模块Statistics::Descriptive
 date: 2011-06-09
 category: perl

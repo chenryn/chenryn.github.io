@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 2013 年度个人总结
 ---
 

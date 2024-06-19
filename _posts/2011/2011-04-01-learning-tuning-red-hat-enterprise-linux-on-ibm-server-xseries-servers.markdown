@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 《Tuning Red Hat Enterprise Linux on IBM server xSeries Servers》读书笔记
 date: 2011-04-01
 category: linux

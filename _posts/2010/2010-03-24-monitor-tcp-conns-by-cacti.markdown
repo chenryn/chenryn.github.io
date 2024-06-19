@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cacti自建tcp80连接数监控
 date: 2010-03-24
 category: monitor

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 私有 docker 仓库部署测试
 category: cloud
 tags:

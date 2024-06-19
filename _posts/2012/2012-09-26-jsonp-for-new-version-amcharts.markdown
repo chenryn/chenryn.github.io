@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用javascript操作新版本amcharts
 category: web
 tags:

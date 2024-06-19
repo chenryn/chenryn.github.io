@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Larry Wall 来中国参加 OSTC 和 PerlChina Workshop
 category: perl
 ---

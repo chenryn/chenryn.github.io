@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 淘宝TrafficServer的SSD分支测试与介绍
 date: 2012-06-08
 category: CDN

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: sed子命令集
 date: 2009-11-23
 category: bash

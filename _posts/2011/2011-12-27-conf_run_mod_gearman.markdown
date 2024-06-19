@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: OMD系列(四)mod_gearman配置与运行
 date: 2011-12-27
 category: monitor

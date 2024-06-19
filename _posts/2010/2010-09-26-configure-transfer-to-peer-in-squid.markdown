@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid回源选择配置小结
 date: 2010-09-26
 category: squid

@@ -1,5 +1,7 @@
 ---
 title: java的中文支持
+theme:
+  name: twitter
 layout: post
 date: 2011-06-10
 category: linux

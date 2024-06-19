@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid运行分析
 date: 2010-02-06
 category: squid

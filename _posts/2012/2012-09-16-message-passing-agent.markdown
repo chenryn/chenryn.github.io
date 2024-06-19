@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【Message::Passing系列】客户端收集脚本
 category: logstash
 tags:

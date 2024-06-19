@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Lucene 查询中的距离查询(proximity query)
 category: elasticsearch
 tags:

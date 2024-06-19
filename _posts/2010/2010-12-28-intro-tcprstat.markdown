@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: TCP响应时间监测
 date: 2010-12-28
 category: monitor

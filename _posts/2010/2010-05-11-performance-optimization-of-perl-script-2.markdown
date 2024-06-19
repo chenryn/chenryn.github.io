@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: perl脚本性能优化（续）
 date: 2010-05-11
 category: perl

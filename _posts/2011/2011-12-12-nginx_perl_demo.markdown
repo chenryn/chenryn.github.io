@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nginx_perl试用
 date: 2011-12-12
 category: nginx

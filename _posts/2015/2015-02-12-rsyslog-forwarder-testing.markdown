@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: rsyslog 的 TCP 转发性能测试
 category: performance
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: HTTP的auth请求模拟
 date: 2011-01-11
 category: web

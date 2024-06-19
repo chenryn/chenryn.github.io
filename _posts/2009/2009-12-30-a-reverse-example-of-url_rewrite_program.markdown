@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: url_rewrite_program（squid游戏恶搞~）
 date: 2009-12-30
 category: squid

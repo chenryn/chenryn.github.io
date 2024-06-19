@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: date的一个怪问题
 date: 2010-04-03
 category: bash

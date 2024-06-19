@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 大模型在运维领域的应用展望
 category: LLM
 tags:
@@ -28,7 +30,7 @@ tags:
 
 ## 二、裴丹教授的 OpsLLM 四阶段论
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrycQgpBaCWm0tZfE2uib27xe8miaaULmgoG92kNBFxM4bvouvTG5mKn2Q/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_1.png)
 
 裴丹教授是 AIOps 学界领袖，指标异常检测方面非常有名的 Donut 开源项目就是裴教授团队出品。裴教授在 6 月一次会议上，提出了大模型在运维领域落地的四阶段观点。如上图所示，后面 L3、L4 其实不用看，毕竟 GPT4 给我们画饼的多模态至今都还没见着呢。我们重点来看 L1 和 L2。
 
@@ -45,17 +47,17 @@ L2 其实就是说：通过类似 langchain 框架开发的形式，在大模型
 
 ## 三、阶段一的 4 个例子
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrW3YXNibblUOrcPCYnwiaGfoRP3KqxtymjhkIwicLlXHO2JzGWU7OILUkQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_2.png)
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrSDM9VE4qWkZhkAClLUV4smTwvRpwxJzRLoCH7ln2ztNZKZ3H1Ngcibg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_3.png)
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrvWrZ1FUN3ibSAgV7BoDOnMUaVfedQU0becaFic8ObnEiaeeplphyZdEqg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_4.png)
 
 两个国外厂商，一个国内厂商，我个人都将其归入阶段一。特点也很明显：相信 ChatGPT 作为 OpsLLM 也很牛，“遇事不决，ask chatgpt”。
 
 那么真的很牛么？这里有另一个例子，来自微软的研究报告：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrL6ez7xdfP6gKUyApLkAxLCEiaFEf3voxgw2g63HJ802TPdzzX2wFBOg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_5.png)
 
 可以说，作为 OpsLLM，GPT 是比 Bert 牛不少了，但是还不够牛！
 
@@ -65,19 +67,19 @@ L2 其实就是说：通过类似 langchain 框架开发的形式，在大模型
 
 ### 4.1 查询语句生成
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrndqohCWDtLc6jeJeibGq4qAibaL9ib4R9oJNk7WV4Cb5VukLPldn97MNA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_6.png)
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkro9kUjmrG6ASjibWz7xzWLxvyhohrTBA1hFt5T4u2PWv3mRqU9IX5vaQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_7.png)
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrRkpXffTHqiaAosb7Rnj0mLBeoT4Eicia85XPjQKnWxfuwNDS9KILZefmg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_8.png)
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrVtvJqXw0icn2Q8f2PkVoezqLhbmIH6R0y629pYkyuTmp2ibMhfDHqWvg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_9.png)
 
 3 个国外厂商，1 个国内厂商的例子。可以看到各家实现的路径还是有挺大差异的。如果本身就是 SQL 查询，那直接 text to SQL 即可。如果是 metric 数据，查询逻辑非常简单，直接 text to Conf 填充菜单选项。如果是自定义语法，要生成完整且准确的语句就很难了，于是 observe 公司被迫引入 IDE 形式，每个函数都要单独提问，然后从产品文档中搜索对应函数的语法和示例小节，通过长达 4k 的 few-shot prompt 生成一个函数片段。
 
 最后再提一下 splunk。日志分析领域的 SPL 查询语言，目前处于一个中间状态，它既不像 SQL 已经有很明确的标准规范，但又不至于像 observe 那样只有自己一家。ChatGPT 有一定的 text to SPL 能力。splunk 早年也自己独立尝试过基于 T5 模型训练。之前的介绍见[《chatGPT初尝试(2): 自动生成 SPL 语句》](/2023/2023-01-31-try-chatgpt-2-nl-to-spl/)。上个月，splunk 也发布了 beta 版本的 text to SPL：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrbGlcytunpDl83cFXos63klLdJhsbBkicyM6Aox5qgPickicNRaCbwMNxg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_10.png)
 
 splunk 是目前国外的运维厂商中，唯一一个继续自研大模型，而不依赖 ChatGPT 服务的公司。大概因为 splunk 还有大量部署版客户吧~这点，也值得国内友商们参考。
 
@@ -85,15 +87,15 @@ splunk 是目前国外的运维厂商中，唯一一个继续自研大模型，�
 
 ### 4.2 API 调用
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkr35VROsKrA69yEnxEicdveZWQvTsdCwVTIrnplzdJWSbLL6fHnxjDDBw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_11.png)
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrzRdnmrEJxwguQbtApf9iaTD571BEcHFXhYdt02aD57wtic3yQysFzNdg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_12.png)
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkr4SZMJaLCbYyzIkhzhKLvSicf6rQKrriav9wfFtDMibia31ySuUfJ8Xeicqw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_13.png)
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrtgCyCNX0fmqicicmXDyrmcEjcBS2NR6CLLLEStV8nmmO7cbSLCRI0P4g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_14.png)
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkredpX5jLKtrl3rr2GuFpfXBxLuDz9tluib85d6w7BBapcm0NXZhr7nVw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_15.png)
 
 4 个国外厂商，1 个国内厂商的例子。APIChain 其实对任意软件都有效，不局限于运维安全或者数据分析。从上述截图里我们也可以看得出来，这个场景非常考验 PM 的设计能力。当然背后也依赖一定的语义分类技术。
 
@@ -107,11 +109,11 @@ splunk 是目前国外的运维厂商中，唯一一个继续自研大模型，�
 
 ### 4.3 自动推理
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrtqib3icblqAibbnv8iaDEicOUYH6KvUg8q8ftpSAI7ffzjCgmR8rJ2y6I0Q/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_16.png)
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrZ1XWn3OruhI5HOvGIX2JAeV8F4v6ib6INb5Dvg2lXh2ZazicBicMcKRDQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_17.png)
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrGSPEJPd1OKQJmCuibQibM9CCldtGQbicaIpyXSxJ6V500V0FwHjiaJnOMw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_18.png)
 
 归类在这个场景下的厂家变少了很多，只有 google cloud 和 datadog。datadog 的用例，其实也还有点类似 Microsoft 的 promptbook 场景，可能通过一定的模板和规则匹配能实现类似效果。因此，我们重点介绍一下 google cloud 这个 search summary。
 
@@ -121,25 +123,25 @@ IT 工程师都知道，看日志其实是一个非常漫长和眼疼的事情�
 
 现在 google cloud 的 search summary 功能，可以直接把日志总结成一段简明概要，而且其中对关键行为的实体，包括人员账号、IP地址、时段、风险等级等的占比都能给出来。比日志聚类，又大大的缩减了排障时间。
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrBRdVpdEU7NM6I3jr5dtGdsic4Dkgh7spvvXuSiasznGEZLiaHQ8Xiaphdg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_19.png)
 
 我们都知道，LLM 的 context windows 是有限制的，哪怕最大的 claude v2也不过 100k token，这对于平均至少 300byte 一行的日志来说，最多也就放个千八百行。所以，此处肯定需要有处理策略。
 
 langchain 社区有一段教学视频发布在油管上，分 L1-L5 介绍如何做 text summary。到 L4 的时候，可以通过聚类方案来实现对整本书的总结：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkr9Qv4kXAHcedf1aknQPzW77TWKGLwhkAibSnkz6d20IkjUdkJdp2mkTg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_20.png)
 
 可惜经过验证，发现这个方法对日志总结场景效果一般。日志毕竟不是真的自然语言，在同一个聚类里，聚类中心点并不能代表本类数据的含义。
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkr7No85kYwvssOuJBRLkrRqzicajRtHL1LYWOoGLzTR9MLrjmfCI9Mjyw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_21.png)
 
 如果直接使用模板，参数信息丢失又太狠。
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrNFOmvhVBnSxicbPNvmnRJxh09iajhOl3LYLkoAZBOFXPHGfVovfMOPAQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_22.png)
 
 因此，search summary 必须采用 agent 智能代理方案实现。由 LLM 给出 thought 和 action。
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFGicPoPWice2FmAXeCFlkpkrmqxib8mplZhgxE30vQAs3AmSDKnMOP0I1umzRxHQfytR9FKVLuEAhKA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-08-10-opsllm_image_23.png)
 
 自动代理是目前所见，大模型在运维安全领域，最难落地，但收益也最明显的场景。我们也是在尝试之中，希望后续有所突破。
 

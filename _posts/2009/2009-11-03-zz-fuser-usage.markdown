@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: fuser命令（转）
 date: 2009-11-03
 category: bash

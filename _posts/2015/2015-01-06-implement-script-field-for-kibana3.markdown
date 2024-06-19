@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 给 Kibana3 添加脚本化字段支持
 category: logstash
 tags:

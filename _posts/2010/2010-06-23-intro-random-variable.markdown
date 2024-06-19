@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: $RANDOM变量妙用
 date: 2010-06-23
 category: bash

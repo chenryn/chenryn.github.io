@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Chrome的APP简单用法
 category: web
 tags:

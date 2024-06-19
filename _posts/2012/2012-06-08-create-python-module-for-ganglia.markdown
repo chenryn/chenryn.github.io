@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用ganglia监控trafficserver
 date: 2012-06-08
 category: monitor

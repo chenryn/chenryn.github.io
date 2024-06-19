@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid的debug日志
 date: 2010-11-09
 category: squid

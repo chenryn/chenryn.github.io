@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【Logstash系列】用rabbitmq和elasticsearch搭建分布式日志收集存储系统
 category: logstash
 date: 2012-06-01

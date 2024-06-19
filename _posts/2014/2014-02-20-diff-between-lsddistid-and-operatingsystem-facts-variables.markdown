@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Facts 变量中 lsbdistid 和 operatingsystem 的区别
 catagory: puppet
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: for/while循环的区别
 date: 2010-12-16
 category: bash

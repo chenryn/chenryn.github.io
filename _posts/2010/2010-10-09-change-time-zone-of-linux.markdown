@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: linux更改时区
 date: 2010-10-09
 category: linux

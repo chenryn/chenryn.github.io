@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: header_replace试验
 date: 2010-01-31
 category: squid

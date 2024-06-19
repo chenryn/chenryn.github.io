@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: qhttpd
 date: 2010-02-09
 category: web

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: tmpfs的inode问题
 date: 2011-06-09
 category: linux

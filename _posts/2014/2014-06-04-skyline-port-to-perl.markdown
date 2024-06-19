@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 Perl5 改写 skyline 异常检测算法
 category: monitor
 tags:

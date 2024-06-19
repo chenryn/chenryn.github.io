@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用perl和lua在nginx中验证url
 date: 2012-05-25
 category: nginx

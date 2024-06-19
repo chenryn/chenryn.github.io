@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid3 的 gzip 支持
 date: 2009-12-30
 category: squid

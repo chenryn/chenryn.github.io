@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】Kibana 发生什么事了？
 category: logstash
 tags:

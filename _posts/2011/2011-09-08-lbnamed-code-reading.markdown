@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: lbnamed代码浅读
 date: 2011-09-08
 category: perl

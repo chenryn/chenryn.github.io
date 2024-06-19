@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 《AIOPS2020 工作坊白皮书》小记
 category: aiops
 ---

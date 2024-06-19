@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Gearman 任务的优先级
 category: perl
 tags:

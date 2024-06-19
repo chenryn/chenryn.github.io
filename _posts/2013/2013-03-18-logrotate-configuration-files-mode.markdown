@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: logrotate 配置文件强制为 0644 属性
 category: linux
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 logstash 统计 Nginx 的 http_accounting 模块输出
 category: logstash
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 让进程在后台可靠运行的几种方法（转）
 date: 2009-11-03
 category: bash

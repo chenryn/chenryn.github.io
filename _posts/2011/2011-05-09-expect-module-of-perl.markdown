@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: perl的Expect模块
 date: 2011-05-09
 category: perl

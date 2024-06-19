@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: apache防盗链（mod_perl试用三）
 date: 2010-05-27
 category: web

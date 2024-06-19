@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nagios性能监控
 date: 2010-10-19
 category: monitor

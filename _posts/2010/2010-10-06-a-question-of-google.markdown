@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: google校招笔试题
 date: 2010-10-06
 ---

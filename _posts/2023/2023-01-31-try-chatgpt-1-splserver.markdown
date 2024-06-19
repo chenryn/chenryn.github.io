@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: ChatGPT初尝试(一)：扮演 SPL 服务器
 category: LLM
 tags:
@@ -28,19 +30,19 @@ ChatGPT 已经火好几个月了，因为没有开源，所以我先试过 stabl
 
 敲下回车键，看看如何：
 
-![](https://pic1.zhimg.com/v2-dbb34ecee880adcd6b8987ce9f562648_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-1-splserver_image_1.png)
 
 嗯，最简单的 LIST 果然没问题。什么 exists 和 available 啊，index 和 indices 的差异都完全不 care。
 
 下面开始写入JSON数据。这里我玩了个小花招——prompts 声明了 ”must“ 有 6 个字段，但我偷懒（才不说其实是完整 JSON 敲完断网的意外），只提供最基础的 "_raw" 原文，看看会如何：
 
-![](https://pic2.zhimg.com/v2-4901a2aa376b68300674fb1c0743cb31_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-1-splserver_image_2.png)
 
 哎呀，可惜啊——ChatGPT 并没有按照我的"must"期望，拒绝掉这次写入——看来prompts 里还得声明好异常处理。
 
 但这时候我好奇了。既然他非要说 Successful，那我就查一下看看？
 
-![](https://pic4.zhimg.com/v2-bee3f584c31c4f78a541bb6a6941702f_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-1-splserver_image_3.png)
 
 奇迹出现了！！！
 
@@ -56,17 +58,17 @@ ChatGPT 已经火好几个月了，因为没有开源，所以我先试过 stabl
 
 好了，收拾一下激动的心情，让我们再试试看统计需求：
 
-![](https://pic4.zhimg.com/v2-775d3dfe7e5dc11e24995feada3448c7_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-1-splserver_image_4.png)
 
 没啥问题。再看看不明确指定索引呢：
 
-![](https://pic3.zhimg.com/v2-7ea1af5fa2a4d645a31056a4b4878f0a_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-1-splserver_image_5.png)
 
 也知道走默认 main 索引。
 
 那最后一个常见需求，时间趋势图。先让我再 po 一条日志，然后试试看：
 
-![](https://pic4.zhimg.com/v2-ceb46fad3d15a74fcaa9dbf6a6ad9ddb_r.jpg)
+![](/images/uploads/2023-01-31-try-chatgpt-1-splserver_image_6.png)
 
 这次终于体现出ChatGPT只是一个语言模型的缺陷了——SPL 里的 timechart指令有一套比较复杂的 autospan 默认值计算，所以直接写 `timechart count` 语句时，ChatGPT 无法知道默认计算逻辑，只能输出两个原始时间。只有我们明确指定 timechart span=1h count语句时，ChatGPT 才知道这是要按小时统计。
 

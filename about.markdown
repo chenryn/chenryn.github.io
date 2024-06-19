@@ -1,6 +1,8 @@
 ---
 title: 关于
 layout: default
+theme :
+  name : twitter
 ---
 
 Personal Informations                  

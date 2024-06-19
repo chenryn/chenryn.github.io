@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Dancer::Plugin::SimpleCRUD模块学习
 date: 2011-12-15
 category: dancer

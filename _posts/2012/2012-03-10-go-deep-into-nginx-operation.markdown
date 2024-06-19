@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 加强了解nginx的几个问题
 category: nginx
 ---

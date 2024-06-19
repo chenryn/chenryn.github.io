@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 给 Sysadmin Advent 快速搭建本地浏览网站
 category: perl
 ---

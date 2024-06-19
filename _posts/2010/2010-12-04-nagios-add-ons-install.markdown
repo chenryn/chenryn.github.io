@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nagios的add-ons安装小抄~
 date: 2010-12-04
 category: monitor

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 大模型取代运维还有多远？
 category: LLM
 tags:
@@ -60,11 +62,11 @@ ReAct 里使用了两个 Tool，一个用来在ReAct 觉得 incident summary 不
 
 看起来这个设计有理有据，但最后结果很尴尬：ReAct 效果别说比不上直接用 RAG，连让大模型自己 CoT 都不如！
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFZAiccvOKxU7dvglic29lC8vDHlYk3dERTSXJHpnylXHLI5KMd818ynoRBISgBcN9S7p9oAj43yicRA/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2024-03-29-opsllm-for-copilot_image_1.png)
 
 唯一的差异大概就是：把很多瞎编的错误，变成了证据不足的错误……
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFZAiccvOKxU7dvglic29lC8vlvBM6HAOe7aTA852Xoj3I86GzZ5q3h1cJKT3mFmTzyTsI4cwYgj1eg/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2024-03-29-opsllm-for-copilot_image_2.png)
 
 证据不足？？于是作者把 incident 的 comment 内容也加入，结果依然没用。
 
@@ -96,7 +98,7 @@ ReAct 里使用了两个 Tool，一个用来在ReAct 觉得 incident summary 不
 
 至于知识库本身怎么处理，也是 fasttext、summary、ICL 这套，不用重复介绍了。但论文附的 prompt 比较有意思，我贴图上来：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFZAiccvOKxU7dvglic29lC8vwDEHf7ZC3aN7D0nvSTJMLNIBBExibpm5fOtPbXn2UL40jogiaGdAt2rA/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2024-03-29-opsllm-for-copilot_image_3.png)
 
 对，还有 negative samples！但论文没提这部分的构建，可能是写死的？
 
@@ -110,7 +112,7 @@ ReAct 里使用了两个 Tool，一个用来在ReAct 觉得 incident summary 不
 
 最后也给了一个案例，无功无过，不甚出彩：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFZAiccvOKxU7dvglic29lC8vGJrX6jJfZIlLC9VWLib0v4HY108PjTlmiaSWZBcZ5NlUouyoZUUyfTuw/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2024-03-29-opsllm-for-copilot_image_4.png)
 
 好了。和 OCE 故障定位相关的五篇论文就介绍到这里。
 

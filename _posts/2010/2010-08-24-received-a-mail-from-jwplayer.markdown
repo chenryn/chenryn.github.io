@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 收到jwplayer的推广邮件
 date: 2010-08-24
 ---

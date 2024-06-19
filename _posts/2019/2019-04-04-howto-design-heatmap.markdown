@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 聊聊主机热力图的背后
 category: 产品设计
 tags:

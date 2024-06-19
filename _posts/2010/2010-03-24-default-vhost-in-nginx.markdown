@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nginx的默认主机头问题
 date: 2010-03-24
 category: nginx

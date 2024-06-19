@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid一次诡异事故
 date: 2009-11-18
 category: squid

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 图片分离小故障一例
 date: 2011-01-20
 category: linux

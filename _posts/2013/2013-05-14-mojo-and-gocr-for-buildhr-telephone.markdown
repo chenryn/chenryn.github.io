@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用mojo抓取数据并gocr替换图片内容
 category: perl
 ---

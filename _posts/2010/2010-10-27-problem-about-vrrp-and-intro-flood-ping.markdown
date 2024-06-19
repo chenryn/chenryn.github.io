@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 集群故障检查记录
 date: 2010-10-27
 category: linux

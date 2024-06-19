@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: OMD系列(一)简介与安装
 date: 2011-12-19
 category: monitor

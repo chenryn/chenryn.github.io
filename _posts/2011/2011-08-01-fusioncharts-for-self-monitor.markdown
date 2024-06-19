@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cdn自主监控(五):生成charts图像
 date: 2011-08-01
 category: monitor

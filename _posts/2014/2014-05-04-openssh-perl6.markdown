@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 在 Perl6 脚本中并发执行 ssh 命令
 category: perl
 tags:

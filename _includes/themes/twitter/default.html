@@ -30,10 +30,9 @@
             {% assign pages_list = site.pages %}
             {% assign group = 'navigation' %}
             {% include JB/pages_list %}
-            <li><a href="http://chenlinux.com/poetry/index.html" />诗文集</a></li>
-            <li><link title="RSS 2.0" type="application/rss+xml" href="http://chenlinux.com/feed.xml" rel="alternate" /><a href="http://chenlinux.com/feed.xml" target="_blank">RSS订阅</a></li>
+            <li><a href="/poetry/" />诗文集</a></li>
           </ul>
-          <ul class="nav pull-right"><li><a href="/about.html">有关我</a></li></ul>
+          <ul class="nav pull-right"><li><a href="/about/">有关我</a></li></ul>
         </div>
       </div>
     </div>
@@ -43,22 +42,8 @@
         {{ content }}
       </div>
       <div class="span4">
-        {% if page.title %}  
-          <div class="well sidebar-nav">
-             <ul id="relate_blog" class="nav nav-list">
-               <li class="nav-header">最近文章</li>
-               {% for post in site.related_posts limit:9 %}
-                 <li><a href="{{ post.url }}">{{ post.title }}</a></li>
-               {% endfor %}
-            </ul>
-          </div>
-        {% endif %}
         <div class="well sidebar-nav">
           <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1035836154&verifier=a26926d5&dpc=1"></iframe>
-        </div>
-        <div class="well sidebar-nav">
-            <div id="uyan_list_time_frame"></div>
-            <script type="text/javascript" id="UYScriptTime" src="http://v1.uyan.cc/js/iframe_time_list.js?UYUserId=1589850&rankType=time" async=""></script>
         </div>
         <div class="well sidebar-nav">
           <ul id="linklists" class="nav nav-list">
@@ -76,18 +61,10 @@
             {% endfor %}
           </ul>
         </div>
-        <div class="well sidebar-nav">
-          <ul id="booklists" class="nav nav-list">
-          <li class="nav-header">我写的技术书籍</li>
-          <li><a href='http://product.china-pub.com/3769604'><img src='http://images.china-pub.com/ebook3765001-3770000/3769604/shupi.jpg' border='0' alt='网站运维技术与实践'/></a></li>
-          <li><a href='http://product.china-pub.com/64005'><img src='http://images.china-pub.com/ebook60001-65000/64005/shupi.jpg' border='0' alt='ELK Stack权威指南'/></a></li>
-          <li class="nav-header">我参与翻译的技术书籍</li>
-          <li><a href='http://product.china-pub.com/4582714'><img src='http://images.china-pub.com/ebook4580001-4585000/4582714/shupi.jpg' border='0' alt='Puppet 实战手册'/></a></li>
-        </div>
       </div>
     </div> <!-- row -->
       <footer>
-        <p>&copy; {{ site.author.name }} 2015 
+        <p>&copy; {{ site.author.name }} 2024 
           with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
           and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
         </p>

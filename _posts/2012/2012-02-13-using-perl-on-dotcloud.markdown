@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: dotcloud试用
 category: cloud
 tags:

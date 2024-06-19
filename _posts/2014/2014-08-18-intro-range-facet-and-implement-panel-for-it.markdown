@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 ES 的 RangeFacets 接口实现一个查看区间占比的 Kibana 面板
 category: logstash
 tags:

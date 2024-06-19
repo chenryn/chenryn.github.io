@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: IPC::Locker模块介绍
 category: perl
 ---

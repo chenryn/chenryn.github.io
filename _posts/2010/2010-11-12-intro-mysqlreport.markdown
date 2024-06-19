@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: mysql状态报表工具
 date: 2010-11-12
 category: database

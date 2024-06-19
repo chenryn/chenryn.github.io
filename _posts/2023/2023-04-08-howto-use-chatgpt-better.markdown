@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Schillace's Law：好好使用 ChatGPT 的原则
 category: LLM
 tags:
@@ -36,7 +38,7 @@ Schillace 是微软副 CTO，他根据微软内部使用 GPT4 辅助编程的实
 
 为了加强大家的印象，我这里给大家演示一个极端案例：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqFbCicYib93vnZZ1PYjy24a8WOiaUbib3tkQ4GlwDWicFHg55QtgFNxaKIX1HWZhp63rt8HF0cvTYyDeNA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-04-08-howto-use-chatgpt-better_image_1.png)
 
 案例场景非常简单，就是让 ChatGPT 重复上一段话。是不是感觉绝对没问题？但是当我们重复编辑 20 次以后，ChatGPT 对着一段湿巾的文案开始推荐 python 了！
 

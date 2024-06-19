@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【Message::Passing系列】ElasticSearch的bulk_index速度测试
 category: logstash
 tags:

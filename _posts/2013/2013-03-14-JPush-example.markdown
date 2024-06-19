@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 极光推送demo
 category: monitor
 tags:

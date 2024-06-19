@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: DSL设计之数据管道与并行处理
 category:  产品设计
 tags:
@@ -36,7 +38,7 @@ dgsh的写法示例如下：
 #!/usr/bin/env dgsh
 
 tee |
-{{
+\{\{
 	printf 'File type:\t'
 	file -
 
@@ -67,12 +69,10 @@ read elastic -from :2015-01-01: -to :2015-07-01:
 |(
   reduce count()
   | view tile -title 'GitHub events count (${cat_in}, ${type_in})' -row 0 -col 0;
-
   reduce count() by repo_name
   | sort count -desc
   | head 10
   | view table -title 'GitHub events for top 10 repos (${cat_in}, ${type_in})' -row 0 -col 1;
-
   reduce -from :2015-01-01: -over :w: -every :d: count() by repo_name
   | view timechart -keyField 'repo_name' -title 'Rolling count of GitHub events (${cat_in}, ${type_in})' -row 1 -col 0;
 )
@@ -80,22 +80,20 @@ read elastic -from :2015-01-01: -to :2015-07-01:
 
 这里采用了分号`;`来区分并行任务。显然比单纯的空行好看且明确一些。不过使用圆括号`()`来作为并行任务的区域表达，又有另一种误解，因为加减乘除运算是使用圆括号来表达优先级的。
 
-所以综合来看，采用花括号`{{}}`配合分号`;`可能是最好的结构了。那么文首的那个机器学习流程可以表达成这样：
+所以综合来看，采用花括号`\{\{}}`配合分号`;`可能是最好的结构了。那么文首的那个机器学习流程可以表达成这样：
 
 ```
 wumai_data_1
   | eval feature_XXX = somecommand(xxx)
-  | {{
+  | \{\{
     bucket feature_XXX span=1000 as numberrange
      | chart numberrange over other yyy,zzz;
-
     fit StandardScaler *
      | sample ratio=0.2
-     | {{
+     | \{\{
         fit RandomForestClassifier predict_field from feature_* into rf_model
          | apply rf_model
          | `confusionmatrix("predict_field","predicted(predict_field)")`;
-
         fit LogisticRegression predict_field from feature_* into lg_model
          | apply lg_model
          | `confusionmatrix("predict_field","predicted(predict_field)")`;

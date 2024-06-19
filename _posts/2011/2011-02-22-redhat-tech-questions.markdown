@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 没事试试RH的技能测试
 date: 2011-02-22
 category: linux

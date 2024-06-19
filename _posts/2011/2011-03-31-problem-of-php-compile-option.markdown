@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: php编译参数问题一例
 date: 2011-03-31
 category: php

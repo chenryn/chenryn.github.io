@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: apache的rewrite伪静态化问题一例
 date: 2011-02-16
 category: apache

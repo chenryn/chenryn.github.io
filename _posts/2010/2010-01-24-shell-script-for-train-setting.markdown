@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: CUshell版惊见中国特色脚本
 date: 2010-01-24
 category: bash

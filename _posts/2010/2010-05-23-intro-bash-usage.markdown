@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: bash使用技巧
 date: 2010-05-23
 category: bash

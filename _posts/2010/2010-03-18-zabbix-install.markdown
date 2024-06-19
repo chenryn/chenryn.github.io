@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: zabbix安装试用
 date: 2010-03-18
 category: monitor

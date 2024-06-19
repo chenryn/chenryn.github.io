@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cdn自主监控(六):数据展示页面
 date: 2011-08-02
 category: monitor

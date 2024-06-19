@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】运维的85条规则
 date: 2013-06-12
 ---

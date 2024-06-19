@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 一个ddns的demo
 date: 2011-09-30
 category: perl

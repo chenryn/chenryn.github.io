@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 域名切换导致的 SEO 问题
 date: 2010-07-17
 category: web

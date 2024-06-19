@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: iscsi试验（失败，慎入）
 date: 2010-04-12
 category: linux

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 《SUSE Linux Enterprise Desktop System Analysis and Tuning Guide》读书笔记
 date: 2011-04-05
 category: linux

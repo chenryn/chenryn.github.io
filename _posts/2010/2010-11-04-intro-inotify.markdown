@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: inotify使用一例
 date: 2010-11-04
 category: linux

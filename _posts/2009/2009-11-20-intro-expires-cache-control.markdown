@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cache驻留时间（三、Expires/Cache-Control）
 date: 2009-11-20
 category: CDN

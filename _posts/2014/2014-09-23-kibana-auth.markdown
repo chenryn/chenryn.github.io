@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Kibana 认证鉴权方案
 category: logstash
 tags:

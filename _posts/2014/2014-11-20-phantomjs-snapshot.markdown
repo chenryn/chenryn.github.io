@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 phantomjs 截图
 tags:
   - javascript

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: shell技巧——getopts
 date: 2009-11-04
 category: bash

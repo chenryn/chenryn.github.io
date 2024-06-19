@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 弹性集群监控中的配置自动生效问题研究
 date: 2012-04-16
 category: monitor

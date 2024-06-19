@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid源站故障转向（终结篇）
 date: 2010-03-28
 category: CDN

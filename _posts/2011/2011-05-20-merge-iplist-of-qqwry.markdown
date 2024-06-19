@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 续上：合并纯真ip段
 date: 2011-05-20
 category: monitor

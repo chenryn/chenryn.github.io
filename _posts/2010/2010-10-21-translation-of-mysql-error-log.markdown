@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: mysql错误日志中文翻译
 date: 2010-10-21
 category: database

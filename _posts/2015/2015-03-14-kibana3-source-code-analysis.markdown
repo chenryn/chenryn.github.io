@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Kibana 3 源码解析
 category: logstash
 tags:
@@ -402,7 +404,7 @@ Kibana 3 作为 ELKstack 风靡世界的最大推动力，其与优美的界面�
 
 ## 入口和模块依赖
 
-这一部分是网页项目的基础。从 index.html 里就可以学到 angularjs 最基础的常用模板语法了。出现的指令有：`ng-repeat`, `ng-controller`, `ng-include`, `ng-view`, `ng-slow`, `ng-click`, `ng-href`，以及变量绑定的语法：`{{ dashboard.current.** }}`。
+这一部分是网页项目的基础。从 index.html 里就可以学到 angularjs 最基础的常用模板语法了。出现的指令有：`ng-repeat`, `ng-controller`, `ng-include`, `ng-view`, `ng-slow`, `ng-click`, `ng-href`，以及变量绑定的语法：`\{\{ dashboard.current.xxx }}`。
 
 index.html 中，需要注意 js 的加载次序，先 `require.js`，然后再 `require.config.js`，最后 `app`。整个 kibana 项目都是通过 **requrie** 方式加载的。而具体的模块，和模块的依赖关系，则定义在 `require.config.js` 里。这些全部加载完成后，才是启动 app 模块，也就是项目本身的代码。
 
@@ -711,7 +713,7 @@ module.html 就是 panel 的具体页面内容。没有太多可说的。大概�
 <div ng-controller='stats' ng-init="init()">
  <table ng-style="panel.style" class="table table-striped table-condensed" ng-show="panel.chart == 'table'">
     <thead>
-      <th>Term</th> <th>{{ panel.tmode == 'terms_stats' ? panel.tstat : 'Count' }}</th> <th>Action</th>
+      <th>Term</th> <th>\{\{ panel.tmode == 'terms_stats' ? panel.tstat : 'Count' }}</th> <th>Action</th>
     </thead>
     <tr ng-repeat="term in data" ng-show="showMeta(term)">
       <td class="terms-legend-term">{{term.label}}</td>

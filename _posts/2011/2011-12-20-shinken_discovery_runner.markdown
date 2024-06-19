@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: OMD系列(三)shinken的discovery配置与运行
 date: 2011-12-20
 category: monitor

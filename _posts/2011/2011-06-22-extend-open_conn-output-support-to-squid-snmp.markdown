@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 给squid的snmp增加open_conn输出
 date: 2011-06-22
 category: monitor

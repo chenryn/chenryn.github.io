@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: PostgreSQL中国用户会DBA2000培训计划北京第二课笔记
 date: 2012-03-18
 category: database

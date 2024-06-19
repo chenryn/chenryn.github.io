@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: inotify-purge后续分析
 date: 2010-11-25
 category: linux

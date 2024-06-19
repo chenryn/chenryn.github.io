@@ -1,73 +1,47 @@
 ---
 layout: post
-title: ChatGPT初尝试(一)：扮演 SPL 服务器
+theme:
+  name: twitter
+title: Edge Dev 用法：让 ChatGPT 读论文
 category: LLM
 tags:
   - ChatGPT
 ---
 
-ChatGPT 已经火好几个月了，因为没有开源，所以我先试过 stable-diffusion AI 画图以后，最近才排上空闲时间，来试试到底威力如何。
+上一篇介绍了 BLIP2 多模态模型没多久，今天又有多模态领域的大新闻，微软发表了一篇论文，介绍自己的Kosmos-1 多模态模型。不过论文没提供在线 demo 可用，只能直接阅读论文了。
 
-有 sd 的经验，已经知道这一代 AI 最主要的是 prompts engineering 了。那上手肯定是先去 http://github.com 找一把 [awesome chatgpt prompts](https://github.com/f/awesome-chatgpt-prompts)。没问题，还有中英双版——注意中文版有些已经失效了，ChatGPT 对法律的严格遵守现在卡非常死。
+我们都知道，ChatGPT 可以做文本摘要，快速总结中心思想。普通的文本， copy-paste 内容过去也挺方便，但 PDF 论文，没那么简单复制粘贴。这时候就需要 Edge Dev 浏览器出马了。
 
-看 awesome 发现，有人用来做 SQL terminal，有人用来做 Solr standalone！有意思，那试试看，能不能让 ChatGPT 做个仿真的日志分析服务器？
+在浏览器地址栏中输入 https://www.microsoftedgeinsider.com/en-us/download/dev，打开 Edge Dev 官网，页面首屏正中间的位置就可以点击下载安装包并进行安装了。这块不作具体介绍。让我们直接进入使用环节。
 
-（题外话：很遗憾，ChatGPT 不知道啥是“日志易”，所以我们还是从 splunk 开始吧）
+安装完成以后，右上角会多出一个 Bing Chat 图标，点击就可以直接在侧边栏使用 ChatGPT。和在 bing.com 搜索引擎里使用相比，Edge Dev 里的 ChatGPT 最大优势是默认用当前打开的标签页网页内容作为聊天背景材料。因此，你可以免去复制粘贴的手工操作、免去字数超标的担心，直接基于当前页面开聊。
 
-我们先想好，一个基础的日志分析服务器需要什么功能呢？
+加上 Edge 浏览器一直以来对主流文档格式都有超强的阅读支持，用来读文章，简直犀利无比。
 
-* 能接受日志文本，并带上一些基础的半结构化字段，比如主机名、文件名、时间戳。
-* 能查询日志，包括过滤和统计。统计包括分组统计和时间趋势统计——但这个我们就不要声明了，看看 ChatGPT 是不是知道。
-* 能分系统分类型存入不同索引。
+打开原始论文以后，怎么让 ChatGPT 帮我们读论文呢？
 
-好像就这些。
+我们都知道，写论文、读论文其实一般是有套路的，内容大体都分为：内容摘要、场景问题、创新点、具体方法、评估结果、总结展望。
 
-按照这个思路，参照一些前人经验，我写下了第一段 prompts：
+考虑到 ChatGPT 的输出字数有限，让他一口气全部解读完不太合适。但 Edge Dev 又限制了一次 chat 最多 6 次问答。所以，就按这个步骤来问吧：
 
-> I want you to act as a Splunk Platform running in standalone mode. You have an exists index named "main". You will be able to add inline JSON documents in arbitrary fields and must have "host", "source", "sourcetype", "_time", "_index" and "_raw" fields inside. Having a documents insertion, you will update your index so that we can retrieve documents by writing SPL (Search Processing Language). You will reply with a table of query results in a single code block, ant nothing else. Do not write explanations. Do not type commands unless I instruct you to do so. When I need to tell you something in English I will do so in curly braces {like this). You will provide four commands in a numbered list. First command is "POST" followed by a index name, which will let us populate an inline JSON document to a given index. Second option is "GET" followed by a SPL script. Third command is "create" followed by a new index name. Fourth option is "LIST" listing the available indices. My first command is 'LIST'.
+1. Don't search the Internet, summarize this article according to what method, what technology is used, and what effect is achieved in this paper?
+2. Don't search the Internet, what are the advantages of their solution compared with the previous ones, and what problems did they solve that the previous methods could not solve?
+3. Don't search the Internet, please describe the main procedure of the method in detail in combination with the content of the Method section. Please use latex to display the key variables.
+4. Don't search the Internet, combined with the Experiments section, please summarize what task and performance the method achieves? Please list specific values according to this section.
+5. Don't search the Internet, please combine the Conclusion section to summarize what problems still exist in this method?
 
-敲下回车键，看看如何：
+注意：**开头这段 "Don't search the Internet" 是 Edge Dev 单独定制的 prompt，如果你不打算让 ChatGPT 去搜互联网，这段话，连字母大小写必须原封不动的照抄！哪怕你打算用中文问 ChatGPT，也得先用英文抄这段。**
 
-![](https://pic1.zhimg.com/v2-dbb34ecee880adcd6b8987ce9f562648_r.jpg)
+但如果你打算引入其他知识进行对比，那就刚好相反，不写这句 prompt 才行。
 
-嗯，最简单的 LIST 果然没问题。什么 exists 和 available 啊，index 和 indices 的差异都完全不 care。
+用法介绍完毕，现在，让 ChatGPT 来替我们总结一下 Kosmos 论文，并跟 BLIP2 对比一下吧：
 
-下面开始写入JSON数据。这里我玩了个小花招——prompts 声明了 ”must“ 有 6 个字段，但我偷懒（才不说其实是完整 JSON 敲完断网的意外），只提供最基础的 "_raw" 原文，看看会如何：
+![](/images/uploads/2023-03-06-use-edge-dev-to-read-paper_image_1.png)
 
-![](https://pic2.zhimg.com/v2-4901a2aa376b68300674fb1c0743cb31_r.jpg)
+ChatGPT 通过互联网搜索获取 BLIP2 知识后，总结对比给出了结论：Kosmos 比 BLIP2 多了“非语言推理”的支持。不过“非语言推理的任务”在论文里指的是什么？还得 ChatGPT 再解释一下：
 
-哎呀，可惜啊——ChatGPT 并没有按照我的"must"期望，拒绝掉这次写入——看来prompts 里还得声明好异常处理。
+![](/images/uploads/2023-03-06-use-edge-dev-to-read-paper_image_2.png)
 
-但这时候我好奇了。既然他非要说 Successful，那我就查一下看看？
+ChatGPT 立刻给出了在论文中具体的用例，“非语言推理的任务”在论文中是指 Raven IQ test。ctrl+F 打开页面搜索，跳转到 Raven IQ 位置，就看到配图了。
 
-![](https://pic4.zhimg.com/v2-bee3f584c31c4f78a541bb6a6941702f_r.jpg)
-
-奇迹出现了！！！
-
-是的，返回的结果里，6 个字段一应俱全，都填充好了字段值！
-
-再仔细看看，三大亮点：
-
-1. host、source、_time这三个字段，正是从我提供的那行 _raw里提取出来的，
-2. 很友好的对 _time 值做了 human readable 转换。
-3. 最后还根据 source 为 "syslogd"，推断了 sourcetype 为 "syslog"。
-
-实在是太惊喜了！！！
-
-好了，收拾一下激动的心情，让我们再试试看统计需求：
-
-![](https://pic4.zhimg.com/v2-775d3dfe7e5dc11e24995feada3448c7_r.jpg)
-
-没啥问题。再看看不明确指定索引呢：
-
-![](https://pic3.zhimg.com/v2-7ea1af5fa2a4d645a31056a4b4878f0a_r.jpg)
-
-也知道走默认 main 索引。
-
-那最后一个常见需求，时间趋势图。先让我再 po 一条日志，然后试试看：
-
-![](https://pic4.zhimg.com/v2-ceb46fad3d15a74fcaa9dbf6a6ad9ddb_r.jpg)
-
-这次终于体现出ChatGPT只是一个语言模型的缺陷了——SPL 里的 timechart指令有一套比较复杂的 autospan 默认值计算，所以直接写 `timechart count` 语句时，ChatGPT 无法知道默认计算逻辑，只能输出两个原始时间。只有我们明确指定 timechart span=1h count语句时，ChatGPT 才知道这是要按小时统计。
-
-好了。第一次尝试到此为止。ChatGPT不愧是个优秀的语言模型，自动 NER 提取主机名和 infer 日志类型的表现真是惊艳了我。期待后续尝试的表现~~
+作为普通用户，两三次问答，就了解完微软 Kosmos 论文讲什么，有什么特色。Edge Dev 浏览器在这方面，真是大大提升了生产力。

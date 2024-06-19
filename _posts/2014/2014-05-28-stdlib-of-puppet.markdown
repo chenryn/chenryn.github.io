@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 巧用 Puppet 的 stdlib 库
 category: devops
 tags:

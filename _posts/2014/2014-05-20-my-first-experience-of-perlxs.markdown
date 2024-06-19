@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: XS 初体验
 category: perl
 tags:

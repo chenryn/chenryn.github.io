@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 从天涯论坛看终极页的缓存控制
 date: 2010-12-10
 category: CDN

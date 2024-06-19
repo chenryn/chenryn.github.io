@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 把docx文档转换成markdown格式发布
 tags:
   - ruby

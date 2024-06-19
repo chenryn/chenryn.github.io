@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Rsyslog 的 mmnormalize 模块用法
 category: rsyslog
 ---

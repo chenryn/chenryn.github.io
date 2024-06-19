@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Elastic 官方压测工具 rally 试用
 category: testing
 tags:

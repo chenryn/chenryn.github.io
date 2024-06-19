@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 通过snmp协议监控NetApp
 date: 2010-12-22
 category: monitor

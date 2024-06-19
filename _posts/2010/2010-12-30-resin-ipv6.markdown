@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: resin与ipv6
 date: 2010-12-30
 category: web

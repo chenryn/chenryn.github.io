@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 Spark 处理数据导入 Elasticsearch
 category: logstash
 tags:

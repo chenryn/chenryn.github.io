@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 日志分析中 6 个常见但没啥用的功能
 ---
 

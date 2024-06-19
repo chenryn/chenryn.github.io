@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 Kibana4 实现 PHP 慢日志函数堆栈分析
 category: logstash
 tags:

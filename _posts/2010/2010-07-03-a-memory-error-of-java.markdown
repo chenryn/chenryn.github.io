@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Java报错一例
 date: 2010-07-03
 category: java

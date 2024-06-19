@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: netperf网络测试
 date: 2010-05-05
 category: linux

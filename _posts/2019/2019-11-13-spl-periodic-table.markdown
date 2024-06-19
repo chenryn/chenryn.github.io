@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: SPL指令的元素周期表
 category:  产品设计
 ---

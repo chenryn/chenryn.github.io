@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid限速
 date: 2010-01-01
 category: squid

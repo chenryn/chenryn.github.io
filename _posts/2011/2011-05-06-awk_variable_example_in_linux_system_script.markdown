@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: linux系统脚本中的awk一例
 date: 2011-05-06
 category: bash

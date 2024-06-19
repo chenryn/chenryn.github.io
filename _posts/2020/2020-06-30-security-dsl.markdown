@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 一个有趣的安全分析场景DSL设计
 category:  产品设计
 ---

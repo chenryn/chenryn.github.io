@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: rsyslog 中 if 条件判断的限制
 category: logstash
 tags:

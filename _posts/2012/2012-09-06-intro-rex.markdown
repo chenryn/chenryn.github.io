@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: (R)?ex介绍
 category: devops
 tags:

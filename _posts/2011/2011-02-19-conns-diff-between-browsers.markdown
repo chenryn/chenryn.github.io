@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 浏览器连接数的小区别
 date: 2011-02-19
 category: CDN

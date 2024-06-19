@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: perl 模块打包加入外部依赖程序
 category: perl
 tags:

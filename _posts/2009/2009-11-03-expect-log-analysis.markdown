@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: expect日志分析
 date: 2009-11-03
 category: bash

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: LogStash::Inputs::Syslog 性能测试与优化
 date: 2014-10-18 00:01:00
 category: logstash

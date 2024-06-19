@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 运维监控领域的访谈案例研究(2)
 category: aiops
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: "Kibana 动态仪表板的使用"
 category: logstash
 tags:

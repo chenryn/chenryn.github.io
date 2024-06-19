@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: consistent_hash的perl脚本模拟
 date: 2010-03-16
 category: web

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】Kibana 4 beta 2 发布
 category: logstash
 tags:

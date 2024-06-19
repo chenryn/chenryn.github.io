@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】2013 年 9 月的 kibana 周报
 category: logstash
 tags:

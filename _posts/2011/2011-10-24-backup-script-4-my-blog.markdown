@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: blog备份脚本
 date: 2011-10-24
 category: perl

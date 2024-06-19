@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 给 puppet 写 Rspec 测试用例
 category: devops
 tags:

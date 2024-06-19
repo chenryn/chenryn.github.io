@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: elasticsearch 的 sampler 聚合
 category: elasticsearch
 tags:

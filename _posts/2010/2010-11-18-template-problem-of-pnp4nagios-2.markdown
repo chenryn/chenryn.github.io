@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: pnp4nagios的模板问题(2)
 date: 2010-11-18
 category: monitor

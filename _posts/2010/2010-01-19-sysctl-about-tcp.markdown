@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 系统优化——TCP参数
 date: 2010-01-19
 category: linux

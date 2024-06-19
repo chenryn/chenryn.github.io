@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 Mod_Gearman 实现 Nagios 分布式
 category: monitor
 tags:

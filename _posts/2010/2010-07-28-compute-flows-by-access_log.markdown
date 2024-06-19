@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 日志流量计算
 date: 2010-07-28
 category: bash

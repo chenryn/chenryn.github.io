@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 plenv 代替 perlbrew 管理 Perl5
 category: perl
 tags:

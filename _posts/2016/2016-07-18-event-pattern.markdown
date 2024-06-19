@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 山寨一个 Splunk 的事件模式功能
 category: logstash
 tags:

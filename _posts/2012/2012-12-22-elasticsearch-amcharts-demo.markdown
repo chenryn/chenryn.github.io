@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 Amcharts 和 ElasticSearch 做日志分析
 category: logstash
 tags:

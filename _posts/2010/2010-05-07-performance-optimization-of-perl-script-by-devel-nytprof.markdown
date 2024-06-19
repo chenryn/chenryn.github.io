@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用Devel::NYTProf模块排查优化perl脚本性能
 date: 2010-05-07
 category: perl

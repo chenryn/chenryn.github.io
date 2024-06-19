@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【Logstash系列】使用Redis并自定义Grok匹配
 category: logstash
 date: 2012-06-13

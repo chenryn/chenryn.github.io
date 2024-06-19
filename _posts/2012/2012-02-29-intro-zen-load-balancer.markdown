@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: ZenLoadBalancer试用(一)
 ---
 

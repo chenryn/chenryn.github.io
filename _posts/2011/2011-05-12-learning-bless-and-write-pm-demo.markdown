@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 学习pm和bless的写法
 date: 2011-05-12
 category: perl

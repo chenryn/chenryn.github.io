@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 日志管理领域研究现状(2)
 category: aiops
 tags:

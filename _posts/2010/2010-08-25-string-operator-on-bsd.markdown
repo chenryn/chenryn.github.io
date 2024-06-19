@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: BSD下的字符串运算
 date: 2010-08-25
 category: bash

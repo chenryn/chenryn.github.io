@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 利用脚本灵活定制 Elasticsearch 中的聚合效果
 category: logstash
 tags:

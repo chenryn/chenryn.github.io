@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 郁闷的last-modified和etag试验
 date: 2010-08-01
 category: CDN

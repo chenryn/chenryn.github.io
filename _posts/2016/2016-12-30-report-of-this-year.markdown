@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 2016 年度个人总结
 ---
 

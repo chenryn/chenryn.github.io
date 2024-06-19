@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid3新acl类型http_status试用（源站故障转向研究）
 date: 2010-01-09
 category: squid

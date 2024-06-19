@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 通过 Rex 命令行参数向动态服务器组发起任务
 category: devops
 tags:

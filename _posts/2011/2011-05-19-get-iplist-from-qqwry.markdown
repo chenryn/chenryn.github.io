@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 从纯真数据库里获取ip列表
 date: 2011-05-19
 category: monitor

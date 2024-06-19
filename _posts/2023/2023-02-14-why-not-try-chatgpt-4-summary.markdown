@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: ChatGPT实践总结:神话之下依然是人
 category: LLM
 tags:
@@ -14,7 +16,7 @@ tags:
 
 我今天拿到了微软 new bing 的体验。特意把之前直接在 ChatGPT 上问过的问题，在 bing 上再 chat 了一遍。甚至可以说：bing chat 的迷惑性，比原生的 ChatGPT 更上一层楼：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqF8KMl8dK3vRECDpbUmkIMREjtUJ56d7GicR3uZf7mAN0KJYTJhnqyHGkdsS4dNTdPBNICH4P29uLQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-02-14-why-not-try-chatgpt-4-summary_image_1.png)
 
 bing chat 在产品形态上，提供了脚注式的 source 来源链接。这从人机交互来说很棒！但当我明确告知他来源 1 里内容不符时，bing chat 甩锅说：**这是来源 2 里的“百度百科”说的，不信你去查**！
 

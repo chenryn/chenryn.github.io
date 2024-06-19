@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: client-cache-origin之间的session问题
 date: 2010-01-09
 category: CDN

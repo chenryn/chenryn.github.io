@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 从猫扑论坛看终极页的缓存控制
 date: 2010-12-12
 category: CDN

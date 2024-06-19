@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 从源代码运行 Kibana 4
 category: logstash
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: linux上获取本机ip的各种perl写法
 date: 2011-09-20
 category: linux

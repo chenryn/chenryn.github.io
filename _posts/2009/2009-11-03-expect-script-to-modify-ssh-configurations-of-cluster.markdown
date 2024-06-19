@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: expect脚本——批量修改ssh配置
 date: 2009-11-03
 category: bash

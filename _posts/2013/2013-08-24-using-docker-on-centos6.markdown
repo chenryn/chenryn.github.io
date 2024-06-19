@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 快速在 CentOS6 上运行 docker
 category: cloud
 ---

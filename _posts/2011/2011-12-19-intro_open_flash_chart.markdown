@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Chart::OFC试用
 date: 2011-12-19
 category: perl

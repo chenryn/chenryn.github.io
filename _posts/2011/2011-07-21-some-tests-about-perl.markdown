@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: perl小测试题(转自CU)
 date: 2011-07-21
 category: perl

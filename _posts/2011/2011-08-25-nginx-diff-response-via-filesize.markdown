@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用nginx区分文件大小做出不同响应
 date: 2011-08-25
 category: nginx

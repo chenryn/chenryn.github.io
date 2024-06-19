@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nginx编译优化压力测试（转）
 date: 2009-11-21
 category: nginx

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: spark streaming 和 spark sql 结合示例
 category: monitor
 tags:

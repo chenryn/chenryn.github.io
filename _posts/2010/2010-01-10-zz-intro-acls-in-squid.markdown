@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Squid的ACL分类
 date: 2010-01-10
 category: squid

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Nginx 万兆网络环境测试
 date: 2013-02-25
 category: testing

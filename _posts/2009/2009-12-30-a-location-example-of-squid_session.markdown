@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid_session（首次访问跳转）
 date: 2009-12-30
 category: squid

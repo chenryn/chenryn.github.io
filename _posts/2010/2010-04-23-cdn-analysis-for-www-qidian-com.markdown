@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 起点小说网的cdn分析~（绝非正式报告）
 date: 2010-04-23
 category: CDN

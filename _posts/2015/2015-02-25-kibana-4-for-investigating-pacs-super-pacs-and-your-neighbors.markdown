@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】用 kibana 4 调查你邻居可能投票给的人
 category: logstash
 tags:

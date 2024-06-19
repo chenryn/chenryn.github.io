@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 山寨一个 Splunk 的 source 上下文查看功能
 category: logstash
 tags:

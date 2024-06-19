@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: inotify+purge_cache
 date: 2010-08-24
 category: linux

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cache驻留时间（六、大文件）
 date: 2009-11-21
 category: CDN

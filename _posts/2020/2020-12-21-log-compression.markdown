@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 日志通用压缩算法的对比研究
 category: logstash
 tags:

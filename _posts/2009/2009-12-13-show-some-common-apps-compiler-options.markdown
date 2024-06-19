@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 查看一些常见应用的编译选项
 date: 2009-12-13
 category: linux

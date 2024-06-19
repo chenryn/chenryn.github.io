@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: patch制作和使用
 date: 2011-06-23
 category: linux

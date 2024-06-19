@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: mysql测试小工具mybench试用
 date: 2011-06-14
 category: testing

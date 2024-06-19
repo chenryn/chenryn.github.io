@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 一种CDN中的动态数据存储方案——UbDP
 date: 2009-11-22
 category: CDN

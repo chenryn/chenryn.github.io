@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 在 kibana 里实现去重计数
 category: logstash
 tags:

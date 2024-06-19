@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nginx泛域名cache_store
 date: 2010-03-13
 category: nginx

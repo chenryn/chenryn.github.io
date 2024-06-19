@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: BeiJing Perl Workshop 2013 参会总结
 category: perl
 ---

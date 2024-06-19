@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: ftp中的软连接问题
 date: 2010-11-22
 category: linux

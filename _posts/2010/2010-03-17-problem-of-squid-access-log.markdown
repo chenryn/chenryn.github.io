@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid 灵异日志
 date: 2010-03-17
 category: squid

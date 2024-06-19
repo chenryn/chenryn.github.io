@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 引号的魔力
 date: 2009-12-04
 category: bash

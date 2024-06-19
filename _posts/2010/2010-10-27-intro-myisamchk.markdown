@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Myisamchk小工具使用手册(转)
 date: 2010-10-27
 category: database

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid页面跳转试验
 date: 2010-01-27
 category: squid

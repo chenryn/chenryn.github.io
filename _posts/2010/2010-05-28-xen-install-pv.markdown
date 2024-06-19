@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: xen安装PV
 date: 2010-05-28
 category: cloud

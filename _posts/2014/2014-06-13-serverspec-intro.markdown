@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Serverspec 工具介绍
 category: devops
 tags:

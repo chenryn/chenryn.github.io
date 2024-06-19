@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用Template::Tookit给squid.conf写模板
 date: 2011-10-25
 category: perl

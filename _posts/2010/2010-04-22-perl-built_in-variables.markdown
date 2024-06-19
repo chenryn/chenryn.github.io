@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: perl内置变量
 date: 2010-04-22
 category: perl

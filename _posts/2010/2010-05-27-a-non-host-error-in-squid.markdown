@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 一个少见的squid报错
 date: 2010-05-27
 category: squid

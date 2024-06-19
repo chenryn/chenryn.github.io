@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【Logstash 系列】根据事件统计值报警
 category: logstash
 tags:

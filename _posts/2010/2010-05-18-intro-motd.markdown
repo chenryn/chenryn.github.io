@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 服务器登陆欢迎信息~
 date: 2010-05-18
 category: linux

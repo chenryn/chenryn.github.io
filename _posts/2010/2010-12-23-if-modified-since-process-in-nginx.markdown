@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: ims在nginx上的处理（无责任猜测）
 date: 2010-12-23
 category: nginx

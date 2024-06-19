@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: url_rewrite_concurrency
 date: 2010-04-08
 category: squid

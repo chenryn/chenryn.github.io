@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: ChatGPT最差实践(1)：学不会的数字
 category: LLM
 tags:
@@ -12,21 +14,21 @@ ChatGPT 爆火以来，大家对它期望越来越高。和群友们聊天时，
 
 时值元宵，朋友圈上遍地是辛弃疾的《青玉案·元夕》，如果能让 ChatGPT 替我填一首，岂不美哉。
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqF8KMl8dK3vRECDpbUmkIMRxqyPvCYeib5iapr2YSv1LcwJXb2icfXMuUPL56Db7MubX4Tu5ROudRsUw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-02-14-why-not-try-chatgpt-1-number_image_1.png)
 
 好吧，看起来 ChatGPT 不太懂啥叫《青玉案》。没关系，这个我懂啊。我来教，预备好辛弃疾的样本，预备好龙榆生《唐宋词格律》的平仄反例。逐一输入：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqF8KMl8dK3vRECDpbUmkIMRH9cHgPK2HFRgdhkm3TiaiciaO2FG4ibkT0DTGWQp3XlqAQoQfFYicYR6lnw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-02-14-why-not-try-chatgpt-1-number_image_2.png)
 
 看起来 ChatGPT 并不理解啥叫平仄……所以我们退而求其次吧，只要能拼个字数看起来像回事的就行。但是，“这首诗共有 10 句”！！！什么情况？？？怎么数出来的 10？
 
 不信邪啊，十以内数自然数啊。再来一次：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqF8KMl8dK3vRECDpbUmkIMRThsP7hjibYicia3Qibgm1uP2nRSx8JucFuibRzYuY3ETRGqD5r1ic6vhs7cg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-02-14-why-not-try-chatgpt-1-number_image_3.png)
 
 难道是声调问题？再降低要求重新来过：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqF8KMl8dK3vRECDpbUmkIMRq8XHrmzaYb7MmfSQib67k187qcSYTDicwly1ibx6v8a69QkQrZWPnVagg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-02-14-why-not-try-chatgpt-1-number_image_4.png)
 
 **ChatGPT 已经陷入疯魔，除了 5 和 7，啥数字都不认了！**
 

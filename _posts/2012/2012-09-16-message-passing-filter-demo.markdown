@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【Message::Passing系列】过滤器实例
 category: logstash
 tags:

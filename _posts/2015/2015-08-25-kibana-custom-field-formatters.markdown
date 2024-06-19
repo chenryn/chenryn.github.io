@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】Kibana 字段的自定义展示格式开发
 category: logstash
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid加载tcmalloc性能优化测试(编译)
 date: 2010-02-04
 category: squid

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: syslog实时报警"说出来"
 category: monitor
 tags:

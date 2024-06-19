@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 直接从 elasticsearch 获取数据进入 skyline 异常检测
 category: monitor
 tags:

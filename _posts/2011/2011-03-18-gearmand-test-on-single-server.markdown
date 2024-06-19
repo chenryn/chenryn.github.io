@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: gearman单机试验
 date: 2011-03-18
 category: perl

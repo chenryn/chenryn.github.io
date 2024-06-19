@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 为比特币绘制 MACD、BOLL、KDJ 指标图
 category: python
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 要命的刷新
 date: 2010-04-22
 category: CDN

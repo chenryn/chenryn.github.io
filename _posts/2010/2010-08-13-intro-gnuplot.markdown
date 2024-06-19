@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: gnuplot画图
 date: 2010-08-13
 category: monitor

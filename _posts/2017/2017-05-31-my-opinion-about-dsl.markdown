@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 从DSL扯开去
 category:  产品设计
 tags:

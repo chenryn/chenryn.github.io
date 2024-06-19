@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: CU的perl大赛
 date: 2011-03-01
 category: perl

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid刷新缓存
 date: 2010-01-13
 category: CDN

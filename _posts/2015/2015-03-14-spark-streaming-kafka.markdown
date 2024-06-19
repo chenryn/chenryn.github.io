@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: spark streaming 接收 kafka 数据示例
 category: monitor
 tags:

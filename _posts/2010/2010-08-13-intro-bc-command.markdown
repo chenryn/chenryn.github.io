@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: bc命令及其他
 date: 2010-08-13
 category: bash

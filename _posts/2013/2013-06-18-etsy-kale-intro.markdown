@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【Etsy 的 Kale 系统】简介、部署和应用
 category: monitor
 tags:

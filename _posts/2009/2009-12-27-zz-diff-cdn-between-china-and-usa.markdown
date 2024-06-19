@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 看上去很美——国内CDN现状与美国对比（转）
 category: CDN
 date: 2009-12-27

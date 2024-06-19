@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cdn自主监控(二):快速查找ip对应信息
 date: 2011-07-26
 category: monitor

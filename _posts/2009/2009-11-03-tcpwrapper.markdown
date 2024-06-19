@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: tcpwrapper
 date: 2009-11-03
 category: linux

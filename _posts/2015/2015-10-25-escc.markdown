@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: ESCC 参会笔记
 category: elasticsearch
 tags:

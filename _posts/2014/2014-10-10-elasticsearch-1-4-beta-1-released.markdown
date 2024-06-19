@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】Elasticsearch 1.4.0 beta 1 发版日志
 category: logstash
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 能不能用ChatGPT的判断原则
 category: LLM
 tags:
@@ -26,7 +28,7 @@ ChatGPT 模型的本质，是**逐字按概率预测**。“逐字”的关键�
 
 几天前，我在阅读 [elasticsearch的官方说明文档](https://www.elastic.co/guide/en/elasticsearch/reference/8.7/search-aggregations-bucket-significantterms-aggregation.html#significantterms-aggregation-parameters)的时候，看到一系列相关性参数，用的都是缩写，讲的不明不白的。我去尝试问问 ChatGPT，这些缩写是什么意思？取值区间是多少？具体强相关弱相关的阈值点是什么？ChatGPT 一一作答，看起来非常完备：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqHibjqGZlIQtjiaM6ra2O8UYIrQoUB1UZunt3sR8LIomnqibict3pALMtcXdXBXgb3P2akMiaAIpsAX0hQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-04-07-when-use-chatgpt_image_1.png)
 
 但事实上，ChatGPT 不管是取值范围，还是强弱阈值，全说错了！JLH 和 GND 都不是 0-1 之间。GND 的强弱点也不是 0.5，而是 1。
 
@@ -46,7 +48,7 @@ ChatGPT 模型的本质，是**逐字按概率预测**。“逐字”的关键�
 
 同时，这也是 New Bing 设计来源链接功能的道理：通过引入外部知识链接，让判断变容易。比如上面这个例子，换成问 New Bing，记住选“精确”对话：
 
-![](https://mmbiz.qpic.cn/mmbiz_png/tNjHEwGJhqHibjqGZlIQtjiaM6ra2O8UYIZPE8tW2vfRiafI01sqcz2IYxDflNTAxmbib3MJicQF3RCHy5W9HrPeNVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![](/images/uploads/2023-04-07-when-use-chatgpt_image_2.png)
 
 虽然看似依然强调取值*一般*在 0-1 之间，下面直接给出了 Wikipedia 地址。我们就很容易判断对错了。
 

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cache驻留时间（七、Vary）
 date: 2010-02-09
 category: CDN

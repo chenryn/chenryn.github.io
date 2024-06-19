@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: （读书笔记）网卡调优MTU
 date: 2010-05-23
 category: linux

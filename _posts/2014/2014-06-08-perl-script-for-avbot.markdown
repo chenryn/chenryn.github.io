@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 配合 avbot 的 HTTP 接口做自动应答的 Perl 脚本
 category: perl
 tags:

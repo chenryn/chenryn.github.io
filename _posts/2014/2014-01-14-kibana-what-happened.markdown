@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】kibana发生什么变化了？
 category: logstash
 tags:

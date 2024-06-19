@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nginx负载均衡（consistent_hash、error_page）进阶
 date: 2010-03-03
 category: nginx

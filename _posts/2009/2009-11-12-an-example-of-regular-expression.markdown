@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 正则表达式一例
 date: 2009-11-12
 category: squid

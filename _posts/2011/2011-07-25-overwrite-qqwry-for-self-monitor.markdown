@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cdn自主监控(一):整理一个可用范围内的尽可能小的ip库
 date: 2011-07-25
 category: monitor

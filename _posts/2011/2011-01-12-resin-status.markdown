@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: resin-status
 date: 2011-01-12
 category: monitor

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 限制单个进程的带宽
 category: linux
 tags:

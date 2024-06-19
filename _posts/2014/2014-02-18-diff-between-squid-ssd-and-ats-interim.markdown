@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid-ssd方案和trafficserver的interim层的异同
 category: cache
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: iscsi试验（读写测试）
 date: 2010-04-15
 category: linux

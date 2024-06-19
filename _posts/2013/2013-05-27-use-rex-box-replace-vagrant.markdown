@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 使用 Rex::Box 代替 Vagrant 的工作
 category: devops
 tags:

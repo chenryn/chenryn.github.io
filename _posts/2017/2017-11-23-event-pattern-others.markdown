@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 日志分析的模式发现功能实现(3)-其他厂商
 category: logstash
 tags:

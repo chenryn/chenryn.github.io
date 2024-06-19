@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: sed使用
 date: 2009-11-03
 category: bash

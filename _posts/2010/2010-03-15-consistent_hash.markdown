@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 一致性哈希研究
 date: 2010-03-15
 category: web

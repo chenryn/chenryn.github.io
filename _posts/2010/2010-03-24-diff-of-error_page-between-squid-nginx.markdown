@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid和nginx的error_page差别
 date: 2010-03-24
 category: CDN

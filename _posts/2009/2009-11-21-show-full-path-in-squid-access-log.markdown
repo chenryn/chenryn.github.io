@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 让squid访问日志显示完整url
 date: 2009-11-21
 category: squid

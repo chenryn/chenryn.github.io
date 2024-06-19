@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: CloudForecast学习笔记(一)
 date: 2011-08-17
 category: perl

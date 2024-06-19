@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: MogileFS安装
 date: 2012-06-10
 category: perl

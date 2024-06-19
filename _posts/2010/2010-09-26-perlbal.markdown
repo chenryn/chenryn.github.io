@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: perlbal
 date: 2010-09-26
 category: perl

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Haml 简介
 ---
 Haml 是 Ruby 社区的一种 HTML 标记语言，它利用强制缩进和类似 jQuery 属性标签的风格，简化书写 HTML 的工作。文档见：<http://haml.info/docs.html>。

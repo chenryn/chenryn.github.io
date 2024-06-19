@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: ubuntu 9.10下linuxqq经常挂掉的解决方案
 date: 2010-01-30
 category: linux

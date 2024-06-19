@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 写个同步分发系统(二)
 date: 2011-09-26
 category: dancer

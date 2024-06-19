@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid/varnish/ats简单测试
 date: 2011-03-15
 category: CDN

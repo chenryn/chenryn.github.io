@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: awk中让人郁闷的system()函数
 date: 2009-12-30
 category: bash

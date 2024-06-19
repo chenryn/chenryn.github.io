@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 avbot 机器人记录 QQ 群聊天记录
 category: devops
 ---

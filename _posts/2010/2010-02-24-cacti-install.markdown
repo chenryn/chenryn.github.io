@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cacti安装记录
 date: 2010-02-24
 category: monitor

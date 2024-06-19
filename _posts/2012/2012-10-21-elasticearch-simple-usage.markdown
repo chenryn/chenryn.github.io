@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【Logstash系列】ElasticSearch的几点使用事项
 category: logstash
 tags:

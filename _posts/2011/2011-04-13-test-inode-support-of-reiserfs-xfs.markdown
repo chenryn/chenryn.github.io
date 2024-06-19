@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: reiserfs和xfs的inode测试
 date: 2011-04-13
 category: testing

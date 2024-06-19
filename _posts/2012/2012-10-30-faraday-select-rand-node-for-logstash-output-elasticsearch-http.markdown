@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【Logstash系列】Outputs::ElasticsearchHTTP自动获取随机node
 category: logstash
 tags:

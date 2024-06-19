@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: hapi.js 框架的认证授权插件示例
 category: logstash
 tags:

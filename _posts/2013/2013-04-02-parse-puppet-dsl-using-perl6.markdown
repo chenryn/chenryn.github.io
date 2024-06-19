@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 Perl6 解析 puppet 的配置语法
 category: perl
 tags:

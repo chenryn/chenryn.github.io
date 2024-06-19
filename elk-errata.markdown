@@ -3,6 +3,8 @@ layout: post
 title: 《ELK stack权威指南》勘误
 group: navigation
 date: 2015-10-18 00:15:15
+theme :
+  name : twitter
 ---
 
 新作《ELK stack权威指南》已经上架销售，考虑到个人精力有限，笔误、差错肯定在所难免。特开这个页面作为勘误清

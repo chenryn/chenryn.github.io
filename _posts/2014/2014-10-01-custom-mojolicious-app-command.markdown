@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Mojolicious 应用的自定义子命令
 category: perl
 tags:

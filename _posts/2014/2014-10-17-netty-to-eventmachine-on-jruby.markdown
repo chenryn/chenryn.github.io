@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 在 JRuby 上用 netty 模拟 eventmachine
 category: ruby
 tags:

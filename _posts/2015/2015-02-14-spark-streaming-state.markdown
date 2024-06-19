@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: spark streaming 的 state 操作示例
 category: monitor
 tags:

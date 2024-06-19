@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: lvs的activeconn与netstat的conn
 date: 2010-04-02
 category: linux

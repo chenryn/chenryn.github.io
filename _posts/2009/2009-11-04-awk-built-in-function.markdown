@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: awk内置函数
 date: 2009-11-04
 category: bash

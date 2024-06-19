@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: zabbix_proxy部署
 date: 2010-03-25
 category: monitor

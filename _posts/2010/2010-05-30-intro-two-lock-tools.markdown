@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 文件锁和 CPU 绑定
 date: 2010-05-30
 category: linux

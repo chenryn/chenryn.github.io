@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用Spork和Template::Toolkit生成slides胶片展示
 date: 2012-06-01
 category: perl

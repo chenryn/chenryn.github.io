@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 ElasticSearch 支持 Rexify 网站的搜索功能
 tags:
   - perl

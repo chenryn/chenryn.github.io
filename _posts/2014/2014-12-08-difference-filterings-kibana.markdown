@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Kibana 中几个不同的 filtering
 category: logstash
 tags:

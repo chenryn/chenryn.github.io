@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 在 logstash 里使用其他 RubyGems 模块
 category: logstash
 tags:

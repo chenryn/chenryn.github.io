@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: perl的POD权限问题
 date: 2010-05-27
 category: perl

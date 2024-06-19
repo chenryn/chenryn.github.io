@@ -1,5 +1,7 @@
 ---    
 layout: post    
+theme:
+  name: twitter
 title: 动态页面正文部分中文乱码排障一例    
 date: 2010-06-26    
 category: web

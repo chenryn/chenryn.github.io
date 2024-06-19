@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: juttle 可视化界面介绍
 category: logstash
 tags:

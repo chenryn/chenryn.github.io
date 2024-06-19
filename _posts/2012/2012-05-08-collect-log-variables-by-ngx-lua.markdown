@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 通过lua统计nginx内部变量数据
 category: nginx
 tags:

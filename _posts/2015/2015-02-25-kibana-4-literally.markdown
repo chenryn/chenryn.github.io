@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】kibana 4 正式就位
 category: logstash
 tags:

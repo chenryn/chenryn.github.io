@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 日志异常检测能转换成指标异常检测吗？
 category: aiops
 tags:

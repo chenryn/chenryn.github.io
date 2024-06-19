@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 利用动态仪表板实现kibana单图表导出功能
 category: logstash
 tags:

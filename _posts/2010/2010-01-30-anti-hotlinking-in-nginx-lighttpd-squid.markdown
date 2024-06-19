@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 防盗链进阶（nginx、lighttpd和squid类比）
 date: 2010-01-30
 category: CDN

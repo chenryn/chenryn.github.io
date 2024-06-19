@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: shell变量扩展
 date: 2010-02-23
 category: bash

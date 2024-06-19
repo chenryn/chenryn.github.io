@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 页面自动刷新小问题
 date: 2010-10-21
 category: monitor

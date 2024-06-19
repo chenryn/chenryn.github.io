@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用perl调用新浪微博API小实验
 date: 2011-11-04
 category: dancer

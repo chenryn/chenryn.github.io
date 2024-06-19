@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: sscanf用法
 date: 2010-04-20
 category: C

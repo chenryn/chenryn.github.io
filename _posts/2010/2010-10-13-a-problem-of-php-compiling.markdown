@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: php编译小问题
 date: 2010-10-13
 category: php

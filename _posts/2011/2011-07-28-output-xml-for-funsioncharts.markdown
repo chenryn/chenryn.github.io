@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: cdn自主监控(四):输出xml数据
 date: 2011-07-28
 category: monitor

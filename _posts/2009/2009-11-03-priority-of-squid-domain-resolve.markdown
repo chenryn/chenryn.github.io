@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid问题-域名解析
 date: 2009-11-03
 category: squid

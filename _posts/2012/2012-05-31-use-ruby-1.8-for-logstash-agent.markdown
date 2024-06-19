@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【Logstash系列】使用原版Ruby1.8运行logstash的客户端程序
 date: 2012-05-31
 category: logstash

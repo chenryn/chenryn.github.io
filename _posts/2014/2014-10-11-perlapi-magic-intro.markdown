@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: PerlAPI 里的 Magic 简介
 category: perl
 ---

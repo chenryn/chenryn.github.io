@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: websocket体验
 date: 2011-11-04
 category: dancer

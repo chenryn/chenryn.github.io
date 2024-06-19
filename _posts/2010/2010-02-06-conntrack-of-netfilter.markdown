@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: netfilter的conntrack优化
 date: 2010-02-06
 category: linux

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: perl边学边练（purge脚本进阶）
 date: 2010-05-07
 category: CDN

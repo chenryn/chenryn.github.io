@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: awk变量（三续）
 date: 2009-11-12
 category: bash

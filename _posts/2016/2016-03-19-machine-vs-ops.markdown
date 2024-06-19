@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 机器战胜人类了，伺候机器的运维呢？
 category: monitor
 ---

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 扩展 Zabbix Web 页面功能
 category: monitor
 tags:

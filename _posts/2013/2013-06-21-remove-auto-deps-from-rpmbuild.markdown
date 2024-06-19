@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 如何去除 rpmbuild 自动发现的依赖关系
 category: linux
 tags:

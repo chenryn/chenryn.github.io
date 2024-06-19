@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: memcached部署
 date: 2010-02-25
 category: web

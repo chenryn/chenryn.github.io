@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【翻译】用 elasticsearch 和 logstash 为数十亿次客户搜索提供服务
 category: logstash
 tags:

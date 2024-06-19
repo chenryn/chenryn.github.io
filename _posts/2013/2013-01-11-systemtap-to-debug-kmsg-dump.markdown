@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 systemtap 调试 kmsg dump 
 category: monitor
 tags:

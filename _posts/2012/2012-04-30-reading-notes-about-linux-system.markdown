@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Linux系统调优读书笔记
 date: 2012-04-30
 category: linux

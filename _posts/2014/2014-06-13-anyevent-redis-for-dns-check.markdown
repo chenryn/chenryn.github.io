@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 Redis 做分布式 DNS/HTTP 检测汇总系统
 category: perl
 tags:

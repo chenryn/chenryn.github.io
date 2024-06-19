@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【puppet系列】puppet使用ENC定义节点
 date: 2012-05-18
 category: devops

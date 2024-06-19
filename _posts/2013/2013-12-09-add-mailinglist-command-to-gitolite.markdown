@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 为 gitolite 实现 mailinglist 命令行操控
 category: perl
 tags:

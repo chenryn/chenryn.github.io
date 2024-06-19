@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: puppet和rex的常用资源写法类比
 category: devops
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 端口转发
 date: 2010-01-28
 category: linux

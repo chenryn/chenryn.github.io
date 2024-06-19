@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: web服务监控小工具httping
 date: 2010-05-06
 category: monitor

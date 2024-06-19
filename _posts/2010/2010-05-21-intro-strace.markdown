@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: strace进程跟踪排错一例
 date: 2010-05-21
 category: linux

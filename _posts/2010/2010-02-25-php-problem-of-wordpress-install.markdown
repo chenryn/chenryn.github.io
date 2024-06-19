@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: wordpress部署时碰到的php小问题~
 date: 2010-02-25
 category: web

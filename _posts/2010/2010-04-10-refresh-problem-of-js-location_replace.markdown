@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 客户页面小故障
 date: 2010-04-10
 category: CDN

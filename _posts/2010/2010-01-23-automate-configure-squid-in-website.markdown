@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid自动配置web化
 date: 2010-01-23
 category: CDN

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 分布式shell程序
 date: 2009-11-04
 category: linux

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: mysqlreport指南
 date: 2011-01-10
 category: database

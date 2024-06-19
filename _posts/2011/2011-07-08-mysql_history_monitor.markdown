@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: mysql_history_monitor
 date: 2011-07-08
 category: monitor

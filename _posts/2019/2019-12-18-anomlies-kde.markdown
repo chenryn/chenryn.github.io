@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 监控指标异常检测之KDE
 category: aiops
 tags:

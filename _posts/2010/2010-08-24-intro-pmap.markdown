@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: pmap命令
 date: 2010-08-24
 category: linux

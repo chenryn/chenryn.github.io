@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid压力测试
 date: 2009-11-03
 category: testing

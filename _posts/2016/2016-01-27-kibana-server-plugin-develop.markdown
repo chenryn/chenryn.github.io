@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Kibana4 服务器端插件开发
 category: logstash
 tags:
@@ -71,7 +73,7 @@ tags:
       "to" : "admin@domain",
       "subject" : "Found {{payload.hits.total}} Error Events",
       "priority" : "high",
-      "body" : "Top10 paths:\n{{#payload.aggregations.topn.buckets}}\t{{key}} {{doc_count}}\n{{/payload.aggregations.topn.buckets}}"
+      "body" : "Top10 paths:\n\{\{#payload.aggregations.topn.buckets}}\t\{\{key}} \{\{doc_count}}\n\{\{/payload.aggregations.topn.buckets}}"
     }
     }
   }

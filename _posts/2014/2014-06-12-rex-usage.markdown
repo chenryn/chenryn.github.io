@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Rex 简明手册
 category: devops
 tags:

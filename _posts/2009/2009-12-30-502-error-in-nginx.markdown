@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: nginx502错误
 date: 2009-12-30
 category: nginx

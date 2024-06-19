@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 虚拟机时间问题的机制原理及解决办法
 date: 2010-01-05
 category: cloud

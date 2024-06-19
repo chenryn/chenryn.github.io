@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 日志分析的模式发现功能实现(4)-阿里云SLS
 category: logstash
 tags:

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: linux小报错一例
 date: 2011-03-17
 category: linux

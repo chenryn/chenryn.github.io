@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 条件判断命令小细节
 date: 2010-09-17
 category: bash 

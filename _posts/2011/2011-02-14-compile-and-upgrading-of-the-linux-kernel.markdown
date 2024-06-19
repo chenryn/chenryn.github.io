@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: linux内核编译升级
 date: 2011-02-14
 category: linux

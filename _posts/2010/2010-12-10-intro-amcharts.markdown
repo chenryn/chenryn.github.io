@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: flash绘图利器-amcharts
 date: 2010-12-10
 category: web

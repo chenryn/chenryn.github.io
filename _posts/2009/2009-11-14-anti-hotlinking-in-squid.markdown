@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid防盗链配置
 date: 2009-11-14
 category: squid

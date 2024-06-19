@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 【puppet系列】puppet安装／Facter插件和puppet模板编写
 date: 2012-05-10
 category: devops

@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: LogStash::Outputs::ElaticSearch 使用 http 协议时的内存泄露问题
 category: logstash
 tags:

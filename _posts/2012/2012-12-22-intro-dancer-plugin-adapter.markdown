@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Dancer::Plugin::Adapter 模块介绍
 category: dancer
 ---

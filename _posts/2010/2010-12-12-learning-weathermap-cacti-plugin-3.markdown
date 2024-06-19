@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: weathermap-cacti-plugin学习(3)
 date: 2010-12-12
 category: monitor

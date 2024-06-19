@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用gearman汇总多台服务器的回滚日志
 date: 2011-06-03
 category: monitor

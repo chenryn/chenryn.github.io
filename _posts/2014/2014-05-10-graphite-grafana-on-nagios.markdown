@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 用 Graphite 存储 Nagios 数据
 category: monitor
 tags:

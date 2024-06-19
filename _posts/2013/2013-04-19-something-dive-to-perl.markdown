@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: Newbie::Gift 所用知识总结
 category: perl
 ---

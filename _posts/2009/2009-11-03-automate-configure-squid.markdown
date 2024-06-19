@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: squid 自动配置脚本
 date: 2009-11-03
 category: devops

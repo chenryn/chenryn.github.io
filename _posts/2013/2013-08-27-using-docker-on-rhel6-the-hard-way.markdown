@@ -1,5 +1,7 @@
 ---
 layout: post
+theme:
+  name: twitter
 title: 编译最新 3.10 内核在 RHEL6 上支持 Docker
 category: cloud
 tags:
