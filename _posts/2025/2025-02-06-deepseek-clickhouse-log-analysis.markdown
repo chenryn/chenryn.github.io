@@ -8,7 +8,7 @@ tags:
   - deepseek
   - clickhouse
   - 可观测性
-  -  opentelemetry
+  - opentelemetry
 ---
 
 过年前后，deepseek 大火特火的时候，安全圈突然爆出 deepseek 的数据库泄露了！研究团队的原始内容参见：<https://www.wiz.io/blog/wiz-research-uncovers-exposed-deepseek-database-leak>。
@@ -57,6 +57,7 @@ tags:
 4. 2023 年 4 月，openai 另外还有推理成本的财务估算，换算一下，是当月 18 亿访问，每天 2 亿次查询，按照 AWS p4d.24xlarge 实例计价，相当于 7120 块 A100 显卡(<https://nerdynav.com/chatgpt-statistics/> 和 <https://www.namepepper.com/chatgpt-users>)：“In April 2023, estimates indicated that running ChatGPT cost OpenAI approximately $700,000 per day, with the cost per query being around $0.36 cents. In 2024, 4o mini was released to cut down costs by 60%”。而微软泄密论文说了 GPT3.5-turbo 是 20B 模型，GPT4o-mini 是 8B 模型。
 5. 去年 Kimi 的访谈记录，200B 模型，预期用 1 万块 A100，支撑400 万用户的访问，并可以开始考虑商业化赚钱的问题(<https://baijiahao.baidu.com/s?id=1794105501307081465>)。同时，QuestMobile 汇报的 Kimi 日活数据，已经到了 300 万(<https://xueqiu.com/3708475800/314628967>)。
 6. deepseek 的 V3/R1 是 671B 的 MoE 模型，激活参数是 37B。折算一下，如果 deepseek 的 1 万卡 A100 都用于推理服务，应该能支撑 1500 万日活用户——这比 3 万显然多太多了。所以 deepseek 公司才会觉得推理服务毫无压力，因此没有设计任何限速、计费策略。我猜测可能 deepseek 一开始按 30 万用户的十倍波峰容量准备一个 200 块GPU 的小 k8s 集群而已(我把这个问题提交给 claude 和 deepseek，他们的建议都是先准备个 70～80 块就得了)。
-    * 在 deepseek 的 V3 技术报告中，曾经提到他们的最小部署单元，是 32 卡 Prefill 集群+320 卡 Decode 集群。官网的 API 计费公告中，曾经提到集群设计容量是 1 万亿——QuestMobile 汇报的 2024 年 12 月数据，智谱清言日活 440 万时，token 消耗正好也是 1 万亿——所以最终结论就出来了：deepseek 公司应该就是预备了一个 352 卡的集群，想着能支撑百万用户(假定 R1 的 reasoning/content = 5:1)，已经比实际用户高一个半数量级，绝对够用了。
+    * 在 deepseek 的 V3 技术报告中，曾经提到他们的最小部署单元，是 32 卡 Prefill 集群+320 卡 Decode 集群。官网 V2.5(V3 比 V2 大了两倍) API 计费公告中，曾经提到集群设计容量是 1 万亿——QuestMobile 汇报的 2024 年 12 月数据，智谱清言日活 440 万时，token 消耗正好也是 1 万亿——所以最终结论就出来了：deepseek 公司应该就是预备了一个 352 卡的集群，想着能支撑百万用户(假定 R1 的 reasoning/content = 5:1)，已经比实际用户高一个半数量级，绝对够用了。
+    * 2025-03-01 更新：deepseek open-source week 最后一天公布了[正确答案]（https://github.com/deepseek-ai/open-infra-index），他们在 02-27 的峰值是占用了 278 个 H800 节点。根据 token 消耗和缓存命中率推算，应该服务了 4620 万用户、人均 3 轮对话。
 
 好了，今天的分析就到这里。各位看官，是不是比 openai deep research 能输出的报告还是深入一些？哈哈～
