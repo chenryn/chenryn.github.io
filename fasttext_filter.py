@@ -1,3 +1,5 @@
+#!python3
+# -*- coding: utf-8 -*-
 from huggingface_hub import hf_hub_download
 import fasttext
 import os
