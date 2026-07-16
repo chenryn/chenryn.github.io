@@ -96,8 +96,13 @@ graph TD
 ## 参考文献 (References)
 
 [1] Zhao, C., Wang, B., & Wang, Z. (2024). *Understanding Literary Texts by LLMs: A Case Study of Ancient Chinese Poetry*. arXiv preprint arXiv:2409.00060.
+
 [2] 汤显祖. (明). 《玉茗堂评花间集》.
+
 [3] Devlin, J., Chang, M. W., Lee, K., & Toutanova, K. (2018). *BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding*. arXiv preprint arXiv:1810.04805.
+
 [4] Radford, A., Wu, J., Child, R., Luan, D., Amodei, D., & Sutskever, I. (2019). *Language Models are Unsupervised Multitask Learners*. OpenAI blog, 1(8), 9.
+
 [5] Jihuai. (2023). *bert-ancient-chinese*. Hugging Face. Retrieved from https://huggingface.co/Jihuai/bert-ancient-chinese
+
 [6] Zhao, Z. et al. (2019). *UER: An Open-Source Toolkit for Pre-training Models*. EMNLP-IJCNLP 2019. (uer/gpt2-chinese-ancient & uer/gpt2-chinese-poem)
