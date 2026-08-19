@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ page.title | default: "三斗室诗文集" }}</title>
+    {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
+    <meta name="author" content="{{ site.author.name }}">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments/default.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+      .poetry-content { padding: 20px 0; }
+      .poetry-content h1 { text-align: center; }
+      .poetry-content pre { background: transparent; border: none; }
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">{{ site.title }}</a>
+          <ul class="nav">
+            <li><a href="/poetry/">诗文集</a></li>
+          </ul>
+          <ul class="nav pull-right"><li><a href="/about/">有关我</a></li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="/">博客主页</a> <span class="divider">/</span></li>
+{% if page.poetry_section %}
+        <li><a href="/poetry/">诗文集</a> <span class="divider">/</span></li>
+        <li class="active">{{ page.poetry_section }}</li>
+{% else %}
+        <li class="active">诗文集</li>
+{% endif %}
+      </ul>
+      <div class="row">
+        <div class="span12 poetry-content">
+          {{ content }}
+        </div>
+      </div>
+      <footer>
+        <p>&copy; {{ site.author.name }} 2024
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+    </div>
+    {% include JB/analytics %}
+  </body>
+</html>
