@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>隐私权政策 — Gmail Paper Processor</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 48px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    line-height: 1.75; color: #1f2328; background: #ffffff;
+  }
+  main { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 26px; margin: 0 0 6px; }
+  .meta { color: #57606a; font-size: 14px; margin: 0 0 34px; }
+  h2 { font-size: 18px; margin: 32px 0 10px; padding-top: 18px; border-top: 1px solid #e5e7eb; }
+  ul { padding-left: 22px; margin: 10px 0; }
+  li { margin: 6px 0; }
+  code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 15px; }
+  th, td { border: 1px solid #d8dee4; padding: 9px 12px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; font-weight: 600; }
+  a { color: #0969da; }
+  .note { background: #f6f8fa; border-left: 3px solid #d0d7de; padding: 12px 16px; margin: 16px 0; }
+</style>
+</head>
+<body>
+<main>
+
+  <h1>隐私权政策</h1>
+  <p class="meta">适用于：Gmail Paper Processor　·　最后更新：2026-10-08</p>
+
+  <p>
+    本隐私权政策说明 Gmail Paper Processor（下称「本应用」）在你授权后，
+    如何访问、使用、存储和分享你的 Google 账号数据。
+  </p>
+
+  <h2>1. 我们访问哪些 Google 用户数据</h2>
+  <p>本应用仅请求一个权限范围：</p>
+  <table>
+    <tr><th>权限范围</th><th>级别</th><th>用途</th></tr>
+    <tr>
+      <td><code>https://www.googleapis.com/auth/gmail.readonly</code></td>
+      <td>Gmail 只读</td>
+      <td>读取你 Gmail 中指定标签下的论文快讯邮件内容，以提取论文标题与链接</td>
+    </tr>
+  </table>
+  <p>
+    该权限<strong>仅能读取</strong>邮件，无法修改、删除、发送邮件，也无法访问你的其他 Google 服务数据。
+    本应用不会读取与你指定标签无关的邮件。
+  </p>
+
+  <h2>2. 我们如何使用这些数据</h2>
+  <ul>
+    <li>解析邮件正文，提取其中提到的论文标题、作者、来源与链接</li>
+    <li>下载可公开获取的论文 PDF（例如来自 arXiv）</li>
+    <li>将 PDF 转换为纯文本 / Markdown，以便本地全文检索</li>
+    <li>按关键词筛选，在本地生成每日论文汇总报告</li>
+  </ul>
+  <p>上述处理全部在你的本机完成，用于你个人的文献整理与回顾。</p>
+
+  <h2>3. 我们如何存储这些数据</h2>
+  <ul>
+    <li>
+      <strong>OAuth 访问令牌与刷新令牌</strong>：以文件形式保存在你本机的应用目录下
+      （<code>gmail-paper-processor/token.json</code>），文件权限设置为仅本人可读。
+    </li>
+    <li>
+      <strong>邮件内容与论文文件</strong>：解析结果、下载的 PDF、转换后的文本和生成的报告，
+      全部保存在你本机的目录中。
+    </li>
+    <li>本应用<strong>没有云端服务端</strong>，不会把任何数据上传或同步到外部服务器。</li>
+  </ul>
+
+  <h2>4. 我们如何分享这些数据</h2>
+  <p>
+    本应用<strong>不向任何第三方出售、出租或分享</strong>你的 Google 用户数据。
+    数据不会离开你的设备，也不会被用于广告、用户画像或任何与本应用功能无关的目的。
+  </p>
+  <p>
+    唯一的对外网络请求是：向你邮件中出现的公开论文站点（如 arXiv）下载 PDF 文件。
+    该过程只会发送论文链接，不会发送你的邮件内容或账号信息。
+  </p>
+
+  <h2>5. 数据保留与删除</h2>
+  <ul>
+    <li>所有数据均由你自行控制，保留时间由你决定。</li>
+    <li>删除本机应用目录中的相应文件即可删除对应数据。</li>
+    <li>
+      撤销授权：访问
+      <a href="https://myaccount.google.com/permissions" rel="noopener">Google 账号的第三方应用权限页面</a>，
+      移除本应用的访问权限。撤销后本应用将无法再读取任何数据。
+    </li>
+  </ul>
+
+  <h2>6. Google API 服务用户数据政策合规声明</h2>
+  <div class="note">
+    本应用对 Google 用户数据的使用，遵守
+    <a href="https://developers.google.com/terms/api-services-user-data-policy" rel="noopener">
+      Google API 服务用户数据政策</a>，包括其中的
+    <strong>「有限使用（Limited Use）」要求</strong>。
+    具体而言：本应用仅将所获取的 Gmail 数据用于提供其明确说明的、面向用户的功能，
+    不会将其转让给第三方，不用于广告用途，也不允许人工读取该数据（除非出于安全目的、
+    为遵守适用法律所必需，或经你明确同意）。
+  </div>
+
+  <h2>7. 政策变更</h2>
+  <p>本政策如有更新，将修改本页面顶部的「最后更新」日期。</p>
+
+  <h2>8. 联系方式</h2>
+  <p>如对本隐私权政策有任何疑问，请联系：<a href="mailto:rao.chenlin@gmail.com">rao.chenlin@gmail.com</a></p>
+
+  <p style="margin-top:36px"><a href="./index.html">← 返回首页</a></p>
+
+</main>
+</body>
+</html>
