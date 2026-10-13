@@ -5,6 +5,10 @@
     <title>{{ page.title }}</title>
     {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
     <meta name="author" content="{{ site.author.name }}">
+    <!-- SEO: canonical 统一规范形态；域名需与 CNAME 保持一致 -->
+    <link rel="canonical" href="https://chenlinux.com{{ page.url }}">
+    {% if page.noindex %}<meta name="robots" content="noindex, follow">{% endif %}
+    {% if paginator.page and paginator.page > 1 %}<meta name="robots" content="noindex, follow">{% endif %}
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>

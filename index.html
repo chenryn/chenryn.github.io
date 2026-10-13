@@ -21,7 +21,7 @@ theme :
       </span>
       Posted in&nbsp;
       {% for category in post.categories %}
-      <a href="/categories/index.html#{{ category }}-ref" title="{{ category }}" rel="category tag">{{ category }}</a>
+      <a href="/categories/#{{ category }}-ref" title="{{ category }}" rel="category tag">{{ category }}</a>
       {% endfor %}
     </p>
     <div class="entry-content full-content" style='background-color: #FFF; margin-left: 24px; padding: 10px;'>
